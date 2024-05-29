@@ -5,11 +5,19 @@ body{
   height: 100vh;
   width: 100vw;
   font-family: 'Open Sans', sans-serif;
-  #app{
+
+  @media screen and (min-width: 768px) {
     height: 100%;
+  }
+  #app {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-flow: column nowrap;
+    justify-content: center;
     align-items: center;
+
+    @media screen and (max-width: 768px) {
+      background: #171414;
+    }
   }
 }

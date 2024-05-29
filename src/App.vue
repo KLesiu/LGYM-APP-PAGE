@@ -33,17 +33,11 @@ const mail:Ref<string> = ref('')
 </script>
 
 <style lang="scss">
-#app{
-  width: 100%;
-  display: flex;
-  flex-flow: column nowrap;
-  background: url("./assets/logoLGYMShadow.png");
+#app {
+  background: url('./assets/logoLGYMShadow.png');
   background-size: contain;
-  background-position-x: 1200px;
-  justify-content: center;
-  align-items: center;
-
-
+  background-position-x: 1290px;
+}
   main{
     display: flex;
     flex-direction: column;
@@ -54,7 +48,10 @@ const mail:Ref<string> = ref('')
     width: 100%;
     max-width: 600px;
     border-radius: 5px;
-    height: calc(100vh - 50px);
+    height: 100%;
+    @media screen and (min-width: 768px) {
+      height: calc(100vh - 50px);
+    }
     h1{
       color:#4CD964;
       font-size: 48px;
@@ -124,12 +121,8 @@ const mail:Ref<string> = ref('')
     display: flex;
     justify-content: center;
     align-items: end;
-  padding: 1rem
-
+    padding: 1rem
   }
-}
-
-
 </style>
 
 
