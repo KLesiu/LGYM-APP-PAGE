@@ -13,10 +13,10 @@
       </section>
       <form>
         <div class="input-container">
-          <label>Email</label>/
+          <label>Email</label>
           <input v-model="mail"  type="email" placeholder="Email" />
         </div>
-        <button type="submit">DELETE ACCOUNT</button>/
+        <button type="submit">DELETE ACCOUNT</button>
       </form>
     </main>
     <div class="imgHolder"></div>
@@ -86,22 +86,27 @@ section{
       flex-direction: column;
       gap: 1rem;
       width: 100%;
-      label{
-        color:grey;
-        margin-bottom: 5px;
-      }
-      input{
-        width: 100%;
-        height: 67px;
-        border-radius: 1rem;
-        background-color: #1E1E1E;
-        border: none;
-        padding: 0.5rem;
+      .input-container{
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
+        gap: 0.5rem;
+        label{
+          color:grey;
+        }
+        input{
+          width: 100%;
+          height: 67px;
+          border-radius: 1rem;
+          background-color: #1E1E1E;
+          border: none;
+          padding: 0.5rem 1rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
 
+        }
       }
+
       button{
         width: 100%;
         background-color: #4CD964;
