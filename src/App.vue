@@ -1,6 +1,5 @@
 <template>
-  <section>
-    <div  class="imgHolder"></div>
+
     <main>
       <h1>Contact Page</h1>
       <img src="./assets/logo300.png" alt="LGYM logo"/>
@@ -19,9 +18,8 @@
         <button type="submit">DELETE ACCOUNT</button>
       </form>
     </main>
-    <div class="imgHolder"></div>
     <footer>Jakub Leśkiewicz</footer>
-  </section>
+
 
 </template>
 
@@ -35,39 +33,40 @@ const mail:Ref<string> = ref('')
 </script>
 
 <style lang="scss">
-section{
+#app{
   width: 100%;
-  height: 100%;
   display: flex;
+  flex-flow: column nowrap;
+  background: url("./assets/logoLGYMShadow.png");
+  background-size: contain;
+  background-position-x: 1200px;
+  justify-content: center;
+  align-items: center;
 
-  .imgHolder{
-    width: calc(100% - 1200px);
-    height: 100%;
-    background: url("./assets/logoLGYMShadow.png");
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+
   main{
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: center;
+    padding: 1rem;
     gap: 2rem;
     align-items: center;
-    width: 600px;
-    padding: 1rem;
-    height: calc(100vh - 400px);
+    width: 100%;
+    max-width: 600px;
     border-radius: 5px;
+    height: calc(100vh - 50px);
     h1{
       color:#4CD964;
       font-size: 48px;
 
     }
+    img {
+      width: 230px;
+    }
     section{
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      height: 100%;
       padding: 1rem;
       h2{
         color:white;
@@ -119,7 +118,6 @@ section{
   }
   footer{
     height: 50px;
-    position: fixed;
     bottom: 0;
     background-color: #4CD964;
     width: 100%;
