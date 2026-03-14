@@ -1,0 +1,76 @@
+{
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Access your trainer workspace",
+    "heading": {
+      "title": "Welcome back",
+      "subtitle": "Please enter your details to sign in."
+    },
+    "branding": {
+      "quote": "Coach with confidence. Every workout, every client, one focused workspace.",
+      "description": "LGYM Trainer helps you track plans, progress, and communication in one place."
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password"
+    },
+    "options": {
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?"
+    },
+    "actions": {
+      "signIn": "Sign in",
+      "or": "Or",
+      "signInGoogle": "Sign in with Google"
+    },
+    "footer": {
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "hint": "Demo mode: click the button to open trainer dashboard."
+  },
+  "trainerDashboard": {
+    "appName": "LGYM Trainer",
+    "appSubtitle": "Coach workspace",
+    "navigation": {
+      "dashboard": "Dashboard",
+      "trainingPlans": "Training Plans",
+      "myClients": "My Clients",
+      "settings": "Settings"
+    },
+    "sidebar": {
+      "noteLabel": "Overview",
+      "noteText": "Manage your athlete plans, monitor progress, and keep daily coaching tasks visible."
+    },
+    "header": {
+      "sectionEyebrow": "Trainer dashboard",
+      "dateLabel": "Today"
+    },
+    "content": {
+      "title": "Your plans",
+      "subtitle": "Browse active programs and jump into the next training workflow."
+    },
+    "plans": {
+      "days": "{count} days",
+      "cardTag": "Active",
+      "items": {
+        "fullBody": {
+          "title": "Full Body Workout"
+        },
+        "strength": {
+          "title": "Strength Builder"
+        },
+        "recomposition": {
+          "title": "Body Recomposition"
+        },
+        "mobility": {
+          "title": "Mobility Reset"
+        }
+      }
+    }
+  }
+}

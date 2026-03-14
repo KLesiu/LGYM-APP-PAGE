@@ -1,18 +1,15 @@
-@import "tailwindcss/theme" layer(tailwind.theme);
-@import "tailwindcss/utilities" layer(tailwind.utilities);
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+@import "tailwindcss";
 
 @theme {
   --color-brand-emerald: #10b981;
   --color-brand-night: #020617;
 }
 
-:root {
-  color-scheme: dark;
-}
-
 body {
   margin: 0;
   min-width: 320px;
+  font-family: 'Inter', sans-serif;
 }
 
 #app {

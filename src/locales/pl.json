@@ -1,0 +1,76 @@
+{
+  "login": {
+    "title": "Logowanie",
+    "subtitle": "Zaloguj sie do panelu trenera",
+    "heading": {
+      "title": "Witaj ponownie",
+      "subtitle": "Wpisz swoje dane, aby sie zalogowac."
+    },
+    "branding": {
+      "quote": "Prowadz podopiecznych skutecznie. Kazdy trening i kazdy klient w jednym miejscu.",
+      "description": "LGYM Trainer pomaga zarzadzac planami, postepami i komunikacja w jednej przestrzeni."
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Haslo",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Wpisz email",
+      "passwordLabel": "Haslo",
+      "passwordPlaceholder": "Wpisz haslo"
+    },
+    "options": {
+      "rememberMe": "Zapamietaj mnie",
+      "forgotPassword": "Nie pamietasz hasla?"
+    },
+    "actions": {
+      "signIn": "Zaloguj sie",
+      "or": "Lub",
+      "signInGoogle": "Zaloguj sie przez Google"
+    },
+    "footer": {
+      "noAccount": "Nie masz konta?",
+      "signUp": "Zarejestruj sie"
+    },
+    "hint": "Tryb demo: kliknij przycisk, aby otworzyc dashboard trenera."
+  },
+  "trainerDashboard": {
+    "appName": "LGYM Trainer",
+    "appSubtitle": "Panel trenera",
+    "navigation": {
+      "dashboard": "Dashboard",
+      "trainingPlans": "Plany Treningowe",
+      "myClients": "Moi Klienci",
+      "settings": "Ustawienia"
+    },
+    "sidebar": {
+      "noteLabel": "Przeglad",
+      "noteText": "Zarzadzaj planami podopiecznych, monitoruj postepy i trzymaj pod reka codzienne zadania."
+    },
+    "header": {
+      "sectionEyebrow": "Dashboard trenera",
+      "dateLabel": "Dzisiaj"
+    },
+    "content": {
+      "title": "Twoje plany",
+      "subtitle": "Przegladaj aktywne programy i przechodz od razu do kolejnego workflow treningowego."
+    },
+    "plans": {
+      "days": "{count} dni",
+      "cardTag": "Aktywny",
+      "items": {
+        "fullBody": {
+          "title": "Trening Full Body"
+        },
+        "strength": {
+          "title": "Budowanie Sily"
+        },
+        "recomposition": {
+          "title": "Rekompozycja Sylwetki"
+        },
+        "mobility": {
+          "title": "Reset Mobilnosci"
+        }
+      }
+    }
+  }
+}
