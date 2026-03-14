@@ -72,5 +72,88 @@
         }
       }
     }
+  },
+  "auth": {
+    "tabs": {
+      "athlete": "Panel zawodnika",
+      "trainer": "Strefa trenera"
+    },
+    "validation": {
+      "usernameRequired": "Nazwa uzytkownika jest wymagana",
+      "usernameMin": "Nazwa uzytkownika musi miec co najmniej 3 znaki",
+      "emailRequired": "Email jest wymagany",
+      "emailInvalid": "Email musi byc poprawny",
+      "passwordRequired": "Haslo jest wymagane",
+      "passwordMin": "Haslo musi miec co najmniej 6 znakow",
+      "confirmPasswordRequired": "Potwierdzenie hasla jest wymagane",
+      "passwordsMustMatch": "Hasla musza byc takie same"
+    },
+    "login": {
+      "title": "Zaloguj sie do konta",
+      "subtitle": "Wpisz nazwe uzytkownika ponizej, aby sie zalogowac",
+      "fields": {
+        "username": "Nazwa uzytkownika",
+        "password": "Haslo"
+      },
+      "placeholders": {
+        "username": "twoja_nazwa",
+        "password": "Haslo"
+      },
+      "actions": {
+        "forgotPassword": "Nie pamietasz hasla?",
+        "submit": "Zaloguj sie",
+        "orContinueWith": "Lub kontynuuj przez",
+        "loginWithApple": "Zaloguj sie przez Apple",
+        "loginWithGoogle": "Zaloguj sie przez Google"
+      },
+      "footer": {
+        "noAccount": "Nie masz konta?",
+        "signUp": "Zarejestruj sie"
+      },
+      "feedback": {
+        "failed": "Logowanie nie powiodlo sie. Sprawdz dane i sprobuj ponownie.",
+        "success": "Logowanie zakonczone sukcesem.",
+        "unexpectedError": "Wystapil nieoczekiwany blad logowania. Sprobuj ponownie."
+      }
+    },
+    "register": {
+      "title": "Utworz konto",
+      "subtitle": "Wypelnij dane ponizej, aby sie zarejestrowac",
+      "fields": {
+        "username": "Nazwa uzytkownika",
+        "email": "Email",
+        "password": "Haslo",
+        "confirmPassword": "Potwierdz haslo"
+      },
+      "placeholders": {
+        "username": "twoja_nazwa",
+        "email": "ja@example.com",
+        "password": "Haslo",
+        "confirmPassword": "Potwierdz haslo"
+      },
+      "actions": {
+        "submit": "Zarejestruj sie"
+      },
+      "footer": {
+        "haveAccount": "Masz juz konto?",
+        "login": "Zaloguj sie"
+      },
+      "feedback": {
+        "failed": "Rejestracja nie powiodla sie. Sprobuj ponownie.",
+        "success": "Rejestracja zakonczona sukcesem. Mozesz sie teraz zalogowac.",
+        "unexpectedError": "Wystapil nieoczekiwany blad rejestracji. Sprobuj ponownie."
+      }
+    }
+  },
+  "ui": {
+    "theme": {
+      "switchToLight": "Przelacz na jasny motyw",
+      "switchToDark": "Przelacz na ciemny motyw"
+    },
+    "language": {
+      "current": "Aktualny jezyk: {code}",
+      "polish": "Polski",
+      "english": "Angielski"
+    }
   }
 }

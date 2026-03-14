@@ -72,5 +72,88 @@
         }
       }
     }
+  },
+  "auth": {
+    "tabs": {
+      "athlete": "Athlete Panel",
+      "trainer": "Trainer Zone"
+    },
+    "validation": {
+      "usernameRequired": "Username is required",
+      "usernameMin": "Username must be at least 3 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email must be valid",
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 6 characters",
+      "confirmPasswordRequired": "Confirm password is required",
+      "passwordsMustMatch": "Passwords must match"
+    },
+    "login": {
+      "title": "Login to your account",
+      "subtitle": "Enter your username below to login to your account",
+      "fields": {
+        "username": "Username",
+        "password": "Password"
+      },
+      "placeholders": {
+        "username": "your_username",
+        "password": "Password"
+      },
+      "actions": {
+        "forgotPassword": "Forgot your password?",
+        "submit": "Login",
+        "orContinueWith": "Or continue with",
+        "loginWithApple": "Login with Apple",
+        "loginWithGoogle": "Login with Google"
+      },
+      "footer": {
+        "noAccount": "Don't have an account?",
+        "signUp": "Sign up"
+      },
+      "feedback": {
+        "failed": "Login failed. Please check your credentials and try again.",
+        "success": "Login successful.",
+        "unexpectedError": "Unexpected login error. Please try again."
+      }
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Fill in your details below to register",
+      "fields": {
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password"
+      },
+      "placeholders": {
+        "username": "your_username",
+        "email": "me@example.com",
+        "password": "Password",
+        "confirmPassword": "Confirm Password"
+      },
+      "actions": {
+        "submit": "Register"
+      },
+      "footer": {
+        "haveAccount": "Already have an account?",
+        "login": "Login"
+      },
+      "feedback": {
+        "failed": "Registration failed. Please try again.",
+        "success": "Registration successful. You can log in now.",
+        "unexpectedError": "Unexpected registration error. Please try again."
+      }
+    }
+  },
+  "ui": {
+    "theme": {
+      "switchToLight": "Switch to light mode",
+      "switchToDark": "Switch to dark mode"
+    },
+    "language": {
+      "current": "Current language: {code}",
+      "polish": "Polski",
+      "english": "English"
+    }
   }
 }

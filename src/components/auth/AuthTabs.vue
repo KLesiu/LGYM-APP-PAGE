@@ -5,7 +5,7 @@
       :class="tabClass('athlete')"
       @click="updateRole('athlete')"
     >
-      Athlete Panel
+      {{ t('auth.tabs.athlete') }}
     </v-btn>
 
     <v-btn
@@ -13,13 +13,17 @@
       :class="tabClass('trainer')"
       @click="updateRole('trainer')"
     >
-      Trainer Zone
+      {{ t('auth.tabs.trainer') }}
     </v-btn>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
 type AuthRole = 'athlete' | 'trainer'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   modelValue: AuthRole

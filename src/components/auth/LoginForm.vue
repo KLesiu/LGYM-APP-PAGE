@@ -3,9 +3,9 @@
     <div class="flex w-full flex-col items-center gap-5">
       <div class="flex w-full flex-col items-center gap-2">
         <v-img :src="logoLgym" alt="LGYM logo" width="150" max-width="150" />
-        <h1 class="text-center text-2xl font-semibold text-[rgb(var(--v-theme-on-surface))]">Login to your account</h1>
+        <h1 class="text-center text-2xl font-semibold text-[rgb(var(--v-theme-on-surface))]">{{ t('auth.login.title') }}</h1>
         <p class="text-center text-sm text-[rgb(var(--v-theme-secondary))]">
-          Enter your username below to login to your account
+          {{ t('auth.login.subtitle') }}
         </p>
       </div>
 
@@ -38,14 +38,14 @@
           <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1.5">
               <div class="flex items-center justify-between">
-                <label for="username" class="text-sm text-[rgb(var(--v-theme-secondary))]">Username</label>
+                <label for="username" class="text-sm text-[rgb(var(--v-theme-secondary))]">{{ t('auth.login.fields.username') }}</label>
               </div>
 
               <v-text-field
                 id="username"
                 v-model="username"
                 type="text"
-                placeholder="your_username"
+                :placeholder="t('auth.login.placeholders.username')"
                 variant="outlined"
                 density="compact"
                 :rules="usernameRules"
@@ -60,12 +60,12 @@
 
             <div class="flex flex-col gap-1.5">
               <div class="flex items-center justify-between">
-                <label for="password" class="text-sm text-[rgb(var(--v-theme-secondary))]">Password</label>
+                <label for="password" class="text-sm text-[rgb(var(--v-theme-secondary))]">{{ t('auth.login.fields.password') }}</label>
                 <button
                   type="button"
                   class="cursor-pointer bg-transparent p-0 text-xs text-[rgb(var(--v-theme-secondary))] underline underline-offset-2"
                 >
-                  Forgot your password?
+                  {{ t('auth.login.actions.forgotPassword') }}
                 </button>
               </div>
 
@@ -73,7 +73,7 @@
                 id="password"
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
-                placeholder="Password"
+                :placeholder="t('auth.login.placeholders.password')"
                 variant="outlined"
                 density="compact"
                 :rules="passwordRules"
@@ -100,12 +100,12 @@
               :disabled="isSubmitting"
               class="rounded-md! text-sm! font-medium! normal-case! tracking-normal! shadow-none!"
             >
-              Login
+              {{ t('auth.login.actions.submit') }}
             </v-btn>
 
             <div class="flex items-center gap-3">
               <div class="h-0.5 flex-1 bg-[rgb(var(--v-theme-outline))]" />
-              <span class="text-xs text-[rgb(var(--v-theme-secondary))]">Or continue with</span>
+              <span class="text-xs text-[rgb(var(--v-theme-secondary))]">{{ t('auth.login.actions.orContinueWith') }}</span>
               <div class="h-0.5 flex-1 bg-[rgb(var(--v-theme-outline))]" />
             </div>
 
@@ -118,7 +118,7 @@
                 height="40"
                 class="rounded-md! text-sm! font-medium! normal-case! tracking-normal! shadow-none!"
               >
-                Login with Apple
+                {{ t('auth.login.actions.loginWithApple') }}
               </v-btn>
               <v-btn
                 block
@@ -128,7 +128,7 @@
                 height="40"
                 class="rounded-md! text-sm! font-medium! normal-case! tracking-normal! shadow-none!"
               >
-                Login with Google
+                {{ t('auth.login.actions.loginWithGoogle') }}
               </v-btn>
             </div>
           </div>
@@ -137,12 +137,12 @@
 
       <div class="flex flex-col items-center gap-1">
         <p class="text-center text-sm text-[rgb(var(--v-theme-secondary))]">
-          Don't have an account?
+          {{ t('auth.login.footer.noAccount') }}
           <router-link
             to="/register"
             class="cursor-pointer bg-transparent p-0 text-[rgb(var(--v-theme-on-surface))] underline underline-offset-2"
           >
-            Sign up
+            {{ t('auth.login.footer.signUp') }}
           </router-link>
         </p>
       </div>
@@ -152,6 +152,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type { LoginRequest, LoginResponseDto } from '../../api/model'
 import { postApiLogin, postApiTrainerLogin } from '../../api/generated/demo'
 import logoLgym from '../../assets/logoLGYM.png'
@@ -159,6 +160,8 @@ import logoLgym from '../../assets/logoLGYM.png'
 import AuthTabs from './AuthTabs.vue'
 
 type AuthRole = 'athlete' | 'trainer'
+
+const { t } = useI18n()
 
 const formRef = ref<{
   validate: () => Promise<{ valid: boolean }>
@@ -176,12 +179,12 @@ const submitError = ref('')
 const submitSuccess = ref('')
 
 const usernameRules = [
-  (value: string) => !!value || 'Username is required',
-  (value: string) => value.length >= 3 || 'Username must be at least 3 characters',
+  (value: string) => !!value || t('auth.validation.usernameRequired'),
+  (value: string) => value.length >= 3 || t('auth.validation.usernameMin'),
 ]
 const passwordRules = [
-  (value: string) => !!value || 'Password is required',
-  (value: string) => value.length >= 6 || 'Password must be at least 6 characters',
+  (value: string) => !!value || t('auth.validation.passwordRequired'),
+  (value: string) => value.length >= 6 || t('auth.validation.passwordMin'),
 ]
 
 const togglePassword = () => {
@@ -245,18 +248,18 @@ const submitForm = async () => {
     const response = await loginByRole(payload)
 
     if (response.status !== 200) {
-      submitError.value = 'Login failed. Please check your credentials and try again.'
+      submitError.value = t('auth.login.feedback.failed')
       return
     }
 
     performLogin(response.data)
-    submitSuccess.value = 'Login successful.'
+    submitSuccess.value = t('auth.login.feedback.success')
     resetFormValidation()
   }
   catch (error: unknown) {
-    submitError.value = error instanceof Error
+    submitError.value = error instanceof Error && error.message
       ? error.message
-      : 'Unexpected login error. Please try again.'
+      : t('auth.login.feedback.unexpectedError')
   }
   finally {
     isSubmitting.value = false
