@@ -1,0 +1,20 @@
+@import "tailwindcss/theme" layer(tailwind.theme);
+@import "tailwindcss/utilities" layer(tailwind.utilities);
+
+@theme {
+  --color-brand-emerald: #10b981;
+  --color-brand-night: #020617;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+#app {
+  min-height: 100vh;
+}
