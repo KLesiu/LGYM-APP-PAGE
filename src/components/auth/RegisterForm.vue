@@ -1,10 +1,10 @@
 <template>
-  <div class="flex w-full max-w-105 flex-col items-center px-4 py-4 text-center text-[rgb(var(--v-theme-on-surface))] sm:px-6 sm:py-6 md:px-8 md:py-8">
+  <div class="flex w-full max-w-md flex-col items-center px-4 py-4 text-center text-[rgb(var(--v-theme-on-surface))] sm:px-6 sm:py-6 md:px-8 md:py-8">
     <div class="flex w-full flex-col items-center gap-5">
       <div class="flex w-full flex-col items-center gap-2">
         <v-img :src="logoLgym" alt="LGYM logo" width="150" max-width="150" />
-        <h1 class="text-center text-[24px] font-semibold text-[rgb(var(--v-theme-on-surface))]">Create your account</h1>
-        <p class="text-center text-[14px] text-[rgb(var(--v-theme-secondary))]">
+        <h1 class="text-center text-2xl font-semibold text-[rgb(var(--v-theme-on-surface))]">Create your account</h1>
+        <p class="text-center text-sm text-[rgb(var(--v-theme-secondary))]">
           Fill in your details below to register
         </p>
       </div>
@@ -19,10 +19,26 @@
         >
           <AuthTabs v-model="selectedRole" />
 
+          <v-alert
+            v-if="submitError"
+            type="error"
+            variant="tonal"
+            density="comfortable"
+            :text="submitError"
+          />
+
+          <v-alert
+            v-if="submitSuccess"
+            type="success"
+            variant="tonal"
+            density="comfortable"
+            :text="submitSuccess"
+          />
+
           <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1.5">
               <div class="flex items-center justify-between">
-                <label for="username" class="text-[13px] text-[rgb(var(--v-theme-secondary))]">Username</label>
+                <label for="username" class="text-sm text-[rgb(var(--v-theme-secondary))]">Username</label>
               </div>
 
               <v-text-field
@@ -44,7 +60,7 @@
 
             <div class="flex flex-col gap-1.5">
               <div class="flex items-center justify-between">
-                <label for="email" class="text-[13px] text-[rgb(var(--v-theme-secondary))]">Email</label>
+                <label for="email" class="text-sm text-[rgb(var(--v-theme-secondary))]">Email</label>
               </div>
 
               <v-text-field
@@ -66,7 +82,7 @@
 
             <div class="flex flex-col gap-1.5">
               <div class="flex items-center justify-between">
-                <label for="password" class="text-[13px] text-[rgb(var(--v-theme-secondary))]">Password</label>
+                <label for="password" class="text-sm text-[rgb(var(--v-theme-secondary))]">Password</label>
               </div>
 
               <v-text-field
@@ -90,7 +106,7 @@
 
             <div class="flex flex-col gap-1.5">
               <div class="flex items-center justify-between">
-                <label for="confirmPassword" class="text-[13px] text-[rgb(var(--v-theme-secondary))]">Confirm Password</label>
+                <label for="confirmPassword" class="text-sm text-[rgb(var(--v-theme-secondary))]">Confirm Password</label>
               </div>
 
               <v-text-field
@@ -119,7 +135,9 @@
             color="primary"
             height="42"
             type="submit"
-            class="rounded-md! text-[14px]! font-medium! normal-case! tracking-normal! shadow-none!"
+            :loading="isSubmitting"
+            :disabled="isSubmitting"
+            class="rounded-md! text-sm! font-medium! normal-case! tracking-normal! shadow-none!"
           >
             Register
           </v-btn>
@@ -127,7 +145,7 @@
       </div>
 
       <div class="flex flex-col items-center gap-1">
-        <p class="text-center text-[13px] text-[rgb(var(--v-theme-secondary))]">
+        <p class="text-center text-sm text-[rgb(var(--v-theme-secondary))]">
           Already have an account?
           <router-link
             to="/login"
@@ -143,6 +161,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import type { RegisterUserRequest, ResponseMessageDto } from '../../api/model'
+import { postApiRegister, postApiTrainerRegister } from '../../api/generated/demo'
 import logoLgym from '../../assets/logoLGYM.png'
 
 import AuthTabs from './AuthTabs.vue'
@@ -155,6 +176,7 @@ const formRef = ref<{
   resetValidation: () => void
 } | null>(null)
 const isFormValid = ref<boolean | null>(null)
+const router = useRouter()
 
 const selectedRole = ref<AuthRole>('athlete')
 const username = ref('')
@@ -163,6 +185,9 @@ const password = ref('')
 const confirmPassword = ref('')
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
+const isSubmitting = ref(false)
+const submitError = ref('')
+const submitSuccess = ref('')
 
 const usernameRules = [
   (value: string) => !!value || 'Username is required',
@@ -189,13 +214,28 @@ const toggleConfirmPassword = () => {
   showConfirmPassword.value = !showConfirmPassword.value
 }
 
-const performRegister = () => {
+const registerByRole = async (payload: RegisterUserRequest) => {
+  if (selectedRole.value === 'trainer')
+    return postApiTrainerRegister(payload)
+
+  return postApiRegister(payload)
+}
+
+const extractMessage = (data: ResponseMessageDto | null | undefined) => {
+  if (!data)
+    return ''
+
+  return data.msg ?? ''
+}
+
+const performRegister = (response: ResponseMessageDto) => {
   console.info('Register submit', {
     role: selectedRole.value,
     username: username.value,
     email: email.value,
     hasPassword: password.value.length > 0,
     passwordsMatch: confirmPassword.value === password.value,
+    responseMessage: response.msg ?? '',
   })
 }
 
@@ -220,7 +260,38 @@ const submitForm = async () => {
   if (!validation.valid)
     return
 
-  performRegister()
-  resetFormValidation()
+  submitError.value = ''
+  submitSuccess.value = ''
+  isSubmitting.value = true
+
+  try {
+    const payload: RegisterUserRequest = {
+      name: username.value,
+      email: email.value,
+      password: password.value,
+      cpassword: confirmPassword.value,
+      isVisibleInRanking: true,
+    }
+
+    const response = await registerByRole(payload)
+
+    if (response.status !== 200) {
+      submitError.value = extractMessage(response.data) || 'Registration failed. Please try again.'
+      return
+    }
+
+    performRegister(response.data)
+    submitSuccess.value = extractMessage(response.data) || 'Registration successful. You can log in now.'
+    resetFormValidation()
+    await router.push('/login')
+  }
+  catch (error: unknown) {
+    submitError.value = error instanceof Error
+      ? error.message
+      : 'Unexpected registration error. Please try again.'
+  }
+  finally {
+    isSubmitting.value = false
+  }
 }
 </script>
