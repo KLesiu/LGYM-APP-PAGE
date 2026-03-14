@@ -91,6 +91,15 @@ import type {
   UserInfoDto
 } from '../model';
 
+const API_BASE_URL = ((import.meta.env.VITE_API_BASE_URL as string | undefined) ?? (import.meta.env.VITE_API_URL as string | undefined) ?? '').replace(/\/$/, '')
+
+const withApiBase = (path: string) => {
+  if (!API_BASE_URL)
+    return path
+
+  return `${API_BASE_URL}${path}`
+}
+
 export type postApiAppConfigGetAppVersionResponse200TextPlain = {
   data: AppConfigInfoDto
   status: 200
@@ -5193,7 +5202,7 @@ export const getPostApiTrainerRegisterUrl = () => {
 
   
 
-  return `/api/trainer/register`
+  return withApiBase('/api/trainer/register')
 }
 
 export const postApiTrainerRegister = async (registerUserRequest: RegisterUserRequest, options?: RequestInit): Promise<postApiTrainerRegisterResponse> => {
@@ -5243,7 +5252,7 @@ export const getPostApiTrainerLoginUrl = () => {
 
   
 
-  return `/api/trainer/login`
+  return withApiBase('/api/trainer/login')
 }
 
 export const postApiTrainerLogin = async (loginRequest: LoginRequest, options?: RequestInit): Promise<postApiTrainerLoginResponse> => {
@@ -7612,7 +7621,7 @@ export const getPostApiRegisterUrl = () => {
 
   
 
-  return `/api/register`
+  return withApiBase('/api/register')
 }
 
 export const postApiRegister = async (registerUserRequest: RegisterUserRequest, options?: RequestInit): Promise<postApiRegisterResponse> => {
@@ -7662,7 +7671,7 @@ export const getPostApiLoginUrl = () => {
 
   
 
-  return `/api/login`
+  return withApiBase('/api/login')
 }
 
 export const postApiLogin = async (loginRequest: LoginRequest, options?: RequestInit): Promise<postApiLoginResponse> => {
