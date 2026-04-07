@@ -116,6 +116,20 @@
         "unexpectedError": "Wystapil nieoczekiwany blad logowania. Sprobuj ponownie."
       }
     },
+    "loginAdmin": {
+      "title": "Logowanie administratora",
+      "subtitle": "Zaloguj sie na konto z uprawnieniami do zarzadzania uzytkownikami i rolami",
+      "actions": {
+        "submit": "Wejdz do panelu admina"
+      },
+      "feedback": {
+        "accessDenied": "To konto nie ma uprawnien administratora."
+      },
+      "footer": {
+        "backToUserLoginLabel": "Chcesz wrocic do zwyklego logowania?",
+        "backToUserLogin": "Przejdz do /login"
+      }
+    },
     "register": {
       "title": "Utworz konto",
       "subtitle": "Wypelnij dane ponizej, aby sie zarejestrowac",
@@ -127,7 +141,7 @@
       },
       "placeholders": {
         "username": "twoja_nazwa",
-        "email": "ja@example.com",
+        "email": "ja.example.com",
         "password": "Haslo",
         "confirmPassword": "Potwierdz haslo"
       },
@@ -154,6 +168,78 @@
       "current": "Aktualny jezyk: {code}",
       "polish": "Polski",
       "english": "Angielski"
+    }
+  },
+  "admin": {
+    "panel": {
+      "eyebrow": "Panel administratora",
+      "brandTitle": "LGYM Control Room",
+      "title": "Zarzadzanie aplikacja",
+      "subtitle": "Przegladaj wszystkich uzytkownikow, kontroluj ich status i nadaj role bezposrednio z nowego panelu administracyjnego.",
+      "badges": {
+        "secureWorkspace": "Bezpieczna przestrzen robocza",
+        "userAccess": "Uzytkownicy · Role · Dostep",
+        "workspaceSuite": "Pakiet administracyjny LGYM"
+      },
+      "side": {
+        "eyebrow": "LGYM Admin Suite",
+        "title": "Trzymaj uzytkownikow, uprawnienia i dostep do workspace'u w jednym, dopracowanym miejscu."
+      }
+    },
+    "stats": {
+      "totalUsers": "Wszyscy uzytkownicy",
+      "blockedUsers": "Zablokowani na tej stronie",
+      "blockedUsersPage": "Zablokowani na tej stronie",
+      "availableRoles": "Dostepne role"
+    },
+    "register": {
+      "eyebrow": "Rejestracja",
+      "title": "Dodaj nowego uzytkownika",
+      "subtitle": "Utworz konto zawodnika albo trenera bez wychodzenia z panelu administratora.",
+      "scope": "Tworzenie kont: zawodnik lub trener",
+      "note": "Po utworzeniu konta mozesz od razu przypisac dodatkowe role z listy uzytkownikow ponizej.",
+      "actions": {
+        "submit": "Zarejestruj uzytkownika"
+      },
+      "feedback": {
+        "failed": "Nie udalo sie zarejestrowac uzytkownika.",
+        "success": "Uzytkownik zostal zarejestrowany poprawnie.",
+        "unexpectedError": "Wystapil nieoczekiwany blad podczas rejestracji.",
+        "userAddedToList": "Uzytkownik zostal dodany i lista zostala odswiezona."
+      }
+    },
+    "table": {
+      "sectionEyebrow": "Rejestr uzytkownikow LGYM",
+      "sectionSubtitle": "Sprawdzaj status kont, analizuj przypisane role i zarzadzaj dostepem bez wychodzenia z dashboardu.",
+      "user": "Uzytkownik",
+      "email": "Email",
+      "status": "Status",
+      "roles": "Role",
+      "actions": "Akcje",
+      "empty": "Brak uzytkownikow do wyswietlenia.",
+      "unknownName": "Brak nazwy"
+    },
+    "status": {
+      "active": "Aktywny",
+      "blocked": "Zablokowany",
+      "deleted": "Usuniety"
+    },
+    "actions": {
+      "refresh": "Odswiez dane",
+      "logout": "Wyloguj",
+      "saveRoles": "Zapisz role",
+      "previous": "Poprzednia",
+      "next": "Nastepna"
+    },
+    "feedback": {
+      "usersLoadFailed": "Nie udalo sie pobrac listy uzytkownikow.",
+      "rolesLoadFailed": "Nie udalo sie pobrac listy rol.",
+      "rolesUpdateFailed": "Nie udalo sie zapisac rol dla uzytkownika.",
+      "rolesUpdateSuccess": "Role zostaly zapisane poprawnie.",
+      "unauthorized": "Sesja administratora wygasla albo nie masz juz wymaganych uprawnien. Zaloguj sie ponownie."
+    },
+    "pagination": {
+      "summary": "Strona {page} z {totalPages} • lacznie {totalCount} uzytkownikow"
     }
   }
 }

@@ -116,6 +116,20 @@
         "unexpectedError": "Unexpected login error. Please try again."
       }
     },
+    "loginAdmin": {
+      "title": "Administrator login",
+      "subtitle": "Sign in with an account that can manage users, roles, and application access",
+      "actions": {
+        "submit": "Open admin panel"
+      },
+      "feedback": {
+        "accessDenied": "This account does not have administrator access."
+      },
+      "footer": {
+        "backToUserLoginLabel": "Want to go back to the regular sign in?",
+        "backToUserLogin": "Go to /login"
+      }
+    },
     "register": {
       "title": "Create your account",
       "subtitle": "Fill in your details below to register",
@@ -127,7 +141,7 @@
       },
       "placeholders": {
         "username": "your_username",
-        "email": "me@example.com",
+        "email": "me.example.com",
         "password": "Password",
         "confirmPassword": "Confirm Password"
       },
@@ -154,6 +168,78 @@
       "current": "Current language: {code}",
       "polish": "Polski",
       "english": "English"
+    }
+  },
+  "admin": {
+    "panel": {
+      "eyebrow": "Administrator panel",
+      "brandTitle": "LGYM Control Room",
+      "title": "Application management",
+      "subtitle": "Review all users, inspect their status, and assign roles directly from the new admin workspace.",
+      "badges": {
+        "secureWorkspace": "Secure workspace",
+        "userAccess": "Users · Roles · Access",
+        "workspaceSuite": "LGYM administration suite"
+      },
+      "side": {
+        "eyebrow": "LGYM Admin Suite",
+        "title": "Keep users, permissions, and workspace access under one sharp control surface."
+      }
+    },
+    "stats": {
+      "totalUsers": "Total users",
+      "blockedUsers": "Blocked on this page",
+      "blockedUsersPage": "Blocked on this page",
+      "availableRoles": "Available roles"
+    },
+    "register": {
+      "eyebrow": "Registration",
+      "title": "Add a new user",
+      "subtitle": "Create an athlete or trainer account directly from the administrator panel.",
+      "scope": "Account creation: athlete or trainer",
+      "note": "After creating the account, you can immediately assign extra roles from the user list below.",
+      "actions": {
+        "submit": "Register user"
+      },
+      "feedback": {
+        "failed": "Failed to register the user.",
+        "success": "User registered successfully.",
+        "unexpectedError": "Unexpected registration error.",
+        "userAddedToList": "User created and the list has been refreshed."
+      }
+    },
+    "table": {
+      "sectionEyebrow": "LGYM User Registry",
+      "sectionSubtitle": "Review account status, inspect assigned roles, and make access changes without leaving the dashboard.",
+      "user": "User",
+      "email": "Email",
+      "status": "Status",
+      "roles": "Roles",
+      "actions": "Actions",
+      "empty": "No users to display.",
+      "unknownName": "Unknown name"
+    },
+    "status": {
+      "active": "Active",
+      "blocked": "Blocked",
+      "deleted": "Deleted"
+    },
+    "actions": {
+      "refresh": "Refresh data",
+      "logout": "Log out",
+      "saveRoles": "Save roles",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "feedback": {
+      "usersLoadFailed": "Failed to load users.",
+      "rolesLoadFailed": "Failed to load roles.",
+      "rolesUpdateFailed": "Failed to save user roles.",
+      "rolesUpdateSuccess": "Roles saved successfully.",
+      "unauthorized": "Your administrator session expired or no longer has the required permissions. Please sign in again."
+    },
+    "pagination": {
+      "summary": "Page {page} of {totalPages} • {totalCount} users total"
     }
   }
 }
