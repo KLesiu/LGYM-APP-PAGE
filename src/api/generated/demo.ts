@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0
  */
 import type {
+  AdminUserDto,
   AppConfigInfoDto,
   AppConfigInfoWithPlatformDto,
   AppConfigVersionRequestDto,
@@ -13,6 +14,7 @@ import type {
   CompleteTutorialRequest,
   CopyPlanDto,
   CreateReportRequestRequest,
+  CreateTrainerInvitationByEmailRequest,
   CreateTrainerInvitationRequest,
   EloRegistryBaseChartDto,
   EnumLookupResponseDto,
@@ -23,6 +25,9 @@ import type {
   ExerciseScoresChartRequestDto,
   ExerciseTrainingHistoryItemDto,
   ExerciseTranslationDto,
+  ForgotPasswordRequest,
+  GetApiIdNotificationsParams,
+  GetApiInvitationsInvitationIdParams,
   GetApiMeasurementsIdGetHistoryParams,
   GetApiMeasurementsIdListParams,
   GetApiMeasurementsIdTrendParams,
@@ -44,6 +49,13 @@ import type {
   MeasurementTrendDto,
   MeasurementsHistoryDto,
   MeasurementsListDto,
+  PagedNotificationsResultDto,
+  PaginatedAdminUserResult,
+  PaginatedRoleRequest,
+  PaginatedRoleResult,
+  PaginatedTrainerInvitationRequest,
+  PaginatedTrainerInvitationResult,
+  PaginatedUserRequest,
   PermissionClaimLookupDto,
   PlanDayBaseInfoDto,
   PlanDayChooseDto,
@@ -58,12 +70,15 @@ import type {
   PostApiExerciseIdDeleteExerciseBodyOne,
   PostApiExerciseIdDeleteExerciseBodyThree,
   PostApiExerciseIdDeleteExerciseBodyTwo,
+  PostApiIdNotificationsMarkAllReadParams,
   ProblemDetails,
+  PublicInvitationStatusDto,
   RecordOrPossibleRequestDto,
   RegisterUserRequest,
   ReportRequestDto,
   ReportSubmissionDto,
   ReportTemplateDto,
+  ResetPasswordRequest,
   ResponseMessageDto,
   RoleDto,
   SetActivePlanDto,
@@ -81,7 +96,9 @@ import type {
   TrainingFormDto,
   TrainingSummaryDto,
   TutorialProgressDto,
+  UnreadCountDto,
   UpdateTimeZoneRequest,
+  UpdateUserRequest,
   UpdateUserRolesRequest,
   UpsertReportTemplateRequest,
   UpsertRoleRequest,
@@ -91,14 +108,432 @@ import type {
   UserInfoDto
 } from '../model';
 
-const API_BASE_URL = ((import.meta.env.VITE_API_BASE_URL as string | undefined) ?? (import.meta.env.VITE_API_URL as string | undefined) ?? '').replace(/\/$/, '')
-
-const withApiBase = (path: string) => {
-  if (!API_BASE_URL)
-    return path
-
-  return `${API_BASE_URL}${path}`
+export type postApiAdminUsersPaginatedResponse200TextPlain = {
+  data: PaginatedAdminUserResult
+  status: 200
 }
+
+export type postApiAdminUsersPaginatedResponse200ApplicationJson = {
+  data: PaginatedAdminUserResult
+  status: 200
+}
+
+export type postApiAdminUsersPaginatedResponse200TextJson = {
+  data: PaginatedAdminUserResult
+  status: 200
+}
+
+export type postApiAdminUsersPaginatedResponseSuccess = (postApiAdminUsersPaginatedResponse200TextPlain | postApiAdminUsersPaginatedResponse200ApplicationJson | postApiAdminUsersPaginatedResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiAdminUsersPaginatedResponse = (postApiAdminUsersPaginatedResponseSuccess)
+
+export const getPostApiAdminUsersPaginatedUrl = () => {
+
+
+  
+
+  return `/api/admin/users/paginated`
+}
+
+export const postApiAdminUsersPaginated = async (paginatedUserRequest: PaginatedUserRequest, options?: RequestInit): Promise<postApiAdminUsersPaginatedResponse> => {
+  
+  const res = await fetch(getPostApiAdminUsersPaginatedUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      paginatedUserRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAdminUsersPaginatedResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAdminUsersPaginatedResponse
+}
+  
+
+
+export type getApiAdminUsersIdResponse200TextPlain = {
+  data: AdminUserDto
+  status: 200
+}
+
+export type getApiAdminUsersIdResponse200ApplicationJson = {
+  data: AdminUserDto
+  status: 200
+}
+
+export type getApiAdminUsersIdResponse200TextJson = {
+  data: AdminUserDto
+  status: 200
+}
+
+export type getApiAdminUsersIdResponse404TextPlain = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type getApiAdminUsersIdResponse404ApplicationJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type getApiAdminUsersIdResponse404TextJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type getApiAdminUsersIdResponseSuccess = (getApiAdminUsersIdResponse200TextPlain | getApiAdminUsersIdResponse200ApplicationJson | getApiAdminUsersIdResponse200TextJson) & {
+  headers: Headers;
+};
+export type getApiAdminUsersIdResponseError = (getApiAdminUsersIdResponse404TextPlain | getApiAdminUsersIdResponse404ApplicationJson | getApiAdminUsersIdResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type getApiAdminUsersIdResponse = (getApiAdminUsersIdResponseSuccess | getApiAdminUsersIdResponseError)
+
+export const getGetApiAdminUsersIdUrl = (id: string,) => {
+
+
+  
+
+  return `/api/admin/users/${id}`
+}
+
+export const getApiAdminUsersId = async (id: string, options?: RequestInit): Promise<getApiAdminUsersIdResponse> => {
+  
+  const res = await fetch(getGetApiAdminUsersIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiAdminUsersIdResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiAdminUsersIdResponse
+}
+  
+
+
+export type postApiAdminUsersIdUpdateResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdUpdateResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdUpdateResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdUpdateResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiAdminUsersIdUpdateResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiAdminUsersIdUpdateResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiAdminUsersIdUpdateResponse404TextPlain = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdUpdateResponse404ApplicationJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdUpdateResponse404TextJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdUpdateResponseSuccess = (postApiAdminUsersIdUpdateResponse200TextPlain | postApiAdminUsersIdUpdateResponse200ApplicationJson | postApiAdminUsersIdUpdateResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiAdminUsersIdUpdateResponseError = (postApiAdminUsersIdUpdateResponse400TextPlain | postApiAdminUsersIdUpdateResponse400ApplicationJson | postApiAdminUsersIdUpdateResponse400TextJson | postApiAdminUsersIdUpdateResponse404TextPlain | postApiAdminUsersIdUpdateResponse404ApplicationJson | postApiAdminUsersIdUpdateResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type postApiAdminUsersIdUpdateResponse = (postApiAdminUsersIdUpdateResponseSuccess | postApiAdminUsersIdUpdateResponseError)
+
+export const getPostApiAdminUsersIdUpdateUrl = (id: string,) => {
+
+
+  
+
+  return `/api/admin/users/${id}/update`
+}
+
+export const postApiAdminUsersIdUpdate = async (id: string,
+    updateUserRequest: UpdateUserRequest, options?: RequestInit): Promise<postApiAdminUsersIdUpdateResponse> => {
+  
+  const res = await fetch(getPostApiAdminUsersIdUpdateUrl(id),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateUserRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAdminUsersIdUpdateResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAdminUsersIdUpdateResponse
+}
+  
+
+
+export type postApiAdminUsersIdDeleteResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdDeleteResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdDeleteResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdDeleteResponse403TextPlain = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiAdminUsersIdDeleteResponse403ApplicationJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiAdminUsersIdDeleteResponse403TextJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiAdminUsersIdDeleteResponse404TextPlain = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdDeleteResponse404ApplicationJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdDeleteResponse404TextJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdDeleteResponseSuccess = (postApiAdminUsersIdDeleteResponse200TextPlain | postApiAdminUsersIdDeleteResponse200ApplicationJson | postApiAdminUsersIdDeleteResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiAdminUsersIdDeleteResponseError = (postApiAdminUsersIdDeleteResponse403TextPlain | postApiAdminUsersIdDeleteResponse403ApplicationJson | postApiAdminUsersIdDeleteResponse403TextJson | postApiAdminUsersIdDeleteResponse404TextPlain | postApiAdminUsersIdDeleteResponse404ApplicationJson | postApiAdminUsersIdDeleteResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type postApiAdminUsersIdDeleteResponse = (postApiAdminUsersIdDeleteResponseSuccess | postApiAdminUsersIdDeleteResponseError)
+
+export const getPostApiAdminUsersIdDeleteUrl = (id: string,) => {
+
+
+  
+
+  return `/api/admin/users/${id}/delete`
+}
+
+export const postApiAdminUsersIdDelete = async (id: string, options?: RequestInit): Promise<postApiAdminUsersIdDeleteResponse> => {
+  
+  const res = await fetch(getPostApiAdminUsersIdDeleteUrl(id),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAdminUsersIdDeleteResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAdminUsersIdDeleteResponse
+}
+  
+
+
+export type postApiAdminUsersIdBlockResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdBlockResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdBlockResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdBlockResponse403TextPlain = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiAdminUsersIdBlockResponse403ApplicationJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiAdminUsersIdBlockResponse403TextJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiAdminUsersIdBlockResponse404TextPlain = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdBlockResponse404ApplicationJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdBlockResponse404TextJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdBlockResponseSuccess = (postApiAdminUsersIdBlockResponse200TextPlain | postApiAdminUsersIdBlockResponse200ApplicationJson | postApiAdminUsersIdBlockResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiAdminUsersIdBlockResponseError = (postApiAdminUsersIdBlockResponse403TextPlain | postApiAdminUsersIdBlockResponse403ApplicationJson | postApiAdminUsersIdBlockResponse403TextJson | postApiAdminUsersIdBlockResponse404TextPlain | postApiAdminUsersIdBlockResponse404ApplicationJson | postApiAdminUsersIdBlockResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type postApiAdminUsersIdBlockResponse = (postApiAdminUsersIdBlockResponseSuccess | postApiAdminUsersIdBlockResponseError)
+
+export const getPostApiAdminUsersIdBlockUrl = (id: string,) => {
+
+
+  
+
+  return `/api/admin/users/${id}/block`
+}
+
+export const postApiAdminUsersIdBlock = async (id: string, options?: RequestInit): Promise<postApiAdminUsersIdBlockResponse> => {
+  
+  const res = await fetch(getPostApiAdminUsersIdBlockUrl(id),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAdminUsersIdBlockResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAdminUsersIdBlockResponse
+}
+  
+
+
+export type postApiAdminUsersIdUnblockResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdUnblockResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdUnblockResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAdminUsersIdUnblockResponse404TextPlain = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdUnblockResponse404ApplicationJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdUnblockResponse404TextJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAdminUsersIdUnblockResponseSuccess = (postApiAdminUsersIdUnblockResponse200TextPlain | postApiAdminUsersIdUnblockResponse200ApplicationJson | postApiAdminUsersIdUnblockResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiAdminUsersIdUnblockResponseError = (postApiAdminUsersIdUnblockResponse404TextPlain | postApiAdminUsersIdUnblockResponse404ApplicationJson | postApiAdminUsersIdUnblockResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type postApiAdminUsersIdUnblockResponse = (postApiAdminUsersIdUnblockResponseSuccess | postApiAdminUsersIdUnblockResponseError)
+
+export const getPostApiAdminUsersIdUnblockUrl = (id: string,) => {
+
+
+  
+
+  return `/api/admin/users/${id}/unblock`
+}
+
+export const postApiAdminUsersIdUnblock = async (id: string, options?: RequestInit): Promise<postApiAdminUsersIdUnblockResponse> => {
+  
+  const res = await fetch(getPostApiAdminUsersIdUnblockUrl(id),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAdminUsersIdUnblockResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAdminUsersIdUnblockResponse
+}
+  
+
 
 export type postApiAppConfigGetAppVersionResponse200TextPlain = {
   data: AppConfigInfoDto
@@ -1982,6 +2417,305 @@ export const postApiGymEditGym = async (gymFormDto: GymFormDto, options?: Reques
   
   const data: postApiGymEditGymResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as postApiGymEditGymResponse
+}
+  
+
+
+export type getApiIdNotificationsResponse200TextPlain = {
+  data: PagedNotificationsResultDto
+  status: 200
+}
+
+export type getApiIdNotificationsResponse200ApplicationJson = {
+  data: PagedNotificationsResultDto
+  status: 200
+}
+
+export type getApiIdNotificationsResponse200TextJson = {
+  data: PagedNotificationsResultDto
+  status: 200
+}
+
+export type getApiIdNotificationsResponse403TextPlain = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type getApiIdNotificationsResponse403ApplicationJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type getApiIdNotificationsResponse403TextJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type getApiIdNotificationsResponseSuccess = (getApiIdNotificationsResponse200TextPlain | getApiIdNotificationsResponse200ApplicationJson | getApiIdNotificationsResponse200TextJson) & {
+  headers: Headers;
+};
+export type getApiIdNotificationsResponseError = (getApiIdNotificationsResponse403TextPlain | getApiIdNotificationsResponse403ApplicationJson | getApiIdNotificationsResponse403TextJson) & {
+  headers: Headers;
+};
+
+export type getApiIdNotificationsResponse = (getApiIdNotificationsResponseSuccess | getApiIdNotificationsResponseError)
+
+export const getGetApiIdNotificationsUrl = (id: string,
+    params?: GetApiIdNotificationsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/${id}/notifications?${stringifiedParams}` : `/api/${id}/notifications`
+}
+
+export const getApiIdNotifications = async (id: string,
+    params?: GetApiIdNotificationsParams, options?: RequestInit): Promise<getApiIdNotificationsResponse> => {
+  
+  const res = await fetch(getGetApiIdNotificationsUrl(id,params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiIdNotificationsResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiIdNotificationsResponse
+}
+  
+
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse403TextPlain = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse403ApplicationJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse403TextJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse404TextPlain = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse404ApplicationJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse404TextJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiIdNotificationsNotificationIdMarkReadResponseSuccess = (postApiIdNotificationsNotificationIdMarkReadResponse200TextPlain | postApiIdNotificationsNotificationIdMarkReadResponse200ApplicationJson | postApiIdNotificationsNotificationIdMarkReadResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiIdNotificationsNotificationIdMarkReadResponseError = (postApiIdNotificationsNotificationIdMarkReadResponse403TextPlain | postApiIdNotificationsNotificationIdMarkReadResponse403ApplicationJson | postApiIdNotificationsNotificationIdMarkReadResponse403TextJson | postApiIdNotificationsNotificationIdMarkReadResponse404TextPlain | postApiIdNotificationsNotificationIdMarkReadResponse404ApplicationJson | postApiIdNotificationsNotificationIdMarkReadResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type postApiIdNotificationsNotificationIdMarkReadResponse = (postApiIdNotificationsNotificationIdMarkReadResponseSuccess | postApiIdNotificationsNotificationIdMarkReadResponseError)
+
+export const getPostApiIdNotificationsNotificationIdMarkReadUrl = (id: string,
+    notificationId: string,) => {
+
+
+  
+
+  return `/api/${id}/notifications/${notificationId}/mark-read`
+}
+
+export const postApiIdNotificationsNotificationIdMarkRead = async (id: string,
+    notificationId: string, options?: RequestInit): Promise<postApiIdNotificationsNotificationIdMarkReadResponse> => {
+  
+  const res = await fetch(getPostApiIdNotificationsNotificationIdMarkReadUrl(id,notificationId),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiIdNotificationsNotificationIdMarkReadResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiIdNotificationsNotificationIdMarkReadResponse
+}
+  
+
+
+export type postApiIdNotificationsMarkAllReadResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiIdNotificationsMarkAllReadResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiIdNotificationsMarkAllReadResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiIdNotificationsMarkAllReadResponse403TextPlain = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiIdNotificationsMarkAllReadResponse403ApplicationJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiIdNotificationsMarkAllReadResponse403TextJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type postApiIdNotificationsMarkAllReadResponseSuccess = (postApiIdNotificationsMarkAllReadResponse200TextPlain | postApiIdNotificationsMarkAllReadResponse200ApplicationJson | postApiIdNotificationsMarkAllReadResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiIdNotificationsMarkAllReadResponseError = (postApiIdNotificationsMarkAllReadResponse403TextPlain | postApiIdNotificationsMarkAllReadResponse403ApplicationJson | postApiIdNotificationsMarkAllReadResponse403TextJson) & {
+  headers: Headers;
+};
+
+export type postApiIdNotificationsMarkAllReadResponse = (postApiIdNotificationsMarkAllReadResponseSuccess | postApiIdNotificationsMarkAllReadResponseError)
+
+export const getPostApiIdNotificationsMarkAllReadUrl = (id: string,
+    params?: PostApiIdNotificationsMarkAllReadParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/${id}/notifications/mark-all-read?${stringifiedParams}` : `/api/${id}/notifications/mark-all-read`
+}
+
+export const postApiIdNotificationsMarkAllRead = async (id: string,
+    params?: PostApiIdNotificationsMarkAllReadParams, options?: RequestInit): Promise<postApiIdNotificationsMarkAllReadResponse> => {
+  
+  const res = await fetch(getPostApiIdNotificationsMarkAllReadUrl(id,params),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiIdNotificationsMarkAllReadResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiIdNotificationsMarkAllReadResponse
+}
+  
+
+
+export type getApiIdNotificationsUnreadCountResponse200TextPlain = {
+  data: UnreadCountDto
+  status: 200
+}
+
+export type getApiIdNotificationsUnreadCountResponse200ApplicationJson = {
+  data: UnreadCountDto
+  status: 200
+}
+
+export type getApiIdNotificationsUnreadCountResponse200TextJson = {
+  data: UnreadCountDto
+  status: 200
+}
+
+export type getApiIdNotificationsUnreadCountResponse403TextPlain = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type getApiIdNotificationsUnreadCountResponse403ApplicationJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type getApiIdNotificationsUnreadCountResponse403TextJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type getApiIdNotificationsUnreadCountResponseSuccess = (getApiIdNotificationsUnreadCountResponse200TextPlain | getApiIdNotificationsUnreadCountResponse200ApplicationJson | getApiIdNotificationsUnreadCountResponse200TextJson) & {
+  headers: Headers;
+};
+export type getApiIdNotificationsUnreadCountResponseError = (getApiIdNotificationsUnreadCountResponse403TextPlain | getApiIdNotificationsUnreadCountResponse403ApplicationJson | getApiIdNotificationsUnreadCountResponse403TextJson) & {
+  headers: Headers;
+};
+
+export type getApiIdNotificationsUnreadCountResponse = (getApiIdNotificationsUnreadCountResponseSuccess | getApiIdNotificationsUnreadCountResponseError)
+
+export const getGetApiIdNotificationsUnreadCountUrl = (id: string,) => {
+
+
+  
+
+  return `/api/${id}/notifications/unread-count`
+}
+
+export const getApiIdNotificationsUnreadCount = async (id: string, options?: RequestInit): Promise<getApiIdNotificationsUnreadCountResponse> => {
+  
+  const res = await fetch(getGetApiIdNotificationsUnreadCountUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiIdNotificationsUnreadCountResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiIdNotificationsUnreadCountResponse
 }
   
 
@@ -4276,6 +5010,81 @@ export const getApiPlanDayIdGetPlanDaysInfo = async (id: string, options?: Reque
   
 
 
+export type getApiInvitationsInvitationIdResponse200TextPlain = {
+  data: PublicInvitationStatusDto
+  status: 200
+}
+
+export type getApiInvitationsInvitationIdResponse200ApplicationJson = {
+  data: PublicInvitationStatusDto
+  status: 200
+}
+
+export type getApiInvitationsInvitationIdResponse200TextJson = {
+  data: PublicInvitationStatusDto
+  status: 200
+}
+
+export type getApiInvitationsInvitationIdResponse404TextPlain = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiInvitationsInvitationIdResponse404ApplicationJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiInvitationsInvitationIdResponse404TextJson = {
+  data: ProblemDetails
+  status: 404
+}
+
+export type getApiInvitationsInvitationIdResponseSuccess = (getApiInvitationsInvitationIdResponse200TextPlain | getApiInvitationsInvitationIdResponse200ApplicationJson | getApiInvitationsInvitationIdResponse200TextJson) & {
+  headers: Headers;
+};
+export type getApiInvitationsInvitationIdResponseError = (getApiInvitationsInvitationIdResponse404TextPlain | getApiInvitationsInvitationIdResponse404ApplicationJson | getApiInvitationsInvitationIdResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type getApiInvitationsInvitationIdResponse = (getApiInvitationsInvitationIdResponseSuccess | getApiInvitationsInvitationIdResponseError)
+
+export const getGetApiInvitationsInvitationIdUrl = (invitationId: string,
+    params?: GetApiInvitationsInvitationIdParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/invitations/${invitationId}?${stringifiedParams}` : `/api/invitations/${invitationId}`
+}
+
+export const getApiInvitationsInvitationId = async (invitationId: string,
+    params?: GetApiInvitationsInvitationIdParams, options?: RequestInit): Promise<getApiInvitationsInvitationIdResponse> => {
+  
+  const res = await fetch(getGetApiInvitationsInvitationIdUrl(invitationId,params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiInvitationsInvitationIdResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiInvitationsInvitationIdResponse
+}
+  
+
+
 export type getApiRolesResponse200TextPlain = {
   data: RoleDto[]
   status: 200
@@ -4388,6 +5197,56 @@ export const postApiRoles = async (upsertRoleRequest: UpsertRoleRequest, options
   
   const data: postApiRolesResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as postApiRolesResponse
+}
+  
+
+
+export type postApiRolesPaginatedResponse200TextPlain = {
+  data: PaginatedRoleResult
+  status: 200
+}
+
+export type postApiRolesPaginatedResponse200ApplicationJson = {
+  data: PaginatedRoleResult
+  status: 200
+}
+
+export type postApiRolesPaginatedResponse200TextJson = {
+  data: PaginatedRoleResult
+  status: 200
+}
+
+export type postApiRolesPaginatedResponseSuccess = (postApiRolesPaginatedResponse200TextPlain | postApiRolesPaginatedResponse200ApplicationJson | postApiRolesPaginatedResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiRolesPaginatedResponse = (postApiRolesPaginatedResponseSuccess)
+
+export const getPostApiRolesPaginatedUrl = () => {
+
+
+  
+
+  return `/api/roles/paginated`
+}
+
+export const postApiRolesPaginated = async (paginatedRoleRequest: PaginatedRoleRequest, options?: RequestInit): Promise<postApiRolesPaginatedResponse> => {
+  
+  const res = await fetch(getPostApiRolesPaginatedUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      paginatedRoleRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiRolesPaginatedResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiRolesPaginatedResponse
 }
   
 
@@ -5202,7 +6061,7 @@ export const getPostApiTrainerRegisterUrl = () => {
 
   
 
-  return withApiBase('/api/trainer/register')
+  return `/api/trainer/register`
 }
 
 export const postApiTrainerRegister = async (registerUserRequest: RegisterUserRequest, options?: RequestInit): Promise<postApiTrainerRegisterResponse> => {
@@ -5252,7 +6111,7 @@ export const getPostApiTrainerLoginUrl = () => {
 
   
 
-  return withApiBase('/api/trainer/login')
+  return `/api/trainer/login`
 }
 
 export const postApiTrainerLogin = async (loginRequest: LoginRequest, options?: RequestInit): Promise<postApiTrainerLoginResponse> => {
@@ -5374,42 +6233,142 @@ export const postApiTrainerInvitations = async (createTrainerInvitationRequest: 
   
 
 
-export type getApiTrainerInvitationsResponse200TextPlain = {
-  data: TrainerInvitationDto[]
+export type postApiTrainerInvitationsPaginatedResponse200TextPlain = {
+  data: PaginatedTrainerInvitationResult
   status: 200
 }
 
-export type getApiTrainerInvitationsResponse200ApplicationJson = {
-  data: TrainerInvitationDto[]
+export type postApiTrainerInvitationsPaginatedResponse200ApplicationJson = {
+  data: PaginatedTrainerInvitationResult
   status: 200
 }
 
-export type getApiTrainerInvitationsResponse200TextJson = {
-  data: TrainerInvitationDto[]
+export type postApiTrainerInvitationsPaginatedResponse200TextJson = {
+  data: PaginatedTrainerInvitationResult
   status: 200
 }
 
-export type getApiTrainerInvitationsResponseSuccess = (getApiTrainerInvitationsResponse200TextPlain | getApiTrainerInvitationsResponse200ApplicationJson | getApiTrainerInvitationsResponse200TextJson) & {
+export type postApiTrainerInvitationsPaginatedResponseSuccess = (postApiTrainerInvitationsPaginatedResponse200TextPlain | postApiTrainerInvitationsPaginatedResponse200ApplicationJson | postApiTrainerInvitationsPaginatedResponse200TextJson) & {
   headers: Headers;
 };
 ;
 
-export type getApiTrainerInvitationsResponse = (getApiTrainerInvitationsResponseSuccess)
+export type postApiTrainerInvitationsPaginatedResponse = (postApiTrainerInvitationsPaginatedResponseSuccess)
 
-export const getGetApiTrainerInvitationsUrl = () => {
+export const getPostApiTrainerInvitationsPaginatedUrl = () => {
 
 
   
 
-  return `/api/trainer/invitations`
+  return `/api/trainer/invitations/paginated`
 }
 
-export const getApiTrainerInvitations = async ( options?: RequestInit): Promise<getApiTrainerInvitationsResponse> => {
+export const postApiTrainerInvitationsPaginated = async (paginatedTrainerInvitationRequest: PaginatedTrainerInvitationRequest, options?: RequestInit): Promise<postApiTrainerInvitationsPaginatedResponse> => {
   
-  const res = await fetch(getGetApiTrainerInvitationsUrl(),
+  const res = await fetch(getPostApiTrainerInvitationsPaginatedUrl(),
   {      
     ...options,
-    method: 'GET'
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      paginatedTrainerInvitationRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTrainerInvitationsPaginatedResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsPaginatedResponse
+}
+  
+
+
+export type postApiTrainerInvitationsByEmailResponse200TextPlain = {
+  data: TrainerInvitationDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsByEmailResponse200ApplicationJson = {
+  data: TrainerInvitationDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsByEmailResponse200TextJson = {
+  data: TrainerInvitationDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsByEmailResponseSuccess = (postApiTrainerInvitationsByEmailResponse200TextPlain | postApiTrainerInvitationsByEmailResponse200ApplicationJson | postApiTrainerInvitationsByEmailResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiTrainerInvitationsByEmailResponse = (postApiTrainerInvitationsByEmailResponseSuccess)
+
+export const getPostApiTrainerInvitationsByEmailUrl = () => {
+
+
+  
+
+  return `/api/trainer/invitations/by-email`
+}
+
+export const postApiTrainerInvitationsByEmail = async (createTrainerInvitationByEmailRequest: CreateTrainerInvitationByEmailRequest, options?: RequestInit): Promise<postApiTrainerInvitationsByEmailResponse> => {
+  
+  const res = await fetch(getPostApiTrainerInvitationsByEmailUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      createTrainerInvitationByEmailRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTrainerInvitationsByEmailResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsByEmailResponse
+}
+  
+
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponseSuccess = (postApiTrainerInvitationsInvitationIdRevokeResponse200TextPlain | postApiTrainerInvitationsInvitationIdRevokeResponse200ApplicationJson | postApiTrainerInvitationsInvitationIdRevokeResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponse = (postApiTrainerInvitationsInvitationIdRevokeResponseSuccess)
+
+export const getPostApiTrainerInvitationsInvitationIdRevokeUrl = (invitationId: string,) => {
+
+
+  
+
+  return `/api/trainer/invitations/${invitationId}/revoke`
+}
+
+export const postApiTrainerInvitationsInvitationIdRevoke = async (invitationId: string, options?: RequestInit): Promise<postApiTrainerInvitationsInvitationIdRevokeResponse> => {
+  
+  const res = await fetch(getPostApiTrainerInvitationsInvitationIdRevokeUrl(invitationId),
+  {      
+    ...options,
+    method: 'POST'
     
     
   }
@@ -5417,8 +6376,8 @@ export const getApiTrainerInvitations = async ( options?: RequestInit): Promise<
 
   const body = [204, 205, 304].includes(res.status) ? null : await res.text();
   
-  const data: getApiTrainerInvitationsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getApiTrainerInvitationsResponse
+  const data: postApiTrainerInvitationsInvitationIdRevokeResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsInvitationIdRevokeResponse
 }
   
 
@@ -7621,7 +8580,7 @@ export const getPostApiRegisterUrl = () => {
 
   
 
-  return withApiBase('/api/register')
+  return `/api/register`
 }
 
 export const postApiRegister = async (registerUserRequest: RegisterUserRequest, options?: RequestInit): Promise<postApiRegisterResponse> => {
@@ -7671,7 +8630,7 @@ export const getPostApiLoginUrl = () => {
 
   
 
-  return withApiBase('/api/login')
+  return `/api/login`
 }
 
 export const postApiLogin = async (loginRequest: LoginRequest, options?: RequestInit): Promise<postApiLoginResponse> => {
@@ -8084,4 +9043,121 @@ export const postApiUpdateTimeZone = async (updateTimeZoneRequest: UpdateTimeZon
   
   const data: postApiUpdateTimeZoneResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as postApiUpdateTimeZoneResponse
+}
+  
+
+
+export type postApiForgotPasswordResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiForgotPasswordResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiForgotPasswordResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiForgotPasswordResponseSuccess = (postApiForgotPasswordResponse200TextPlain | postApiForgotPasswordResponse200ApplicationJson | postApiForgotPasswordResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiForgotPasswordResponse = (postApiForgotPasswordResponseSuccess)
+
+export const getPostApiForgotPasswordUrl = () => {
+
+
+  
+
+  return `/api/forgot-password`
+}
+
+export const postApiForgotPassword = async (forgotPasswordRequest: ForgotPasswordRequest, options?: RequestInit): Promise<postApiForgotPasswordResponse> => {
+  
+  const res = await fetch(getPostApiForgotPasswordUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      forgotPasswordRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiForgotPasswordResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiForgotPasswordResponse
+}
+  
+
+
+export type postApiResetPasswordResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiResetPasswordResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiResetPasswordResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiResetPasswordResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiResetPasswordResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiResetPasswordResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiResetPasswordResponseSuccess = (postApiResetPasswordResponse200TextPlain | postApiResetPasswordResponse200ApplicationJson | postApiResetPasswordResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiResetPasswordResponseError = (postApiResetPasswordResponse400TextPlain | postApiResetPasswordResponse400ApplicationJson | postApiResetPasswordResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type postApiResetPasswordResponse = (postApiResetPasswordResponseSuccess | postApiResetPasswordResponseError)
+
+export const getPostApiResetPasswordUrl = () => {
+
+
+  
+
+  return `/api/reset-password`
+}
+
+export const postApiResetPassword = async (resetPasswordRequest: ResetPasswordRequest, options?: RequestInit): Promise<postApiResetPasswordResponse> => {
+  
+  const res = await fetch(getPostApiResetPasswordUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      resetPasswordRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiResetPasswordResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiResetPasswordResponse
 }
