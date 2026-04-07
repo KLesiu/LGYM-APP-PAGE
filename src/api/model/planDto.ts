@@ -6,9 +6,11 @@
  */
 
 export interface PlanDto {
-  id?: string;
+  /** @nullable */
+  id?: string | null;
   /** @nullable */
   name?: string | null;
   isActive?: boolean;
-  userId?: string;
+  /** @nullable */
+  userId?: string | null;
 }
