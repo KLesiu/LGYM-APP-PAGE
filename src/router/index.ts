@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import { hasAdminAccess } from "../composables/useAuthSession";
+import AdminLayout from "../layouts/AdminLayout.vue";
 import AdminUsersPage from "../pages/admin/AdminUsersPage.vue";
 import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
@@ -30,18 +31,22 @@ export const router = createRouter({
     },
     {
       path: "/admin",
-      redirect: "/admin/users",
+      component: AdminLayout,
       meta: {
         requiresAdmin: true,
+        hasLayout: true,
       },
-    },
-    {
-      path: "/admin/users",
-      name: "admin-users",
-      component: AdminUsersPage,
-      meta: {
-        requiresAdmin: true,
-      },
+      children: [
+        {
+          path: "",
+          redirect: "/admin/users",
+        },
+        {
+          path: "users",
+          name: "admin-users",
+          component: AdminUsersPage,
+        },
+      ],
     },
   ],
 });
