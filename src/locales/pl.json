@@ -186,6 +186,23 @@
         "title": "Trzymaj uzytkownikow, uprawnienia i dostep do workspace'u w jednym, dopracowanym miejscu."
       }
     },
+    "tabs": {
+      "eyebrow": "Sekcje administracyjne",
+      "items": {
+        "users": {
+          "label": "Uzytkownicy i role",
+          "title": "Konta i uprawnienia",
+          "description": "Dodawaj nowych uzytkownikow, aktualizuj role i zarzadzaj dostepem z jednego widoku.",
+          "menuHint": "Rejestracja, role i statusy"
+        },
+        "versions": {
+          "label": "Wersje aplikacji",
+          "title": "Publikacje Android i iOS",
+          "description": "Zarzadzaj aktualnymi wersjami mobilnymi, minimalnymi wymaganiami oraz linkami do aktualizacji dla Androida i iOS.",
+          "menuHint": "Android, iOS i rollout"
+        }
+      }
+    },
     "stats": {
       "totalUsers": "Wszyscy uzytkownicy",
       "blockedUsers": "Zablokowani na tej stronie",
@@ -237,6 +254,51 @@
       "rolesUpdateFailed": "Nie udalo sie zapisac rol dla uzytkownika.",
       "rolesUpdateSuccess": "Role zostaly zapisane poprawnie.",
       "unauthorized": "Sesja administratora wygasla albo nie masz juz wymaganych uprawnien. Zaloguj sie ponownie."
+    },
+    "versions": {
+      "eyebrow": "Wersje aplikacji",
+      "title": "Konfiguracja aktualizacji mobilnych",
+      "subtitle": "Dodawaj i odswiezaj konfiguracje wersji dla Androida i iOS z wykorzystaniem endpointow wygenerowanych przez Orval.",
+      "platforms": {
+        "android": "Android",
+        "ios": "iOS"
+      },
+      "current": {
+        "eyebrow": "Aktualna konfiguracja",
+        "forceRequired": "Aktualizacja wymagana",
+        "optional": "Aktualizacja opcjonalna"
+      },
+      "fields": {
+        "latestVersion": "Najnowsza wersja",
+        "minRequiredVersion": "Minimalna wymagana wersja",
+        "updateUrl": "Link do aktualizacji",
+        "releaseNotes": "Release notes",
+        "forceUpdate": "Wymus aktualizacje",
+        "forceUpdateHint": "Wlacz, jezeli aplikacja ma zablokowac dalsze korzystanie do czasu instalacji nowej wersji."
+      },
+      "placeholders": {
+        "version": "np. 1.2.3",
+        "androidUrl": "https://play.google.com/store/apps/details?id=...",
+        "iosUrl": "https://apps.apple.com/app/id...",
+        "releaseNotes": "Opisz najwazniejsze zmiany dla tej wersji"
+      },
+      "actions": {
+        "refresh": "Odswiez konfiguracje",
+        "loadCurrent": "Wczytaj biezaca",
+        "submit": "Zapisz wersje"
+      },
+      "feedback": {
+        "noConfig": "Brak zapisanej konfiguracji dla wybranej platformy.",
+        "loadFailed": "Nie udalo sie pobrac konfiguracji wersji.",
+        "latestVersionRequired": "Najnowsza wersja jest wymagana.",
+        "minVersionRequired": "Minimalna wymagana wersja jest wymagana.",
+        "submitFailed": "Nie udalo sie zapisac wersji aplikacji.",
+        "submitSuccess": "Konfiguracja wersji zostala zapisana poprawnie."
+      },
+      "notes": {
+        "title": "Jak tego uzywac",
+        "description": "Kazda platforma korzysta z tego samego endpointu API i rozroznia sie polem platform. Mozesz najpierw wczytac aktualna konfiguracje, a potem nadpisac ja nowa wersja dla Androida lub iOS."
+      }
     },
     "pagination": {
       "summary": "Strona {page} z {totalPages} • lacznie {totalCount} uzytkownikow"
