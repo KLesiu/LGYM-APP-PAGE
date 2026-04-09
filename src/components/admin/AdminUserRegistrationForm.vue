@@ -1,25 +1,30 @@
 <template>
   <v-card
     rounded="[32px]"
-    class="register-panel overflow-hidden border border-[rgb(var(--v-theme-outline))] bg-surface/95"
+    class="overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
   >
-    <div class="register-panel__top px-5 py-5 sm:px-6">
+    <div
+      class="relative overflow-hidden bg-[var(--lgym-register-top-bg)] px-5 py-5 sm:px-6"
+    >
       <p
         class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]"
       >
         {{ t("admin.register.eyebrow") }}
       </p>
-      <h2 class="mt-3 text-2xl font-semibold text-white">
+      <h2 class="mt-3 text-2xl font-semibold text-[var(--lgym-text)]">
         {{ t("admin.register.title") }}
       </h2>
-      <p class="mt-2 max-w-md text-sm leading-6 text-white/72">
+      <p class="mt-2 max-w-md text-sm leading-6 text-[var(--lgym-text-muted)]">
         {{ t("admin.register.subtitle") }}
       </p>
       <p
-        class="mt-3 text-xs font-medium uppercase tracking-[0.18em] text-white/45"
+        class="mt-3 text-xs font-medium uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]"
       >
         {{ t("admin.register.scope") }}
       </p>
+      <div
+        class="absolute -right-10 -bottom-20 h-[180px] w-[180px] rounded-full bg-[var(--lgym-register-glow)] pointer-events-none"
+      ></div>
     </div>
 
     <v-card-text class="flex flex-col gap-5 px-5 py-5 sm:px-6">
@@ -31,7 +36,7 @@
         @submit.prevent="submitForm"
       >
         <div
-          class="rounded-[22px] border border-[rgb(var(--v-theme-outline))] bg-[rgb(var(--v-theme-surface-variant))]/55 p-2"
+          class="rounded-[22px] p-2 border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]"
         >
           <AuthTabs v-model="selectedRole" />
         </div>
@@ -39,9 +44,6 @@
         <v-alert
           v-if="submitError"
           type="error"
-          variant="tonal"
-          density="comfortable"
-          border="start"
           class="rounded-2xl"
           :text="submitError"
         />
@@ -49,9 +51,6 @@
         <v-alert
           v-if="submitSuccess"
           type="success"
-          variant="tonal"
-          density="comfortable"
-          border="start"
           class="rounded-2xl"
           :text="submitSuccess"
         />
@@ -61,15 +60,8 @@
             v-model="username"
             :label="t('auth.register.fields.username')"
             :placeholder="t('auth.register.placeholders.username')"
-            variant="outlined"
-            density="comfortable"
             :rules="usernameRules"
             autocomplete="username"
-            base-color="outline"
-            color="primary"
-            bg-color="surface"
-            rounded="xl"
-            hide-details="auto"
           />
 
           <v-text-field
@@ -77,15 +69,8 @@
             type="email"
             :label="t('auth.register.fields.email')"
             :placeholder="t('auth.register.placeholders.email')"
-            variant="outlined"
-            density="comfortable"
             :rules="emailRules"
             autocomplete="email"
-            base-color="outline"
-            color="primary"
-            bg-color="surface"
-            rounded="xl"
-            hide-details="auto"
           />
 
           <v-text-field
@@ -93,18 +78,11 @@
             :type="showPassword ? 'text' : 'password'"
             :label="t('auth.register.fields.password')"
             :placeholder="t('auth.register.placeholders.password')"
-            variant="outlined"
-            density="comfortable"
             :rules="passwordRules"
             autocomplete="new-password"
             :append-inner-icon="
               showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'
             "
-            base-color="outline"
-            color="primary"
-            bg-color="surface"
-            rounded="xl"
-            hide-details="auto"
             @click:append-inner="togglePassword"
           />
 
@@ -113,30 +91,25 @@
             :type="showConfirmPassword ? 'text' : 'password'"
             :label="t('auth.register.fields.confirmPassword')"
             :placeholder="t('auth.register.placeholders.confirmPassword')"
-            variant="outlined"
-            density="comfortable"
             :rules="confirmPasswordRules"
             autocomplete="new-password"
             :append-inner-icon="
               showConfirmPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'
             "
-            base-color="outline"
-            color="primary"
-            bg-color="surface"
-            rounded="xl"
-            hide-details="auto"
             @click:append-inner="toggleConfirmPassword"
           />
         </div>
 
         <div
-          class="rounded-[24px] border border-[rgb(var(--v-theme-outline))] bg-[rgb(var(--v-theme-surface-variant))]/35 p-4"
+          class="rounded-[24px] p-4 border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]"
         >
           <div class="flex items-start gap-3">
-            <div class="register-panel__icon">
+            <div
+              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--lgym-note-icon-bg)] text-[var(--lgym-note-icon-text)]"
+            >
               <v-icon icon="mdi-account-plus-outline" size="22" />
             </div>
-            <p class="text-sm leading-6 text-[rgb(var(--v-theme-secondary))]">
+            <p class="text-sm leading-6 text-[var(--lgym-text-muted)]">
               {{ t("admin.register.note") }}
             </p>
           </div>
@@ -144,11 +117,9 @@
 
         <v-btn
           type="submit"
-          variant="flat"
           color="primary"
-          rounded="xl"
           size="large"
-          class="register-submit"
+          class="min-h-12 normal-case tracking-normal font-semibold"
           :loading="isSubmitting"
           :disabled="isSubmitting"
         >
@@ -281,50 +252,3 @@ const submitForm = async () => {
   }
 };
 </script>
-
-<style scoped>
-.register-panel {
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
-}
-
-.register-panel__top {
-  position: relative;
-  overflow: hidden;
-  background:
-    linear-gradient(145deg, rgba(12, 18, 34, 0.96), rgba(27, 40, 68, 0.88)),
-    #0b1220;
-}
-
-.register-panel__top::after {
-  content: "";
-  position: absolute;
-  inset: auto -40px -80px auto;
-  height: 180px;
-  width: 180px;
-  border-radius: 999px;
-  background: radial-gradient(
-    circle,
-    rgba(56, 189, 248, 0.22),
-    transparent 68%
-  );
-}
-
-.register-panel__icon {
-  display: inline-flex;
-  height: 44px;
-  width: 44px;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  border-radius: 16px;
-  background: rgba(var(--v-theme-primary), 0.14);
-  color: rgb(var(--v-theme-primary));
-}
-
-.register-submit {
-  min-height: 48px;
-  text-transform: none;
-  letter-spacing: 0;
-  font-weight: 600;
-}
-</style>
