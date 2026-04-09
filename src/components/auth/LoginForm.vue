@@ -1,16 +1,14 @@
 <template>
   <div
-    class="flex w-full max-w-md flex-col items-center px-4 py-4 text-center text-[rgb(var(--v-theme-on-surface))] sm:px-6 sm:py-6 md:px-8 md:py-8"
+    class="flex w-full max-w-md flex-col items-center px-5 py-5 text-center text-[var(--lgym-text)] sm:px-6 sm:py-6"
   >
     <div class="flex w-full flex-col items-center gap-5">
       <div class="flex w-full flex-col items-center gap-2">
         <v-img :src="logoLgym" alt="LGYM logo" width="150" max-width="150" />
-        <h1
-          class="text-center text-2xl font-semibold text-[rgb(var(--v-theme-on-surface))]"
-        >
+        <h1 class="text-center text-2xl font-semibold text-[var(--lgym-text)]">
           {{ loginTitle }}
         </h1>
-        <p class="text-center text-sm text-[rgb(var(--v-theme-secondary))]">
+        <p class="text-center text-sm text-[var(--lgym-text-muted)]">
           {{ loginSubtitle }}
         </p>
       </div>
@@ -25,62 +23,34 @@
         >
           <AuthTabs v-if="!isAdminMode" v-model="selectedUserRole" />
 
-          <v-alert
-            v-if="submitError"
-            type="error"
-            variant="tonal"
-            density="comfortable"
-            :text="submitError"
-          />
+          <v-alert v-if="submitError" type="error" :text="submitError" />
 
-          <v-alert
-            v-if="submitSuccess"
-            type="success"
-            variant="tonal"
-            density="comfortable"
-            :text="submitSuccess"
-          />
+          <v-alert v-if="submitSuccess" type="success" :text="submitSuccess" />
 
-          <div class="flex flex-col gap-4">
-            <div class="flex flex-col gap-1.5">
-              <div class="flex items-center justify-between">
-                <label
-                  for="username"
-                  class="text-sm text-[rgb(var(--v-theme-secondary))]"
-                  >{{ t("auth.login.fields.username") }}</label
-                >
-              </div>
-
-              <v-text-field
-                id="username"
-                v-model="username"
-                type="text"
-                :placeholder="t('auth.login.placeholders.username')"
-                variant="outlined"
-                density="compact"
-                :rules="usernameRules"
-                autocomplete="username"
-                base-color="outline"
-                color="primary"
-                bg-color="surface"
-                rounded="lg"
-                hide-details="auto"
-              />
-            </div>
+          <div class="grid gap-4">
+            <v-text-field
+              id="username"
+              v-model="username"
+              type="text"
+              :label="t('auth.login.fields.username')"
+              :placeholder="t('auth.login.placeholders.username')"
+              :rules="usernameRules"
+              autocomplete="username"
+            />
 
             <div class="flex flex-col gap-1.5">
               <div class="flex items-center justify-between">
                 <label
                   for="password"
-                  class="text-sm text-[rgb(var(--v-theme-secondary))]"
+                  class="text-sm text-[var(--lgym-text-muted)]"
                   >{{ t("auth.login.fields.password") }}</label
                 >
-                <button
-                  type="button"
-                  class="cursor-pointer bg-transparent p-0 text-xs text-[rgb(var(--v-theme-secondary))] underline underline-offset-2"
+                <router-link
+                  to="/forgot-password"
+                  class="text-xs text-[var(--lgym-text-muted)] underline underline-offset-2 hover:text-[var(--lgym-text)]"
                 >
                   {{ t("auth.login.actions.forgotPassword") }}
-                </button>
+                </router-link>
               </div>
 
               <v-text-field
@@ -88,18 +58,11 @@
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 :placeholder="t('auth.login.placeholders.password')"
-                variant="outlined"
-                density="compact"
                 :rules="passwordRules"
                 autocomplete="current-password"
                 :append-inner-icon="
                   showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'
                 "
-                base-color="outline"
-                color="primary"
-                bg-color="surface"
-                rounded="lg"
-                hide-details="auto"
                 @click:append-inner="togglePassword"
               />
             </div>
@@ -108,43 +71,39 @@
           <div class="flex flex-col gap-4">
             <v-btn
               block
-              variant="flat"
               color="primary"
-              height="42"
               type="submit"
+              size="large"
               :loading="isSubmitting"
               :disabled="isSubmitting"
-              class="rounded-md! text-sm! font-medium! normal-case! tracking-normal! shadow-none!"
             >
               {{ submitLabel }}
             </v-btn>
 
             <div class="flex items-center gap-3">
-              <div class="h-0.5 flex-1 bg-[rgb(var(--v-theme-outline))]" />
-              <span class="text-xs text-[rgb(var(--v-theme-secondary))]">{{
+              <div class="h-0.5 flex-1 bg-[var(--lgym-border)]" />
+              <span class="text-xs text-[var(--lgym-text-muted)]">{{
                 t("auth.login.actions.orContinueWith")
               }}</span>
-              <div class="h-0.5 flex-1 bg-[rgb(var(--v-theme-outline))]" />
+              <div class="h-0.5 flex-1 bg-[var(--lgym-border)]" />
             </div>
 
             <div class="flex flex-col gap-2.5">
               <v-btn
                 block
-                variant="flat"
+                variant="outlined"
                 color="primary"
                 prepend-icon="mdi-apple"
-                height="40"
-                class="rounded-md! text-sm! font-medium! normal-case! tracking-normal! shadow-none!"
+                size="large"
               >
                 {{ t("auth.login.actions.loginWithApple") }}
               </v-btn>
               <v-btn
                 block
-                variant="flat"
+                variant="outlined"
                 color="primary"
                 prepend-icon="mdi-google"
-                height="40"
-                class="rounded-md! text-sm! font-medium! normal-case! tracking-normal! shadow-none!"
+                size="large"
               >
                 {{ t("auth.login.actions.loginWithGoogle") }}
               </v-btn>
@@ -154,11 +113,11 @@
       </div>
 
       <div v-if="!isAdminMode" class="flex flex-col items-center gap-1">
-        <p class="text-center text-sm text-[rgb(var(--v-theme-secondary))]">
+        <p class="text-center text-sm text-[var(--lgym-text-muted)]">
           {{ t("auth.login.footer.noAccount") }}
           <router-link
             to="/register"
-            class="cursor-pointer bg-transparent p-0 text-[rgb(var(--v-theme-on-surface))] underline underline-offset-2"
+            class="text-[var(--lgym-text)] underline underline-offset-2 hover:text-[var(--lgym-primary)]"
           >
             {{ t("auth.login.footer.signUp") }}
           </router-link>
@@ -166,11 +125,11 @@
       </div>
 
       <div v-else class="flex flex-col items-center gap-1">
-        <p class="text-center text-sm text-[rgb(var(--v-theme-secondary))]">
+        <p class="text-center text-sm text-[var(--lgym-text-muted)]">
           {{ t("auth.loginAdmin.footer.backToUserLoginLabel") }}
           <router-link
             to="/login"
-            class="cursor-pointer bg-transparent p-0 text-[rgb(var(--v-theme-on-surface))] underline underline-offset-2"
+            class="text-[var(--lgym-text)] underline underline-offset-2 hover:text-[var(--lgym-primary)]"
           >
             {{ t("auth.loginAdmin.footer.backToUserLogin") }}
           </router-link>
