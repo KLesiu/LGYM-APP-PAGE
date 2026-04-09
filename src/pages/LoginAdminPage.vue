@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    class="flex min-h-screen items-center justify-center bg-background px-4 py-5 sm:px-6 sm:py-6"
+    class="flex min-h-screen items-center justify-center bg-[var(--lgym-page-glow),var(--lgym-bg)] px-4 py-5 sm:px-6 sm:py-6"
   >
     <LoginForm mode="admin" />
   </v-container>
