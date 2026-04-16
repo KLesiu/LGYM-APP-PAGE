@@ -4,9 +4,7 @@
     class="flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
   >
     <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
-      <div
-        class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between"
-      >
+      <div class="flex flex-col gap-5">
         <div class="space-y-3">
           <p
             class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]"
@@ -25,17 +23,6 @@
             </p>
           </div>
         </div>
-
-        <v-btn
-          variant="outlined"
-          color="primary"
-          prepend-icon="mdi-refresh"
-          :loading="isRefreshing"
-          class="self-start xl:self-auto"
-          @click="refreshAll"
-        >
-          {{ t("admin.versions.actions.refresh") }}
-        </v-btn>
       </div>
 
       <div
@@ -177,10 +164,6 @@ const platformOptions = computed(() => [
   },
 ]);
 
-const isRefreshing = computed(
-  () => states.Android.isLoading || states.Ios.isLoading,
-);
-
 const platformRequestMap: Record<
   VersionPlatform,
   AppConfigVersionRequestDtoPlatform
@@ -316,10 +299,6 @@ const submitPlatform = async (platform: VersionPlatform) => {
 const refreshAll = async () => {
   await Promise.all([loadPlatform("Android"), loadPlatform("Ios")]);
 };
-
-defineExpose({
-  refreshAll,
-});
 
 onMounted(async () => {
   await refreshAll();

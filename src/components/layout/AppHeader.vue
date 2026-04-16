@@ -5,15 +5,11 @@
     <!-- Left side -->
     <div class="flex items-center gap-3">
       <!-- Mobile hamburger -->
-      <v-btn
-        icon
-        variant="text"
-        size="small"
-        class="mr-2 lg:hidden"
-        @click="$emit('toggleSidebar')"
-      >
-        <v-icon icon="mdi-menu" />
-      </v-btn>
+      <div class="mr-2 lg:hidden">
+        <v-btn icon variant="text" size="small" @click="$emit('toggleSidebar')">
+          <v-icon icon="mdi-menu" />
+        </v-btn>
+      </div>
 
       <!-- Title section -->
       <div class="flex flex-col">
