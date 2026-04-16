@@ -1,23 +1,24 @@
 <template>
   <article
-    class="border border-[var(--lgym-border)] rounded-3xl bg-[var(--lgym-surface-muted)] p-6"
+    class="rounded-3xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-muted)] px-6 py-6 lg:px-7 lg:py-7"
   >
-    <div class="flex items-start justify-between gap-4">
-      <div>
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div class="space-y-2">
         <p
-          class="text-[var(--lgym-primary)] text-xs font-semibold uppercase tracking-[0.24em]"
+          class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]"
         >
           {{ t("admin.versions.current.eyebrow") }}
         </p>
-        <h3 class="text-[var(--lgym-text)] mt-2 text-xl font-semibold">
+        <h3 class="text-2xl font-semibold text-[var(--lgym-text)]">
           {{ platformLabel }}
         </h3>
       </div>
 
       <v-chip
         size="small"
+        rounded="pill"
         :color="currentConfig?.forceUpdate ? 'warning' : 'success'"
-        class="status-chip"
+        class="self-start"
       >
         {{
           currentConfig?.forceUpdate
@@ -31,66 +32,66 @@
       v-if="isLoading"
       indeterminate
       color="primary"
-      class="mt-4"
+      class="mt-6"
     />
 
     <template v-else>
-      <div v-if="currentConfig" class="mt-5 grid gap-4 sm:grid-cols-2">
+      <div v-if="currentConfig" class="mt-6 grid gap-5 sm:grid-cols-2">
         <div
-          class="border border-[var(--lgym-border)] rounded-[20px] bg-[var(--lgym-note-bg)] p-4"
+          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5"
         >
           <p
-            class="m-0 text-xs font-semibold tracking-[0.18em] uppercase text-[var(--lgym-text-soft)]"
+            class="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]"
           >
             {{ t("admin.versions.fields.latestVersion") }}
           </p>
           <p
-            class="mt-2 text-[var(--lgym-text)] text-base font-semibold leading-relaxed"
+            class="mt-3 text-base font-semibold leading-relaxed text-[var(--lgym-text)]"
           >
             {{ currentConfig.latestVersion || "—" }}
           </p>
         </div>
 
         <div
-          class="border border-[var(--lgym-border)] rounded-[20px] bg-[var(--lgym-note-bg)] p-4"
+          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5"
         >
           <p
-            class="m-0 text-xs font-semibold tracking-[0.18em] uppercase text-[var(--lgym-text-soft)]"
+            class="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]"
           >
             {{ t("admin.versions.fields.minRequiredVersion") }}
           </p>
           <p
-            class="mt-2 text-[var(--lgym-text)] text-base font-semibold leading-relaxed"
+            class="mt-3 text-base font-semibold leading-relaxed text-[var(--lgym-text)]"
           >
             {{ currentConfig.minRequiredVersion || "—" }}
           </p>
         </div>
 
         <div
-          class="border border-[var(--lgym-border)] rounded-[20px] bg-[var(--lgym-note-bg)] p-4 sm:col-span-2"
+          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5 sm:col-span-2"
         >
           <p
-            class="m-0 text-xs font-semibold tracking-[0.18em] uppercase text-[var(--lgym-text-soft)]"
+            class="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]"
           >
             {{ t("admin.versions.fields.updateUrl") }}
           </p>
           <p
-            class="mt-2 break-all text-sm font-semibold leading-relaxed text-[var(--lgym-text)]"
+            class="mt-3 break-all text-sm font-semibold leading-7 text-[var(--lgym-text)]"
           >
             {{ currentConfig.updateUrl || "—" }}
           </p>
         </div>
 
         <div
-          class="border border-[var(--lgym-border)] rounded-[20px] bg-[var(--lgym-note-bg)] p-4 sm:col-span-2"
+          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5 sm:col-span-2"
         >
           <p
-            class="m-0 text-xs font-semibold tracking-[0.18em] uppercase text-[var(--lgym-text-soft)]"
+            class="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]"
           >
             {{ t("admin.versions.fields.releaseNotes") }}
           </p>
           <p
-            class="mt-2 overflow-hidden whitespace-pre-line text-sm font-medium leading-relaxed text-[var(--lgym-text)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:5]"
+            class="mt-3 overflow-hidden whitespace-pre-line text-sm font-medium leading-7 text-[var(--lgym-text)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:5]"
           >
             {{ currentConfig.releaseNotes || "—" }}
           </p>
@@ -99,9 +100,9 @@
 
       <div
         v-else
-        class="border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] mt-4 rounded-[24px] p-5"
+        class="mt-6 rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5"
       >
-        <p class="text-[var(--lgym-text-muted)] text-sm leading-6">
+        <p class="text-sm leading-7 text-[var(--lgym-text-muted)]">
           {{ t("admin.versions.feedback.noConfig") }}
         </p>
       </div>
@@ -121,9 +122,3 @@ defineProps<{
 
 const { t } = useI18n();
 </script>
-
-<style scoped>
-.status-chip {
-  border-radius: 999px;
-}
-</style>

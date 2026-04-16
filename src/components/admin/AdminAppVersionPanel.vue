@@ -3,22 +3,23 @@
     rounded="[32px]"
     class="flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
   >
-    <div class="border-b border-[var(--lgym-border)] px-6 py-6">
+    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div
-        class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
+        class="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between"
       >
-        <div class="space-y-2">
+        <div class="space-y-3">
           <p
-            class="text-[var(--lgym-primary)] text-xs font-semibold uppercase tracking-[0.24em]"
+            class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]"
           >
             {{ t("admin.versions.eyebrow") }}
           </p>
+
           <div>
-            <h2 class="text-[var(--lgym-text)] text-2xl font-semibold">
+            <h2 class="text-3xl font-semibold text-[var(--lgym-text)]">
               {{ t("admin.versions.title") }}
             </h2>
             <p
-              class="text-[var(--lgym-text-muted)] mt-3 max-w-3xl text-sm leading-6"
+              class="mt-3 max-w-3xl text-sm leading-7 text-[var(--lgym-text-muted)]"
             >
               {{ t("admin.versions.subtitle") }}
             </p>
@@ -30,6 +31,7 @@
           color="primary"
           prepend-icon="mdi-refresh"
           :loading="isRefreshing"
+          class="self-start xl:self-auto"
           @click="refreshAll"
         >
           {{ t("admin.versions.actions.refresh") }}
@@ -37,19 +39,20 @@
       </div>
 
       <div
-        class="border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] mt-6 rounded-[22px] p-3"
+        class="mt-7 rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-2 sm:p-3"
       >
         <v-tabs
           v-model="activePlatform"
           color="primary"
           grow
-          class="admin-platform-tabs"
+          align-tabs="center"
         >
           <v-tab
             v-for="platform in platformOptions"
             :key="platform.value"
             :value="platform.value"
-            class="min-h-[46px] rounded-[18px] normal-case tracking-normal font-semibold"
+            rounded="xl"
+            class="min-h-[50px] px-4 normal-case font-semibold tracking-normal"
           >
             <div class="flex items-center gap-2">
               <v-icon :icon="platform.icon" size="18" />
@@ -60,7 +63,9 @@
       </div>
     </div>
 
-    <v-card-text class="min-h-0 flex-1 overflow-y-auto px-6 py-6">
+    <v-card-text
+      class="min-h-0 flex-1 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8"
+    >
       <v-window v-model="activePlatform" class="h-full min-h-0">
         <v-window-item
           v-for="platform in platformOptions"
@@ -69,22 +74,17 @@
           class="h-full min-h-0"
         >
           <div
-            class="grid h-full min-h-0 gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
+            class="grid h-full min-h-0 gap-6 2xl:gap-8 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
           >
-            <section class="space-y-4">
+            <section class="space-y-5">
               <AdminVersionCurrentSummary
                 :platform-label="platform.label"
                 :current-config="states[platform.value].currentConfig"
                 :is-loading="states[platform.value].isLoading"
               />
-
-              <AdminVersionInfoNote
-                :title="t('admin.versions.notes.title')"
-                :description="t('admin.versions.notes.description')"
-              />
             </section>
 
-            <section>
+            <section class="pt-1">
               <AdminVersionEditForm
                 :platform="platform.value"
                 v-model:latest-version="states[platform.value].latestVersion"
@@ -125,7 +125,6 @@ import { useToast } from "../../composables/useToast";
 
 import AdminVersionCurrentSummary from "./AdminVersionCurrentSummary.vue";
 import AdminVersionEditForm from "./AdminVersionEditForm.vue";
-import AdminVersionInfoNote from "./AdminVersionInfoNote.vue";
 
 type VersionPlatform = "Android" | "Ios";
 
@@ -326,22 +325,3 @@ onMounted(async () => {
   await refreshAll();
 });
 </script>
-
-<style scoped>
-.admin-platform-tabs {
-  --v-theme-primary: var(--lgym-primary-rgb);
-}
-
-.admin-platform-tabs :deep(.v-slide-group__content) {
-  gap: 0.5rem;
-}
-
-.admin-platform-tabs :deep(.v-tab) {
-  color: var(--lgym-tab-idle-text);
-}
-
-.admin-platform-tabs :deep(.v-tab--selected) {
-  background: var(--lgym-tab-active);
-  color: var(--lgym-tab-active-text);
-}
-</style>
