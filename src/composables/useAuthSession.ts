@@ -129,3 +129,13 @@ export const hasAdminAccess = () => {
     permissionClaims.includes(MANAGE_APP_CONFIG_CLAIM)
   );
 };
+
+export const hasTrainerAccess = () => {
+  const token = getAuthToken();
+  if (!token) return false;
+
+  const storedRole = getStoredRole().toLowerCase();
+  const roles = getStoredRoles().map((role) => role.toLowerCase());
+
+  return storedRole === "trainer" || roles.includes("trainer");
+};

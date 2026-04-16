@@ -40,6 +40,7 @@
       "dashboard": "Dashboard",
       "trainingPlans": "Plany Treningowe",
       "myClients": "Moi Klienci",
+      "invitations": "Zaproszenia",
       "settings": "Ustawienia"
     },
     "sidebar": {
@@ -179,6 +180,108 @@
       "error": "Blad",
       "warning": "Uwaga",
       "info": "Informacja"
+    }
+  },
+  "trainerInvitations": {
+    "layout": {
+      "invitations": {
+        "title": "Zaproszenia",
+        "subtitle": "Zapraszaj nowych podopiecznych po emailu, monitoruj status i cofaj oczekujace zaproszenia."
+      }
+    },
+    "page": {
+      "eyebrow": "Workflow zaproszen",
+      "title": "Zarzadzaj zaproszeniami do wspolpracy",
+      "subtitle": "Wysylaj nowe zaproszenia bez wychodzenia z panelu trenera, a ponizej od razu sprawdzaj ich status, historie i kolejne akcje.",
+      "summary": "Lacznie zaproszen: {totalCount}"
+    },
+    "form": {
+      "eyebrow": "Nowe zaproszenie",
+      "title": "Zaproś nowego klienta",
+      "subtitle": "Podaj email klienta oraz preferowany jezyk i strefe czasowa, aby backend przygotowal zaproszenie zgodne z jego ustawieniami.",
+      "note": "Po sukcesie formularz wyczysci sie automatycznie, a historia zaproszen po prawej zostanie odswiezona bez przeladowania strony.",
+      "fields": {
+        "email": "Email klienta",
+        "preferredLanguage": "Preferowany jezyk",
+        "preferredTimeZone": "Preferowana strefa czasowa"
+      },
+      "placeholders": {
+        "email": "klient{'@'}example.com"
+      },
+      "validation": {
+        "languageRequired": "Wybierz preferowany jezyk",
+        "timeZoneRequired": "Wybierz preferowana strefe czasowa"
+      },
+      "actions": {
+        "submit": "Wyslij zaproszenie"
+      }
+    },
+    "history": {
+      "eyebrow": "Historia zaproszen",
+      "title": "Twoje ostatnie zaproszenia",
+      "subtitle": "Filtruj liste po statusie, wyszukuj po emailu i kontroluj, ktore zaproszenia wciaz czekaja na reakcje.",
+      "filters": {
+        "search": "Szukaj po emailu",
+        "pageSize": "Na strone"
+      },
+      "placeholders": {
+        "search": "Wpisz email zaproszonej osoby"
+      },
+      "columns": {
+        "inviteeEmail": "Zaproszony email",
+        "trainee": "Podopieczny",
+        "status": "Status",
+        "sentAt": "Data wyslania",
+        "actions": "Akcje"
+      },
+      "fallback": {
+        "noTraineeName": "Brak przypisanego podopiecznego",
+        "noTraineeEmail": "Brak adresu podopiecznego"
+      },
+      "meta": {
+        "expiresAt": "Wygasa"
+      },
+      "empty": {
+        "title": "Brak zaproszen do wyswietlenia",
+        "subtitle": "Sprobuj zmienic filtry albo wyslij pierwsze zaproszenie z formularza po lewej stronie."
+      },
+      "pagination": {
+        "summary": "Strona {page} z {totalPages} · wszystkich zaproszen: {totalCount}"
+      },
+      "sort": {
+        "newest": "Najnowsze najpierw",
+        "oldest": "Najstarsze najpierw"
+      }
+    },
+    "filters": {
+      "all": "Wszystkie",
+      "pending": "Oczekujace",
+      "accepted": "Zaakceptowane",
+      "rejected": "Odrzucone",
+      "revoked": "Cofniete",
+      "expired": "Wygasle"
+    },
+    "status": {
+      "pending": "Oczekujace",
+      "accepted": "Zaakceptowane",
+      "rejected": "Odrzucone",
+      "revoked": "Cofniete",
+      "expired": "Wygasle",
+      "unknown": "Nieznany"
+    },
+    "actions": {
+      "revoke": "Cofnij",
+      "revokeConfirm": "Czy na pewno chcesz cofnac zaproszenie dla {email}?",
+      "previous": "Poprzednia",
+      "next": "Nastepna"
+    },
+    "feedback": {
+      "createSuccess": "Zaproszenie zostalo wyslane poprawnie.",
+      "createFailed": "Nie udalo sie wyslac zaproszenia.",
+      "loadFailed": "Nie udalo sie pobrac historii zaproszen.",
+      "unauthorized": "Sesja trenera wygasla albo nie masz dostepu do tego widoku.",
+      "revokeSuccess": "Zaproszenie zostalo cofniete.",
+      "revokeFailed": "Nie udalo sie cofnac zaproszenia."
     }
   },
   "admin": {

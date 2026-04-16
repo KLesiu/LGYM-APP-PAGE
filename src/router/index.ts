@@ -1,9 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import { hasAdminAccess } from "../composables/useAuthSession";
+import {
+  hasAdminAccess,
+  hasTrainerAccess,
+} from "../composables/useAuthSession";
 import AdminLayout from "../layouts/AdminLayout.vue";
+import TrainerLayout from "../layouts/TrainerLayout.vue";
 import AdminUsersPage from "../pages/admin/AdminUsersPage.vue";
 import AdminVersionsPage from "../pages/admin/AdminVersionsPage.vue";
+import TrainerInvitationsPage from "../pages/trainer/TrainerInvitationsPage.vue";
 import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
@@ -54,11 +59,33 @@ export const router = createRouter({
         },
       ],
     },
+    {
+      path: "/trainer",
+      component: TrainerLayout,
+      meta: {
+        requiresTrainer: true,
+        hasLayout: true,
+      },
+      children: [
+        {
+          path: "",
+          redirect: "/trainer/invitations",
+        },
+        {
+          path: "invitations",
+          name: "trainer-invitations",
+          component: TrainerInvitationsPage,
+        },
+      ],
+    },
   ],
 });
 
 router.beforeEach((to) => {
   const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
+  const requiresTrainer = to.matched.some(
+    (record) => record.meta.requiresTrainer,
+  );
 
   if (requiresAdmin && !hasAdminAccess()) {
     return {
@@ -69,9 +96,24 @@ router.beforeEach((to) => {
     };
   }
 
+  if (requiresTrainer && !hasTrainerAccess()) {
+    return {
+      name: "login",
+      query: {
+        redirect: to.fullPath,
+      },
+    };
+  }
+
   if (to.name === "login-admin" && hasAdminAccess()) {
     return {
       name: "admin-users",
+    };
+  }
+
+  if (to.name === "login" && hasTrainerAccess()) {
+    return {
+      name: "trainer-invitations",
     };
   }
 

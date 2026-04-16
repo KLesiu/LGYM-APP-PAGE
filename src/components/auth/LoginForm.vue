@@ -35,12 +35,7 @@
             />
 
             <div class="flex flex-col gap-1.5">
-              <div class="flex items-center justify-between">
-                <label
-                  for="password"
-                  class="text-sm text-[var(--lgym-text-muted)]"
-                  >{{ t("auth.login.fields.password") }}</label
-                >
+              <div class="flex items-center justify-end">
                 <router-link
                   to="/forgot-password"
                   class="text-xs text-[var(--lgym-text-muted)] underline underline-offset-2 hover:text-[var(--lgym-text)]"
@@ -53,6 +48,7 @@
                 id="password"
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
+                :label="t('auth.login.fields.password')"
                 :placeholder="t('auth.login.placeholders.password')"
                 :rules="passwordRules"
                 autocomplete="current-password"
@@ -171,11 +167,20 @@ const formRef = ref<{
 } | null>(null);
 const isFormValid = ref<boolean | null>(null);
 
+const resolveInitialRole = (): AuthRole => {
+  if (props.mode === "admin") return "admin";
+
+  const redirect =
+    typeof route.query.redirect === "string" ? route.query.redirect : "";
+
+  if (redirect.startsWith("/trainer")) return "trainer";
+
+  return "athlete";
+};
+
 const username = ref("");
 const password = ref("");
-const selectedRole = ref<AuthRole>(
-  props.mode === "admin" ? "admin" : "athlete",
-);
+const selectedRole = ref<AuthRole>(resolveInitialRole());
 const showPassword = ref(false);
 const isSubmitting = ref(false);
 
@@ -294,6 +299,15 @@ const submitForm = async () => {
         typeof route.query.redirect === "string"
           ? route.query.redirect
           : "/admin/users";
+      await router.push(redirect);
+      return;
+    }
+
+    if (selectedRole.value === "trainer") {
+      const redirect =
+        typeof route.query.redirect === "string"
+          ? route.query.redirect
+          : "/trainer/invitations";
       await router.push(redirect);
     }
   } catch (error: unknown) {

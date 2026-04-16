@@ -40,6 +40,7 @@
       "dashboard": "Dashboard",
       "trainingPlans": "Training Plans",
       "myClients": "My Clients",
+      "invitations": "Invitations",
       "settings": "Settings"
     },
     "sidebar": {
@@ -179,6 +180,108 @@
       "error": "Error",
       "warning": "Warning",
       "info": "Information"
+    }
+  },
+  "trainerInvitations": {
+    "layout": {
+      "invitations": {
+        "title": "Invitations",
+        "subtitle": "Invite new customers by email, track every status, and revoke pending invitations from one trainer view."
+      }
+    },
+    "page": {
+      "eyebrow": "Invitation workflow",
+      "title": "Manage collaboration invitations",
+      "subtitle": "Send new invitations without leaving the trainer panel, then immediately review their status, history, and the next actions below.",
+      "summary": "Total invitations: {totalCount}"
+    },
+    "form": {
+      "eyebrow": "New invitation",
+      "title": "Invite a new customer",
+      "subtitle": "Provide the customer email together with the preferred language and time zone so the backend can create the invitation with the right defaults.",
+      "note": "After a successful submit the form resets automatically and the invitation history on the right refreshes without a full page reload.",
+      "fields": {
+        "email": "Customer email",
+        "preferredLanguage": "Preferred language",
+        "preferredTimeZone": "Preferred time zone"
+      },
+      "placeholders": {
+        "email": "customer{'@'}example.com"
+      },
+      "validation": {
+        "languageRequired": "Select a preferred language",
+        "timeZoneRequired": "Select a preferred time zone"
+      },
+      "actions": {
+        "submit": "Send invitation"
+      }
+    },
+    "history": {
+      "eyebrow": "Invitation history",
+      "title": "Your recent invitations",
+      "subtitle": "Filter the list by status, search by email, and keep control over which invitations are still awaiting a response.",
+      "filters": {
+        "search": "Search by email",
+        "pageSize": "Per page"
+      },
+      "placeholders": {
+        "search": "Type the invited email"
+      },
+      "columns": {
+        "inviteeEmail": "Invitee email",
+        "trainee": "Trainee",
+        "status": "Status",
+        "sentAt": "Sent date",
+        "actions": "Actions"
+      },
+      "fallback": {
+        "noTraineeName": "No trainee assigned yet",
+        "noTraineeEmail": "No trainee email available"
+      },
+      "meta": {
+        "expiresAt": "Expires"
+      },
+      "empty": {
+        "title": "No invitations to display",
+        "subtitle": "Try adjusting the filters or send the first invitation from the form on the left."
+      },
+      "pagination": {
+        "summary": "Page {page} of {totalPages} · total invitations: {totalCount}"
+      },
+      "sort": {
+        "newest": "Newest first",
+        "oldest": "Oldest first"
+      }
+    },
+    "filters": {
+      "all": "All",
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "revoked": "Revoked",
+      "expired": "Expired"
+    },
+    "status": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "revoked": "Revoked",
+      "expired": "Expired",
+      "unknown": "Unknown"
+    },
+    "actions": {
+      "revoke": "Revoke",
+      "revokeConfirm": "Are you sure you want to revoke the invitation for {email}?",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "feedback": {
+      "createSuccess": "Invitation sent successfully.",
+      "createFailed": "Failed to send the invitation.",
+      "loadFailed": "Failed to load invitation history.",
+      "unauthorized": "Your trainer session expired or you no longer have access to this view.",
+      "revokeSuccess": "Invitation revoked successfully.",
+      "revokeFailed": "Failed to revoke the invitation."
     }
   },
   "admin": {
