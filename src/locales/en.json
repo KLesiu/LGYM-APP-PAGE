@@ -116,6 +116,20 @@
         "unexpectedError": "Unexpected login error. Please try again."
       }
     },
+    "loginAdmin": {
+      "title": "Administrator login",
+      "subtitle": "Sign in with an account that can manage users, roles, and application access",
+      "actions": {
+        "submit": "Open admin panel"
+      },
+      "feedback": {
+        "accessDenied": "This account does not have administrator access."
+      },
+      "footer": {
+        "backToUserLoginLabel": "Want to go back to the regular sign in?",
+        "backToUserLogin": "Go to /login"
+      }
+    },
     "register": {
       "title": "Create your account",
       "subtitle": "Fill in your details below to register",
@@ -127,7 +141,7 @@
       },
       "placeholders": {
         "username": "your_username",
-        "email": "me@example.com",
+        "email": "me.example.com",
         "password": "Password",
         "confirmPassword": "Confirm Password"
       },
@@ -154,6 +168,151 @@
       "current": "Current language: {code}",
       "polish": "Polski",
       "english": "English"
+    }
+  },
+  "common": {
+    "actions": {
+      "dismiss": "Dismiss notification"
+    },
+    "toastTitles": {
+      "success": "Success",
+      "error": "Error",
+      "warning": "Warning",
+      "info": "Information"
+    }
+  },
+  "admin": {
+    "panel": {
+      "eyebrow": "Administrator panel",
+      "brandTitle": "LGYM Control Room",
+      "title": "Application management",
+      "subtitle": "Review all users, inspect their status, and assign roles directly from the new admin workspace.",
+      "badges": {
+        "secureWorkspace": "Secure workspace",
+        "userAccess": "Users · Roles · Access",
+        "workspaceSuite": "LGYM administration suite"
+      },
+      "side": {
+        "eyebrow": "LGYM Admin Suite",
+        "title": "Keep users, permissions, and workspace access under one sharp control surface."
+      }
+    },
+    "tabs": {
+      "eyebrow": "Administrative sections",
+      "items": {
+        "users": {
+          "label": "Users & roles",
+          "title": "Accounts and permissions",
+          "description": "Add new users, update roles, and manage access from a single focused workspace.",
+          "menuHint": "Registration, roles, and status"
+        },
+        "versions": {
+          "label": "App versions",
+          "title": "Android and iOS releases",
+          "description": "Manage current mobile builds, minimum required versions, and update URLs for both Android and iOS.",
+          "menuHint": "Android, iOS, and rollout"
+        }
+      }
+    },
+    "stats": {
+      "totalUsers": "Total users",
+      "blockedUsers": "Blocked on this page",
+      "blockedUsersPage": "Blocked on this page",
+      "availableRoles": "Available roles"
+    },
+    "register": {
+      "eyebrow": "Registration",
+      "title": "Add a new user",
+      "subtitle": "Create an athlete or trainer account directly from the administrator panel.",
+      "scope": "Account creation: athlete or trainer",
+      "note": "After creating the account, you can immediately assign extra roles from the user list below.",
+      "actions": {
+        "submit": "Register user"
+      },
+      "feedback": {
+        "failed": "Failed to register the user.",
+        "success": "User registered successfully.",
+        "unexpectedError": "Unexpected registration error.",
+        "userAddedToList": "User created and the list has been refreshed."
+      }
+    },
+    "table": {
+      "sectionEyebrow": "LGYM User Registry",
+      "sectionSubtitle": "Review account status, inspect assigned roles, and make access changes without leaving the dashboard.",
+      "user": "User",
+      "email": "Email",
+      "status": "Status",
+      "roles": "Roles",
+      "actions": "Actions",
+      "empty": "No users to display.",
+      "unknownName": "Unknown name"
+    },
+    "status": {
+      "active": "Active",
+      "blocked": "Blocked",
+      "deleted": "Deleted"
+    },
+    "actions": {
+      "refresh": "Refresh data",
+      "logout": "Log out",
+      "saveRoles": "Save roles",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "feedback": {
+      "usersLoadFailed": "Failed to load users.",
+      "rolesLoadFailed": "Failed to load roles.",
+      "rolesUpdateFailed": "Failed to save user roles.",
+      "rolesUpdateSuccess": "Roles saved successfully.",
+      "unauthorized": "Your administrator session expired or no longer has the required permissions. Please sign in again."
+    },
+    "versions": {
+      "eyebrow": "Application versions",
+      "title": "Mobile update configuration",
+      "subtitle": "Create and refresh Android and iOS version settings using the Orval-generated app config endpoints.",
+      "platforms": {
+        "android": "Android",
+        "ios": "iOS"
+      },
+      "current": {
+        "eyebrow": "Current configuration",
+        "forceRequired": "Force update required",
+        "optional": "Optional update"
+      },
+      "fields": {
+        "latestVersion": "Latest version",
+        "minRequiredVersion": "Minimum required version",
+        "updateUrl": "Update URL",
+        "releaseNotes": "Release notes",
+        "forceUpdate": "Force update",
+        "forceUpdateHint": "Enable this when the app should block usage until the new version is installed."
+      },
+      "placeholders": {
+        "version": "e.g. 1.2.3",
+        "androidUrl": "https://play.google.com/store/apps/details?id=...",
+        "iosUrl": "https://apps.apple.com/app/id...",
+        "releaseNotes": "Describe the main changes in this release"
+      },
+      "actions": {
+        "refresh": "Refresh configuration",
+        "loadCurrent": "Load current",
+        "submit": "Save version"
+      },
+      "feedback": {
+        "noConfig": "No configuration has been saved for this platform yet.",
+        "loadFailed": "Failed to load the app version configuration.",
+        "latestVersionRequired": "Latest version is required.",
+        "minVersionRequired": "Minimum required version is required.",
+        "submitFailed": "Failed to save the app version configuration.",
+        "submitSuccess": "App version configuration saved successfully."
+      },
+      "notes": {
+        "title": "How to use it",
+        "description": "Both mobile platforms use the same API endpoint and are distinguished by the platform field in the payload. Load the current config first or overwrite it directly with a new Android or iOS release."
+      }
+    },
+    "pagination": {
+      "summary": "Page {page} of {totalPages} • {totalCount} users total"
     }
   }
 }

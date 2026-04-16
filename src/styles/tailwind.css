@@ -1,17 +1,214 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────
+   Tailwind theme tokens
+   ───────────────────────────────────────────── */
 @theme {
-  --color-brand-emerald: #10b981;
-  --color-brand-night: #020617;
+  --color-brand-green: #4e9f62;
+  --color-brand-green-light: #67b47a;
+  --color-brand-night: #0a0a0a;
 }
 
+/* ─────────────────────────────────────────────
+   Design tokens — LIGHT theme (default)
+   Vuetify sets .v-theme--light on <v-app>
+   ───────────────────────────────────────────── */
+:root {
+  /* ── Core palette ── */
+  --lgym-primary: #20bc2d;
+  --lgym-primary-rgb: 32, 188, 45;
+  --lgym-error: #e53935;
+  --lgym-warning: #ed6c02;
+  --lgym-success: #2e7d32;
+  --lgym-info: #0288d1;
+
+  /* ── Surfaces ── */
+  --lgym-bg: #f4f5f1;
+  --lgym-surface: #ffffff;
+  --lgym-shell-surface: #f1f1f1;
+  --lgym-surface-muted: #f0f0f0;
+  --lgym-surface-card: #ffffff;
+  --lgym-surface-elevated: #ffffff;
+
+  /* ── Text ── */
+  --lgym-text: #1a1a1a;
+  --lgym-text-muted: rgba(26, 26, 26, 0.72);
+  --lgym-text-soft: rgba(26, 26, 26, 0.52);
+
+  /* ── Borders ── */
+  --lgym-border: rgba(0, 0, 0, 0.12);
+  --lgym-border-strong: rgba(0, 0, 0, 0.18);
+
+  /* ── Overlays / glass ── */
+  --lgym-overlay: rgba(0, 0, 0, 0.04);
+  --lgym-overlay-strong: rgba(0, 0, 0, 0.08);
+
+  /* ── Shadows ── */
+  --lgym-shadow-surface: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --lgym-shadow-hero: 0 8px 40px rgba(0, 0, 0, 0.1);
+
+  /* ── Decorative — page glow ── */
+  --lgym-page-glow:
+    radial-gradient(
+      circle at top left,
+      rgba(78, 159, 98, 0.08),
+      transparent 32%
+    ),
+    radial-gradient(circle at top right, rgba(0, 0, 0, 0.03), transparent 28%);
+
+  /* ── Decorative — register panel ── */
+  --lgym-register-top-bg: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(245, 245, 245, 0.95)
+  );
+  --lgym-register-glow: radial-gradient(
+    circle,
+    rgba(78, 159, 98, 0.12),
+    transparent 68%
+  );
+
+  /* ── Decorative — avatar ── */
+  --lgym-avatar-bg: linear-gradient(
+    135deg,
+    rgba(78, 159, 98, 0.16),
+    rgba(0, 0, 0, 0.06)
+  );
+
+  /* ── Table ── */
+  --lgym-table-head-bg: rgba(0, 0, 0, 0.03);
+  --lgym-table-row-hover: rgba(78, 159, 98, 0.08);
+
+  /* ── Note / callout ── */
+  --lgym-note-bg: rgba(0, 0, 0, 0.03);
+  --lgym-note-icon-bg: rgba(78, 159, 98, 0.12);
+  --lgym-note-icon-text: var(--lgym-primary);
+
+  /* ── Tabs ── */
+  --lgym-tab-track: #e8e8e8;
+  --lgym-tab-active: #ffffff;
+  --lgym-tab-active-text: var(--lgym-text);
+  --lgym-tab-idle-text: rgba(26, 26, 26, 0.6);
+
+  /* ── Nav active ── */
+  --lgym-nav-active-border: rgba(78, 159, 98, 0.28);
+  --lgym-nav-active-bg: linear-gradient(
+    135deg,
+    rgba(78, 159, 98, 0.14),
+    rgba(255, 255, 255, 0.58)
+  );
+
+  /* ── Brand mark (logo container) ── */
+  --lgym-brand-mark-bg: rgba(255, 255, 255, 0.96);
+  --lgym-brand-mark-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --lgym-card-padding: clamp(16px, 1.8vw, 24px);
+  --lgym-section-gap: clamp(24px, 2.2vw, 32px);
+  --lgym-control-height: 52px;
+}
+
+/* ─────────────────────────────────────────────
+   Design tokens — DARK theme
+   Vuetify toggles .v-theme--dark on <v-app>
+   ───────────────────────────────────────────── */
+.v-theme--dark {
+  /* ── Surfaces ── */
+  --lgym-bg: #0a0a0a;
+  --lgym-surface: #171b22;
+  --lgym-shell-surface: #0c0c0c;
+  --lgym-surface-muted: rgba(20, 20, 20, 0.82);
+  --lgym-surface-card: #141414;
+  --lgym-surface-elevated: #1e1e1e;
+
+  /* ── Text ── */
+  --lgym-text: #e8e6e6;
+  --lgym-text-muted: rgba(232, 230, 230, 0.76);
+  --lgym-text-soft: rgba(232, 230, 230, 0.52);
+
+  /* ── Borders ── */
+  --lgym-border: rgba(232, 230, 230, 0.12);
+  --lgym-border-strong: rgba(232, 230, 230, 0.18);
+
+  /* ── Overlays / glass ── */
+  --lgym-overlay: rgba(232, 230, 230, 0.06);
+  --lgym-overlay-strong: rgba(232, 230, 230, 0.1);
+
+  /* ── Shadows ── */
+  --lgym-shadow-surface: 0 24px 60px rgba(0, 0, 0, 0.24);
+  --lgym-shadow-hero: 0 24px 80px rgba(2, 6, 23, 0.34);
+
+  /* ── Decorative — page glow ── */
+  --lgym-page-glow:
+    radial-gradient(
+      circle at top left,
+      rgba(103, 180, 122, 0.12),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(232, 230, 230, 0.06),
+      transparent 28%
+    );
+
+  /* ── Decorative — register panel ── */
+  --lgym-register-top-bg:
+    linear-gradient(145deg, rgba(10, 10, 10, 0.98), rgba(30, 30, 30, 0.92)),
+    #0a0a0a;
+  --lgym-register-glow: radial-gradient(
+    circle,
+    rgba(103, 180, 122, 0.22),
+    transparent 68%
+  );
+
+  /* ── Decorative — avatar ── */
+  --lgym-avatar-bg: linear-gradient(
+    135deg,
+    rgba(103, 180, 122, 0.24),
+    rgba(232, 230, 230, 0.14)
+  );
+
+  /* ── Table ── */
+  --lgym-table-head-bg: rgba(30, 30, 30, 0.78);
+  --lgym-table-row-hover: rgba(103, 180, 122, 0.1);
+
+  /* ── Note / callout ── */
+  --lgym-note-bg: rgba(24, 24, 24, 0.7);
+  --lgym-note-icon-bg: rgba(103, 180, 122, 0.18);
+  --lgym-note-icon-text: var(--lgym-primary);
+
+  /* ── Tabs ── */
+  --lgym-tab-track: rgba(30, 30, 30, 0.9);
+  --lgym-tab-active: #141414;
+  --lgym-tab-active-text: #e8e6e6;
+  --lgym-tab-idle-text: rgba(232, 230, 230, 0.7);
+
+  /* ── Nav active ── */
+  --lgym-nav-active-border: rgba(103, 180, 122, 0.32);
+  --lgym-nav-active-bg: linear-gradient(
+    135deg,
+    rgba(103, 180, 122, 0.18),
+    rgba(20, 24, 22, 0.92)
+  );
+
+  /* ── Brand mark ── */
+  --lgym-brand-mark-bg: rgba(255, 255, 255, 0.96);
+  --lgym-brand-mark-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+}
+
+/* ─────────────────────────────────────────────
+   Base styles
+   ───────────────────────────────────────────── */
 body {
   margin: 0;
   min-width: 320px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
+html,
+body,
 #app {
   min-height: 100vh;
+  height: 100%;
+  overflow: auto !important;
+  
 }
