@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4 lg:gap-5">
-    <section class="grid h-full min-h-0 gap-4 lg:gap-5">
+    <section v-if="isUsersSection" class="grid h-full min-h-0 gap-4 lg:gap-5">
       <AdminUsersWorkspace
         ref="usersWorkspaceRef"
         :page="page"
@@ -21,11 +21,26 @@
         "
       />
     </section>
+
+    <section v-else class="grid h-full min-h-0 gap-4 lg:gap-5">
+      <AdminAppVersionPanel
+        ref="appVersionPanelRef"
+        @unauthorized="handleNestedUnauthorized"
+      />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  toRef,
+  watch,
+} from "vue";
 import { useRouter } from "vue-router";
 
 import {
@@ -33,6 +48,7 @@ import {
   postApiRolesPaginated,
   postApiRolesUsersIdRoles,
 } from "../../api/generated/demo";
+import AdminAppVersionPanel from "../../components/admin/AdminAppVersionPanel.vue";
 import AdminUsersWorkspace from "../../components/admin/AdminUsersWorkspace.vue";
 import type {
   AdminUserDto,
@@ -44,12 +60,28 @@ import type {
 import { clearAuthSession } from "../../composables/useAuthSession";
 import { useToast } from "../../composables/useToast";
 
+type AdminAppVersionPanelRef = {
+  refreshAll: () => Promise<void>;
+};
+
 type AdminUsersWorkspaceRef = {
   getRecommendedPageSize: () => number;
 };
 
+const props = withDefaults(
+  defineProps<{
+    activeSection?: "users" | "versions";
+  }>(),
+  {
+    activeSection: "users",
+  },
+);
+
 const router = useRouter();
 const toast = useToast();
+const activeSection = toRef(props, "activeSection");
+const isUsersSection = computed(() => activeSection.value === "users");
+const isVersionsSection = computed(() => activeSection.value === "versions");
 
 const page = ref(1);
 const pageSize = ref(4);
@@ -61,6 +93,7 @@ const editableRoles = ref<Record<string, string[]>>({});
 const isLoadingUsers = ref(false);
 const isLoadingRoles = ref(false);
 const savingRoleUserIds = ref(new Set<string>());
+const appVersionPanelRef = ref<AdminAppVersionPanelRef | null>(null);
 const usersWorkspaceRef = ref<AdminUsersWorkspaceRef | null>(null);
 const recentlySavedRoleUserId = ref<string | null>(null);
 const usersRequestToken = ref(0);
@@ -87,6 +120,11 @@ const handleUnauthorizedResponse = async (status: number) => {
   toast.error("admin.feedback.unauthorized");
   await redirectToAdminLogin();
   return true;
+};
+
+const handleNestedUnauthorized = async () => {
+  toast.error("admin.feedback.unauthorized");
+  await redirectToAdminLogin();
 };
 
 const availableRoles = computed(() =>
@@ -146,6 +184,8 @@ const formatDate = (value: string | null | undefined) => {
 };
 
 const loadRoles = async () => {
+  if (!isUsersSection.value) return;
+
   isLoadingRoles.value = true;
 
   try {
@@ -173,6 +213,8 @@ const loadRoles = async () => {
 };
 
 const loadUsers = async (targetPage = page.value) => {
+  if (!isUsersSection.value) return;
+
   isLoadingUsers.value = true;
 
   try {
@@ -208,7 +250,17 @@ const loadUsers = async (targetPage = page.value) => {
 };
 
 const refreshData = async () => {
-  await Promise.all([loadRoles(), loadUsers(page.value)]);
+  const tasks: Promise<unknown>[] = [];
+
+  if (isUsersSection.value) {
+    tasks.push(loadRoles(), loadUsers(page.value));
+  }
+
+  if (isVersionsSection.value && appVersionPanelRef.value) {
+    tasks.push(appVersionPanelRef.value.refreshAll());
+  }
+
+  await Promise.all(tasks);
 };
 
 const changePage = async (targetPage: number) => {
@@ -274,6 +326,7 @@ const saveRoles = async (userId: string) => {
 };
 
 const syncPageSizeWithViewport = async () => {
+  if (!isUsersSection.value) return;
   if (hasPendingRoleChanges()) return;
 
   await nextTick();
@@ -304,9 +357,29 @@ defineExpose({
   isRefreshing,
 });
 
+watch(activeSection, async (section) => {
+  await nextTick();
+
+  if (section === "users") {
+    await Promise.all([loadRoles(), loadUsers(page.value)]);
+    schedulePageSizeSync();
+    return;
+  }
+
+  if (section === "versions" && appVersionPanelRef.value) {
+    await appVersionPanelRef.value.refreshAll();
+  }
+});
+
 onMounted(async () => {
-  await Promise.all([loadRoles(), loadUsers()]);
-  await syncPageSizeWithViewport();
+  if (isUsersSection.value) {
+    await Promise.all([loadRoles(), loadUsers()]);
+    await syncPageSizeWithViewport();
+  }
+
+  if (isVersionsSection.value && appVersionPanelRef.value) {
+    await appVersionPanelRef.value.refreshAll();
+  }
 
   if (typeof window !== "undefined") {
     window.addEventListener("resize", schedulePageSizeSync, {

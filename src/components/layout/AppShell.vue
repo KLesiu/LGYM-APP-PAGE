@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid h-screen overflow-hidden bg-[var(--lgym-page-glow),var(--lgym-bg)] supports-[height:100dvh]:h-[100dvh] lg:grid-cols-[260px_1fr]"
+    class="grid h-screen overflow-hidden bg-[var(--lgym-page-glow),var(--lgym-bg)] supports-[height:100dvh]:h-[100dvh] lg:grid-cols-[288px_1fr]"
   >
     <!-- Desktop Sidebar -->
     <AppSidebar
@@ -50,7 +50,10 @@
 
         <!-- Sidebar panel -->
         <Transition name="sidebar-slide">
-          <div v-if="sidebarOpen" class="relative z-10 h-full w-[260px]">
+          <div
+            v-if="sidebarOpen"
+            class="relative z-10 h-full w-[288px] max-w-[calc(100vw-2rem)]"
+          >
             <AppSidebar
               :items="sidebarItems"
               :active-item="activeSidebarItem"

@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="flex h-full min-h-0 w-[260px] min-w-[260px] max-w-[260px] flex-col overflow-hidden border-r border-[var(--lgym-border)] bg-[var(--lgym-shell-surface)] px-5 py-6"
+    class="flex h-full min-h-0 w-[288px] min-w-[288px] max-w-[288px] flex-col overflow-hidden border-r border-[var(--lgym-border)] bg-[var(--lgym-shell-surface)] px-5 py-6"
   >
     <!-- Branding Section -->
     <div class="flex items-center gap-3">
@@ -36,7 +36,7 @@
         :to="item.to"
         :active="item.key === activeItem"
         rounded="xl"
-        class="relative min-h-12 rounded-2xl px-4 text-sm font-medium text-[var(--lgym-text-muted)] transition-all duration-150 hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
+        class="relative min-h-12 rounded-2xl px-4 py-2 text-sm font-medium text-[var(--lgym-text-muted)] transition-all duration-150 hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
         :class="
           item.key === activeItem
             ? 'bg-[var(--lgym-nav-active-bg)] font-semibold text-[var(--lgym-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]'
@@ -52,11 +52,13 @@
           <v-icon
             :icon="item.icon"
             size="20"
-            class="mr-3 text-current opacity-100"
+            class="mr-3 shrink-0 self-start text-current opacity-100"
           />
         </template>
 
-        <v-list-item-title class="text-sm font-inherit text-current">
+        <v-list-item-title
+          class="whitespace-normal break-words text-sm leading-5 font-inherit text-current"
+        >
           {{ item.label }}
         </v-list-item-title>
       </v-list-item>

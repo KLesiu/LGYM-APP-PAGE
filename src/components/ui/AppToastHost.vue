@@ -16,30 +16,30 @@
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="pointer-events-auto overflow-hidden rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)] backdrop-blur"
+        class="pointer-events-auto flex flex-col gap-2 overflow-hidden rounded-2xl border  border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)] backdrop-blur"
       >
         <div :class="accentClassMap[toast.type]" class="h-1 w-full" />
 
-        <div class="flex items-start gap-3 px-4 py-3.5">
+        <div class="flex items-start gap-3 px-5 py-4.5 sm:px-5.5">
           <div
             :class="iconClassMap[toast.type]"
-            class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--lgym-note-bg)]"
+            class="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--lgym-note-bg)]"
           >
             <v-icon :icon="iconMap[toast.type]" size="18" />
           </div>
 
-          <div class="min-w-0 flex-1">
-            <p class="text-sm font-semibold text-[var(--lgym-text)]">
+          <div class="min-w-0 flex-1 pr-2">
+            <p class="text-sm leading-5 font-semibold text-[var(--lgym-text)]">
               {{ t(titleKeyMap[toast.type]) }}
             </p>
-            <p class="mt-1 text-sm leading-6 text-[var(--lgym-text-muted)]">
+            <p class=" text-sm leading-6 text-[var(--lgym-text-muted)]">
               {{ t(toast.resourceKey, toast.params ?? {}) }}
             </p>
           </div>
 
           <button
             type="button"
-            class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-[var(--lgym-text-soft)] transition-colors hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
+            class="mt-0.5 ml-1 inline-flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-xl text-[var(--lgym-text-soft)] transition-colors hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
             :aria-label="t('common.actions.dismiss')"
             @click="remove(toast.id)"
           >

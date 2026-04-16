@@ -42,9 +42,20 @@ const sectionByRouteName: Record<string, string> = {
   "admin-versions": "versions",
 };
 
-const activeSection = computed(
-  () => sectionByRouteName[String(route.name ?? "")] ?? "users",
-);
+const activeSection = computed(() => {
+  const routeName = String(route.name ?? "");
+  const matchedSection = sectionByRouteName[routeName];
+
+  if (matchedSection) {
+    return matchedSection;
+  }
+
+  if (route.path.startsWith("/admin/versions")) {
+    return "versions";
+  }
+
+  return "users";
+});
 
 const sidebarItems = computed<SidebarItem[]>(() => [
   {
