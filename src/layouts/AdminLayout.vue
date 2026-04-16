@@ -15,7 +15,9 @@
     </template>
 
     <router-view v-slot="{ Component }">
-      <component :is="Component" :active-section="activeSection" />
+      <div class="h-full min-h-0 w-full">
+        <component :is="Component" :active-section="activeSection" />
+      </div>
     </router-view>
   </AppShell>
 </template>

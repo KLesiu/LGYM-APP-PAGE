@@ -5,8 +5,8 @@
    Tailwind theme tokens
    ───────────────────────────────────────────── */
 @theme {
-  --color-brand-green: #20bc2d;
-  --color-brand-green-light: #2dd43b;
+  --color-brand-green: #4e9f62;
+  --color-brand-green-light: #67b47a;
   --color-brand-night: #0a0a0a;
 }
 
@@ -24,8 +24,9 @@
   --lgym-info: #0288d1;
 
   /* ── Surfaces ── */
-  --lgym-bg: #f5f5f5;
+  --lgym-bg: #f4f5f1;
   --lgym-surface: #ffffff;
+  --lgym-shell-surface: #edf2ea;
   --lgym-surface-muted: #f0f0f0;
   --lgym-surface-card: #ffffff;
   --lgym-surface-elevated: #ffffff;
@@ -51,7 +52,7 @@
   --lgym-page-glow:
     radial-gradient(
       circle at top left,
-      rgba(32, 188, 45, 0.06),
+      rgba(78, 159, 98, 0.08),
       transparent 32%
     ),
     radial-gradient(circle at top right, rgba(0, 0, 0, 0.03), transparent 28%);
@@ -64,24 +65,24 @@
   );
   --lgym-register-glow: radial-gradient(
     circle,
-    rgba(32, 188, 45, 0.1),
+    rgba(78, 159, 98, 0.12),
     transparent 68%
   );
 
   /* ── Decorative — avatar ── */
   --lgym-avatar-bg: linear-gradient(
     135deg,
-    rgba(32, 188, 45, 0.16),
+    rgba(78, 159, 98, 0.16),
     rgba(0, 0, 0, 0.06)
   );
 
   /* ── Table ── */
   --lgym-table-head-bg: rgba(0, 0, 0, 0.03);
-  --lgym-table-row-hover: rgba(32, 188, 45, 0.06);
+  --lgym-table-row-hover: rgba(78, 159, 98, 0.08);
 
   /* ── Note / callout ── */
   --lgym-note-bg: rgba(0, 0, 0, 0.03);
-  --lgym-note-icon-bg: rgba(32, 188, 45, 0.1);
+  --lgym-note-icon-bg: rgba(78, 159, 98, 0.12);
   --lgym-note-icon-text: var(--lgym-primary);
 
   /* ── Tabs ── */
@@ -91,16 +92,19 @@
   --lgym-tab-idle-text: rgba(26, 26, 26, 0.6);
 
   /* ── Nav active ── */
-  --lgym-nav-active-border: rgba(32, 188, 45, 0.3);
+  --lgym-nav-active-border: rgba(78, 159, 98, 0.28);
   --lgym-nav-active-bg: linear-gradient(
     135deg,
-    rgba(32, 188, 45, 0.08),
-    rgba(245, 245, 245, 0.92)
+    rgba(78, 159, 98, 0.14),
+    rgba(255, 255, 255, 0.58)
   );
 
   /* ── Brand mark (logo container) ── */
   --lgym-brand-mark-bg: rgba(255, 255, 255, 0.96);
   --lgym-brand-mark-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --lgym-card-padding: clamp(16px, 1.8vw, 24px);
+  --lgym-section-gap: clamp(24px, 2.2vw, 32px);
+  --lgym-control-height: 52px;
 }
 
 /* ─────────────────────────────────────────────
@@ -111,6 +115,7 @@
   /* ── Surfaces ── */
   --lgym-bg: #0a0a0a;
   --lgym-surface: #171b22;
+  --lgym-shell-surface: #0c0c0c;
   --lgym-surface-muted: rgba(20, 20, 20, 0.82);
   --lgym-surface-card: #141414;
   --lgym-surface-elevated: #1e1e1e;
@@ -136,7 +141,7 @@
   --lgym-page-glow:
     radial-gradient(
       circle at top left,
-      rgba(32, 188, 45, 0.12),
+      rgba(103, 180, 122, 0.12),
       transparent 32%
     ),
     radial-gradient(
@@ -151,24 +156,24 @@
     #0a0a0a;
   --lgym-register-glow: radial-gradient(
     circle,
-    rgba(32, 188, 45, 0.22),
+    rgba(103, 180, 122, 0.22),
     transparent 68%
   );
 
   /* ── Decorative — avatar ── */
   --lgym-avatar-bg: linear-gradient(
     135deg,
-    rgba(32, 188, 45, 0.24),
+    rgba(103, 180, 122, 0.24),
     rgba(232, 230, 230, 0.14)
   );
 
   /* ── Table ── */
   --lgym-table-head-bg: rgba(30, 30, 30, 0.78);
-  --lgym-table-row-hover: rgba(32, 188, 45, 0.08);
+  --lgym-table-row-hover: rgba(103, 180, 122, 0.1);
 
   /* ── Note / callout ── */
   --lgym-note-bg: rgba(24, 24, 24, 0.7);
-  --lgym-note-icon-bg: rgba(32, 188, 45, 0.16);
+  --lgym-note-icon-bg: rgba(103, 180, 122, 0.18);
   --lgym-note-icon-text: var(--lgym-primary);
 
   /* ── Tabs ── */
@@ -178,11 +183,11 @@
   --lgym-tab-idle-text: rgba(232, 230, 230, 0.7);
 
   /* ── Nav active ── */
-  --lgym-nav-active-border: rgba(32, 188, 45, 0.35);
+  --lgym-nav-active-border: rgba(103, 180, 122, 0.32);
   --lgym-nav-active-bg: linear-gradient(
     135deg,
-    rgba(32, 188, 45, 0.16),
-    rgba(20, 20, 20, 0.92)
+    rgba(103, 180, 122, 0.18),
+    rgba(20, 24, 22, 0.92)
   );
 
   /* ── Brand mark ── */
@@ -199,6 +204,9 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+html,
+body,
 #app {
   min-height: 100vh;
+  height: 100%;
 }

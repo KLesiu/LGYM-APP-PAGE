@@ -1,10 +1,10 @@
 <template>
   <v-card
     rounded="[32px]"
-    class="overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+    class="admin-register-card flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
   >
     <div
-      class="relative overflow-hidden bg-[var(--lgym-register-top-bg)] px-5 py-5 sm:px-6"
+      class="relative overflow-hidden bg-[var(--lgym-register-top-bg)] px-6 py-6"
     >
       <p
         class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]"
@@ -14,7 +14,7 @@
       <h2 class="mt-3 text-2xl font-semibold text-[var(--lgym-text)]">
         {{ t("admin.register.title") }}
       </h2>
-      <p class="mt-2 max-w-md text-sm leading-6 text-[var(--lgym-text-muted)]">
+      <p class="mt-3 max-w-md text-sm leading-6 text-[var(--lgym-text-muted)]">
         {{ t("admin.register.subtitle") }}
       </p>
       <p
@@ -27,35 +27,23 @@
       ></div>
     </div>
 
-    <v-card-text class="flex flex-col gap-5 px-5 py-5 sm:px-6">
+    <v-card-text
+      class="admin-register-form flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-6 py-6"
+    >
       <v-form
         ref="formRef"
         v-model="isFormValid"
         validate-on="submit lazy"
-        class="flex flex-col gap-5"
+        class="flex flex-1 flex-col gap-6"
         @submit.prevent="submitForm"
       >
         <div
-          class="rounded-[22px] p-2 border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]"
+          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-3"
         >
           <AuthTabs v-model="selectedRole" />
         </div>
 
-        <v-alert
-          v-if="submitError"
-          type="error"
-          class="rounded-2xl"
-          :text="submitError"
-        />
-
-        <v-alert
-          v-if="submitSuccess"
-          type="success"
-          class="rounded-2xl"
-          :text="submitSuccess"
-        />
-
-        <div class="grid gap-4">
+        <div class="grid gap-5">
           <v-text-field
             v-model="username"
             :label="t('auth.register.fields.username')"
@@ -101,7 +89,7 @@
         </div>
 
         <div
-          class="rounded-[24px] p-4 border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]"
+          class="rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-5"
         >
           <div class="flex items-start gap-3">
             <div
@@ -119,7 +107,7 @@
           type="submit"
           color="primary"
           size="large"
-          class="min-h-12 normal-case tracking-normal font-semibold"
+          class="min-h-[52px] px-6 normal-case tracking-normal font-semibold"
           :loading="isSubmitting"
           :disabled="isSubmitting"
         >
@@ -138,7 +126,8 @@ import {
   postApiRegister,
   postApiTrainerRegister,
 } from "../../api/generated/demo";
-import type { RegisterUserRequest, ResponseMessageDto } from "../../api/model";
+import type { RegisterUserRequest } from "../../api/model";
+import { useToast } from "../../composables/useToast";
 import AuthTabs from "../auth/AuthTabs.vue";
 
 type AuthRole = "athlete" | "trainer";
@@ -148,6 +137,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const toast = useToast();
 
 const formRef = ref<{
   validate: () => Promise<{ valid: boolean }>;
@@ -164,8 +154,6 @@ const confirmPassword = ref("");
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const isSubmitting = ref(false);
-const submitError = ref("");
-const submitSuccess = ref("");
 
 const usernameRules = [
   (value: string) => !!value || t("auth.validation.usernameRequired"),
@@ -194,9 +182,6 @@ const toggleConfirmPassword = () => {
   showConfirmPassword.value = !showConfirmPassword.value;
 };
 
-const extractMessage = (data: ResponseMessageDto | null | undefined) =>
-  data?.msg ?? "";
-
 const registerByRole = async (payload: RegisterUserRequest) => {
   if (selectedRole.value === "trainer") return postApiTrainerRegister(payload);
 
@@ -217,8 +202,6 @@ const submitForm = async () => {
   const validation = await formRef.value.validate();
   if (!validation.valid) return;
 
-  submitError.value = "";
-  submitSuccess.value = "";
   isSubmitting.value = true;
 
   try {
@@ -233,22 +216,27 @@ const submitForm = async () => {
     const response = await registerByRole(payload);
 
     if (response.status !== 200) {
-      submitError.value =
-        extractMessage(response.data) || t("admin.register.feedback.failed");
+      toast.error("admin.register.feedback.failed");
       return;
     }
 
-    submitSuccess.value =
-      extractMessage(response.data) || t("admin.register.feedback.success");
     resetFields();
     emit("registered");
   } catch (error: unknown) {
-    submitError.value =
-      error instanceof Error && error.message
-        ? error.message
-        : t("admin.register.feedback.unexpectedError");
+    console.error(error);
+    toast.error("admin.register.feedback.unexpectedError");
   } finally {
     isSubmitting.value = false;
   }
 };
 </script>
+
+<style scoped>
+.admin-register-form :deep(.v-field) {
+  min-height: var(--lgym-control-height);
+}
+
+.admin-register-form :deep(.v-label) {
+  margin-bottom: 0.2rem;
+}
+</style>

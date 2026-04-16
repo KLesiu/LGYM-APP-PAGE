@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid min-h-screen bg-[var(--lgym-page-glow),var(--lgym-bg)] lg:grid-cols-[260px_1fr]"
+    class="grid h-screen overflow-hidden bg-[var(--lgym-page-glow),var(--lgym-bg)] supports-[height:100dvh]:h-[100dvh] lg:grid-cols-[260px_1fr]"
   >
     <!-- Desktop Sidebar -->
     <AppSidebar
@@ -18,7 +18,9 @@
     </AppSidebar>
 
     <!-- Right column: header + content -->
-    <div class="flex min-h-screen flex-col">
+    <div
+      class="flex h-screen min-h-0 flex-col overflow-hidden supports-[height:100dvh]:h-[100dvh]"
+    >
       <AppHeader
         :title="headerTitle"
         :subtitle="headerSubtitle"
@@ -31,7 +33,7 @@
         </template>
       </AppHeader>
 
-      <main class="flex-1 p-6">
+      <main class="flex min-h-0 flex-1 overflow-hidden p-4 sm:p-5 lg:p-6">
         <slot />
       </main>
     </div>
@@ -49,7 +51,7 @@
 
         <!-- Sidebar panel -->
         <Transition name="sidebar-slide">
-          <div v-if="sidebarOpen" class="relative z-10 h-full w-[280px]">
+          <div v-if="sidebarOpen" class="relative z-10 h-full w-[260px]">
             <AppSidebar
               :items="sidebarItems"
               :active-item="activeSidebarItem"

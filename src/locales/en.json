@@ -170,6 +170,17 @@
       "english": "English"
     }
   },
+  "common": {
+    "actions": {
+      "dismiss": "Dismiss notification"
+    },
+    "toastTitles": {
+      "success": "Success",
+      "error": "Error",
+      "warning": "Warning",
+      "info": "Information"
+    }
+  },
   "admin": {
     "panel": {
       "eyebrow": "Administrator panel",

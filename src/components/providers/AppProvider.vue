@@ -10,6 +10,8 @@
     <v-main class="bg-background">
       <slot />
     </v-main>
+
+    <AppToastHost />
   </v-app>
 </template>
 
@@ -19,6 +21,7 @@ import { useRoute } from "vue-router";
 
 import { useAppLocale } from "../../composables/useAppLocale";
 import { useAppTheme } from "../../composables/useAppTheme";
+import AppToastHost from "../ui/AppToastHost.vue";
 import LanguageToggle from "../ui/LanguageToggle.vue";
 import ThemeToggle from "../ui/ThemeToggle.vue";
 

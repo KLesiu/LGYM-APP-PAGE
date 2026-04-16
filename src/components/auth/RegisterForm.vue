@@ -23,10 +23,6 @@
         >
           <AuthTabs v-model="selectedRole" />
 
-          <v-alert v-if="submitError" type="error" :text="submitError" />
-
-          <v-alert v-if="submitSuccess" type="success" :text="submitSuccess" />
-
           <div class="grid gap-4">
             <v-text-field
               id="username"
@@ -110,6 +106,7 @@ import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import type { RegisterUserRequest, ResponseMessageDto } from "../../api/model";
+import { useToast } from "../../composables/useToast";
 import {
   postApiRegister,
   postApiTrainerRegister,
@@ -121,6 +118,7 @@ import AuthTabs from "./AuthTabs.vue";
 type AuthRole = "athlete" | "trainer";
 
 const { t } = useI18n();
+const toast = useToast();
 
 const formRef = ref<{
   validate: () => Promise<{ valid: boolean }>;
@@ -138,8 +136,6 @@ const confirmPassword = ref("");
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 const isSubmitting = ref(false);
-const submitError = ref("");
-const submitSuccess = ref("");
 
 const usernameRules = [
   (value: string) => !!value || t("auth.validation.usernameRequired"),
@@ -174,12 +170,6 @@ const registerByRole = async (payload: RegisterUserRequest) => {
   return postApiRegister(payload);
 };
 
-const extractMessage = (data: ResponseMessageDto | null | undefined) => {
-  if (!data) return "";
-
-  return data.msg ?? "";
-};
-
 const performRegister = (response: ResponseMessageDto) => {
   console.info("Register submit", {
     role: selectedRole.value,
@@ -210,8 +200,6 @@ const submitForm = async () => {
   const validation = await formRef.value.validate();
   if (!validation.valid) return;
 
-  submitError.value = "";
-  submitSuccess.value = "";
   isSubmitting.value = true;
 
   try {
@@ -226,21 +214,17 @@ const submitForm = async () => {
     const response = await registerByRole(payload);
 
     if (response.status !== 200) {
-      submitError.value =
-        extractMessage(response.data) || t("auth.register.feedback.failed");
+      toast.error("auth.register.feedback.failed");
       return;
     }
 
     performRegister(response.data);
-    submitSuccess.value =
-      extractMessage(response.data) || t("auth.register.feedback.success");
+    toast.success("auth.register.feedback.success");
     resetFormValidation();
     await router.push("/login");
   } catch (error: unknown) {
-    submitError.value =
-      error instanceof Error && error.message
-        ? error.message
-        : t("auth.register.feedback.unexpectedError");
+    console.error(error);
+    toast.error("auth.register.feedback.unexpectedError");
   } finally {
     isSubmitting.value = false;
   }

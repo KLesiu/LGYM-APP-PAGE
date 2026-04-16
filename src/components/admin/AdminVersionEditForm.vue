@@ -1,20 +1,9 @@
 <template>
-  <v-form class="flex flex-col gap-4" @submit.prevent="$emit('submit')">
-    <v-alert
-      v-if="submitError"
-      type="error"
-      class="rounded-2xl"
-      :text="submitError"
-    />
-
-    <v-alert
-      v-if="submitSuccess"
-      type="success"
-      class="rounded-2xl"
-      :text="submitSuccess"
-    />
-
-    <div class="grid gap-4 md:grid-cols-2">
+  <v-form
+    class="admin-version-form flex flex-col gap-5"
+    @submit.prevent="$emit('submit')"
+  >
+    <div class="grid gap-5 md:grid-cols-2">
       <v-text-field
         :model-value="latestVersion"
         :label="t('admin.versions.fields.latestVersion')"
@@ -54,16 +43,16 @@
     />
 
     <div
-      class="border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] rounded-3xl p-4"
+      class="border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] rounded-3xl px-5 py-5"
     >
       <div
-        class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
           <p class="text-[var(--lgym-text)] text-sm font-semibold">
             {{ t("admin.versions.fields.forceUpdate") }}
           </p>
-          <p class="text-[var(--lgym-text-muted)] mt-1 text-sm leading-6">
+          <p class="text-[var(--lgym-text-muted)] mt-3 text-sm leading-6">
             {{ t("admin.versions.fields.forceUpdateHint") }}
           </p>
         </div>
@@ -76,14 +65,20 @@
       </div>
     </div>
 
-    <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
-      <v-btn variant="outlined" color="primary" @click="$emit('loadCurrent')">
+    <div class="mt-2 flex flex-col gap-3 sm:flex-row sm:justify-end">
+      <v-btn
+        variant="outlined"
+        color="primary"
+        class="min-h-[52px] px-6"
+        @click="$emit('loadCurrent')"
+      >
         {{ t("admin.versions.actions.loadCurrent") }}
       </v-btn>
 
       <v-btn
         type="submit"
         color="primary"
+        class="min-h-[52px] px-6"
         :loading="isSubmitting"
         :disabled="isSubmitting"
       >
@@ -106,8 +101,6 @@ defineProps<{
   releaseNotes: string;
   forceUpdate: boolean;
   isSubmitting: boolean;
-  submitError: string;
-  submitSuccess: string;
 }>();
 
 defineEmits<{
@@ -122,3 +115,9 @@ defineEmits<{
 
 const { t } = useI18n();
 </script>
+
+<style scoped>
+.admin-version-form :deep(.v-field) {
+  min-height: var(--lgym-control-height);
+}
+</style>

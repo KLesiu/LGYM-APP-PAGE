@@ -1,6 +1,6 @@
 <template>
-  <div
-    class="flex h-full flex-col gap-6 border-r border-[var(--lgym-border)] bg-[var(--lgym-surface)] p-5"
+  <aside
+    class="flex h-full min-h-0 w-[260px] min-w-[260px] max-w-[260px] flex-col overflow-hidden border-r border-[var(--lgym-border)] bg-[var(--lgym-shell-surface)] px-5 py-6"
   >
     <!-- Branding Section -->
     <div class="flex items-center gap-3">
@@ -9,47 +9,64 @@
       >
         <v-img :src="logoSrc" :alt="brandName" width="36" max-width="36" />
       </div>
+
       <div class="min-w-0 flex-1">
-        <p class="text-sm font-bold text-[var(--lgym-text)]">
+        <p class="truncate text-sm font-bold text-[var(--lgym-text)]">
           {{ brandName }}
         </p>
-        <p v-if="brandSubtitle" class="text-xs text-[var(--lgym-text-muted)]">
+        <p
+          v-if="brandSubtitle"
+          class="truncate text-xs text-[var(--lgym-text-muted)]"
+        >
           {{ brandSubtitle }}
         </p>
       </div>
     </div>
 
-    <!-- Navigation Section -->
-    <nav class="flex flex-col gap-1">
-      <component
-        :is="item.to ? 'router-link' : 'button'"
+    <!-- Navigation -->
+    <v-list
+      nav
+      density="comfortable"
+      bg-color="transparent"
+      class="mt-6 flex min-h-0 flex-1 flex-col gap-1 overflow-x-hidden overflow-y-auto p-0"
+    >
+      <v-list-item
         v-for="item in items"
         :key="item.key"
-        v-bind="item.to ? { to: item.to } : { type: 'button' }"
-        class="relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium text-[var(--lgym-text-muted)] transition-colors duration-150 hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
+        :to="item.to"
+        :active="item.key === activeItem"
+        rounded="xl"
+        class="relative min-h-12 rounded-2xl px-4 text-sm font-medium text-[var(--lgym-text-muted)] transition-all duration-150 hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
         :class="
           item.key === activeItem
-            ? 'bg-[var(--lgym-overlay-strong)] text-[var(--lgym-text)] font-semibold'
+            ? 'bg-[var(--lgym-nav-active-bg)] font-semibold text-[var(--lgym-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]'
             : ''
         "
         @click="handleItemClick(item)"
       >
-        <!-- Active Indicator -->
-        <div
-          v-if="item.key === activeItem"
-          class="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-[var(--lgym-primary)]"
-        />
+        <template #prepend>
+          <div
+            v-if="item.key === activeItem"
+            class="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-[var(--lgym-primary)]"
+          />
+          <v-icon
+            :icon="item.icon"
+            size="20"
+            class="mr-3 text-current opacity-100"
+          />
+        </template>
 
-        <v-icon :icon="item.icon" size="20" />
-        <span>{{ item.label }}</span>
-      </component>
-    </nav>
+        <v-list-item-title class="text-sm font-inherit text-current">
+          {{ item.label }}
+        </v-list-item-title>
+      </v-list-item>
+    </v-list>
 
-    <!-- Footer Slot -->
-    <div class="mt-auto">
+    <!-- Footer -->
+    <div class="mt-6 shrink-0">
       <slot name="footer" />
     </div>
-  </div>
+  </aside>
 </template>
 
 <script setup lang="ts">

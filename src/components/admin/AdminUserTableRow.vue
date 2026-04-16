@@ -2,7 +2,7 @@
   <tr
     class="border-b border-[var(--lgym-border)] transition-colors duration-200 hover:bg-[var(--lgym-table-row-hover)]"
   >
-    <td class="px-5 py-5 align-top">
+    <td class="px-6 py-6 align-top">
       <div class="flex items-start gap-4">
         <div
           class="inline-flex h-[52px] w-[52px] items-center justify-center rounded-[18px] bg-[var(--lgym-avatar-bg)] text-[var(--lgym-text)] text-base font-bold shadow-[inset_0_1px_0_rgba(232,230,230,0.12)]"
@@ -22,14 +22,14 @@
 
           <div
             v-if="(user.roles?.length ?? 0) > 0"
-            class="flex flex-wrap gap-2"
+            class="flex flex-wrap gap-3"
           >
             <v-chip
               v-for="role in user.roles ?? []"
               :key="`${user.id}-${role}`"
               size="x-small"
               color="primary"
-              class="font-medium"
+              class="role-badge font-semibold"
             >
               {{ role }}
             </v-chip>
@@ -38,7 +38,7 @@
       </div>
     </td>
 
-    <td class="text-[var(--lgym-text)] px-5 py-5 align-top text-sm">
+    <td class="text-[var(--lgym-text)] px-6 py-6 align-top text-sm">
       <div class="space-y-1">
         <p>{{ user.email || "—" }}</p>
         <p class="text-[var(--lgym-text-muted)] text-xs">
@@ -47,22 +47,31 @@
       </div>
     </td>
 
-    <td class="px-5 py-5 align-top">
+    <td class="px-6 py-6 align-top">
       <div class="flex flex-wrap gap-2">
-        <v-chip size="small" :color="user.isBlocked ? 'warning' : 'success'">
+        <v-chip
+          size="small"
+          :color="user.isBlocked ? 'warning' : 'success'"
+          class="status-chip"
+        >
           {{
             user.isBlocked
               ? t("admin.status.blocked")
               : t("admin.status.active")
           }}
         </v-chip>
-        <v-chip v-if="user.isDeleted" size="small" color="error">
+        <v-chip
+          v-if="user.isDeleted"
+          size="small"
+          color="error"
+          class="status-chip"
+        >
           {{ t("admin.status.deleted") }}
         </v-chip>
       </div>
     </td>
 
-    <td class="min-w-[280px] px-5 py-5 align-top">
+    <td class="min-w-[300px] px-6 py-6 align-top">
       <v-select
         :model-value="editableRoles[user.id ?? ''] ?? []"
         :items="availableRoles"
@@ -78,16 +87,31 @@
       />
     </td>
 
-    <td class="px-5 py-5 align-top">
-      <v-btn
-        color="primary"
-        class="min-w-[132px]"
-        :loading="isSaving"
-        :disabled="!user.id || isSaving"
-        @click="user.id && $emit('saveRoles')"
-      >
-        {{ t("admin.actions.saveRoles") }}
-      </v-btn>
+    <td class="px-6 py-6 pr-7 align-top">
+      <div class="flex flex-col items-start gap-2">
+        <v-btn
+          color="primary"
+          :variant="hasPendingChanges ? 'flat' : 'outlined'"
+          :prepend-icon="
+            isRecentlySaved && !hasPendingChanges
+              ? 'mdi-check-circle-outline'
+              : 'mdi-content-save-outline'
+          "
+          class="min-h-11 min-w-[148px] px-5"
+          :loading="isSaving"
+          :disabled="!user.id || isSaving || !hasPendingChanges"
+          @click="user.id && $emit('saveRoles')"
+        >
+          {{ t("admin.actions.saveRoles") }}
+        </v-btn>
+
+        <p
+          v-if="isRecentlySaved && !hasPendingChanges"
+          class="text-xs font-medium text-[var(--lgym-success)]"
+        >
+          {{ t("admin.feedback.rolesUpdateSuccess") }}
+        </p>
+      </div>
     </td>
   </tr>
 </template>
@@ -107,6 +131,8 @@ defineProps<{
   editableRoles: Record<string, string[]>;
   availableRoles: RoleOption[];
   isSaving: boolean;
+  hasPendingChanges: boolean;
+  isRecentlySaved: boolean;
   formatDate: (value: string | null | undefined) => string;
 }>();
 
@@ -124,7 +150,28 @@ const getUserInitial = (user: AdminUserDto) => {
 </script>
 
 <style scoped>
+.role-badge :deep(.v-chip__content),
+.status-chip :deep(.v-chip__content) {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.role-badge {
+  border-radius: 999px;
+  padding-inline: 0.3rem;
+}
+
+.status-chip {
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
 .role-select :deep(.v-field) {
   border-radius: 18px;
+  min-height: var(--lgym-control-height);
+}
+
+.role-select :deep(.v-field__input) {
+  row-gap: 0.45rem;
 }
 </style>

@@ -23,10 +23,6 @@
         >
           <AuthTabs v-if="!isAdminMode" v-model="selectedUserRole" />
 
-          <v-alert v-if="submitError" type="error" :text="submitError" />
-
-          <v-alert v-if="submitSuccess" type="success" :text="submitSuccess" />
-
           <div class="grid gap-4">
             <v-text-field
               id="username"
@@ -148,6 +144,7 @@ import { postApiLogin, postApiTrainerLogin } from "../../api/generated/demo";
 import type { LoginRequest, LoginResponseDto } from "../../api/model";
 import logoLgym from "../../assets/logoLGYM.png";
 import { saveAuthSession } from "../../composables/useAuthSession";
+import { useToast } from "../../composables/useToast";
 
 import AuthTabs from "./AuthTabs.vue";
 
@@ -163,6 +160,7 @@ const props = withDefaults(
 );
 
 const { t } = useI18n();
+const toast = useToast();
 const router = useRouter();
 const route = useRoute();
 
@@ -180,8 +178,6 @@ const selectedRole = ref<AuthRole>(
 );
 const showPassword = ref(false);
 const isSubmitting = ref(false);
-const submitError = ref("");
-const submitSuccess = ref("");
 
 const isAdminMode = computed(() => props.mode === "admin");
 const selectedUserRole = computed<"athlete" | "trainer">({
@@ -269,8 +265,6 @@ const submitForm = async () => {
   const validation = await formRef.value.validate();
   if (!validation.valid) return;
 
-  submitError.value = "";
-  submitSuccess.value = "";
   isSubmitting.value = true;
 
   try {
@@ -282,17 +276,17 @@ const submitForm = async () => {
     const response = await loginByRole(payload);
 
     if (response.status !== 200) {
-      submitError.value = t("auth.login.feedback.failed");
+      toast.error("auth.login.feedback.failed");
       return;
     }
 
     if (isAdminMode.value && !hasAdminPermissions(response.data)) {
-      submitError.value = t("auth.loginAdmin.feedback.accessDenied");
+      toast.error("auth.loginAdmin.feedback.accessDenied");
       return;
     }
 
     performLogin(response.data);
-    submitSuccess.value = t("auth.login.feedback.success");
+    toast.success("auth.login.feedback.success");
     resetFormValidation();
 
     if (isAdminMode.value) {
@@ -303,10 +297,8 @@ const submitForm = async () => {
       await router.push(redirect);
     }
   } catch (error: unknown) {
-    submitError.value =
-      error instanceof Error && error.message
-        ? error.message
-        : t("auth.login.feedback.unexpectedError");
+    console.error(error);
+    toast.error("auth.login.feedback.unexpectedError");
   } finally {
     isSubmitting.value = false;
   }

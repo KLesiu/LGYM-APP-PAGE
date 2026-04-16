@@ -1,6 +1,6 @@
 <template>
   <header
-    class="flex min-h-[64px] items-center justify-between border-b border-[var(--lgym-border)] bg-[var(--lgym-surface)] px-6"
+    class="flex min-h-[72px] items-center justify-between border-b border-[var(--lgym-border)] bg-[var(--lgym-shell-surface)] px-4 sm:px-5 lg:px-6"
   >
     <!-- Left side -->
     <div class="flex items-center gap-3">
@@ -21,7 +21,7 @@
 
         <h1
           v-if="title"
-          class="m-0 text-lg font-semibold text-[var(--lgym-text)]"
+          class="m-0 text-lg font-semibold text-[var(--lgym-text)] sm:text-xl"
         >
           {{ title }}
         </h1>

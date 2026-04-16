@@ -1,7 +1,7 @@
 <template>
-  <div class="border-t border-[var(--lgym-border)] px-5 py-4 sm:px-6">
+  <div class="border-t border-[var(--lgym-border)] px-6 py-5">
     <div
-      class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+      class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
     >
       <p class="text-[var(--lgym-text-muted)] text-sm">
         {{
@@ -13,10 +13,11 @@
         }}
       </p>
 
-      <div class="flex gap-3">
+      <div class="flex gap-3 self-end">
         <v-btn
           variant="outlined"
           color="primary"
+          class="min-h-11 px-5"
           :disabled="page <= 1 || isLoading"
           @click="$emit('changePage', page - 1)"
         >
@@ -25,6 +26,7 @@
         <v-btn
           variant="outlined"
           color="primary"
+          class="min-h-11 px-5"
           :disabled="page >= totalPages || isLoading"
           @click="$emit('changePage', page + 1)"
         >

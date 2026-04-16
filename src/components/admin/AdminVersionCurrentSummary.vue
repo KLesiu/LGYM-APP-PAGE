@@ -1,6 +1,6 @@
 <template>
   <article
-    class="border border-[var(--lgym-border)] rounded-3xl bg-[var(--lgym-surface-muted)] p-5"
+    class="border border-[var(--lgym-border)] rounded-3xl bg-[var(--lgym-surface-muted)] p-6"
   >
     <div class="flex items-start justify-between gap-4">
       <div>
@@ -17,6 +17,7 @@
       <v-chip
         size="small"
         :color="currentConfig?.forceUpdate ? 'warning' : 'success'"
+        class="status-chip"
       >
         {{
           currentConfig?.forceUpdate
@@ -34,14 +35,7 @@
     />
 
     <template v-else>
-      <v-alert
-        v-if="loadError"
-        type="warning"
-        class="mt-4 rounded-2xl"
-        :text="loadError"
-      />
-
-      <div v-else-if="currentConfig" class="mt-4 grid gap-3 sm:grid-cols-2">
+      <div v-if="currentConfig" class="mt-5 grid gap-4 sm:grid-cols-2">
         <div
           class="border border-[var(--lgym-border)] rounded-[20px] bg-[var(--lgym-note-bg)] p-4"
         >
@@ -81,7 +75,7 @@
             {{ t("admin.versions.fields.updateUrl") }}
           </p>
           <p
-            class="mt-2 text-[var(--lgym-text)] text-base font-semibold leading-relaxed break-all text-sm"
+            class="mt-2 break-all text-sm font-semibold leading-relaxed text-[var(--lgym-text)]"
           >
             {{ currentConfig.updateUrl || "—" }}
           </p>
@@ -96,7 +90,7 @@
             {{ t("admin.versions.fields.releaseNotes") }}
           </p>
           <p
-            class="mt-2 text-[var(--lgym-text)] text-base font-semibold leading-relaxed whitespace-pre-line text-sm font-medium"
+            class="mt-2 overflow-hidden whitespace-pre-line text-sm font-medium leading-relaxed text-[var(--lgym-text)] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:5]"
           >
             {{ currentConfig.releaseNotes || "—" }}
           </p>
@@ -121,10 +115,15 @@ import type { AppConfigInfoDto } from "../../api/model";
 
 defineProps<{
   platformLabel: string;
-  currentConfig: AppConfigInfoDto | null;
+  currentConfig: AppConfigInfoDto | null | undefined;
   isLoading: boolean;
-  loadError: string;
 }>();
 
 const { t } = useI18n();
 </script>
+
+<style scoped>
+.status-chip {
+  border-radius: 999px;
+}
+</style>

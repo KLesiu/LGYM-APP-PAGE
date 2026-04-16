@@ -1,9 +1,9 @@
 <template>
   <v-card
     rounded="[32px]"
-    class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)] overflow-hidden"
+    class="flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
   >
-    <div class="border-b border-[var(--lgym-border)] px-5 py-5 sm:px-6">
+    <div class="border-b border-[var(--lgym-border)] px-6 py-6">
       <div
         class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
       >
@@ -18,7 +18,7 @@
               {{ t("admin.versions.title") }}
             </h2>
             <p
-              class="text-[var(--lgym-text-muted)] mt-2 max-w-3xl text-sm leading-6"
+              class="text-[var(--lgym-text-muted)] mt-3 max-w-3xl text-sm leading-6"
             >
               {{ t("admin.versions.subtitle") }}
             </p>
@@ -37,7 +37,7 @@
       </div>
 
       <div
-        class="border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] mt-5 rounded-[22px] p-2"
+        class="border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] mt-6 rounded-[22px] p-3"
       >
         <v-tabs
           v-model="activePlatform"
@@ -60,22 +60,22 @@
       </div>
     </div>
 
-    <v-card-text class="px-5 py-5 sm:px-6">
-      <v-window v-model="activePlatform">
+    <v-card-text class="min-h-0 flex-1 overflow-y-auto px-6 py-6">
+      <v-window v-model="activePlatform" class="h-full min-h-0">
         <v-window-item
           v-for="platform in platformOptions"
           :key="platform.value"
           :value="platform.value"
+          class="h-full min-h-0"
         >
           <div
-            class="grid gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
+            class="grid h-full min-h-0 gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
           >
             <section class="space-y-4">
               <AdminVersionCurrentSummary
                 :platform-label="platform.label"
                 :current-config="states[platform.value].currentConfig"
                 :is-loading="states[platform.value].isLoading"
-                :load-error="states[platform.value].loadError"
               />
 
               <AdminVersionInfoNote
@@ -95,12 +95,8 @@
                 v-model:release-notes="states[platform.value].releaseNotes"
                 v-model:force-update="states[platform.value].forceUpdate"
                 :is-submitting="states[platform.value].isSubmitting"
-                :submit-error="states[platform.value].submitError"
-                :submit-success="states[platform.value].submitSuccess"
                 @submit="submitPlatform(platform.value)"
-                @load-current="
-                  loadPlatform(platform.value, { preserveMessages: true })
-                "
+                @load-current="loadPlatform(platform.value)"
               />
             </section>
           </div>
@@ -123,9 +119,9 @@ import {
   AppConfigVersionRequestDtoPlatform,
   type AppConfigInfoDto,
   type AppConfigInfoWithPlatformDto,
-  type ResponseMessageDto,
 } from "../../api/model";
 import { getAuthUserId } from "../../composables/useAuthSession";
+import { useToast } from "../../composables/useToast";
 
 import AdminVersionCurrentSummary from "./AdminVersionCurrentSummary.vue";
 import AdminVersionEditForm from "./AdminVersionEditForm.vue";
@@ -141,10 +137,7 @@ type VersionState = {
   forceUpdate: boolean;
   isLoading: boolean;
   isSubmitting: boolean;
-  submitError: string;
-  submitSuccess: string;
-  loadError: string;
-  currentConfig: AppConfigInfoDto | null;
+  currentConfig: AppConfigInfoDto | null | undefined;
 };
 
 const emit = defineEmits<{
@@ -152,6 +145,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const toast = useToast();
 
 const activePlatform = ref<VersionPlatform>("Android");
 
@@ -163,10 +157,7 @@ const createEmptyState = (): VersionState => ({
   forceUpdate: false,
   isLoading: false,
   isSubmitting: false,
-  submitError: "",
-  submitSuccess: "",
-  loadError: "",
-  currentConfig: null,
+  currentConfig: undefined,
 });
 
 const states = reactive<Record<VersionPlatform, VersionState>>({
@@ -210,11 +201,6 @@ const platformCreateMap: Record<
 const isUnauthorizedStatus = (status: number) =>
   status === 401 || status === 403;
 
-const extractMessage = (
-  data: ResponseMessageDto | null | undefined,
-  fallback: string,
-) => data?.msg?.trim() || fallback;
-
 const syncFormWithCurrentConfig = (
   platform: VersionPlatform,
   config: AppConfigInfoDto | null | undefined,
@@ -228,18 +214,9 @@ const syncFormWithCurrentConfig = (
   states[platform].forceUpdate = config.forceUpdate ?? false;
 };
 
-const loadPlatform = async (
-  platform: VersionPlatform,
-  options?: { preserveMessages?: boolean },
-) => {
+const loadPlatform = async (platform: VersionPlatform) => {
   const state = states[platform];
   state.isLoading = true;
-  state.loadError = "";
-
-  if (!options?.preserveMessages) {
-    state.submitError = "";
-    state.submitSuccess = "";
-  }
 
   try {
     const response = await postApiAppConfigGetAppVersion({
@@ -253,29 +230,21 @@ const loadPlatform = async (
 
     if (response.status === 404) {
       state.currentConfig = null;
-      state.loadError = extractMessage(
-        response.data,
-        t("admin.versions.feedback.noConfig"),
-      );
       return;
     }
 
     if (response.status !== 200) {
-      state.currentConfig = null;
-      state.loadError = extractMessage(
-        response.data,
-        t("admin.versions.feedback.loadFailed"),
-      );
+      state.currentConfig = undefined;
+      toast.error("admin.versions.feedback.loadFailed");
       return;
     }
 
     state.currentConfig = response.data;
     syncFormWithCurrentConfig(platform, response.data);
   } catch (error: unknown) {
-    state.loadError =
-      error instanceof Error && error.message
-        ? error.message
-        : t("admin.versions.feedback.loadFailed");
+    console.error(error);
+    state.currentConfig = undefined;
+    toast.error("admin.versions.feedback.loadFailed");
   } finally {
     state.isLoading = false;
   }
@@ -285,12 +254,12 @@ const validateState = (platform: VersionPlatform) => {
   const state = states[platform];
 
   if (!state.latestVersion.trim()) {
-    state.submitError = t("admin.versions.feedback.latestVersionRequired");
+    toast.warning("admin.versions.feedback.latestVersionRequired");
     return false;
   }
 
   if (!state.minRequiredVersion.trim()) {
-    state.submitError = t("admin.versions.feedback.minVersionRequired");
+    toast.warning("admin.versions.feedback.minVersionRequired");
     return false;
   }
 
@@ -299,12 +268,10 @@ const validateState = (platform: VersionPlatform) => {
 
 const submitPlatform = async (platform: VersionPlatform) => {
   const state = states[platform];
-  state.submitError = "";
-  state.submitSuccess = "";
   const adminUserId = getAuthUserId();
 
   if (!adminUserId) {
-    state.submitError = t("admin.feedback.unauthorized");
+    toast.error("admin.feedback.unauthorized");
     return;
   }
 
@@ -333,23 +300,15 @@ const submitPlatform = async (platform: VersionPlatform) => {
     }
 
     if (response.status !== 201) {
-      state.submitError = extractMessage(
-        response.data,
-        t("admin.versions.feedback.submitFailed"),
-      );
+      toast.error("admin.versions.feedback.submitFailed");
       return;
     }
 
-    state.submitSuccess = extractMessage(
-      response.data,
-      t("admin.versions.feedback.submitSuccess"),
-    );
-    await loadPlatform(platform, { preserveMessages: true });
+    toast.success("admin.versions.feedback.submitSuccess");
+    await loadPlatform(platform);
   } catch (error: unknown) {
-    state.submitError =
-      error instanceof Error && error.message
-        ? error.message
-        : t("admin.versions.feedback.submitFailed");
+    console.error(error);
+    toast.error("admin.versions.feedback.submitFailed");
   } finally {
     state.isSubmitting = false;
   }
@@ -370,7 +329,7 @@ onMounted(async () => {
 
 <style scoped>
 .admin-platform-tabs {
-  --v-theme-primary: 32, 188, 45;
+  --v-theme-primary: var(--lgym-primary-rgb);
 }
 
 .admin-platform-tabs :deep(.v-slide-group__content) {

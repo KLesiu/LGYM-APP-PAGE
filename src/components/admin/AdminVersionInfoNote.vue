@@ -1,6 +1,6 @@
 <template>
   <article
-    class="border border-[var(--lgym-border)] rounded-3xl bg-[var(--lgym-surface-muted)] p-5"
+    class="border border-[var(--lgym-border)] rounded-3xl bg-[var(--lgym-surface-muted)] p-6"
   >
     <div class="flex items-start gap-3">
       <div
@@ -12,7 +12,7 @@
         <p class="text-[var(--lgym-text)] text-sm font-semibold">
           {{ title }}
         </p>
-        <p class="text-[var(--lgym-text-muted)] mt-2 text-sm leading-6">
+        <p class="mt-3 text-sm leading-6 text-[var(--lgym-text-muted)]">
           {{ description }}
         </p>
       </div>
