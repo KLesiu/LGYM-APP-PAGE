@@ -10,7 +10,6 @@
       :brand-name="brandName"
       :brand-subtitle="brandSubtitle"
       class="hidden lg:flex"
-      @update:active-item="$emit('update:activeSidebarItem', $event)"
     >
       <template v-if="$slots['sidebar-footer']" #footer>
         <slot name="sidebar-footer" />
@@ -58,7 +57,7 @@
               :logo-src="logoSrc"
               :brand-name="brandName"
               :brand-subtitle="brandSubtitle"
-              @update:active-item="handleMobileNavClick"
+              @item-click="handleMobileNavClick"
             >
               <template v-if="$slots['sidebar-footer']" #footer>
                 <slot name="sidebar-footer" />
@@ -90,8 +89,7 @@ defineProps<{
   user: CurrentUser | null;
 }>();
 
-const emit = defineEmits<{
-  "update:activeSidebarItem": [value: string];
+defineEmits<{
   logout: [];
 }>();
 
@@ -106,9 +104,8 @@ watch(
   },
 );
 
-// Handle mobile nav click: emit update and close sidebar
-function handleMobileNavClick(value: string) {
-  emit("update:activeSidebarItem", value);
+// Close the mobile sidebar immediately on menu interaction.
+function handleMobileNavClick() {
   sidebarOpen.value = false;
 }
 </script>

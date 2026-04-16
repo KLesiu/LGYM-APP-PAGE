@@ -1,56 +1,31 @@
 <template>
   <div class="flex h-full min-h-0 flex-col gap-4 lg:gap-5">
-    <v-window
-      v-model="activeSection"
-      class="admin-sections-window min-h-0 min-w-0 flex-1"
-      :touch="false"
-    >
-      <v-window-item value="users">
-        <section class="grid h-full min-h-0 gap-4 lg:gap-5">
-          <AdminUsersWorkspace
-            ref="usersWorkspaceRef"
-            :page="page"
-            :page-size="pageSize"
-            :total-pages="totalPages"
-            :total-users="totalUsers"
-            :users="users"
-            :available-roles="availableRoles"
-            :editable-roles="editableRoles"
-            :is-loading="isLoadingUsers"
-            :saving-role-user-ids="savingRoleUserIds"
-            :recently-saved-role-user-id="recentlySavedRoleUserId"
-            :format-date="formatDate"
-            @change-page="changePage"
-            @save-roles="saveRoles"
-            @update-editable-roles="
-              ({ userId, value }) => updateEditableRoles(userId, value)
-            "
-          />
-        </section>
-      </v-window-item>
-
-      <v-window-item value="versions">
-        <section class="grid h-full min-h-0 gap-4 lg:gap-5">
-          <AdminAppVersionPanel
-            ref="appVersionPanelRef"
-            @unauthorized="handleNestedUnauthorized"
-          />
-        </section>
-      </v-window-item>
-    </v-window>
+    <section class="grid h-full min-h-0 gap-4 lg:gap-5">
+      <AdminUsersWorkspace
+        ref="usersWorkspaceRef"
+        :page="page"
+        :page-size="pageSize"
+        :total-pages="totalPages"
+        :total-users="totalUsers"
+        :users="users"
+        :available-roles="availableRoles"
+        :editable-roles="editableRoles"
+        :is-loading="isLoadingUsers"
+        :saving-role-user-ids="savingRoleUserIds"
+        :recently-saved-role-user-id="recentlySavedRoleUserId"
+        :format-date="formatDate"
+        @change-page="changePage"
+        @save-roles="saveRoles"
+        @update-editable-roles="
+          ({ userId, value }) => updateEditableRoles(userId, value)
+        "
+      />
+    </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  nextTick,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  toRef,
-  watch,
-} from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import {
@@ -58,7 +33,6 @@ import {
   postApiRolesPaginated,
   postApiRolesUsersIdRoles,
 } from "../../api/generated/demo";
-import AdminAppVersionPanel from "../../components/admin/AdminAppVersionPanel.vue";
 import AdminUsersWorkspace from "../../components/admin/AdminUsersWorkspace.vue";
 import type {
   AdminUserDto,
@@ -70,27 +44,12 @@ import type {
 import { clearAuthSession } from "../../composables/useAuthSession";
 import { useToast } from "../../composables/useToast";
 
-type AdminAppVersionPanelRef = {
-  refreshAll: () => Promise<void>;
-};
-
 type AdminUsersWorkspaceRef = {
   getRecommendedPageSize: () => number;
 };
 
-const props = withDefaults(
-  defineProps<{
-    activeSection?: string;
-  }>(),
-  {
-    activeSection: "users",
-  },
-);
-
 const router = useRouter();
 const toast = useToast();
-
-const activeSection = toRef(props, "activeSection");
 
 const page = ref(1);
 const pageSize = ref(4);
@@ -102,7 +61,6 @@ const editableRoles = ref<Record<string, string[]>>({});
 const isLoadingUsers = ref(false);
 const isLoadingRoles = ref(false);
 const savingRoleUserIds = ref(new Set<string>());
-const appVersionPanelRef = ref<AdminAppVersionPanelRef | null>(null);
 const usersWorkspaceRef = ref<AdminUsersWorkspaceRef | null>(null);
 const recentlySavedRoleUserId = ref<string | null>(null);
 const usersRequestToken = ref(0);
@@ -139,11 +97,6 @@ const availableRoles = computed(() =>
     }))
     .filter((role) => role.value.length > 0),
 );
-
-const handleNestedUnauthorized = async () => {
-  toast.error("admin.feedback.unauthorized");
-  await redirectToAdminLogin();
-};
 
 const isRefreshing = computed(
   () => isLoadingUsers.value || isLoadingRoles.value,
@@ -255,13 +208,7 @@ const loadUsers = async (targetPage = page.value) => {
 };
 
 const refreshData = async () => {
-  const tasks: Promise<unknown>[] = [loadRoles(), loadUsers(page.value)];
-
-  if (appVersionPanelRef.value) {
-    tasks.push(appVersionPanelRef.value.refreshAll());
-  }
-
-  await Promise.all(tasks);
+  await Promise.all([loadRoles(), loadUsers(page.value)]);
 };
 
 const changePage = async (targetPage: number) => {
@@ -327,7 +274,6 @@ const saveRoles = async (userId: string) => {
 };
 
 const syncPageSizeWithViewport = async () => {
-  if (activeSection.value !== "users") return;
   if (hasPendingRoleChanges()) return;
 
   await nextTick();
@@ -358,14 +304,6 @@ defineExpose({
   isRefreshing,
 });
 
-watch(activeSection, async (section) => {
-  await nextTick();
-
-  if (section === "users") {
-    schedulePageSizeSync();
-  }
-});
-
 onMounted(async () => {
   await Promise.all([loadRoles(), loadUsers()]);
   await syncPageSizeWithViewport();
@@ -389,12 +327,3 @@ onBeforeUnmount(() => {
   }
 });
 </script>
-
-<style scoped>
-.admin-sections-window,
-.admin-sections-window :deep(.v-window__container),
-.admin-sections-window :deep(.v-window-item) {
-  height: 100%;
-  min-height: 0;
-}
-</style>

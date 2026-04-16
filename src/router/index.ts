@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import { hasAdminAccess } from "../composables/useAuthSession";
 import AdminLayout from "../layouts/AdminLayout.vue";
 import AdminUsersPage from "../pages/admin/AdminUsersPage.vue";
+import AdminVersionsPage from "../pages/admin/AdminVersionsPage.vue";
 import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
@@ -45,6 +46,11 @@ export const router = createRouter({
           path: "users",
           name: "admin-users",
           component: AdminUsersPage,
+        },
+        {
+          path: "versions",
+          name: "admin-versions",
+          component: AdminVersionsPage,
         },
       ],
     },

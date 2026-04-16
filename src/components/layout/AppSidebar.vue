@@ -70,11 +70,13 @@
 </template>
 
 <script setup lang="ts">
+import type { RouteLocationRaw } from "vue-router";
+
 export type SidebarItem = {
   key: string;
   label: string;
   icon: string;
-  to?: string;
+  to: RouteLocationRaw;
 };
 
 defineProps<{
@@ -86,10 +88,10 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  "update:activeItem": [value: string];
+  "item-click": [value: string];
 }>();
 
 function handleItemClick(item: SidebarItem) {
-  emit("update:activeItem", item.key);
+  emit("item-click", item.key);
 }
 </script>

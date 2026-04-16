@@ -1,6 +1,6 @@
 <template>
   <AppShell
-    v-model:active-sidebar-item="activeSection"
+    :active-sidebar-item="activeSection"
     :sidebar-items="sidebarItems"
     :logo-src="logoLgym"
     :brand-name="t('admin.panel.brandTitle')"
@@ -16,16 +16,16 @@
 
     <router-view v-slot="{ Component }">
       <div class="h-full min-h-0 w-full">
-        <component :is="Component" :active-section="activeSection" />
+        <component :is="Component" />
       </div>
     </router-view>
   </AppShell>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import logoLgym from "../assets/logoLGYM.png";
 import AppShell from "../components/layout/AppShell.vue";
@@ -34,20 +34,30 @@ import { clearAuthSession } from "../composables/useAuthSession";
 import { getCurrentUser } from "../composables/useCurrentUser";
 
 const { t } = useI18n();
+const route = useRoute();
 const router = useRouter();
 
-const activeSection = ref("users");
+const sectionByRouteName: Record<string, string> = {
+  "admin-users": "users",
+  "admin-versions": "versions",
+};
+
+const activeSection = computed(
+  () => sectionByRouteName[String(route.name ?? "")] ?? "users",
+);
 
 const sidebarItems = computed<SidebarItem[]>(() => [
   {
     key: "users",
     label: t("admin.tabs.items.users.label"),
     icon: "mdi-account-group-outline",
+    to: { name: "admin-users" },
   },
   {
     key: "versions",
     label: t("admin.tabs.items.versions.label"),
     icon: "mdi-cellphone-arrow-down",
+    to: { name: "admin-versions" },
   },
 ]);
 
