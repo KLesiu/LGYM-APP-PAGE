@@ -79,6 +79,12 @@
       "athlete": "Athlete Panel",
       "trainer": "Trainer Zone"
     },
+    "roles": {
+      "admin": "Administrator",
+      "trainer": "Trainer",
+      "athlete": "Athlete",
+      "user": "User"
+    },
     "validation": {
       "usernameRequired": "Username is required",
       "usernameMin": "Username must be at least 3 characters",

@@ -79,6 +79,12 @@
       "athlete": "Panel zawodnika",
       "trainer": "Strefa trenera"
     },
+    "roles": {
+      "admin": "Administrator",
+      "trainer": "Trener",
+      "athlete": "Zawodnik",
+      "user": "Uzytkownik"
+    },
     "validation": {
       "usernameRequired": "Nazwa uzytkownika jest wymagana",
       "usernameMin": "Nazwa uzytkownika musi miec co najmniej 3 znaki",

@@ -65,7 +65,7 @@
               {{ user.name }}
             </span>
             <span class="text-xs text-[var(--lgym-text-muted)]">
-              {{ user.email || user.role }}
+              {{ displayUserMeta(user) }}
             </span>
           </div>
 
@@ -87,6 +87,7 @@
 
 <script setup lang="ts">
 import { computed, useSlots } from "vue";
+import { useI18n } from "vue-i18n";
 
 import LanguageToggle from "../ui/LanguageToggle.vue";
 import ThemeToggle from "../ui/ThemeToggle.vue";
@@ -103,6 +104,20 @@ defineEmits<{
   toggleSidebar: [];
 }>();
 
+const { t, te } = useI18n();
 const slots = useSlots();
 const hasActionsSlot = computed(() => !!slots.actions);
+
+const translateRole = (role: string) => {
+  const normalizedRole = role.trim().toLowerCase();
+  if (!normalizedRole) return "";
+
+  const translationKey = `auth.roles.${normalizedRole}`;
+  return te(translationKey) ? t(translationKey) : role;
+};
+
+const displayUserMeta = (user: CurrentUser) => {
+  const translatedRole = translateRole(user.role);
+  return translatedRole || user.email;
+};
 </script>
