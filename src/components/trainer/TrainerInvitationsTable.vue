@@ -78,136 +78,108 @@
 
     <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
-    <v-card-text class="min-h-0 flex-1 overflow-x-auto px-0 py-0">
-      <table class="min-w-full">
-        <thead
-          class="border-b border-[var(--lgym-border)] bg-[var(--lgym-table-head-bg)]"
-        >
-          <tr>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-muted)]"
-            >
-              {{ t("trainerInvitations.history.columns.inviteeEmail") }}
-            </th>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-muted)]"
-            >
-              {{ t("trainerInvitations.history.columns.trainee") }}
-            </th>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-muted)]"
-            >
-              {{ t("trainerInvitations.history.columns.status") }}
-            </th>
-            <th
-              class="px-6 py-4 text-left text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-muted)]"
-            >
-              {{ t("trainerInvitations.history.columns.sentAt") }}
-            </th>
-            <th
-              class="px-6 py-4 pr-7 text-left text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-muted)]"
-            >
-              {{ t("trainerInvitations.history.columns.actions") }}
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr v-if="!isLoading && invitations.length === 0">
-            <td
-              colspan="5"
-              class="px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]"
-            >
-              <div class="mx-auto flex max-w-md flex-col items-center gap-3">
-                <div
-                  class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
-                >
-                  <v-icon icon="mdi-email-outline" size="26" />
-                </div>
-                <p class="text-base font-semibold text-[var(--lgym-text)]">
-                  {{ t("trainerInvitations.history.empty.title") }}
-                </p>
-                <p class="leading-6">
-                  {{ t("trainerInvitations.history.empty.subtitle") }}
-                </p>
-              </div>
-            </td>
-          </tr>
-
-          <tr
-            v-for="(invitation, index) in invitations"
-            :key="
-              invitation._id ??
-              invitation.code ??
-              invitation.inviteeEmail ??
-              `invitation-${index}`
-            "
-            class="border-b border-[var(--lgym-border)] transition-colors duration-200 hover:bg-[var(--lgym-table-row-hover)]"
+    <v-card-text class="min-h-0 flex-1 px-0 py-0">
+      <v-data-table-server
+        class="trainer-invitations-table h-full"
+        :headers="headers"
+        :items="invitations"
+        :items-length="totalCount"
+        :items-per-page="pageSize"
+        :page="page"
+        :loading="isLoading"
+        item-value="_id"
+        hide-default-footer
+        hover
+        @update:page="$emit('update:page', $event)"
+        @update:items-per-page="onItemsPerPageUpdate"
+      >
+        <template #item.inviteeEmail="{ item, index }">
+          <div
+            :key="invitationRowKey(item, index)"
+            class="space-y-1 px-6 py-6 text-sm text-[var(--lgym-text)]"
           >
-            <td class="px-6 py-6 align-top text-sm text-[var(--lgym-text)]">
-              <div class="space-y-1">
-                <p class="font-semibold">
-                  {{ invitation.inviteeEmail || "—" }}
-                </p>
-                <p class="text-xs text-[var(--lgym-text-muted)]">
-                  {{ invitation.code || "—" }}
-                </p>
-              </div>
-            </td>
+            <p class="font-semibold">
+              {{ item.inviteeEmail || "—" }}
+            </p>
+            <p class="text-xs text-[var(--lgym-text-muted)]">
+              {{ item.code || "—" }}
+            </p>
+          </div>
+        </template>
 
-            <td class="px-6 py-6 align-top text-sm">
-              <div class="space-y-1">
-                <p class="font-semibold text-[var(--lgym-text)]">
-                  {{
-                    invitation.traineeName ||
-                    t("trainerInvitations.history.fallback.noTraineeName")
-                  }}
-                </p>
-                <p class="text-[var(--lgym-text-muted)]">
-                  {{
-                    invitation.traineeEmail ||
-                    t("trainerInvitations.history.fallback.noTraineeEmail")
-                  }}
-                </p>
-              </div>
-            </td>
+        <template #item.trainee="{ item }">
+          <div class="space-y-1 px-6 py-6 text-sm">
+            <p class="font-semibold text-[var(--lgym-text)]">
+              {{
+                item.traineeName ||
+                t("trainerInvitations.history.fallback.noTraineeName")
+              }}
+            </p>
+            <p class="text-[var(--lgym-text-muted)]">
+              {{
+                item.traineeEmail ||
+                t("trainerInvitations.history.fallback.noTraineeEmail")
+              }}
+            </p>
+          </div>
+        </template>
 
-            <td class="px-6 py-6 align-top">
-              <v-chip
-                :color="statusColor(invitation.status)"
-                size="small"
-                class="status-chip"
+        <template #item.status="{ item }">
+          <div class="px-6 py-6">
+            <v-chip
+              :color="statusColor(item.status)"
+              size="small"
+              class="status-chip"
+            >
+              {{ statusLabel(item.status) }}
+            </v-chip>
+          </div>
+        </template>
+
+        <template #item.sentAt="{ item }">
+          <div class="space-y-1 px-6 py-6 text-sm text-[var(--lgym-text)]">
+            <p>{{ formatDate(item.createdAt) }}</p>
+            <p class="text-xs text-[var(--lgym-text-muted)]">
+              {{ t("trainerInvitations.history.meta.expiresAt") }}:
+              {{ formatDate(item.expiresAt) }}
+            </p>
+          </div>
+        </template>
+
+        <template #item.actions="{ item }">
+          <div class="px-6 py-6 pr-7">
+            <v-btn
+              variant="outlined"
+              color="error"
+              prepend-icon="mdi-close-circle-outline"
+              class="min-h-11 min-w-[148px] px-5"
+              :loading="isRevoking(item._id)"
+              :disabled="!canRevoke(item) || isRevoking(item._id)"
+              @click="$emit('revoke', item)"
+            >
+              {{ t("trainerInvitations.actions.revoke") }}
+            </v-btn>
+          </div>
+        </template>
+
+        <template #no-data>
+          <div class="px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]">
+            <div class="mx-auto flex max-w-md flex-col items-center gap-3">
+              <div
+                class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
               >
-                {{ statusLabel(invitation.status) }}
-              </v-chip>
-            </td>
-
-            <td class="px-6 py-6 align-top text-sm text-[var(--lgym-text)]">
-              <div class="space-y-1">
-                <p>{{ formatDate(invitation.createdAt) }}</p>
-                <p class="text-xs text-[var(--lgym-text-muted)]">
-                  {{ t("trainerInvitations.history.meta.expiresAt") }}:
-                  {{ formatDate(invitation.expiresAt) }}
-                </p>
+                <v-icon icon="mdi-email-outline" size="26" />
               </div>
-            </td>
-
-            <td class="px-6 py-6 pr-7 align-top">
-              <v-btn
-                variant="outlined"
-                color="error"
-                prepend-icon="mdi-close-circle-outline"
-                class="min-h-11 min-w-[148px] px-5"
-                :loading="isRevoking(invitation._id)"
-                :disabled="!canRevoke(invitation) || isRevoking(invitation._id)"
-                @click="$emit('revoke', invitation)"
-              >
-                {{ t("trainerInvitations.actions.revoke") }}
-              </v-btn>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              <p class="text-base font-semibold text-[var(--lgym-text)]">
+                {{ t("trainerInvitations.history.empty.title") }}
+              </p>
+              <p class="leading-6">
+                {{ t("trainerInvitations.history.empty.subtitle") }}
+              </p>
+            </div>
+          </div>
+        </template>
+      </v-data-table-server>
     </v-card-text>
 
     <div class="border-t border-[var(--lgym-border)] px-6 py-5">
@@ -260,6 +232,13 @@ import {
   type InvitationStatusFilter,
 } from "../../composables/useTrainerInvitations";
 
+type TableHeader = {
+  title: string;
+  key: string;
+  sortable?: boolean;
+  align?: "start" | "center" | "end";
+};
+
 const props = defineProps<{
   invitations: TrainerInvitationDto[];
   isLoading: boolean;
@@ -288,6 +267,34 @@ const emit = defineEmits<{
 const { t } = useI18n();
 
 const pageSizeOptions = [10, 20, 50];
+
+const headers = computed<TableHeader[]>(() => [
+  {
+    title: t("trainerInvitations.history.columns.inviteeEmail"),
+    key: "inviteeEmail",
+    sortable: false,
+  },
+  {
+    title: t("trainerInvitations.history.columns.trainee"),
+    key: "trainee",
+    sortable: false,
+  },
+  {
+    title: t("trainerInvitations.history.columns.status"),
+    key: "status",
+    sortable: false,
+  },
+  {
+    title: t("trainerInvitations.history.columns.sentAt"),
+    key: "sentAt",
+    sortable: false,
+  },
+  {
+    title: t("trainerInvitations.history.columns.actions"),
+    key: "actions",
+    sortable: false,
+  },
+]);
 
 const statusFilters = computed<
   { label: string; value: InvitationStatusFilter }[]
@@ -343,9 +350,66 @@ const onPageSizeUpdate = (value: number | string | null) => {
 
   emit("update:pageSize", parsedValue);
 };
+
+const onItemsPerPageUpdate = (value: number) => {
+  if (!pageSizeOptions.includes(value)) {
+    emit("update:pageSize", value);
+    return;
+  }
+
+  onPageSizeUpdate(value);
+};
+
+const invitationRowKey = (
+  invitation: TrainerInvitationDto,
+  index: number,
+) =>
+  invitation._id ??
+  invitation.code ??
+  invitation.inviteeEmail ??
+  `invitation-${index}`;
 </script>
 
 <style scoped>
+.trainer-invitations-table :deep(.v-table__wrapper) {
+  height: 100%;
+  overflow-x: auto;
+}
+
+.trainer-invitations-table :deep(table) {
+  min-width: 100%;
+}
+
+.trainer-invitations-table :deep(thead) {
+  border-bottom: 1px solid var(--lgym-border);
+  background: var(--lgym-table-head-bg);
+}
+
+.trainer-invitations-table :deep(th) {
+  padding: 1rem 1.5rem;
+  color: var(--lgym-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-align: left;
+  text-transform: uppercase;
+  box-shadow: none;
+}
+
+.trainer-invitations-table :deep(th:last-child) {
+  padding-right: 1.75rem;
+}
+
+.trainer-invitations-table :deep(td) {
+  padding: 0;
+  border-bottom: 1px solid var(--lgym-border);
+  vertical-align: top;
+}
+
+.trainer-invitations-table :deep(tbody tr:hover) {
+  background: var(--lgym-table-row-hover);
+}
+
 .status-chip {
   border-radius: 999px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);

@@ -67,21 +67,7 @@
           :menu-props="{ maxHeight: 320 }"
         />
 
-        <div
-          class="rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-5"
-        >
-          <div class="flex items-start gap-3">
-            <div
-              class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--lgym-note-icon-bg)] text-[var(--lgym-note-icon-text)]"
-            >
-              <v-icon icon="mdi-email-fast-outline" size="22" />
-            </div>
-            <p class="text-sm leading-6 text-[var(--lgym-text-muted)]">
-              {{ t("trainerInvitations.form.note") }}
-            </p>
-          </div>
-        </div>
-
+      
         <v-btn
           type="submit"
           color="primary"
