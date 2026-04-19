@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-full min-h-0 flex-col gap-4 lg:gap-5">
-    <section class="grid h-full min-h-0 gap-4 lg:gap-5">
+  <div class="flex h-full min-h-0 min-w-0 flex-col gap-4 lg:gap-5">
+    <section class="grid h-full min-h-0 min-w-0 gap-4 lg:gap-5">
       <AdminAppVersionPanel @unauthorized="handleUnauthorized" />
     </section>
   </div>
