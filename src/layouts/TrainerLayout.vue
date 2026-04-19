@@ -11,7 +11,7 @@
     @logout="logout"
   >
     <router-view v-slot="{ Component }">
-      <div class="h-full min-h-0 w-full">
+      <div class="h-full min-h-0 min-w-0 w-full">
         <component :is="Component" />
       </div>
     </router-view>
