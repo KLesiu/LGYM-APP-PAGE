@@ -2,6 +2,10 @@ const AUTH_TOKEN_KEY = "lgym.auth.token";
 const AUTH_ROLE_KEY = "lgym.auth.role";
 const AUTH_ROLES_KEY = "lgym.auth.roles";
 const AUTH_PERMISSION_CLAIMS_KEY = "lgym.auth.permissionClaims";
+const AUTH_USER_NAME_KEY = "lgym.auth.user.name";
+const AUTH_USER_EMAIL_KEY = "lgym.auth.user.email";
+const AUTH_USER_AVATAR_KEY = "lgym.auth.user.avatar";
+const AUTH_USER_ID_KEY = "lgym.auth.user.id";
 
 const ADMIN_ROLE = "Admin";
 const ADMIN_ACCESS_CLAIM = "admin.access";
@@ -49,6 +53,12 @@ export interface AuthSessionPayload {
   role: string;
   roles?: string[] | null;
   permissionClaims?: string[] | null;
+  user?: {
+    id?: string | null;
+    name?: string | null;
+    email?: string | null;
+    avatar?: string | null;
+  } | null;
 }
 
 export const saveAuthSession = (payload: AuthSessionPayload) => {
@@ -65,6 +75,16 @@ export const saveAuthSession = (payload: AuthSessionPayload) => {
     AUTH_PERMISSION_CLAIMS_KEY,
     JSON.stringify(payload.permissionClaims ?? []),
   );
+  currentWindow.localStorage.setItem(AUTH_USER_NAME_KEY, payload.user?.name ?? "");
+  currentWindow.localStorage.setItem(
+    AUTH_USER_EMAIL_KEY,
+    payload.user?.email ?? "",
+  );
+  currentWindow.localStorage.setItem(
+    AUTH_USER_AVATAR_KEY,
+    payload.user?.avatar ?? "",
+  );
+  currentWindow.localStorage.setItem(AUTH_USER_ID_KEY, payload.user?.id ?? "");
 };
 
 export const clearAuthSession = () => {
@@ -75,12 +95,19 @@ export const clearAuthSession = () => {
   currentWindow.localStorage.removeItem(AUTH_ROLE_KEY);
   currentWindow.localStorage.removeItem(AUTH_ROLES_KEY);
   currentWindow.localStorage.removeItem(AUTH_PERMISSION_CLAIMS_KEY);
+  currentWindow.localStorage.removeItem(AUTH_USER_NAME_KEY);
+  currentWindow.localStorage.removeItem(AUTH_USER_EMAIL_KEY);
+  currentWindow.localStorage.removeItem(AUTH_USER_AVATAR_KEY);
+  currentWindow.localStorage.removeItem(AUTH_USER_ID_KEY);
 };
 
 export const getAuthToken = () =>
   safeWindow()?.localStorage.getItem(AUTH_TOKEN_KEY) ?? "";
 
 export const getAuthUserId = () => {
+  const storedUserId = safeWindow()?.localStorage.getItem(AUTH_USER_ID_KEY) ?? "";
+  if (storedUserId.trim().length > 0) return storedUserId.trim();
+
   const payload = decodeJwtPayload(getAuthToken());
   if (!payload) return "";
 
@@ -104,6 +131,15 @@ export const getAuthUserId = () => {
 
 export const getStoredRole = () =>
   safeWindow()?.localStorage.getItem(AUTH_ROLE_KEY) ?? "";
+
+export const getStoredUserName = () =>
+  safeWindow()?.localStorage.getItem(AUTH_USER_NAME_KEY) ?? "";
+
+export const getStoredUserEmail = () =>
+  safeWindow()?.localStorage.getItem(AUTH_USER_EMAIL_KEY) ?? "";
+
+export const getStoredUserAvatar = () =>
+  safeWindow()?.localStorage.getItem(AUTH_USER_AVATAR_KEY) ?? "";
 
 export const getStoredRoles = () =>
   parseStoredArray(safeWindow()?.localStorage.getItem(AUTH_ROLES_KEY) ?? null);

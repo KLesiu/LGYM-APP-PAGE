@@ -248,6 +248,12 @@ const performLogin = (response: LoginResponseDto) => {
     roles: response.req?.roles,
     permissionClaims:
       response.permissionClaims ?? response.req?.permissionClaims,
+    user: {
+      id: response.req?._id,
+      name: response.req?.name,
+      email: response.req?.email,
+      avatar: response.req?.avatar,
+    },
   });
 };
 
