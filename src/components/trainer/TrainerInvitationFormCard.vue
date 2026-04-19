@@ -1,10 +1,10 @@
 <template>
   <v-card
     rounded="[32px]"
-    class="flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+    class="flex min-h-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
   >
     <div
-      class="relative overflow-hidden bg-[var(--lgym-register-top-bg)] px-6 py-6"
+      class="relative overflow-hidden bg-[var(--lgym-register-top-bg)] px-4 py-5 sm:px-6 sm:py-6"
     >
       <p
         class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]"
@@ -18,11 +18,11 @@
         {{ t("trainerInvitations.form.subtitle") }}
       </p>
       <div
-        class="pointer-events-none absolute -right-10 -bottom-20 h-[180px] w-[180px] rounded-full bg-[var(--lgym-register-glow)]"
+        class="pointer-events-none absolute -right-10 -bottom-20 hidden h-[180px] w-[180px] rounded-full bg-[var(--lgym-register-glow)] sm:block"
       />
     </div>
 
-    <v-card-text class="flex flex-1 flex-col gap-6 px-6 py-6">
+    <v-card-text class="flex flex-1 flex-col gap-6 px-4 py-5 sm:px-6 sm:py-6">
       <v-form
         ref="formRef"
         v-model="isFormValid"

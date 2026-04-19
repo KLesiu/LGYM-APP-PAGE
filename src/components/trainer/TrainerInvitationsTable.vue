@@ -1,9 +1,9 @@
 <template>
   <v-card
     rounded="[32px]"
-    class="flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+    class="flex min-h-0 min-w-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
   >
-    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+    <div class="border-b border-[var(--lgym-border)] px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-5">
         <div class="space-y-3">
           <p
@@ -13,7 +13,7 @@
           </p>
 
           <div>
-            <h2 class="text-3xl font-semibold text-[var(--lgym-text)]">
+            <h2 class="text-2xl font-semibold text-[var(--lgym-text)] sm:text-3xl">
               {{ t("trainerInvitations.history.title") }}
             </h2>
             <p
@@ -25,7 +25,7 @@
         </div>
 
         <div
-          class="grid gap-4 xl:grid-cols-[minmax(0,1fr)_auto_auto] xl:items-center"
+          class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,220px)] xl:grid-cols-[minmax(0,1fr)_auto_auto] xl:items-center"
         >
           <v-text-field
             :model-value="searchQuery"
@@ -40,7 +40,7 @@
             variant="outlined"
             color="primary"
             prepend-icon="mdi-sort-calendar-descending"
-            class="min-h-11 px-5"
+            class="min-h-11 w-full px-5 xl:w-auto"
             @click="$emit('toggleSortDirection')"
           >
             {{
@@ -55,7 +55,7 @@
             :items="pageSizeOptions"
             :label="t('trainerInvitations.history.filters.pageSize')"
             hide-details
-            class="min-w-[140px]"
+            class="w-full xl:min-w-[140px]"
             @update:model-value="onPageSizeUpdate"
           />
         </div>
@@ -79,8 +79,104 @@
     <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
     <v-card-text class="min-h-0 flex-1 px-0 py-0">
+      <div v-if="isMobileLayout" class="flex flex-col gap-3 p-4 sm:p-6">
+        <template v-if="invitations.length > 0">
+          <article
+            v-for="(item, index) in invitations"
+            :key="invitationRowKey(item, index)"
+            class="overflow-hidden rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-4"
+          >
+            <div class="flex flex-col gap-4">
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <div class="min-w-0 space-y-1">
+                  <p class="break-words text-sm font-semibold text-[var(--lgym-text)]">
+                    {{ item.inviteeEmail || "—" }}
+                  </p>
+                  <p class="break-all text-xs text-[var(--lgym-text-muted)]">
+                    {{ item.code || "—" }}
+                  </p>
+                </div>
+
+                <v-chip
+                  :color="statusColor(item.status)"
+                  size="small"
+                  class="status-chip"
+                >
+                  {{ statusLabel(item.status) }}
+                </v-chip>
+              </div>
+
+              <dl class="grid gap-3 sm:grid-cols-2">
+                <div class="space-y-1">
+                  <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                    {{ t("trainerInvitations.history.columns.trainee") }}
+                  </dt>
+                  <dd class="m-0 text-sm text-[var(--lgym-text)]">
+                    {{
+                      item.traineeName ||
+                      t("trainerInvitations.history.fallback.noTraineeName")
+                    }}
+                  </dd>
+                  <dd class="m-0 break-words text-xs text-[var(--lgym-text-muted)]">
+                    {{
+                      item.traineeEmail ||
+                      t("trainerInvitations.history.fallback.noTraineeEmail")
+                    }}
+                  </dd>
+                </div>
+
+                <div class="space-y-1">
+                  <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                    {{ t("trainerInvitations.history.columns.sentAt") }}
+                  </dt>
+                  <dd class="m-0 text-sm text-[var(--lgym-text)]">
+                    {{ formatDate(item.createdAt) }}
+                  </dd>
+                  <dd class="m-0 text-xs text-[var(--lgym-text-muted)]">
+                    {{ t("trainerInvitations.history.meta.expiresAt") }}:
+                    {{ formatDate(item.expiresAt) }}
+                  </dd>
+                </div>
+              </dl>
+
+              <v-btn
+                variant="outlined"
+                color="error"
+                prepend-icon="mdi-close-circle-outline"
+                class="min-h-11 w-full px-5 sm:w-auto"
+                :loading="isRevoking(item._id)"
+                :disabled="!canRevoke(item) || isRevoking(item._id)"
+                @click="$emit('revoke', item)"
+              >
+                {{ t("trainerInvitations.actions.revoke") }}
+              </v-btn>
+            </div>
+          </article>
+        </template>
+
+        <div
+          v-else
+          class="rounded-[24px] border border-dashed border-[var(--lgym-border)] px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]"
+        >
+          <div class="mx-auto flex max-w-md flex-col items-center gap-3">
+            <div
+              class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
+            >
+              <v-icon icon="mdi-email-outline" size="26" />
+            </div>
+            <p class="text-base font-semibold text-[var(--lgym-text)]">
+              {{ t("trainerInvitations.history.empty.title") }}
+            </p>
+            <p class="leading-6">
+              {{ t("trainerInvitations.history.empty.subtitle") }}
+            </p>
+          </div>
+        </div>
+      </div>
+
       <v-data-table-server
-        class="trainer-invitations-table h-full"
+        v-else
+        class="trainer-invitations-table"
         :headers="headers"
         :items="invitations"
         :items-length="totalCount"
@@ -98,10 +194,10 @@
             :key="invitationRowKey(item, index)"
             class="space-y-1 px-6 py-6 text-sm text-[var(--lgym-text)]"
           >
-            <p class="font-semibold">
+            <p class="break-words font-semibold">
               {{ item.inviteeEmail || "—" }}
             </p>
-            <p class="text-xs text-[var(--lgym-text-muted)]">
+            <p class="break-all text-xs text-[var(--lgym-text-muted)]">
               {{ item.code || "—" }}
             </p>
           </div>
@@ -115,7 +211,7 @@
                 t("trainerInvitations.history.fallback.noTraineeName")
               }}
             </p>
-            <p class="text-[var(--lgym-text-muted)]">
+            <p class="break-words text-[var(--lgym-text-muted)]">
               {{
                 item.traineeEmail ||
                 t("trainerInvitations.history.fallback.noTraineeEmail")
@@ -182,7 +278,7 @@
       </v-data-table-server>
     </v-card-text>
 
-    <div class="border-t border-[var(--lgym-border)] px-6 py-5">
+    <div class="border-t border-[var(--lgym-border)] px-4 py-5 sm:px-6">
       <div
         class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
@@ -196,7 +292,7 @@
           }}
         </p>
 
-        <div class="flex gap-3 self-end">
+        <div class="flex w-full flex-col gap-3 self-end sm:w-auto sm:flex-row">
           <v-btn
             variant="outlined"
             color="primary"
@@ -223,6 +319,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 
 import type { TrainerInvitationDto } from "../../api/model";
@@ -265,8 +362,11 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { lgAndUp } = useDisplay();
 
 const pageSizeOptions = [10, 20, 50];
+
+const isMobileLayout = computed(() => !lgAndUp.value);
 
 const headers = computed<TableHeader[]>(() => [
   {
@@ -372,8 +472,8 @@ const invitationRowKey = (
 
 <style scoped>
 .trainer-invitations-table :deep(.v-table__wrapper) {
-  height: 100%;
   overflow-x: auto;
+  overflow-y: visible;
 }
 
 .trainer-invitations-table :deep(table) {
@@ -401,6 +501,7 @@ const invitationRowKey = (
 }
 
 .trainer-invitations-table :deep(td) {
+  min-width: 0;
   padding: 0;
   border-bottom: 1px solid var(--lgym-border);
   vertical-align: top;
