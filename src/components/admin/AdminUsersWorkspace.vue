@@ -2,9 +2,9 @@
   <v-card
     ref="cardRef"
     rounded="[32px]"
-    class="flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+    class="flex min-h-0 min-w-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
   >
-    <div ref="headerRef" class="border-b border-[var(--lgym-border)] px-6 py-6">
+    <div ref="headerRef" class="border-b border-[var(--lgym-border)] px-4 py-5 sm:px-6 sm:py-6">
       <div
         class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
       >
@@ -15,7 +15,7 @@
             {{ t("admin.table.sectionEyebrow") }}
           </p>
           <div>
-            <h2 class="text-[var(--lgym-text)] text-2xl font-semibold">
+            <h2 class="text-[var(--lgym-text)] text-2xl font-semibold sm:text-3xl">
               {{ t("admin.table.user") }} &amp; {{ t("admin.table.roles") }}
             </h2>
             <p
@@ -48,9 +48,107 @@
     <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
     <v-card-text class="min-h-0 flex-1 pa-0">
+      <div v-if="isMobileLayout" class="flex flex-col gap-3 p-4 sm:p-6">
+        <template v-if="users.length > 0">
+          <article
+            v-for="(item, index) in users"
+            :key="userRowKey(item, index)"
+            class="overflow-hidden rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-4"
+          >
+            <div class="flex flex-col gap-4">
+              <div class="flex items-start gap-4">
+                <div
+                  class="inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[18px] bg-[var(--lgym-avatar-bg)] text-[var(--lgym-text)] text-base font-bold shadow-[inset_0_1px_0_rgba(232,230,230,0.12)]"
+                >
+                  {{ getUserInitial(item) }}
+                </div>
+
+                <div class="min-w-0 flex-1 space-y-1">
+                  <p class="truncate text-sm font-semibold text-[var(--lgym-text)]">
+                    {{ item.name || t("admin.table.unknownName") }}
+                  </p>
+                  <p class="break-words text-sm text-[var(--lgym-text-muted)]">
+                    {{ item.email || "—" }}
+                  </p>
+                  <p class="break-all text-xs text-[var(--lgym-text-soft)]">
+                    ID: {{ item.id || "—" }} · {{ formatDate(item.createdAt) }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <v-chip
+                  size="small"
+                  :color="item.isBlocked ? 'warning' : 'success'"
+                  class="status-chip"
+                >
+                  {{ item.isBlocked ? t("admin.status.blocked") : t("admin.status.active") }}
+                </v-chip>
+                <v-chip
+                  v-if="item.isDeleted"
+                  size="small"
+                  color="error"
+                  class="status-chip"
+                >
+                  {{ t("admin.status.deleted") }}
+                </v-chip>
+              </div>
+
+              <div class="space-y-2">
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                  {{ t("admin.table.roles") }}
+                </p>
+                <v-select
+                  :model-value="editableRoles[item.id ?? ''] ?? []"
+                  :items="availableRoles"
+                  item-title="label"
+                  item-value="value"
+                  multiple
+                  chips
+                  closable-chips
+                  class="role-select"
+                  :menu-props="{ maxHeight: 300 }"
+                  :disabled="!item.id || isSavingRoles(item.id) || availableRoles.length === 0"
+                  @update:model-value="(value) => updateEditableRoles(item.id, value)"
+                />
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <v-btn
+                  color="primary"
+                  :variant="hasPendingChanges(item) ? 'flat' : 'outlined'"
+                  :prepend-icon="recentlySavedRoleUserId === item.id && !hasPendingChanges(item) ? 'mdi-check-circle-outline' : 'mdi-content-save-outline'"
+                  class="min-h-11 w-full px-5"
+                  :loading="isSavingRoles(item.id)"
+                  :disabled="!item.id || isSavingRoles(item.id) || !hasPendingChanges(item)"
+                  @click="item.id && $emit('saveRoles', item.id)"
+                >
+                  {{ t("admin.actions.saveRoles") }}
+                </v-btn>
+
+                <p
+                  v-if="recentlySavedRoleUserId === item.id && !hasPendingChanges(item)"
+                  class="text-xs font-medium text-[var(--lgym-success)]"
+                >
+                  {{ t("admin.feedback.rolesUpdateSuccess") }}
+                </p>
+              </div>
+            </div>
+          </article>
+        </template>
+
+        <div
+          v-else
+          class="text-[var(--lgym-text-muted)] rounded-[24px] border border-dashed border-[var(--lgym-border)] px-6 py-12 text-center text-sm"
+        >
+          {{ t("admin.table.empty") }}
+        </div>
+      </div>
+
       <v-data-table-server
+        v-else
         ref="tableRef"
-        class="admin-users-table h-full"
+        class="admin-users-table"
         :headers="headers"
         :items="users"
         :items-length="totalUsers"
@@ -143,7 +241,7 @@
         </template>
 
         <template #item.roles="{ item }">
-          <div class="min-w-[300px] px-6 py-6">
+          <div class="px-6 py-6 xl:min-w-[300px]">
             <v-select
               :model-value="editableRoles[item.id ?? ''] ?? []"
               :items="availableRoles"
@@ -197,7 +295,7 @@
       </v-data-table-server>
     </v-card-text>
 
-    <div ref="paginationRef" class="border-t border-[var(--lgym-border)] px-6 py-5">
+    <div ref="paginationRef" class="border-t border-[var(--lgym-border)] px-4 py-5 sm:px-6">
       <div
         class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
@@ -211,7 +309,7 @@
           }}
         </p>
 
-        <div class="flex gap-3 self-end">
+        <div class="flex w-full flex-col gap-3 self-end sm:w-auto sm:flex-row">
           <v-btn
             variant="outlined"
             color="primary"
@@ -238,6 +336,7 @@
 
 <script setup lang="ts">
 import { computed, ref, type ComponentPublicInstance } from "vue";
+import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 
 import type { AdminUserDto } from "../../api/model";
@@ -277,6 +376,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { lgAndUp } = useDisplay();
 const cardRef = ref<HTMLElement | null>(null);
 const headerRef = ref<HTMLElement | null>(null);
 const tableRef = ref<ComponentPublicInstance | null>(null);
@@ -285,6 +385,7 @@ type RefTarget = Element | ComponentPublicInstance | null;
 
 const paginationRef = ref<RefTarget>(null);
 const firstRowRef = ref<RefTarget>(null);
+const isMobileLayout = computed(() => !lgAndUp.value);
 
 const headers = computed<TableHeader[]>(() => [
   {
@@ -393,9 +494,8 @@ defineExpose({
 
 <style scoped>
 .admin-users-table :deep(.v-table__wrapper) {
-  height: 100%;
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: visible;
 }
 
 .admin-users-table :deep(table) {
