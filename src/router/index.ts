@@ -11,6 +11,9 @@ import AdminVersionsPage from "../pages/admin/AdminVersionsPage.vue";
 import TrainerMemberDetailsPage from "../pages/trainer/TrainerMemberDetailsPage.vue";
 import TrainerInvitationsPage from "../pages/trainer/TrainerInvitationsPage.vue";
 import TrainerMembersPage from "../pages/trainer/TrainerMembersPage.vue";
+import TrainerTrainingPlanDayEditorPage from "../pages/trainer/TrainerTrainingPlanDayEditorPage.vue";
+import TrainerTrainingPlanDetailsPage from "../pages/trainer/TrainerTrainingPlanDetailsPage.vue";
+import TrainerTrainingPlansPage from "../pages/trainer/TrainerTrainingPlansPage.vue";
 import TrainerReportTemplatesPage from "../pages/trainer/TrainerReportTemplatesPage.vue";
 import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
@@ -93,6 +96,26 @@ export const router = createRouter({
           path: "report-templates",
           name: "trainer-report-templates",
           component: TrainerReportTemplatesPage,
+        },
+        {
+          path: "training-plans",
+          name: "trainer-training-plans",
+          component: TrainerTrainingPlansPage,
+        },
+        {
+          path: "training-plans/:planId",
+          name: "trainer-training-plan-details",
+          component: TrainerTrainingPlanDetailsPage,
+        },
+        {
+          path: "training-plans/:planId/plan-days/new",
+          name: "trainer-training-plan-day-create",
+          component: TrainerTrainingPlanDayEditorPage,
+        },
+        {
+          path: "training-plans/:planId/plan-days/:planDayId",
+          name: "trainer-training-plan-day-edit",
+          component: TrainerTrainingPlanDayEditorPage,
         },
       ],
     },

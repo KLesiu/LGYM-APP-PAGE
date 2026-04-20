@@ -200,10 +200,290 @@
         "title": "Zaproszenia",
         "subtitle": "Zapraszaj nowych podopiecznych po emailu, monitoruj status i cofaj oczekujace zaproszenia."
       },
+      "trainingPlans": {
+        "title": "Plany treningowe",
+        "subtitle": "Buduj i zarzadzaj globalnymi planami treningowymi, dniami planu oraz kodami udostepniania z jednego miejsca."
+      },
       "reportTemplates": {
         "title": "Szablony raportow",
         "subtitle": "Zarzadzaj globalna biblioteka szablonow raportow dla calej strefy trenera."
       }
+    }
+  },
+  "trainerTrainingPlans": {
+    "page": {
+      "eyebrow": "Globalny builder",
+      "title": "Strefa planow treningowych",
+      "subtitle": "Tworz powtarzalne globalne plany, trzymaj nazwy w porzadku i otwieraj pelny builder do edycji dzien po dniu.",
+      "summary": "Globalna biblioteka planow trenera"
+    },
+    "list": {
+      "eyebrow": "Lista planow",
+      "title": "Wszystkie globalne plany",
+      "subtitle": "Ten widok pokazuje tylko pola dostepne w obecnym DTO planu i odswieza sie po kazdej zmianie."
+    },
+    "status": {
+      "active": "Aktywny",
+      "inactive": "Nieaktywny"
+    },
+    "fallback": {
+      "noName": "Plan bez nazwy"
+    },
+    "dialog": {
+      "createTitle": "Utworz plan treningowy",
+      "renameTitle": "Zmien nazwe planu treningowego"
+    },
+    "form": {
+      "name": "Nazwa planu",
+      "namePlaceholder": "Wpisz nazwe planu treningowego"
+    },
+    "actions": {
+      "create": "Utworz plan",
+      "open": "Otworz szczegoly",
+      "rename": "Zmien nazwe",
+      "delete": "Usun",
+      "share": "Udostepnij",
+      "setActive": "Ustaw jako aktywny",
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "retry": "Sprobuj ponownie",
+      "deleteConfirm": "Usunac plan \"{name}\"?"
+    },
+    "empty": {
+      "title": "Brak utworzonych globalnych planow."
+    },
+    "error": {
+      "load": "Nie udalo sie pobrac globalnych planow treningowych."
+    },
+    "share": {
+      "codeLabel": "Kod udostepniania",
+      "copy": "Kopiuj kod"
+    },
+    "feedback": {
+      "loadPlansFailed": "Nie udalo sie pobrac planow treningowych.",
+      "nameRequired": "Nazwa planu jest wymagana.",
+      "createPlanSuccess": "Plan treningowy zostal utworzony.",
+      "createPlanFailed": "Nie udalo sie utworzyc planu treningowego.",
+      "updatePlanSuccess": "Plan treningowy zostal zaktualizowany.",
+      "updatePlanFailed": "Nie udalo sie zaktualizowac planu treningowego.",
+      "deletePlanSuccess": "Plan treningowy zostal usuniety.",
+      "deletePlanFailed": "Nie udalo sie usunac planu treningowego.",
+      "setActiveSuccess": "Aktywny plan zostal zaktualizowany.",
+      "setActiveFailed": "Nie udalo sie ustawic aktywnego planu.",
+      "sharePlanSuccess": "Kod udostepniania zostal wygenerowany.",
+      "sharePlanFailed": "Nie udalo sie wygenerowac kodu udostepniania.",
+      "copyShareCodeSuccess": "Kod udostepniania skopiowano do schowka.",
+      "copyShareCodeFailed": "Nie udalo sie skopiowac kodu udostepniania."
+    }
+  },
+  "trainerTrainingPlanDetails": {
+    "page": {
+      "eyebrow": "Builder planu",
+      "title": "Szczegoly planu treningowego",
+      "subtitle": "Zarzadzaj dniami planu, edytuj cwiczenia inline i generuj kod udostepniania dla tego globalnego planu.",
+      "badge": "Globalny plan",
+      "planIdLabel": "ID planu: {id}"
+    },
+    "actions": {
+      "back": "Wroc do planow",
+      "retry": "Sprobuj ponownie"
+    },
+    "error": {
+      "plan": "Nie udalo sie pobrac wybranego planu treningowego."
+    },
+    "share": {
+      "eyebrow": "Udostepnianie",
+      "title": "Udostepnij ten plan kodem",
+      "subtitle": "Backend zwraca obecnie tylko kod udostepniania, dlatego ten panel zachowuje prosty, operacyjny workflow oparty o kod.",
+      "codeLabel": "Aktualny kod udostepniania",
+      "empty": "Wygeneruj kod udostepniania, gdy chcesz pozniej skopiowac ten plan do innego workflow.",
+      "actions": {
+        "generate": "Generuj kod",
+        "regenerate": "Generuj ponownie",
+        "copy": "Kopiuj kod"
+      }
+    },
+    "planDays": {
+      "eyebrow": "Dni planu",
+      "title": "Lista dni planu",
+      "subtitle": "Wybierz dzien planu do edycji albo utworz nowy dzien dla tego globalnego planu.",
+      "empty": "Nie dodano jeszcze zadnych dni planu.",
+      "fallback": {
+        "noName": "Dzien bez nazwy"
+      },
+      "meta": {
+        "exercises": "Cwiczenia: {count}",
+        "series": "Serie: {count}",
+        "lastTraining": "Ostatni trening: {value}"
+      },
+      "actions": {
+        "create": "Nowy dzien planu",
+        "open": "Otworz workspace",
+        "delete": "Usun",
+        "deleteConfirm": "Usunac dzien planu \"{name}\"?"
+      },
+      "error": {
+        "load": "Nie udalo sie pobrac listy dni planu."
+      }
+    },
+    "workspace": {
+      "eyebrow": "Workspace dnia planu",
+      "subtitle": "Flow z mobile najlepiej dziala wtedy, gdy edycja dnia planu ma osobna przestrzen robocza. Otworz dzien i edytuj go w szerokim builderze zamiast w ciasnym formularzu inline.",
+      "sections": {
+        "create": {
+          "eyebrow": "Tworzenie",
+          "title": "Rozpocznij nowy dzien planu",
+          "subtitle": "Otworz dedykowana trase z miejscem na nazwe dnia, biblioteke cwiczen, kolejnosc i podsumowanie."
+        },
+        "edit": {
+          "eyebrow": "Edycja",
+          "title": "Edytuj w pelnym workspace",
+          "subtitle": "Kazdy istniejacy dzien otwiera sie w szerszym edytorze inspirowanym flow z mobile.",
+          "helper": "Uzyj listy po lewej, aby otworzyc dzien planu. Trasa edytora daje wiecej miejsca na wybieranie cwiczen i zarzadzanie lista."
+        }
+      }
+    },
+    "editor": {
+      "eyebrow": "Edytor dnia",
+      "title": "Edytuj wybrany dzien planu",
+      "createTitle": "Utworz nowy dzien planu",
+      "subtitle": "Ten edytor korzysta tylko z pol dostepnych aktualnie w DTO dnia planu: nazwa, cwiczenie, powtorzenia i serie.",
+      "exerciseRowsTitle": "Cwiczenia",
+      "fields": {
+        "name": "Nazwa dnia planu",
+        "namePlaceholder": "Wpisz nazwe dnia planu"
+      },
+      "columns": {
+        "exercise": "Cwiczenie",
+        "reps": "Powtorzenia",
+        "series": "Serie"
+      },
+      "meta": {
+        "rows": "Wiersze: {count}"
+      },
+      "actions": {
+        "save": "Zapisz dzien planu",
+        "reset": "Resetuj",
+        "addExercise": "Dodaj cwiczenie"
+      },
+      "error": {
+        "load": "Nie udalo sie pobrac wybranego dnia planu.",
+        "exercises": "Nie udalo sie pobrac globalnej listy cwiczen."
+      }
+    },
+    "exercises": {
+      "fallback": {
+        "noName": "Cwiczenie bez nazwy"
+      }
+    },
+    "feedback": {
+      "loadPlanFailed": "Nie udalo sie pobrac planu treningowego.",
+      "loadPlanDaysFailed": "Nie udalo sie pobrac dni planu.",
+      "loadPlanDayFailed": "Nie udalo sie pobrac szczegolow dnia planu.",
+      "loadExercisesFailed": "Nie udalo sie pobrac globalnych cwiczen.",
+      "planDayNameRequired": "Nazwa dnia planu jest wymagana.",
+      "createPlanDaySuccess": "Dzien planu zostal utworzony.",
+      "createPlanDayFailed": "Nie udalo sie utworzyc dnia planu.",
+      "updatePlanDaySuccess": "Dzien planu zostal zaktualizowany.",
+      "updatePlanDayFailed": "Nie udalo sie zaktualizowac dnia planu.",
+      "deletePlanDaySuccess": "Dzien planu zostal usuniety.",
+      "deletePlanDayFailed": "Nie udalo sie usunac dnia planu.",
+      "sharePlanSuccess": "Kod udostepniania zostal wygenerowany.",
+      "sharePlanFailed": "Nie udalo sie wygenerowac kodu udostepniania.",
+      "copyShareCodeSuccess": "Kod udostepniania skopiowano do schowka.",
+      "copyShareCodeFailed": "Nie udalo sie skopiowac kodu udostepniania."
+    }
+  },
+  "trainerTrainingPlanDayEditor": {
+    "page": {
+      "eyebrow": "Workspace dnia planu",
+      "title": "Tworzenie i edycja dnia planu",
+      "subtitle": "Ten szeroki workspace odtwarza flow z mobile: najpierw nazwa, potem wybór ćwiczeń, a na końcu ułożenie listy i zapis.",
+      "badges": {
+        "create": "Nowy dzien",
+        "edit": "Edycja dnia"
+      }
+    },
+    "header": {
+      "eyebrow": "Skupiony edytor",
+      "editTitle": "Edytuj dzien planu w pelnym workspace",
+      "createTitle": "Utworz dzien planu w pelnym workspace",
+      "subtitle": "Formularz jest rozdzielony na przejrzysta biblioteke cwiczen i osobny obszar wybranych elementow, dzieki czemu trener pracuje szybciej."
+    },
+    "plan": {
+      "eyebrow": "Plan",
+      "subtitle": "Ten edytor pracuje wewnatrz aktualnie wybranego globalnego planu treningowego."
+    },
+    "basics": {
+      "eyebrow": "Krok 1",
+      "title": "Podstawy dnia planu",
+      "fields": {
+        "name": "Nazwa dnia planu",
+        "namePlaceholder": "Wpisz nazwe dnia"
+      }
+    },
+    "library": {
+      "eyebrow": "Krok 2",
+      "title": "Biblioteka cwiczen",
+      "subtitle": "Picker korzysta jednoczesnie z pelnej listy cwiczen usera i z dedykowanej listy globalnej, dzieki czemu nic nie jest zaszyte na sztywno.",
+      "filters": {
+        "all": "Wszystkie",
+        "user": "Moje cwiczenia",
+        "global": "Globalne",
+        "allBodyParts": "Wszystkie partie"
+      },
+      "fields": {
+        "search": "Szukaj cwiczen",
+        "searchPlaceholder": "Wpisz nazwe cwiczenia lub partie",
+        "bodyPart": "Partia miesniowa"
+      },
+      "source": {
+        "user": "User",
+        "global": "Global"
+      },
+      "actions": {
+        "add": "Dodaj",
+        "added": "Dodane"
+      },
+      "empty": "Brak cwiczen pasujacych do aktualnych filtrow.",
+      "error": {
+        "load": "Nie udalo sie pobrac biblioteki cwiczen."
+      }
+    },
+    "selection": {
+      "eyebrow": "Krok 3",
+      "title": "Wybrane cwiczenia",
+      "subtitle": "Dostosuj reps i serie, a potem ustaw kolejnosc tak, aby finalny dzien odzwierciedlal prawidlowy przebieg treningu.",
+      "summary": "Wybrane wiersze: {count}",
+      "empty": "Dodaj cwiczenia z biblioteki po lewej, aby zaczac budowac dzien planu.",
+      "fields": {
+        "reps": "Powtorzenia",
+        "series": "Serie"
+      },
+      "meta": {
+        "unknownExercise": "Brak szczegolow cwiczenia"
+      }
+    },
+    "actions": {
+      "backToPlan": "Wroc do planu",
+      "cancel": "Anuluj",
+      "save": "Zapisz dzien planu",
+      "retry": "Sprobuj ponownie"
+    },
+    "error": {
+      "plan": "Nie udalo sie pobrac planu nadrzednego dla tego edytora.",
+      "planDay": "Nie udalo sie pobrac wybranego dnia planu do edycji."
+    },
+    "feedback": {
+      "loadPlanFailed": "Nie udalo sie pobrac planu treningowego.",
+      "loadPlanDayFailed": "Nie udalo sie pobrac wybranego dnia planu.",
+      "loadExercisesFailed": "Nie udalo sie pobrac cwiczen do edytora.",
+      "nameRequired": "Nazwa dnia planu jest wymagana.",
+      "exerciseRequired": "Dodaj przynajmniej jedno cwiczenie przed zapisem.",
+      "createSuccess": "Dzien planu zostal utworzony.",
+      "createFailed": "Nie udalo sie utworzyc dnia planu.",
+      "updateSuccess": "Dzien planu zostal zaktualizowany.",
+      "updateFailed": "Nie udalo sie zaktualizowac dnia planu."
     }
   },
   "trainerMembers": {

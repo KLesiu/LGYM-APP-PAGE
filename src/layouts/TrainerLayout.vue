@@ -37,6 +37,10 @@ const sectionByRouteName: Record<string, string> = {
   "trainer-members": "members",
   "trainer-member-details": "members",
   "trainer-invitations": "invitations",
+  "trainer-training-plans": "trainingPlans",
+  "trainer-training-plan-details": "trainingPlans",
+  "trainer-training-plan-day-create": "trainingPlans",
+  "trainer-training-plan-day-edit": "trainingPlans",
   "trainer-report-templates": "reportTemplates",
 };
 
@@ -57,6 +61,12 @@ const sidebarItems = computed<SidebarItem[]>(() => [
     label: t("trainerDashboard.navigation.invitations"),
     icon: "mdi-email-fast-outline",
     to: "/trainer/invitations",
+  },
+  {
+    key: "trainingPlans",
+    label: t("trainerDashboard.navigation.trainingPlans"),
+    icon: "mdi-notebook-multiple-outline",
+    to: "/trainer/training-plans",
   },
   {
     key: "reportTemplates",

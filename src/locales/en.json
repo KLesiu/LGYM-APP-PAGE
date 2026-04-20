@@ -200,10 +200,290 @@
         "title": "Invitations",
         "subtitle": "Invite new customers by email, track every status, and revoke pending invitations from one trainer view."
       },
+      "trainingPlans": {
+        "title": "Training Plans",
+        "subtitle": "Build and manage reusable global training plans, plan days, and share codes from one trainer workspace."
+      },
       "reportTemplates": {
         "title": "Report Templates",
         "subtitle": "Manage reusable report templates globally for your trainer workspace."
       }
+    }
+  },
+  "trainerTrainingPlans": {
+    "page": {
+      "eyebrow": "Global builder",
+      "title": "Training plans workspace",
+      "subtitle": "Create reusable global plans, keep plan names organized, and open the full builder for day-by-day editing.",
+      "summary": "Global trainer plan library"
+    },
+    "list": {
+      "eyebrow": "Plan list",
+      "title": "All global plans",
+      "subtitle": "This view shows only fields available in the current plan DTO and refreshes after every mutation."
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "fallback": {
+      "noName": "Untitled plan"
+    },
+    "dialog": {
+      "createTitle": "Create training plan",
+      "renameTitle": "Rename training plan"
+    },
+    "form": {
+      "name": "Plan name",
+      "namePlaceholder": "Enter training plan name"
+    },
+    "actions": {
+      "create": "Create plan",
+      "open": "Open details",
+      "rename": "Rename",
+      "delete": "Delete",
+      "share": "Share",
+      "setActive": "Set active",
+      "save": "Save",
+      "cancel": "Cancel",
+      "retry": "Retry",
+      "deleteConfirm": "Delete plan \"{name}\"?"
+    },
+    "empty": {
+      "title": "No global plans created yet."
+    },
+    "error": {
+      "load": "Failed to load the global training plans."
+    },
+    "share": {
+      "codeLabel": "Share code",
+      "copy": "Copy code"
+    },
+    "feedback": {
+      "loadPlansFailed": "Failed to load the training plans.",
+      "nameRequired": "Plan name is required.",
+      "createPlanSuccess": "Training plan created successfully.",
+      "createPlanFailed": "Failed to create the training plan.",
+      "updatePlanSuccess": "Training plan updated successfully.",
+      "updatePlanFailed": "Failed to update the training plan.",
+      "deletePlanSuccess": "Training plan deleted successfully.",
+      "deletePlanFailed": "Failed to delete the training plan.",
+      "setActiveSuccess": "Active plan updated successfully.",
+      "setActiveFailed": "Failed to update the active plan.",
+      "sharePlanSuccess": "Share code generated successfully.",
+      "sharePlanFailed": "Failed to generate the share code.",
+      "copyShareCodeSuccess": "Share code copied to clipboard.",
+      "copyShareCodeFailed": "Failed to copy the share code."
+    }
+  },
+  "trainerTrainingPlanDetails": {
+    "page": {
+      "eyebrow": "Plan builder",
+      "title": "Training plan details",
+      "subtitle": "Manage plan days, edit exercises inline, and generate a reusable share code for this global plan.",
+      "badge": "Global plan",
+      "planIdLabel": "Plan ID: {id}"
+    },
+    "actions": {
+      "back": "Back to plans",
+      "retry": "Retry"
+    },
+    "error": {
+      "plan": "Failed to load the selected training plan."
+    },
+    "share": {
+      "eyebrow": "Share",
+      "title": "Share this plan by code",
+      "subtitle": "The backend currently returns only a share code, so this panel keeps the workflow simple and code-based.",
+      "codeLabel": "Current share code",
+      "empty": "Generate a share code when you want to copy this plan into another workflow later.",
+      "actions": {
+        "generate": "Generate code",
+        "regenerate": "Regenerate code",
+        "copy": "Copy code"
+      }
+    },
+    "planDays": {
+      "eyebrow": "Plan days",
+      "title": "Plan day list",
+      "subtitle": "Select one plan day to edit, or create a new day for this global plan.",
+      "empty": "No plan days added yet.",
+      "fallback": {
+        "noName": "Unnamed day"
+      },
+      "meta": {
+        "exercises": "Exercises: {count}",
+        "series": "Series: {count}",
+        "lastTraining": "Last training: {value}"
+      },
+      "actions": {
+        "create": "New plan day",
+        "open": "Open workspace",
+        "delete": "Delete",
+        "deleteConfirm": "Delete plan day \"{name}\"?"
+      },
+      "error": {
+        "load": "Failed to load the plan day list."
+      }
+    },
+    "workspace": {
+      "eyebrow": "Plan day workspace",
+      "subtitle": "The mobile flow works best when plan-day editing has its own dedicated space. Open a day to edit it in a wider builder instead of a cramped inline form.",
+      "sections": {
+        "create": {
+          "eyebrow": "Create",
+          "title": "Start a new plan day",
+          "subtitle": "Open a dedicated route with enough space for the day name, exercise library, ordering, and summary."
+        },
+        "edit": {
+          "eyebrow": "Edit",
+          "title": "Edit in a full workspace",
+          "subtitle": "Each existing day opens in a wider editor inspired by the mobile flow.",
+          "helper": "Use the list on the left to open a plan day. The editor route gives more room for exercise picking and list management."
+        }
+      }
+    },
+    "editor": {
+      "eyebrow": "Day editor",
+      "title": "Edit selected plan day",
+      "createTitle": "Create a new plan day",
+      "subtitle": "This editor only uses fields currently exposed by the plan day DTO: name, exercise, reps, and series.",
+      "exerciseRowsTitle": "Exercises",
+      "fields": {
+        "name": "Plan day name",
+        "namePlaceholder": "Enter plan day name"
+      },
+      "columns": {
+        "exercise": "Exercise",
+        "reps": "Reps",
+        "series": "Series"
+      },
+      "meta": {
+        "rows": "Rows: {count}"
+      },
+      "actions": {
+        "save": "Save plan day",
+        "reset": "Reset",
+        "addExercise": "Add exercise"
+      },
+      "error": {
+        "load": "Failed to load the selected plan day.",
+        "exercises": "Global exercise options could not be loaded."
+      }
+    },
+    "exercises": {
+      "fallback": {
+        "noName": "Unnamed exercise"
+      }
+    },
+    "feedback": {
+      "loadPlanFailed": "Failed to load the training plan.",
+      "loadPlanDaysFailed": "Failed to load plan days.",
+      "loadPlanDayFailed": "Failed to load the plan day details.",
+      "loadExercisesFailed": "Failed to load global exercises.",
+      "planDayNameRequired": "Plan day name is required.",
+      "createPlanDaySuccess": "Plan day created successfully.",
+      "createPlanDayFailed": "Failed to create the plan day.",
+      "updatePlanDaySuccess": "Plan day updated successfully.",
+      "updatePlanDayFailed": "Failed to update the plan day.",
+      "deletePlanDaySuccess": "Plan day deleted successfully.",
+      "deletePlanDayFailed": "Failed to delete the plan day.",
+      "sharePlanSuccess": "Share code generated successfully.",
+      "sharePlanFailed": "Failed to generate the share code.",
+      "copyShareCodeSuccess": "Share code copied to clipboard.",
+      "copyShareCodeFailed": "Failed to copy the share code."
+    }
+  },
+  "trainerTrainingPlanDayEditor": {
+    "page": {
+      "eyebrow": "Plan day workspace",
+      "title": "Create or edit a plan day",
+      "subtitle": "This wider workspace follows the mobile flow: name first, then exercise selection, then final arrangement and save.",
+      "badges": {
+        "create": "New day",
+        "edit": "Edit day"
+      }
+    },
+    "header": {
+      "eyebrow": "Focused editor",
+      "editTitle": "Edit plan day in full workspace",
+      "createTitle": "Create plan day in full workspace",
+      "subtitle": "The form is split into a clear exercise library and a separate selected-exercises area so the trainer can work faster."
+    },
+    "plan": {
+      "eyebrow": "Plan",
+      "subtitle": "This editor works inside the currently selected global training plan."
+    },
+    "basics": {
+      "eyebrow": "Step 1",
+      "title": "Plan day basics",
+      "fields": {
+        "name": "Plan day name",
+        "namePlaceholder": "Enter the day name"
+      }
+    },
+    "library": {
+      "eyebrow": "Step 2",
+      "title": "Exercise library",
+      "subtitle": "The picker uses both the full user exercise list and the dedicated global list, so you can browse everything without hardcoded options.",
+      "filters": {
+        "all": "All",
+        "user": "My exercises",
+        "global": "Global",
+        "allBodyParts": "All body parts"
+      },
+      "fields": {
+        "search": "Search exercises",
+        "searchPlaceholder": "Type exercise name or body part",
+        "bodyPart": "Body part"
+      },
+      "source": {
+        "user": "User",
+        "global": "Global"
+      },
+      "actions": {
+        "add": "Add",
+        "added": "Added"
+      },
+      "empty": "No exercises match the current filters.",
+      "error": {
+        "load": "Failed to load the exercise library."
+      }
+    },
+    "selection": {
+      "eyebrow": "Step 3",
+      "title": "Selected exercises",
+      "subtitle": "Adjust reps and series, then reorder the list so the final day reflects the intended workout flow.",
+      "summary": "Selected rows: {count}",
+      "empty": "Add exercises from the library on the left to start building this plan day.",
+      "fields": {
+        "reps": "Reps",
+        "series": "Series"
+      },
+      "meta": {
+        "unknownExercise": "Exercise details unavailable"
+      }
+    },
+    "actions": {
+      "backToPlan": "Back to plan",
+      "cancel": "Cancel",
+      "save": "Save plan day",
+      "retry": "Retry"
+    },
+    "error": {
+      "plan": "Failed to load the parent plan for this editor.",
+      "planDay": "Failed to load the selected plan day for editing."
+    },
+    "feedback": {
+      "loadPlanFailed": "Failed to load the training plan.",
+      "loadPlanDayFailed": "Failed to load the selected plan day.",
+      "loadExercisesFailed": "Failed to load exercises for the editor.",
+      "nameRequired": "Plan day name is required.",
+      "exerciseRequired": "Add at least one exercise before saving.",
+      "createSuccess": "Plan day created successfully.",
+      "createFailed": "Failed to create the plan day.",
+      "updateSuccess": "Plan day updated successfully.",
+      "updateFailed": "Failed to update the plan day."
     }
   },
   "trainerMembers": {
