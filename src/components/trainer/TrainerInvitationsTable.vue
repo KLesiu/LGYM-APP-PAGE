@@ -1,10 +1,7 @@
 <template>
-  <v-card
-    rounded="[32px]"
-    class="flex min-h-0 min-w-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
-  >
-    <div class="border-b border-[var(--lgym-border)] px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
-      <div class="flex flex-col gap-5">
+  <section class="flex min-h-0 min-w-0 w-full flex-col border-y border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/40">
+    <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-5">
+      <div class="flex flex-col gap-4">
         <div class="space-y-3">
           <p
             class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]"
@@ -13,11 +10,11 @@
           </p>
 
           <div>
-            <h2 class="text-2xl font-semibold text-[var(--lgym-text)] sm:text-3xl">
+            <h2 class="text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
               {{ t("trainerInvitations.history.title") }}
             </h2>
             <p
-              class="mt-3 max-w-3xl text-sm leading-7 text-[var(--lgym-text-muted)]"
+              class="mt-2 max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]"
             >
               {{ t("trainerInvitations.history.subtitle") }}
             </p>
@@ -25,7 +22,7 @@
         </div>
 
         <div
-          class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,220px)] xl:grid-cols-[minmax(0,1fr)_auto_auto] xl:items-center"
+          class="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,220px)] xl:grid-cols-[minmax(0,1fr)_auto_auto] xl:items-center"
         >
           <v-text-field
             :model-value="searchQuery"
@@ -40,7 +37,7 @@
             variant="outlined"
             color="primary"
             prepend-icon="mdi-sort-calendar-descending"
-            class="min-h-11 w-full px-5 xl:w-auto"
+            class="min-h-10 w-full rounded-md px-4 xl:w-auto"
             @click="$emit('toggleSortDirection')"
           >
             {{
@@ -60,14 +57,14 @@
           />
         </div>
 
-        <div class="flex flex-wrap gap-3">
+        <div class="flex flex-wrap gap-2">
           <v-chip
             v-for="filter in statusFilters"
             :key="filter.value"
             :color="statusFilter === filter.value ? 'primary' : undefined"
             :variant="statusFilter === filter.value ? 'flat' : 'outlined'"
             size="default"
-            class="cursor-pointer font-semibold"
+            class="cursor-pointer rounded-md font-semibold"
             @click="$emit('update:statusFilter', filter.value)"
           >
             {{ filter.label }}
@@ -78,13 +75,13 @@
 
     <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
-    <v-card-text class="min-h-0 flex-1 px-0 py-0">
-      <div v-if="isMobileLayout" class="flex flex-col gap-3 p-4 sm:p-6">
+    <div class="min-h-0 flex-1 px-0 py-0">
+      <div v-if="isMobileLayout" class="border-y border-[var(--lgym-border)]">
         <template v-if="invitations.length > 0">
           <article
             v-for="(item, index) in invitations"
             :key="invitationRowKey(item, index)"
-            class="overflow-hidden rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-4"
+            class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
           >
             <div class="flex flex-col gap-4">
               <div class="flex flex-wrap items-start justify-between gap-3">
@@ -143,7 +140,7 @@
                 variant="outlined"
                 color="error"
                 prepend-icon="mdi-close-circle-outline"
-                class="min-h-11 w-full px-5 sm:w-auto"
+                class="min-h-10 w-full rounded-md px-4 sm:w-auto"
                 :loading="isRevoking(item._id)"
                 :disabled="!canRevoke(item) || isRevoking(item._id)"
                 @click="$emit('revoke', item)"
@@ -156,11 +153,11 @@
 
         <div
           v-else
-          class="rounded-[24px] border border-dashed border-[var(--lgym-border)] px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]"
+          class="m-4 rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]"
         >
           <div class="mx-auto flex max-w-md flex-col items-center gap-3">
             <div
-              class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
+                class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
             >
               <v-icon icon="mdi-email-outline" size="26" />
             </div>
@@ -192,7 +189,7 @@
         <template #item.inviteeEmail="{ item, index }">
           <div
             :key="invitationRowKey(item, index)"
-            class="space-y-1 px-6 py-6 text-sm text-[var(--lgym-text)]"
+            class="space-y-1 px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5"
           >
             <p class="break-words font-semibold">
               {{ item.inviteeEmail || "—" }}
@@ -204,7 +201,7 @@
         </template>
 
         <template #item.trainee="{ item }">
-          <div class="space-y-1 px-6 py-6 text-sm">
+          <div class="space-y-1 px-4 py-4 text-sm lg:px-5">
             <p class="font-semibold text-[var(--lgym-text)]">
               {{
                 item.traineeName ||
@@ -221,7 +218,7 @@
         </template>
 
         <template #item.status="{ item }">
-          <div class="px-6 py-6">
+          <div class="px-4 py-4 lg:px-5">
             <v-chip
               :color="statusColor(item.status)"
               size="small"
@@ -233,7 +230,7 @@
         </template>
 
         <template #item.sentAt="{ item }">
-          <div class="space-y-1 px-6 py-6 text-sm text-[var(--lgym-text)]">
+          <div class="space-y-1 px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
             <p>{{ formatDate(item.createdAt) }}</p>
             <p class="text-xs text-[var(--lgym-text-muted)]">
               {{ t("trainerInvitations.history.meta.expiresAt") }}:
@@ -243,12 +240,12 @@
         </template>
 
         <template #item.actions="{ item }">
-          <div class="px-6 py-6 pr-7">
+          <div class="px-4 py-4 lg:px-5">
             <v-btn
               variant="outlined"
               color="error"
               prepend-icon="mdi-close-circle-outline"
-              class="min-h-11 min-w-[148px] px-5"
+              class="min-h-10 min-w-[132px] rounded-md px-4"
               :loading="isRevoking(item._id)"
               :disabled="!canRevoke(item) || isRevoking(item._id)"
               @click="$emit('revoke', item)"
@@ -259,10 +256,10 @@
         </template>
 
         <template #no-data>
-          <div class="px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]">
+          <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
             <div class="mx-auto flex max-w-md flex-col items-center gap-3">
               <div
-                class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
+                class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
               >
                 <v-icon icon="mdi-email-outline" size="26" />
               </div>
@@ -276,9 +273,9 @@
           </div>
         </template>
       </v-data-table-server>
-    </v-card-text>
+    </div>
 
-    <div class="border-t border-[var(--lgym-border)] px-4 py-5 sm:px-6">
+    <div class="border-t border-[var(--lgym-border)] px-4 py-4 sm:px-5">
       <div
         class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
       >
@@ -296,7 +293,7 @@
           <v-btn
             variant="outlined"
             color="primary"
-            class="min-h-11 px-5"
+            class="min-h-10 rounded-md px-4"
             :disabled="!hasPreviousPage || isLoading"
             @click="$emit('update:page', page - 1)"
           >
@@ -305,7 +302,7 @@
           <v-btn
             variant="outlined"
             color="primary"
-            class="min-h-11 px-5"
+            class="min-h-10 rounded-md px-4"
             :disabled="!hasNextPage || isLoading"
             @click="$emit('update:page', page + 1)"
           >
@@ -314,7 +311,7 @@
         </div>
       </div>
     </div>
-  </v-card>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -486,7 +483,7 @@ const invitationRowKey = (
 }
 
 .trainer-invitations-table :deep(th) {
-  padding: 1rem 1.5rem;
+  padding: 0.875rem 1rem;
   color: var(--lgym-text-muted);
   font-size: 0.75rem;
   font-weight: 600;
@@ -497,7 +494,7 @@ const invitationRowKey = (
 }
 
 .trainer-invitations-table :deep(th:last-child) {
-  padding-right: 1.75rem;
+  padding-right: 1rem;
 }
 
 .trainer-invitations-table :deep(td) {

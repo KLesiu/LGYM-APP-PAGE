@@ -1,8 +1,6 @@
 <template>
-  <div class="flex min-h-full min-w-0 flex-col gap-4 lg:gap-5">
-    <section
-      class="overflow-hidden rounded-[32px] border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-4 py-5 shadow-[var(--lgym-shadow-surface)] sm:px-6 sm:py-6 lg:px-8 lg:py-7"
-    >
+  <div class="flex min-h-full min-w-0 flex-col gap-4">
+    <section class="border-b border-[var(--lgym-border)] px-1 pb-4">
       <div
         class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
       >
@@ -13,11 +11,11 @@
             {{ t("trainerInvitations.page.eyebrow") }}
           </p>
           <div>
-            <h2 class="text-2xl font-semibold text-[var(--lgym-text)] sm:text-3xl">
+            <h2 class="text-2xl font-semibold text-[var(--lgym-text)] sm:text-[2rem]">
               {{ t("trainerInvitations.page.title") }}
             </h2>
             <p
-              class="mt-3 text-sm leading-7 text-[var(--lgym-text-muted)] lg:text-base"
+              class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]"
             >
               {{ t("trainerInvitations.page.subtitle") }}
             </p>
@@ -25,7 +23,7 @@
         </div>
 
         <div
-          class="self-start rounded-full border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-2 text-sm text-[var(--lgym-text-muted)]"
+          class="self-start rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-3 py-1.5 text-sm text-[var(--lgym-text-muted)]"
         >
           {{ t("trainerInvitations.page.summary", { totalCount }) }}
         </div>
@@ -33,7 +31,7 @@
     </section>
 
     <section
-      class="grid min-h-0 min-w-0 gap-4 xl:grid-cols-[minmax(320px,420px)_minmax(0,1fr)] lg:gap-5"
+      class="grid min-h-0 min-w-0 gap-4 xl:grid-cols-[minmax(300px,380px)_minmax(0,1fr)]"
     >
       <TrainerInvitationFormCard
         ref="formCardRef"

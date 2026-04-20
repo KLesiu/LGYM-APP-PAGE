@@ -1,33 +1,25 @@
 <template>
-  <v-card
-    rounded="[32px]"
-    class="flex min-h-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
-  >
-    <div
-      class="relative overflow-hidden bg-[var(--lgym-register-top-bg)] px-4 py-5 sm:px-6 sm:py-6"
-    >
+  <section class="flex min-h-0 w-full flex-col border-y border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/40">
+    <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 sm:py-5">
       <p
         class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]"
       >
         {{ t("trainerInvitations.form.eyebrow") }}
       </p>
-      <h2 class="mt-3 text-2xl font-semibold text-[var(--lgym-text)]">
+      <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)]">
         {{ t("trainerInvitations.form.title") }}
       </h2>
-      <p class="mt-3 max-w-md text-sm leading-6 text-[var(--lgym-text-muted)]">
+      <p class="mt-2 max-w-md text-sm leading-6 text-[var(--lgym-text-muted)]">
         {{ t("trainerInvitations.form.subtitle") }}
       </p>
-      <div
-        class="pointer-events-none absolute -right-10 -bottom-20 hidden h-[180px] w-[180px] rounded-full bg-[var(--lgym-register-glow)] sm:block"
-      />
     </div>
 
-    <v-card-text class="flex flex-1 flex-col gap-6 px-4 py-5 sm:px-6 sm:py-6">
+    <div class="flex flex-1 flex-col gap-5 px-4 py-4 sm:px-5 sm:py-5">
       <v-form
         ref="formRef"
         v-model="isFormValid"
         validate-on="submit lazy"
-        class="flex flex-1 flex-col gap-5"
+        class="flex flex-1 flex-col gap-4"
         @submit.prevent="submitForm"
       >
         <v-text-field
@@ -68,19 +60,21 @@
         />
 
       
-        <v-btn
-          type="submit"
-          color="primary"
-          size="large"
-          class="min-h-[52px] px-6 font-semibold normal-case tracking-normal"
-          :loading="isSubmitting"
-          :disabled="isSubmitting"
-        >
-          {{ t("trainerInvitations.form.actions.submit") }}
-        </v-btn>
+        <div class="border-t border-[var(--lgym-border)] pt-4">
+          <v-btn
+            type="submit"
+            color="primary"
+            size="large"
+            class="min-h-11 rounded-md px-5 font-semibold normal-case tracking-normal"
+            :loading="isSubmitting"
+            :disabled="isSubmitting"
+          >
+            {{ t("trainerInvitations.form.actions.submit") }}
+          </v-btn>
+        </div>
       </v-form>
-    </v-card-text>
-  </v-card>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">

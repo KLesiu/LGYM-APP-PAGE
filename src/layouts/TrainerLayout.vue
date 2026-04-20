@@ -5,8 +5,8 @@
     :logo-src="logoLgym"
     :brand-name="t('trainerDashboard.appName')"
     :brand-subtitle="t('trainerDashboard.appSubtitle')"
-    :header-title="t(`trainerInvitations.layout.${activeSection}.title`)"
-    :header-subtitle="t(`trainerInvitations.layout.${activeSection}.subtitle`)"
+    :header-title="t(`trainerArea.layout.${activeSection}.title`)"
+    :header-subtitle="t(`trainerArea.layout.${activeSection}.subtitle`)"
     :user="currentUser"
     @logout="logout"
   >
@@ -34,20 +34,35 @@ const route = useRoute();
 const router = useRouter();
 
 const sectionByRouteName: Record<string, string> = {
+  "trainer-members": "members",
+  "trainer-member-details": "members",
   "trainer-invitations": "invitations",
+  "trainer-report-templates": "reportTemplates",
 };
 
 const activeSection = computed(() => {
   const routeName = String(route.name ?? "");
-  return sectionByRouteName[routeName] ?? "invitations";
+  return sectionByRouteName[routeName] ?? "members";
 });
 
 const sidebarItems = computed<SidebarItem[]>(() => [
   {
+    key: "members",
+    label: t("trainerDashboard.navigation.members"),
+    icon: "mdi-account-group-outline",
+    to: "/trainer/members",
+  },
+  {
     key: "invitations",
     label: t("trainerDashboard.navigation.invitations"),
     icon: "mdi-email-fast-outline",
-    to: { name: "trainer-invitations" },
+    to: "/trainer/invitations",
+  },
+  {
+    key: "reportTemplates",
+    label: t("trainerDashboard.navigation.reportTemplates"),
+    icon: "mdi-file-document-multiple-outline",
+    to: "/trainer/report-templates",
   },
 ]);
 

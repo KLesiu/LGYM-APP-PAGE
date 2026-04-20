@@ -39,8 +39,10 @@
     "navigation": {
       "dashboard": "Dashboard",
       "trainingPlans": "Plany Treningowe",
+      "members": "Podopieczni",
       "myClients": "Moi Klienci",
       "invitations": "Zaproszenia",
+      "reportTemplates": "Szablony raportow",
       "settings": "Ustawienia"
     },
     "sidebar": {
@@ -186,6 +188,363 @@
       "error": "Blad",
       "warning": "Uwaga",
       "info": "Informacja"
+    }
+  },
+  "trainerArea": {
+    "layout": {
+      "members": {
+        "title": "Podopieczni",
+        "subtitle": "Przegladaj liste podopiecznych, otwieraj szczegoly i zarzadzaj relacja trenerska z jednego miejsca."
+      },
+      "invitations": {
+        "title": "Zaproszenia",
+        "subtitle": "Zapraszaj nowych podopiecznych po emailu, monitoruj status i cofaj oczekujace zaproszenia."
+      },
+      "reportTemplates": {
+        "title": "Szablony raportow",
+        "subtitle": "Zarzadzaj globalna biblioteka szablonow raportow dla calej strefy trenera."
+      }
+    }
+  },
+  "trainerMembers": {
+    "page": {
+      "eyebrow": "Strefa podopiecznych",
+      "title": "Zarzadzaj podopiecznymi",
+      "subtitle": "Przegladaj status relacji, otwieraj szczegoly i trzymaj liste filtrowana po stronie serwera dla szybszej pracy trenera.",
+      "summary": "Lacznie podopiecznych: {totalCount}"
+    },
+    "list": {
+      "eyebrow": "Lista podopiecznych",
+      "title": "Twoje relacje z podopiecznymi",
+      "subtitle": "Szukaj po imieniu lub emailu, filtruj po statusie, sortuj po stronie serwera i przechodz od razu do widoku szczegolow.",
+      "filters": {
+        "search": "Szukaj podopiecznych",
+        "sortBy": "Sortuj po",
+        "pageSize": "Na strone"
+      },
+      "placeholders": {
+        "search": "Wpisz imie lub email podopiecznego"
+      },
+      "columns": {
+        "member": "Podopieczny",
+        "status": "Status",
+        "relationship": "Relacja",
+        "lastUpdate": "Ostatnia zmiana",
+        "actions": "Akcje"
+      },
+      "sortOptions": {
+        "name": "Imie",
+        "createdAt": "Data utworzenia",
+        "status": "Status",
+        "linkedAt": "Data polaczenia",
+        "lastInvitationExpiresAt": "Wygasniecie zaproszenia",
+        "lastInvitationRespondedAt": "Odpowiedz na zaproszenie"
+      },
+      "sortDirection": {
+        "ascending": "Rosnaco",
+        "descending": "Malejaco"
+      },
+      "fallback": {
+        "noName": "Nieznany podopieczny",
+        "noEmail": "Brak adresu email"
+      },
+      "empty": {
+        "title": "Brak podopiecznych do wyswietlenia",
+        "subtitle": "Sprobuj zmienic filtry albo poczekaj, az relacje trener-podopieczny pojawia sie na liscie."
+      },
+      "error": {
+        "title": "Nie udalo sie pobrac listy podopiecznych",
+        "subtitle": "Nie udalo sie zaladowac listy dla aktualnych filtrow. Sprobuj ponownie za chwile."
+      },
+      "pagination": {
+        "summary": "Strona {page} z {totalPages} · wszystkich podopiecznych: {totalCount}"
+      }
+    },
+    "filters": {
+      "all": "Wszyscy"
+    },
+    "relationship": {
+      "linked": "Polaczony z trenerem",
+      "pendingInvitation": "Zaproszenie oczekujace",
+      "expiredInvitation": "Zaproszenie wygaslo",
+      "noActiveLink": "Brak aktywnej relacji"
+    },
+    "status": {
+      "linked": "Polaczony",
+      "invitationPending": "Zaproszenie oczekujace",
+      "invitationExpired": "Zaproszenie wygaslo",
+      "invitationRejected": "Zaproszenie odrzucone",
+      "invitationAccepted": "Zaproszenie zaakceptowane",
+      "noRelationship": "Brak relacji",
+      "unknown": "Nieznany"
+    },
+    "actions": {
+      "openDetails": "Otworz szczegoly",
+      "unlink": "Odepnij",
+      "unlinkConfirm": "Czy na pewno chcesz odpiac {name}?",
+      "previous": "Poprzednia",
+      "next": "Nastepna",
+      "retry": "Sprobuj ponownie"
+    },
+    "feedback": {
+      "loadFailed": "Nie udalo sie pobrac listy podopiecznych.",
+      "unlinkSuccess": "Podopieczny zostal odpięty poprawnie.",
+      "unlinkFailed": "Nie udalo sie odpiac podopiecznego.",
+      "unauthorized": "Sesja trenera wygasla albo nie masz dostepu do tego widoku."
+    }
+  },
+  "trainerMemberDetails": {
+    "header": {
+      "fallbackName": "Brak snapshotu podopiecznego",
+      "snapshotHint": "Naglowek korzysta z ostatniego snapshotu podopiecznego dostepnego juz w strefie trenera."
+    },
+    "tabs": {
+      "overview": "Overview",
+      "trainings": "Trainings",
+      "plans": "Plans",
+      "reports": "Reports",
+      "measurements": "Measurements"
+    },
+    "actions": {
+      "back": "Wroc do listy",
+      "retry": "Sprobuj ponownie",
+      "cancel": "Anuluj",
+      "save": "Zapisz"
+    },
+    "overview": {
+      "eyebrow": "Overview",
+      "title": "Podsumowanie podopiecznego oparte na realnych danych trenera",
+      "subtitle": "Ta sekcja agreguje tylko dane, ktore sa juz dostepne w aktualnym kontrakcie API.",
+      "emptyValue": "—",
+      "cards": {
+        "relationship": "Relacja",
+        "lastTraining": "Ostatni trening",
+        "activePlan": "Aktywny plan",
+        "latestReport": "Ostatni wyslany raport",
+        "elo": "Ostatni punkt ELO",
+        "mainRecord": "Ostatni rekord glowny"
+      },
+      "meta": {
+        "trainingDates": "Na podstawie endpointu z zarejestrowanymi datami treningow.",
+        "noActivePlan": "Brak przypisanego aktywnego planu.",
+        "noReports": "Brak wyslanych raportow.",
+        "noMainRecords": "Brak rekordow glownych.",
+        "noExercise": "Brak nazwy cwiczenia",
+        "noSnapshot": "Brak zapisanego snapshotu dla tej trasy."
+      },
+      "error": {
+        "title": "Nie udalo sie zbudowac overview",
+        "subtitle": "Co najmniej jedno zrodo danych overview nie moglo zostac pobrane."
+      }
+    },
+    "trainings": {
+      "eyebrow": "Historia treningow",
+      "title": "Zapisane daty treningow",
+      "detailsEyebrow": "Szczegoly treningu",
+      "selectDate": "Wybierz zapisana date",
+      "columns": {
+        "gym": "Silownia",
+        "exercises": "Cwiczenia"
+      },
+      "exerciseList": "Lista cwiczen",
+      "fallback": {
+        "noType": "Brak typu treningu",
+        "noPlanDay": "Brak dnia planu",
+        "noGym": "Brak danych o silowni",
+        "noExercise": "Brak nazwy cwiczenia",
+        "noBodyPart": "Brak partii miesniowej"
+      },
+      "empty": {
+        "title": "Brak zapisanych dat treningow.",
+        "details": "Wybierz date z lewej strony, aby pobrac szczegoly treningu.",
+        "exercises": "Brak zapisanych cwiczen dla tego treningu."
+      },
+      "error": {
+        "subtitle": "Nie udalo sie pobrac dat treningow.",
+        "details": "Nie udalo sie pobrac szczegolow treningu dla wybranej daty."
+      }
+    },
+    "plans": {
+      "eyebrow": "Plany",
+      "title": "Plany zarzadzane przez trenera",
+      "subtitle": "Tworz, zmieniaj nazwy, usuwaj, przypisuj i odpinaj plany wspierane przez obecny kontrakt trenerski.",
+      "badges": {
+        "active": "Aktywny"
+      },
+      "meta": {
+        "createdAt": "Utworzono"
+      },
+      "fallback": {
+        "noName": "Plan bez nazwy"
+      },
+      "empty": {
+        "title": "Brak planow utworzonych dla tego podopiecznego."
+      },
+      "dialog": {
+        "createTitle": "Utworz plan",
+        "renameTitle": "Zmien nazwe planu"
+      },
+      "form": {
+        "name": "Nazwa planu",
+        "namePlaceholder": "Wpisz nazwe planu"
+      },
+      "actions": {
+        "create": "Utworz plan",
+        "assign": "Przypisz",
+        "rename": "Zmien nazwe",
+        "delete": "Usun",
+        "unassign": "Odepnij aktywny plan",
+        "deleteConfirm": "Usunac plan \"{name}\"?"
+      },
+      "error": {
+        "subtitle": "Nie udalo sie pobrac planow zarzadzanych przez trenera."
+      },
+      "feedback": {
+        "loadFailed": "Nie udalo sie pobrac planow.",
+        "nameRequired": "Nazwa planu jest wymagana.",
+        "createSuccess": "Plan zostal utworzony poprawnie.",
+        "createFailed": "Nie udalo sie utworzyc planu.",
+        "renameSuccess": "Nazwa planu zostala zmieniona.",
+        "renameFailed": "Nie udalo sie zmienic nazwy planu.",
+        "assignSuccess": "Plan zostal przypisany poprawnie.",
+        "assignFailed": "Nie udalo sie przypisac planu.",
+        "unassignSuccess": "Aktywny plan zostal odpiety.",
+        "unassignFailed": "Nie udalo sie odpiac aktywnego planu.",
+        "deleteSuccess": "Plan zostal usuniety poprawnie.",
+        "deleteFailed": "Nie udalo sie usunac planu."
+      }
+    },
+    "reports": {
+      "submissionsEyebrow": "Raporty podopiecznego",
+      "submissionsTitle": "Prosby o raport i wyslane odpowiedzi",
+      "submissionsSubtitle": "Wyslij prosbe o raport do tego podopiecznego i przegladaj wszystkie przeslane odpowiedzi.",
+      "requestTitle": "Popros o raport tego podopiecznego",
+      "requestSubtitle": "Wybierz jeden z globalnych szablonow raportu, ustaw termin i wyslij prosbe do tego podopiecznego.",
+      "form": {
+        "template": "Szablon",
+        "dueAt": "Termin",
+        "note": "Notatka trenera"
+      },
+      "actions": {
+        "manageTemplates": "Zarzadzaj szablonami",
+        "goToTemplateLibrary": "Otworz biblioteke szablonow",
+        "sendRequest": "Wyslij prosbe"
+      },
+      "meta": {
+        "submittedAt": "Wyslano"
+      },
+      "fallback": {
+        "noTemplateName": "Szablon bez nazwy",
+        "noDescription": "Brak opisu.",
+        "noFieldType": "Nieznany typ",
+        "noStatus": "Nieznany status",
+        "noAnswer": "Brak odpowiedzi"
+      },
+      "boolean": {
+        "true": "Tak",
+        "false": "Nie"
+      },
+      "empty": {
+        "templates": "Brak dostepnych szablonow raportow. Najpierw utworz je w globalnej bibliotece.",
+        "submissions": "Brak wyslanych raportow dla tego podopiecznego."
+      },
+      "error": {
+        "templates": "Nie udalo sie pobrac szablonow raportow.",
+        "submissions": "Nie udalo sie pobrac odpowiedzi raportowych."
+      },
+      "feedback": {
+        "loadTemplatesFailed": "Nie udalo sie pobrac szablonow raportow.",
+        "loadSubmissionsFailed": "Nie udalo sie pobrac wyslanych raportow.",
+        "templateRequired": "Wybierz szablon przed wyslaniem prosby.",
+        "createRequestSuccess": "Prosba o raport zostala wyslana.",
+        "createRequestFailed": "Nie udalo sie utworzyc prosby o raport."
+      }
+    },
+    "trainerReportTemplates": {
+      "page": {
+        "eyebrow": "Globalna biblioteka raportow",
+        "title": "Szablony raportow",
+        "subtitle": "Tworz, edytuj, podgladaj i usuwaj wielokrotnego uzytku szablony raportow w osobnym module trenera.",
+        "summary": "Szablony sa zarzadzane globalnie i wykorzystywane potem przy prosbach o raport dla podopiecznych."
+      },
+      "form": {
+        "templateName": "Nazwa szablonu",
+        "templateDescription": "Opis szablonu",
+        "fieldsTitle": "Pola szablonu",
+        "fieldLabel": "Etykieta pola",
+        "fieldKey": "Klucz pola",
+        "fieldType": "Typ pola",
+        "fieldOrder": "Kolejnosc",
+        "fieldRequired": "Wymagane"
+      },
+      "dialog": {
+        "createTemplateTitle": "Utworz szablon raportu",
+        "editTemplateTitle": "Edytuj szablon raportu"
+      },
+      "actions": {
+        "createTemplate": "Utworz szablon",
+        "editTemplate": "Edytuj",
+        "deleteTemplate": "Usun",
+        "deleteTemplateConfirm": "Usunac szablon raportu \"{name}\"?",
+        "addField": "Dodaj pole",
+        "removeField": "Usun pole",
+        "retry": "Sprobuj ponownie",
+        "cancel": "Anuluj",
+        "save": "Zapisz"
+      },
+      "preview": {
+        "fields": "Podglad pol"
+      },
+      "fallback": {
+        "noTemplateName": "Szablon bez nazwy",
+        "noDescription": "Brak opisu.",
+        "noFieldType": "Nieznany typ"
+      },
+      "empty": {
+        "templates": "Brak utworzonych szablonow raportow."
+      },
+      "error": {
+        "templates": "Nie udalo sie pobrac szablonow raportow."
+      },
+      "feedback": {
+        "loadTemplatesFailed": "Nie udalo sie pobrac szablonow raportow.",
+        "templateNameRequired": "Nazwa szablonu jest wymagana.",
+        "templateFieldRequired": "Wymagane jest co najmniej jedno poprawne pole szablonu.",
+        "createTemplateSuccess": "Szablon zostal utworzony poprawnie.",
+        "createTemplateFailed": "Nie udalo sie utworzyc szablonu.",
+        "updateTemplateSuccess": "Szablon zostal zaktualizowany poprawnie.",
+        "updateTemplateFailed": "Nie udalo sie zaktualizowac szablonu.",
+        "deleteTemplateSuccess": "Szablon zostal usuniety poprawnie.",
+        "deleteTemplateFailed": "Nie udalo sie usunac szablonu."
+      }
+    },
+    "measurements": {
+      "eyebrow": "Pomiary",
+      "title": "Pomiary partii ciala",
+      "subtitle": "Sledz trend, historie i ostatnie wartosci z wykorzystaniem istniejacych endpointow pomiarow."
+      ,"emptyValue": "—",
+      "filters": {
+        "bodyPart": "Partia ciala",
+        "unit": "Jednostka"
+      },
+      "cards": {
+        "currentValue": "Aktualna wartosc",
+        "change": "Zmiana",
+        "changePercentage": "Zmiana %"
+      },
+      "sections": {
+        "trend": "Punkty historii",
+        "latest": "Ostatnie pomiary"
+      },
+      "empty": {
+        "title": "Brak pomiarow dla wybranych filtrow."
+      },
+      "error": {
+        "subtitle": "Nie udalo sie pobrac pomiarow partii ciala dla tego podopiecznego."
+      },
+      "feedback": {
+        "loadFailed": "Nie udalo sie pobrac pomiarow."
+      }
     }
   },
   "trainerInvitations": {

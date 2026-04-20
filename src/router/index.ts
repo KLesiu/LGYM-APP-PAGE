@@ -8,7 +8,10 @@ import AdminLayout from "../layouts/AdminLayout.vue";
 import TrainerLayout from "../layouts/TrainerLayout.vue";
 import AdminUsersPage from "../pages/admin/AdminUsersPage.vue";
 import AdminVersionsPage from "../pages/admin/AdminVersionsPage.vue";
+import TrainerMemberDetailsPage from "../pages/trainer/TrainerMemberDetailsPage.vue";
 import TrainerInvitationsPage from "../pages/trainer/TrainerInvitationsPage.vue";
+import TrainerMembersPage from "../pages/trainer/TrainerMembersPage.vue";
+import TrainerReportTemplatesPage from "../pages/trainer/TrainerReportTemplatesPage.vue";
 import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
@@ -69,12 +72,27 @@ export const router = createRouter({
       children: [
         {
           path: "",
-          redirect: "/trainer/invitations",
+          redirect: "/trainer/members",
+        },
+        {
+          path: "members",
+          name: "trainer-members",
+          component: TrainerMembersPage,
+        },
+        {
+          path: "members/:traineeId",
+          name: "trainer-member-details",
+          component: TrainerMemberDetailsPage,
         },
         {
           path: "invitations",
           name: "trainer-invitations",
           component: TrainerInvitationsPage,
+        },
+        {
+          path: "report-templates",
+          name: "trainer-report-templates",
+          component: TrainerReportTemplatesPage,
         },
       ],
     },
@@ -113,7 +131,7 @@ router.beforeEach((to) => {
 
   if (to.name === "login" && hasTrainerAccess()) {
     return {
-      name: "trainer-invitations",
+      path: "/trainer/members",
     };
   }
 

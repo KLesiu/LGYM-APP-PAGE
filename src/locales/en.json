@@ -39,8 +39,10 @@
     "navigation": {
       "dashboard": "Dashboard",
       "trainingPlans": "Training Plans",
+      "members": "Members",
       "myClients": "My Clients",
       "invitations": "Invitations",
+      "reportTemplates": "Report Templates",
       "settings": "Settings"
     },
     "sidebar": {
@@ -186,6 +188,363 @@
       "error": "Error",
       "warning": "Warning",
       "info": "Information"
+    }
+  },
+  "trainerArea": {
+    "layout": {
+      "members": {
+        "title": "Members",
+        "subtitle": "Browse trainees, open details, and manage the active coaching relationship from one trainer workspace."
+      },
+      "invitations": {
+        "title": "Invitations",
+        "subtitle": "Invite new customers by email, track every status, and revoke pending invitations from one trainer view."
+      },
+      "reportTemplates": {
+        "title": "Report Templates",
+        "subtitle": "Manage reusable report templates globally for your trainer workspace."
+      }
+    }
+  },
+  "trainerMembers": {
+    "page": {
+      "eyebrow": "Members workspace",
+      "title": "Manage your trainees",
+      "subtitle": "Review relationship status, open member details, and keep the list filtered on the server for faster trainer workflows.",
+      "summary": "Total members: {totalCount}"
+    },
+    "list": {
+      "eyebrow": "Members list",
+      "title": "Your trainee relationships",
+      "subtitle": "Search by name or email, narrow the list by status, sort on the server, and jump straight into the member workspace.",
+      "filters": {
+        "search": "Search members",
+        "sortBy": "Sort by",
+        "pageSize": "Per page"
+      },
+      "placeholders": {
+        "search": "Type member name or email"
+      },
+      "columns": {
+        "member": "Member",
+        "status": "Status",
+        "relationship": "Relationship",
+        "lastUpdate": "Last update",
+        "actions": "Actions"
+      },
+      "sortOptions": {
+        "name": "Name",
+        "createdAt": "Created at",
+        "status": "Status",
+        "linkedAt": "Linked at",
+        "lastInvitationExpiresAt": "Invitation expires",
+        "lastInvitationRespondedAt": "Invitation answered"
+      },
+      "sortDirection": {
+        "ascending": "Ascending",
+        "descending": "Descending"
+      },
+      "fallback": {
+        "noName": "Unknown member",
+        "noEmail": "No email available"
+      },
+      "empty": {
+        "title": "No members to display",
+        "subtitle": "Try adjusting the filters or wait until the trainer-member relationships appear in the list."
+      },
+      "error": {
+        "title": "Failed to load members",
+        "subtitle": "The current filters could not be loaded. Try again in a moment."
+      },
+      "pagination": {
+        "summary": "Page {page} of {totalPages} · total members: {totalCount}"
+      }
+    },
+    "filters": {
+      "all": "All"
+    },
+    "relationship": {
+      "linked": "Linked with trainer",
+      "pendingInvitation": "Invitation pending",
+      "expiredInvitation": "Invitation expired",
+      "noActiveLink": "No active relationship"
+    },
+    "status": {
+      "linked": "Linked",
+      "invitationPending": "Invitation pending",
+      "invitationExpired": "Invitation expired",
+      "invitationRejected": "Invitation rejected",
+      "invitationAccepted": "Invitation accepted",
+      "noRelationship": "No relationship",
+      "unknown": "Unknown"
+    },
+    "actions": {
+      "openDetails": "Open details",
+      "unlink": "Unlink",
+      "unlinkConfirm": "Are you sure you want to unlink {name}?",
+      "previous": "Previous",
+      "next": "Next",
+      "retry": "Retry"
+    },
+    "feedback": {
+      "loadFailed": "Failed to load the members list.",
+      "unlinkSuccess": "Member unlinked successfully.",
+      "unlinkFailed": "Failed to unlink the member.",
+      "unauthorized": "Your trainer session expired or you no longer have access to this view."
+    }
+  },
+  "trainerMemberDetails": {
+    "header": {
+      "fallbackName": "Member snapshot unavailable",
+      "snapshotHint": "The page header uses the latest member snapshot already available in the trainer workspace."
+    },
+    "tabs": {
+      "overview": "Overview",
+      "trainings": "Trainings",
+      "plans": "Plans",
+      "reports": "Reports",
+      "measurements": "Measurements"
+    },
+    "actions": {
+      "back": "Back to members",
+      "retry": "Retry",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "overview": {
+      "eyebrow": "Overview",
+      "title": "Member summary based on live trainer data",
+      "subtitle": "This section aggregates only data that already exists in the current API contract.",
+      "emptyValue": "—",
+      "cards": {
+        "relationship": "Relationship",
+        "lastTraining": "Last training date",
+        "activePlan": "Active plan",
+        "latestReport": "Latest report submission",
+        "elo": "Latest ELO point",
+        "mainRecord": "Latest main record"
+      },
+      "meta": {
+        "trainingDates": "Taken from the recorded training dates endpoint.",
+        "noActivePlan": "No active plan assigned.",
+        "noReports": "No submitted reports found.",
+        "noMainRecords": "No main records found.",
+        "noExercise": "Exercise not provided",
+        "noSnapshot": "No cached snapshot available for this route yet."
+      },
+      "error": {
+        "title": "Failed to build the overview",
+        "subtitle": "At least one overview data source could not be loaded."
+      }
+    },
+    "trainings": {
+      "eyebrow": "Training history",
+      "title": "Recorded training dates",
+      "detailsEyebrow": "Training details",
+      "selectDate": "Select a recorded date",
+      "columns": {
+        "gym": "Gym",
+        "exercises": "Exercises"
+      },
+      "exerciseList": "Exercises",
+      "fallback": {
+        "noType": "Training type unavailable",
+        "noPlanDay": "No plan day",
+        "noGym": "Gym not provided",
+        "noExercise": "Exercise unavailable",
+        "noBodyPart": "Body part unavailable"
+      },
+      "empty": {
+        "title": "No recorded training dates found.",
+        "details": "Select a date from the left to load training details.",
+        "exercises": "No exercises recorded for this training."
+      },
+      "error": {
+        "subtitle": "Failed to load recorded training dates.",
+        "details": "Failed to load the training details for the selected date."
+      }
+    },
+    "plans": {
+      "eyebrow": "Plans",
+      "title": "Trainer-managed plans",
+      "subtitle": "Create, rename, delete, assign, and unassign plans supported by the current trainer contract.",
+      "badges": {
+        "active": "Active"
+      },
+      "meta": {
+        "createdAt": "Created"
+      },
+      "fallback": {
+        "noName": "Untitled plan"
+      },
+      "empty": {
+        "title": "No plans created for this member yet."
+      },
+      "dialog": {
+        "createTitle": "Create plan",
+        "renameTitle": "Rename plan"
+      },
+      "form": {
+        "name": "Plan name",
+        "namePlaceholder": "Enter plan name"
+      },
+      "actions": {
+        "create": "Create plan",
+        "assign": "Assign",
+        "rename": "Rename",
+        "delete": "Delete",
+        "unassign": "Unassign active plan",
+        "deleteConfirm": "Delete plan \"{name}\"?"
+      },
+      "error": {
+        "subtitle": "Failed to load the trainer-managed plans."
+      },
+      "feedback": {
+        "loadFailed": "Failed to load plans.",
+        "nameRequired": "Plan name is required.",
+        "createSuccess": "Plan created successfully.",
+        "createFailed": "Failed to create the plan.",
+        "renameSuccess": "Plan renamed successfully.",
+        "renameFailed": "Failed to rename the plan.",
+        "assignSuccess": "Plan assigned successfully.",
+        "assignFailed": "Failed to assign the plan.",
+        "unassignSuccess": "Active plan unassigned successfully.",
+        "unassignFailed": "Failed to unassign the active plan.",
+        "deleteSuccess": "Plan deleted successfully.",
+        "deleteFailed": "Failed to delete the plan."
+      }
+    },
+    "reports": {
+      "submissionsEyebrow": "Member reports",
+      "submissionsTitle": "Report requests and submissions",
+      "submissionsSubtitle": "Request a report from this member and review all submitted answers.",
+      "requestTitle": "Request report from this member",
+      "requestSubtitle": "Choose one of your global report templates, set the due date, and send the request to this member.",
+      "form": {
+        "template": "Template",
+        "dueAt": "Due at",
+        "note": "Trainer note"
+      },
+      "actions": {
+        "manageTemplates": "Manage templates",
+        "goToTemplateLibrary": "Open template library",
+        "sendRequest": "Send request"
+      },
+      "meta": {
+        "submittedAt": "Submitted"
+      },
+      "fallback": {
+        "noTemplateName": "Unnamed template",
+        "noDescription": "No description provided.",
+        "noFieldType": "Unknown type",
+        "noStatus": "Unknown status",
+        "noAnswer": "No answer"
+      },
+      "boolean": {
+        "true": "Yes",
+        "false": "No"
+      },
+      "empty": {
+        "templates": "No report templates are available yet. Create them in the global template library first.",
+        "submissions": "No report submissions found for this member."
+      },
+      "error": {
+        "templates": "Failed to load report templates.",
+        "submissions": "Failed to load report submissions."
+      },
+      "feedback": {
+        "loadTemplatesFailed": "Failed to load report templates.",
+        "loadSubmissionsFailed": "Failed to load report submissions.",
+        "templateRequired": "Select a template before sending a request.",
+        "createRequestSuccess": "Report request sent successfully.",
+        "createRequestFailed": "Failed to create the report request."
+      }
+    },
+    "trainerReportTemplates": {
+      "page": {
+        "eyebrow": "Global report library",
+        "title": "Report Templates",
+        "subtitle": "Create, edit, preview, and delete reusable report templates for all your members from one trainer-level module.",
+        "summary": "Templates are managed globally and reused when requesting reports from members."
+      },
+      "form": {
+        "templateName": "Template name",
+        "templateDescription": "Template description",
+        "fieldsTitle": "Template fields",
+        "fieldLabel": "Field label",
+        "fieldKey": "Field key",
+        "fieldType": "Field type",
+        "fieldOrder": "Display order",
+        "fieldRequired": "Required"
+      },
+      "dialog": {
+        "createTemplateTitle": "Create report template",
+        "editTemplateTitle": "Edit report template"
+      },
+      "actions": {
+        "createTemplate": "Create template",
+        "editTemplate": "Edit",
+        "deleteTemplate": "Delete",
+        "deleteTemplateConfirm": "Delete report template \"{name}\"?",
+        "addField": "Add field",
+        "removeField": "Remove field",
+        "retry": "Retry",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "preview": {
+        "fields": "Field preview"
+      },
+      "fallback": {
+        "noTemplateName": "Unnamed template",
+        "noDescription": "No description provided.",
+        "noFieldType": "Unknown type"
+      },
+      "empty": {
+        "templates": "No report templates created yet."
+      },
+      "error": {
+        "templates": "Failed to load report templates."
+      },
+      "feedback": {
+        "loadTemplatesFailed": "Failed to load report templates.",
+        "templateNameRequired": "Template name is required.",
+        "templateFieldRequired": "At least one valid template field is required.",
+        "createTemplateSuccess": "Template created successfully.",
+        "createTemplateFailed": "Failed to create the template.",
+        "updateTemplateSuccess": "Template updated successfully.",
+        "updateTemplateFailed": "Failed to update the template.",
+        "deleteTemplateSuccess": "Template deleted successfully.",
+        "deleteTemplateFailed": "Failed to delete the template."
+      }
+    },
+    "measurements": {
+      "eyebrow": "Measurements",
+      "title": "Body-part measurements",
+      "subtitle": "Track trend, history, and recent values using the existing measurement endpoints.",
+      "emptyValue": "—",
+      "filters": {
+        "bodyPart": "Body part",
+        "unit": "Unit"
+      },
+      "cards": {
+        "currentValue": "Current value",
+        "change": "Change",
+        "changePercentage": "Change %"
+      },
+      "sections": {
+        "trend": "History points",
+        "latest": "Latest measurements"
+      },
+      "empty": {
+        "title": "No measurements found for the selected filters."
+      },
+      "error": {
+        "subtitle": "Failed to load body-part measurements for this member."
+      },
+      "feedback": {
+        "loadFailed": "Failed to load measurements."
+      }
     }
   },
   "trainerInvitations": {
