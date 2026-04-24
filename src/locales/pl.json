@@ -76,6 +76,19 @@
       }
     }
   },
+  "userArea": {
+    "appName": "LGYM",
+    "appSubtitle": "Strefa zawodnika",
+    "navigation": {
+      "relationship": "Relacja z trenerem"
+    },
+    "layout": {
+      "relationship": {
+        "title": "Relacja z trenerem",
+        "subtitle": "Sprawdz aktualny status relacji z trenerem i reaguj na zaproszenia wspierane przez obecny kontrakt API."
+      }
+    }
+  },
   "auth": {
     "tabs": {
       "athlete": "Panel zawodnika",
@@ -571,6 +584,133 @@
       "unlinkSuccess": "Podopieczny zostal odpięty poprawnie.",
       "unlinkFailed": "Nie udalo sie odpiac podopiecznego.",
       "unauthorized": "Sesja trenera wygasla albo nie masz dostepu do tego widoku."
+    }
+  },
+  "userRelationship": {
+    "page": {
+      "eyebrow": "Strefa zawodnika",
+      "title": "Relacja z trenerem",
+      "subtitle": "Ten ekran opiera się wyłącznie na realnym kontrakcie zaproszeń. Pokazuje status publicznego zaproszenia i pozwala odpowiedzieć tylko wtedy, gdy API naprawdę to wspiera.",
+      "invitationMode": "Aktywny kontekst zaproszenia",
+      "guidanceTitle": "Jak czytać ten ekran",
+      "guidance": [
+        "Jeśli link zaproszenia zawiera poprawny identyfikator i kod, ekran pobiera publiczny status zaproszenia z Orvala.",
+        "Akceptacja i odrzucenie są dostępne wyłącznie dla statusu oczekującego obsługiwanego przez endpointy accept/reject.",
+        "Brak kontekstu zaproszenia nie oznacza automatycznie braku relacji — oznacza tylko, że obecny kontrakt API nie daje widokowi danych do potwierdzenia jej stanu."
+      ]
+    },
+    "actions": {
+      "accept": "Akceptuj relację",
+      "reject": "Odrzuć zaproszenie",
+      "retry": "Spróbuj ponownie",
+      "dismissInvitationContext": "Otwórz widok domyślny"
+    },
+    "common": {
+      "yes": "Tak",
+      "no": "Nie",
+      "notAvailable": "Brak danych"
+    },
+    "summary": {
+      "accountLabel": "Twoje konto",
+      "accountMeta": "Tożsamość pochodzi z aktywnej sesji użytkownika.",
+      "contractLabel": "Zakres kontraktu",
+      "contractWithContext": "Status zaproszenia dostępny",
+      "contractWithoutContext": "Brak kontekstu zaproszenia",
+      "contractMeta": "Widok korzysta tylko z endpointów invitation / accept / reject.",
+      "stateLabel": "Stan ekranu",
+      "stateMeta": "Stan wynika wyłącznie z odpowiedzi API dla zaproszenia."
+    },
+    "cards": {
+      "status": {
+        "label": "Status relacji"
+      },
+      "actions": {
+        "label": "Dostępne akcje",
+        "available": "Możesz odpowiedzieć na zaproszenie",
+        "unavailable": "Brak akcji do wykonania",
+        "pendingDescription": "API potwierdza status oczekujący, więc możesz teraz zaakceptować lub odrzucić relację.",
+        "defaultDescription": "Poza statusem oczekującym ekran pozostaje tylko informacyjny i nie zgaduje dalszych możliwości."
+      },
+      "identity": {
+        "label": "Konto zawodnika",
+        "description": "Sekcja używa wyłącznie danych dostępnych w bieżącej sesji, bez hardcodowania trenera."
+      },
+      "scope": {
+        "label": "Źródło prawdy",
+        "value": "Public invitation status",
+        "description": "Widok nie korzysta z endpointów planów treningowych ani z pośrednich proxy relacji."
+      }
+    },
+    "contract": {
+      "title": "Kontrakt API",
+      "primaryLine": "Używane są tylko endpointy sprawdzające status zaproszenia oraz accept / reject.",
+      "secondaryLine": "Jeśli backend nie udostępnia osobnego endpointu bieżącej relacji zalogowanego zawodnika, ekran nie zgaduje tego stanu na podstawie planu treningowego ani innych modułów."
+    },
+    "sidePanels": {
+      "invitation": {
+        "eyebrow": "Szczegóły zaproszenia",
+        "title": "Dane zwrócone przez kontrakt",
+        "items": {
+          "status": "Status API",
+          "statusMeta": "Pole status pochodzi bezpośrednio z PublicInvitationStatusDto.",
+          "accountExists": "Czy konto istnieje",
+          "invitationId": "Id zaproszenia"
+        }
+      },
+      "context": {
+        "eyebrow": "Kontekst trasy",
+        "title": "Parametry wejściowe",
+        "items": {
+          "code": "Kod zaproszenia",
+          "codeMeta": "Kod jest używany wyłącznie do pobrania publicznego statusu zaproszenia.",
+          "route": "Tryb widoku",
+          "routeValue": "Strona otwarta z linku zaproszenia"
+        }
+      }
+    },
+    "states": {
+      "loading": {
+        "badge": "Ładowanie",
+        "title": "Sprawdzamy status relacji",
+        "subtitle": "Widok pobiera tylko dane zaproszenia udostępnione przez aktualny kontrakt API."
+      },
+      "error": {
+        "badge": "Błąd",
+        "title": "Nie udało się odczytać statusu zaproszenia",
+        "subtitle": "Spróbuj ponownie. Jeśli problem wraca, API nie zwróciło danych potrzebnych do pokazania relacji."
+      },
+      "pending": {
+        "badge": "Oczekujące",
+        "title": "Masz oczekujące zaproszenie od trenera",
+        "subtitle": "Możesz teraz zaakceptować lub odrzucić tę relację. Ekran nie pokazuje danych trenera, bo obecny DTO nie zwraca takich pól."
+      },
+      "accepted": {
+        "badge": "Zaakceptowane",
+        "title": "Zaproszenie zostało zaakceptowane",
+        "subtitle": "Publiczny status zaproszenia zwraca stan zaakceptowany. Ekran nie dopowiada niczego ponad to, co naprawdę potwierdza API."
+      },
+      "rejected": {
+        "badge": "Odrzucone",
+        "title": "To zaproszenie zostało już odrzucone",
+        "subtitle": "Zaproszenie nie jest już aktywne i nie możesz na nie ponownie odpowiedzieć z tego widoku."
+      },
+      "expired": {
+        "badge": "Niedostępne",
+        "title": "To zaproszenie nie jest już aktywne",
+        "subtitle": "Status zaproszenia wskazuje, że link wygasł albo został cofnięty i nie ma już akcji do wykonania."
+      },
+      "empty": {
+        "badge": "Ograniczony kontrakt",
+        "title": "Brak danych zaproszenia do wyświetlenia",
+        "subtitle": "Ten widok nie ma aktywnego kontekstu zaproszenia albo API nie zwróciło statusu, więc nie można potwierdzić relacji trener–podopieczny bez zgadywania backendu."
+      }
+    },
+    "feedback": {
+      "loadFailed": "Nie udało się pobrać danych zaproszenia lub relacji z trenerem.",
+      "acceptSuccess": "Zaproszenie zostało zaakceptowane.",
+      "acceptFailed": "Nie udało się zaakceptować relacji z trenerem.",
+      "rejectSuccess": "Zaproszenie zostało odrzucone.",
+      "rejectFailed": "Nie udało się odrzucić zaproszenia od trenera."
     }
   },
   "trainerMemberDetails": {
