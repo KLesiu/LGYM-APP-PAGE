@@ -257,6 +257,17 @@ const performLogin = (response: LoginResponseDto) => {
   });
 };
 
+const resolvePostLoginRedirect = (fallbackPath: string) => {
+  const redirect =
+    typeof route.query.redirect === "string" ? route.query.redirect.trim() : "";
+
+  if (!redirect || redirect === "/login" || redirect === "/login-admin") {
+    return fallbackPath;
+  }
+
+  return redirect;
+};
+
 const resetForm = () => {
   formRef.value?.reset();
 };
@@ -301,21 +312,16 @@ const submitForm = async () => {
     resetFormValidation();
 
     if (isAdminMode.value) {
-      const redirect =
-        typeof route.query.redirect === "string"
-          ? route.query.redirect
-          : "/admin/users";
-      await router.push(redirect);
+      await router.replace(resolvePostLoginRedirect("/admin/users"));
       return;
     }
 
     if (selectedRole.value === "trainer") {
-      const redirect =
-        typeof route.query.redirect === "string"
-          ? route.query.redirect
-          : "/trainer/invitations";
-      await router.push(redirect);
+      await router.replace(resolvePostLoginRedirect("/trainer/invitations"));
+      return;
     }
+
+    await router.replace(resolvePostLoginRedirect("/athlete/relationship"));
   } catch (error: unknown) {
     console.error(error);
     toast.error("auth.login.feedback.unexpectedError");

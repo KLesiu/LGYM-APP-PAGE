@@ -3,9 +3,11 @@ import { createRouter, createWebHistory } from "vue-router";
 import {
   hasAdminAccess,
   hasTrainerAccess,
+  hasUserAccess,
 } from "../composables/useAuthSession";
 import AdminLayout from "../layouts/AdminLayout.vue";
 import TrainerLayout from "../layouts/TrainerLayout.vue";
+import UserLayout from "../layouts/UserLayout.vue";
 import AdminUsersPage from "../pages/admin/AdminUsersPage.vue";
 import AdminVersionsPage from "../pages/admin/AdminVersionsPage.vue";
 import TrainerMemberDetailsPage from "../pages/trainer/TrainerMemberDetailsPage.vue";
@@ -18,6 +20,7 @@ import TrainerReportTemplatesPage from "../pages/trainer/TrainerReportTemplatesP
 import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
+import UserRelationshipPage from "../pages/user/UserRelationshipPage.vue";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -62,6 +65,30 @@ export const router = createRouter({
           path: "versions",
           name: "admin-versions",
           component: AdminVersionsPage,
+        },
+      ],
+    },
+    {
+      path: "/athlete",
+      component: UserLayout,
+      meta: {
+        requiresUser: true,
+        hasLayout: true,
+      },
+      children: [
+        {
+          path: "",
+          redirect: "/athlete/relationship",
+        },
+        {
+          path: "relationship",
+          name: "user-relationship-status",
+          component: UserRelationshipPage,
+        },
+        {
+          path: "invitations/:invitationId",
+          name: "user-relationship-invitation",
+          component: UserRelationshipPage,
         },
       ],
     },
@@ -127,6 +154,7 @@ router.beforeEach((to) => {
   const requiresTrainer = to.matched.some(
     (record) => record.meta.requiresTrainer,
   );
+  const requiresUser = to.matched.some((record) => record.meta.requiresUser);
 
   if (requiresAdmin && !hasAdminAccess()) {
     return {
@@ -146,6 +174,15 @@ router.beforeEach((to) => {
     };
   }
 
+  if (requiresUser && !hasUserAccess()) {
+    return {
+      name: "login",
+      query: {
+        redirect: to.fullPath,
+      },
+    };
+  }
+
   if (to.name === "login-admin" && hasAdminAccess()) {
     return {
       name: "admin-users",
@@ -155,6 +192,12 @@ router.beforeEach((to) => {
   if (to.name === "login" && hasTrainerAccess()) {
     return {
       path: "/trainer/members",
+    };
+  }
+
+  if (to.name === "login" && hasUserAccess()) {
+    return {
+      path: "/athlete/relationship",
     };
   }
 

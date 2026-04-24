@@ -175,3 +175,10 @@ export const hasTrainerAccess = () => {
 
   return storedRole === "trainer" || roles.includes("trainer");
 };
+
+export const hasUserAccess = () => {
+  const token = getAuthToken();
+  if (!token) return false;
+
+  return getStoredRole().trim().toLowerCase() === "athlete";
+};
