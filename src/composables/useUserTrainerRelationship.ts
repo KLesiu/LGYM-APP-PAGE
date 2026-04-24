@@ -6,9 +6,14 @@ import {
   postApiTraineeInvitationsInvitationIdAccept,
   postApiTraineeInvitationsInvitationIdReject,
 } from "../api/generated/demo";
+import {
+  getApiErrorMessage,
+  getTraineeInvitations,
+} from "../api/userTrainerInvitations";
 import type {
   GetApiInvitationsInvitationIdParams,
   PublicInvitationStatusDto,
+  TrainerInvitationDto,
 } from "../api/model";
 import { clearAuthSession } from "./useAuthSession";
 import { getCurrentUser } from "./useCurrentUser";
@@ -32,6 +37,7 @@ export const useUserTrainerRelationship = () => {
   const toast = useToast();
 
   const invitationStatus = ref<PublicInvitationStatusDto | null>(null);
+  const pendingInvitations = ref<TrainerInvitationDto[]>([]);
   const viewState = ref<UserRelationshipViewState>("loading");
   const errorKey = ref<string | null>(null);
   const isLoading = ref(false);
@@ -47,7 +53,15 @@ export const useUserTrainerRelationship = () => {
   );
   const currentUser = computed(() => getCurrentUser());
   const normalizedInvitationStatus = computed(() =>
-    normalizeInvitationStatus(invitationStatus.value?.status),
+    normalizeInvitationStatus(
+      invitationStatus.value?.status ?? activeInvitation.value?.status,
+    ),
+  );
+  const activeInvitation = computed(
+    () => pendingInvitations.value.find((item) => normalizeInvitationStatus(item.status) === "pending") ?? null,
+  );
+  const activeInvitationId = computed(
+    () => invitationId.value || activeInvitation.value?._id?.trim() || "",
   );
   const hasKnownAccount = computed(
     () =>
@@ -56,7 +70,7 @@ export const useUserTrainerRelationship = () => {
       !!currentUser.value?.id?.trim(),
   );
   const isInvitationActionable = computed(
-    () => hasInvitationContext.value && normalizedInvitationStatus.value === "pending",
+    () => activeInvitationId.value.length > 0 && normalizedInvitationStatus.value === "pending",
   );
 
   const invitationQuery = computed<GetApiInvitationsInvitationIdParams | undefined>(() => {
@@ -101,7 +115,33 @@ export const useUserTrainerRelationship = () => {
     return "loaded" as const;
   };
 
+  const loadPendingInvitations = async () => {
+    pendingInvitations.value = [];
+
+    if (hasInvitationContext.value) return "skipped" as const;
+
+    const response = await getTraineeInvitations();
+
+    if (await handleUnauthorizedResponse(response.status)) {
+      return "unauthorized" as const;
+    }
+
+    if (response.status === 404 || response.status === 204) {
+      return "loaded" as const;
+    }
+
+    if (response.status !== 200) {
+      const message = getApiErrorMessage(response.data);
+      if (message) errorKey.value = message;
+      return "error" as const;
+    }
+
+    pendingInvitations.value = Array.isArray(response.data) ? response.data : [];
+    return "loaded" as const;
+  };
+
   const deriveState = (): UserRelationshipViewState => {
+    if (!hasInvitationContext.value && activeInvitation.value) return "pending";
     if (!hasInvitationContext.value) return "empty";
     if (!invitationStatus.value) return "empty";
 
@@ -121,12 +161,19 @@ export const useUserTrainerRelationship = () => {
     errorKey.value = null;
 
     try {
-      const invitationLoadResult = await loadInvitationStatus();
+      const invitationLoadResult = hasInvitationContext.value
+        ? await loadInvitationStatus()
+        : await loadPendingInvitations();
 
       if (currentToken !== requestToken) return;
 
       if (invitationLoadResult === "unauthorized") {
         viewState.value = "empty";
+        return;
+      }
+
+      if (invitationLoadResult === "error") {
+        viewState.value = "error";
         return;
       }
 
@@ -144,12 +191,13 @@ export const useUserTrainerRelationship = () => {
     }
   };
 
-  const acceptInvitation = async () => {
-    if (!invitationId.value || !isInvitationActionable.value) return false;
+  const acceptInvitation = async (targetInvitationId = activeInvitationId.value) => {
+    const normalizedInvitationId = targetInvitationId.trim();
+    if (!normalizedInvitationId || !isInvitationActionable.value) return false;
 
     isSubmittingAccept.value = true;
     try {
-      const response = await postApiTraineeInvitationsInvitationIdAccept(invitationId.value);
+      const response = await postApiTraineeInvitationsInvitationIdAccept(normalizedInvitationId);
       if (await handleUnauthorizedResponse(response.status)) {
         return false;
       }
@@ -171,12 +219,13 @@ export const useUserTrainerRelationship = () => {
     }
   };
 
-  const rejectInvitation = async () => {
-    if (!invitationId.value || !isInvitationActionable.value) return false;
+  const rejectInvitation = async (targetInvitationId = activeInvitationId.value) => {
+    const normalizedInvitationId = targetInvitationId.trim();
+    if (!normalizedInvitationId || !isInvitationActionable.value) return false;
 
     isSubmittingReject.value = true;
     try {
-      const response = await postApiTraineeInvitationsInvitationIdReject(invitationId.value);
+      const response = await postApiTraineeInvitationsInvitationIdReject(normalizedInvitationId);
       if (await handleUnauthorizedResponse(response.status)) {
         return false;
       }
@@ -206,6 +255,9 @@ export const useUserTrainerRelationship = () => {
     currentUser,
     invitationId,
     invitationCode,
+    activeInvitation,
+    activeInvitationId,
+    pendingInvitations,
     hasInvitationContext,
     hasKnownAccount,
     invitationStatus,
