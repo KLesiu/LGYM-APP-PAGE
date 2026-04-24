@@ -194,6 +194,8 @@ const templateOptions = computed(() =>
 let templateToken = 0;
 let submissionToken = 0;
 
+const isEmptyListStatus = (status: number) => status === 404;
+
 type OrderedFieldLike = {
   key?: string | null;
   label?: string | null;
@@ -223,6 +225,11 @@ const loadTemplates = async () => {
         `/trainer/members/${props.traineeId}`,
       )
     ) {
+      return;
+    }
+
+    if (isEmptyListStatus(response.status)) {
+      templates.value = [];
       return;
     }
 
@@ -269,6 +276,11 @@ const loadSubmissions = async () => {
         `/trainer/members/${props.traineeId}`,
       )
     ) {
+      return;
+    }
+
+    if (isEmptyListStatus(response.status)) {
+      submissions.value = [];
       return;
     }
 

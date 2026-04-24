@@ -190,6 +190,8 @@ const unitOptions = computed(() =>
 
 let requestToken = 0;
 
+const isEmptyListStatus = (status: number) => status === 404;
+
 const loadMeasurements = async () => {
   if (!props.traineeId) return;
 
@@ -231,7 +233,8 @@ const loadMeasurements = async () => {
     }
 
     const failedResponse = responses.find(
-      (response) => response.status < 200 || response.status >= 300,
+      (response) =>
+        response.status !== 404 && (response.status < 200 || response.status >= 300),
     );
     if (failedResponse) {
       const message = getApiErrorMessage(failedResponse.data);
@@ -241,10 +244,18 @@ const loadMeasurements = async () => {
       return;
     }
 
-    measurements.value = listResponse.status === 200 ? (listResponse.data.measurements ?? []) : [];
+    measurements.value =
+      listResponse.status === 200 && !isEmptyListStatus(listResponse.status)
+        ? (listResponse.data.measurements ?? [])
+        : [];
     historyPoints.value =
-      historyResponse.status === 200 ? (historyResponse.data.measurements ?? []) : [];
-    trend.value = trendResponse.status === 200 ? trendResponse.data : null;
+      historyResponse.status === 200 && !isEmptyListStatus(historyResponse.status)
+        ? (historyResponse.data.measurements ?? [])
+        : [];
+    trend.value =
+      trendResponse.status === 200 && !isEmptyListStatus(trendResponse.status)
+        ? trendResponse.data
+        : null;
   } catch (error) {
     if (currentToken !== requestToken) return;
 

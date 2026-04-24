@@ -19,6 +19,17 @@ const TRAINING_PLANS_ROUTE = "/trainer/training-plans";
 
 const normalizeName = (value: string | null | undefined) => value?.trim() ?? "";
 
+const isEmptyPlansResponse = (status: number, data: unknown) => {
+  if (status === 204 || status === 404) return true;
+
+  const message = getApiErrorMessage(data)?.toLocaleLowerCase("pl-PL") ?? "";
+  return (
+    message.includes("nie znaleziono") ||
+    message.includes("no records") ||
+    message.includes("not found")
+  );
+};
+
 const getShareCodePayload = (value: unknown): ShareCodeResponseDto | null => {
   if (!value || typeof value !== "object") return null;
 
@@ -72,6 +83,11 @@ export const useTrainerTrainingPlans = () => {
           TRAINING_PLANS_ROUTE,
         )
       ) {
+        return;
+      }
+
+      if (isEmptyPlansResponse(response.status, response.data)) {
+        plans.value = [];
         return;
       }
 
