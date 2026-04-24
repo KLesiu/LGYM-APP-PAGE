@@ -43,6 +43,7 @@ export const useUserTrainerRelationship = () => {
   const isLoading = ref(false);
   const isSubmittingAccept = ref(false);
   const isSubmittingReject = ref(false);
+  const submittingInvitationId = ref<string | null>(null);
 
   let requestToken = 0;
 
@@ -126,13 +127,17 @@ export const useUserTrainerRelationship = () => {
       return "unauthorized" as const;
     }
 
-    if (response.status === 404 || response.status === 204) {
+    if (response.status === 204) {
       return "loaded" as const;
     }
 
     if (response.status !== 200) {
       const message = getApiErrorMessage(response.data);
-      if (message) errorKey.value = message;
+      errorKey.value =
+        message ||
+        (response.status === 404
+          ? "userRelationship.feedback.invitationsEndpointMissing"
+          : "userRelationship.feedback.loadFailed");
       return "error" as const;
     }
 
@@ -193,8 +198,9 @@ export const useUserTrainerRelationship = () => {
 
   const acceptInvitation = async (targetInvitationId = activeInvitationId.value) => {
     const normalizedInvitationId = targetInvitationId.trim();
-    if (!normalizedInvitationId || !isInvitationActionable.value) return false;
+    if (!normalizedInvitationId) return false;
 
+    submittingInvitationId.value = normalizedInvitationId;
     isSubmittingAccept.value = true;
     try {
       const response = await postApiTraineeInvitationsInvitationIdAccept(normalizedInvitationId);
@@ -216,13 +222,15 @@ export const useUserTrainerRelationship = () => {
       return false;
     } finally {
       isSubmittingAccept.value = false;
+      submittingInvitationId.value = null;
     }
   };
 
   const rejectInvitation = async (targetInvitationId = activeInvitationId.value) => {
     const normalizedInvitationId = targetInvitationId.trim();
-    if (!normalizedInvitationId || !isInvitationActionable.value) return false;
+    if (!normalizedInvitationId) return false;
 
+    submittingInvitationId.value = normalizedInvitationId;
     isSubmittingReject.value = true;
     try {
       const response = await postApiTraineeInvitationsInvitationIdReject(normalizedInvitationId);
@@ -244,6 +252,7 @@ export const useUserTrainerRelationship = () => {
       return false;
     } finally {
       isSubmittingReject.value = false;
+      submittingInvitationId.value = null;
     }
   };
 
@@ -268,6 +277,7 @@ export const useUserTrainerRelationship = () => {
     isLoading,
     isSubmittingAccept,
     isSubmittingReject,
+    submittingInvitationId,
     load,
     acceptInvitation,
     rejectInvitation,

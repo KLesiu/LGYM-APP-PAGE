@@ -61,10 +61,10 @@
 
                 <div>
                   <h3 class="text-2xl font-semibold text-[var(--lgym-text)]">
-                    {{ statePresentation.title }}
+                    {{ invitationsPanelTitle }}
                   </h3>
                   <p class="mt-2 text-sm leading-7 text-[var(--lgym-text-muted)]">
-                    {{ statePresentation.subtitle }}
+                    {{ invitationsPanelSubtitle }}
                   </p>
                 </div>
               </div>
@@ -80,7 +80,7 @@
                   {{ t("userRelationship.actions.retry") }}
                 </v-btn>
 
-                <template v-else-if="viewState === 'pending'">
+                <template v-else-if="viewState === 'pending' && hasInvitationContext">
                   <v-btn
                     color="primary"
                     class="min-h-11 rounded-xl px-5"
@@ -132,68 +132,58 @@
               </div>
             </div>
 
-            <div v-else class="grid gap-4 lg:grid-cols-2">
-              <article
-                v-for="card in overviewCards"
-                :key="card.label"
-                class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface)]/88 px-5 py-5"
-              >
-                <div class="flex items-start justify-between gap-3">
-                  <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-text-soft)]">
-                      {{ card.label }}
-                    </p>
-                    <p class="mt-3 text-lg font-semibold text-[var(--lgym-text)]">
-                      {{ card.value }}
-                    </p>
-                  </div>
-
-                  <div class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--lgym-note-bg)] text-[rgb(var(--v-theme-primary))]">
-                    <v-icon :icon="card.icon" size="22" />
-                  </div>
-                </div>
-
-                <p class="mt-3 text-sm leading-6 text-[var(--lgym-text-muted)]">
-                  {{ card.description }}
-                </p>
-              </article>
-            </div>
-
-            <div
-              v-if="pendingInvitations.length > 0 && !hasInvitationContext"
-              class="mt-5 border-t border-[var(--lgym-border)] pt-5"
-            >
-              <div class="mb-4 space-y-2">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-text-soft)]">
-                  {{ t("userRelationship.invitations.eyebrow") }}
-                </p>
-                <h4 class="text-lg font-semibold text-[var(--lgym-text)]">
-                  {{ t("userRelationship.invitations.title") }}
-                </h4>
-              </div>
-
-              <div class="grid gap-3">
+            <template v-else>
+              <div v-if="pendingInvitations.length > 0" class="grid gap-4">
                 <article
                   v-for="invitation in pendingInvitations"
                   :key="invitation._id || invitation.code || 'invitation'"
-                  class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface)]/88 px-5 py-5"
+                  class="border border-[var(--lgym-border)] bg-[var(--lgym-surface)]/88 px-5 py-5"
                 >
-                  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                    <div class="min-w-0">
-                      <p class="text-sm font-semibold text-[var(--lgym-text)]">
-                        {{ t("userRelationship.invitations.itemTitle") }}
-                      </p>
-                      <p class="mt-2 break-words text-sm leading-6 text-[var(--lgym-text-muted)]">
-                        {{ t("userRelationship.invitations.expiresAt") }}:
-                        {{ formatDateTime(invitation.expiresAt) }}
-                      </p>
+                  <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                    <div class="min-w-0 space-y-3">
+                      <div class="flex flex-wrap items-center gap-3">
+                        <v-chip color="warning" variant="flat" size="small" class="font-semibold">
+                          {{ t("userRelationship.states.pending.badge") }}
+                        </v-chip>
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                          {{ t("userRelationship.invitations.eyebrow") }}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h4 class="text-xl font-semibold text-[var(--lgym-text)]">
+                          {{ t("userRelationship.invitations.itemTitle") }}
+                        </h4>
+                        <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+                          {{ t("userRelationship.invitations.itemDescription") }}
+                        </p>
+                      </div>
+
+                      <dl class="grid gap-3 text-sm sm:grid-cols-2">
+                        <div>
+                          <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                            {{ t("userRelationship.invitations.expiresAt") }}
+                          </dt>
+                          <dd class="mt-1 text-[var(--lgym-text)]">
+                            {{ formatDateTime(invitation.expiresAt) }}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                            {{ t("userRelationship.invitations.sentTo") }}
+                          </dt>
+                          <dd class="mt-1 break-words text-[var(--lgym-text)]">
+                            {{ invitation.inviteeEmail || userDisplayEmail }}
+                          </dd>
+                        </div>
+                      </dl>
                     </div>
 
-                    <div class="flex flex-col gap-2 sm:flex-row">
+                    <div class="flex flex-col gap-2 sm:flex-row lg:shrink-0">
                       <v-btn
                         color="primary"
-                        class="min-h-11 rounded-xl px-5"
-                        :loading="isSubmittingAccept && activeInvitationId === invitation._id"
+                        class="min-h-11 px-5"
+                        :loading="isSubmittingAccept && submittingInvitationId === invitation._id"
                         :disabled="!invitation._id || isSubmittingAccept || isSubmittingReject"
                         @click="acceptInvitation(invitation._id || '')"
                       >
@@ -202,8 +192,8 @@
                       <v-btn
                         variant="outlined"
                         color="secondary"
-                        class="min-h-11 rounded-xl px-5"
-                        :loading="isSubmittingReject && activeInvitationId === invitation._id"
+                        class="min-h-11 px-5"
+                        :loading="isSubmittingReject && submittingInvitationId === invitation._id"
                         :disabled="!invitation._id || isSubmittingAccept || isSubmittingReject"
                         @click="rejectInvitation(invitation._id || '')"
                       >
@@ -213,7 +203,53 @@
                   </div>
                 </article>
               </div>
-            </div>
+
+              <div v-else class="border border-dashed border-[var(--lgym-border)] bg-[var(--lgym-surface)] px-6 py-10 text-center">
+                <div class="mx-auto flex max-w-xl flex-col items-center gap-4">
+                  <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
+                    <v-icon icon="mdi-email-open-outline" size="28" />
+                  </div>
+                  <div class="space-y-2">
+                    <p class="text-lg font-semibold text-[var(--lgym-text)]">
+                      {{ t("userRelationship.invitations.emptyTitle") }}
+                    </p>
+                    <p class="text-sm leading-7 text-[var(--lgym-text-muted)]">
+                      {{ t("userRelationship.invitations.emptySubtitle") }}
+                    </p>
+                  </div>
+                  <v-btn color="primary" variant="outlined" class="min-h-11 px-5" @click="load">
+                    {{ t("userRelationship.actions.retry") }}
+                  </v-btn>
+                </div>
+              </div>
+
+              <div class="mt-5 grid gap-4 lg:grid-cols-2">
+                <article
+                  v-for="card in overviewCards"
+                  :key="card.label"
+                  class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface)]/88 px-5 py-5"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-text-soft)]">
+                        {{ card.label }}
+                      </p>
+                      <p class="mt-3 text-lg font-semibold text-[var(--lgym-text)]">
+                        {{ card.value }}
+                      </p>
+                    </div>
+
+                    <div class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--lgym-note-bg)] text-[rgb(var(--v-theme-primary))]">
+                      <v-icon :icon="card.icon" size="22" />
+                    </div>
+                  </div>
+
+                  <p class="mt-3 text-sm leading-6 text-[var(--lgym-text-muted)]">
+                    {{ card.description }}
+                  </p>
+                </article>
+              </div>
+            </template>
           </div>
         </section>
 
@@ -305,7 +341,6 @@ const {
   currentUser,
   invitationId,
   invitationCode,
-  activeInvitationId,
   pendingInvitations,
   hasInvitationContext,
   hasKnownAccount,
@@ -317,6 +352,7 @@ const {
   isLoading,
   isSubmittingAccept,
   isSubmittingReject,
+  submittingInvitationId,
   load,
   acceptInvitation,
   rejectInvitation,
@@ -399,6 +435,24 @@ const statePresentation = computed(() => {
   };
 
   return map[viewState.value] ?? map.empty;
+});
+
+const invitationsPanelTitle = computed(() => {
+  if (pendingInvitations.value.length > 0) {
+    return t("userRelationship.invitations.title");
+  }
+
+  return statePresentation.value.title;
+});
+
+const invitationsPanelSubtitle = computed(() => {
+  if (pendingInvitations.value.length > 0) {
+    return t("userRelationship.invitations.subtitle", {
+      count: pendingInvitations.value.length,
+    });
+  }
+
+  return statePresentation.value.subtitle;
 });
 
 const heroStats = computed(() => [
