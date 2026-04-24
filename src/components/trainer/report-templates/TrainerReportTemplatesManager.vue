@@ -1,6 +1,6 @@
 <template>
-  <section class="overflow-hidden border-y border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/40">
-    <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-5">
+  <section class="overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
+    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
@@ -304,6 +304,17 @@ let templateToken = 0;
 
 const redirectPath = computed(() => props.redirectPath || "/trainer/report-templates");
 
+const isEmptyTemplatesResponse = (status: number, data: unknown) => {
+  if (status === 204 || status === 404) return true;
+
+  const message = getApiErrorMessage(data)?.toLocaleLowerCase("pl-PL") ?? "";
+  return (
+    message.includes("nie znaleziono") ||
+    message.includes("no records") ||
+    message.includes("not found")
+  );
+};
+
 const orderedFields = (fields: OrderedFieldLike[] | null | undefined) =>
   [...(fields ?? [])].sort((left, right) => (left.order ?? 0) - (right.order ?? 0));
 
@@ -390,6 +401,11 @@ const loadTemplates = async () => {
         redirectPath.value,
       )
     ) {
+      return;
+    }
+
+    if (isEmptyTemplatesResponse(response.status, response.data)) {
+      templates.value = [];
       return;
     }
 

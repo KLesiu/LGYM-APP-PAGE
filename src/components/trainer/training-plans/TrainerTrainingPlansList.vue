@@ -1,6 +1,6 @@
 <template>
-  <section class="overflow-hidden border-y border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/40">
-    <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 lg:px-6">
+  <section class="overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
+    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
@@ -34,7 +34,7 @@
 
       <div
         v-else-if="plans.length === 0"
-        class="px-4 py-8 text-center text-sm text-[var(--lgym-text-muted)] sm:px-5 lg:px-6"
+        class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8"
       >
         {{ t("trainerTrainingPlans.empty.title") }}
       </div>
@@ -42,7 +42,7 @@
       <article
         v-for="plan in plans"
         :key="plan._id || plan.name || 'plan'"
-        class="px-4 py-4 sm:px-5 lg:px-6"
+        class="px-6 py-5 lg:px-8"
       >
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div class="min-w-0">
