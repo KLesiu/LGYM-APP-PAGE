@@ -6,9 +6,11 @@
  */
 import type {
   AdminUserDto,
+  AppConfigDetailDto,
   AppConfigInfoDto,
   AppConfigInfoWithPlatformDto,
   AppConfigVersionRequestDto,
+  ChangeVisibilityInRankingRequest,
   CheckOffSupplementIntakeRequest,
   CompleteStepRequest,
   CompleteTutorialRequest,
@@ -51,6 +53,8 @@ import type {
   MeasurementsListDto,
   PagedNotificationsResultDto,
   PaginatedAdminUserResult,
+  PaginatedAppConfigRequest,
+  PaginatedAppConfigResult,
   PaginatedRoleRequest,
   PaginatedRoleResult,
   PaginatedTrainerInvitationRequest,
@@ -64,9 +68,6 @@ import type {
   PlanDto,
   PlanFormDto,
   PossibleRecordForExerciseDto,
-  PostApiChangeVisibilityInRankingBodyOne,
-  PostApiChangeVisibilityInRankingBodyThree,
-  PostApiChangeVisibilityInRankingBodyTwo,
   PostApiExerciseIdDeleteExerciseBodyOne,
   PostApiExerciseIdDeleteExerciseBodyThree,
   PostApiExerciseIdDeleteExerciseBodyTwo,
@@ -97,6 +98,7 @@ import type {
   TrainingSummaryDto,
   TutorialProgressDto,
   UnreadCountDto,
+  UpdateAppConfigRequest,
   UpdateTimeZoneRequest,
   UpdateUserRequest,
   UpdateUserRolesRequest,
@@ -696,6 +698,271 @@ export const postApiAppConfigCreateNewAppVersionId = async (id: string,
   
   const data: postApiAppConfigCreateNewAppVersionIdResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as postApiAppConfigCreateNewAppVersionIdResponse
+}
+  
+
+
+export type postApiAppconfigPaginatedResponse200TextPlain = {
+  data: PaginatedAppConfigResult
+  status: 200
+}
+
+export type postApiAppconfigPaginatedResponse200ApplicationJson = {
+  data: PaginatedAppConfigResult
+  status: 200
+}
+
+export type postApiAppconfigPaginatedResponse200TextJson = {
+  data: PaginatedAppConfigResult
+  status: 200
+}
+
+export type postApiAppconfigPaginatedResponseSuccess = (postApiAppconfigPaginatedResponse200TextPlain | postApiAppconfigPaginatedResponse200ApplicationJson | postApiAppconfigPaginatedResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiAppconfigPaginatedResponse = (postApiAppconfigPaginatedResponseSuccess)
+
+export const getPostApiAppconfigPaginatedUrl = () => {
+
+
+  
+
+  return `/api/appconfig/paginated`
+}
+
+export const postApiAppconfigPaginated = async (paginatedAppConfigRequest: PaginatedAppConfigRequest, options?: RequestInit): Promise<postApiAppconfigPaginatedResponse> => {
+  
+  const res = await fetch(getPostApiAppconfigPaginatedUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      paginatedAppConfigRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAppconfigPaginatedResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAppconfigPaginatedResponse
+}
+  
+
+
+export type getApiAppconfigIdResponse200TextPlain = {
+  data: AppConfigDetailDto
+  status: 200
+}
+
+export type getApiAppconfigIdResponse200ApplicationJson = {
+  data: AppConfigDetailDto
+  status: 200
+}
+
+export type getApiAppconfigIdResponse200TextJson = {
+  data: AppConfigDetailDto
+  status: 200
+}
+
+export type getApiAppconfigIdResponse404TextPlain = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type getApiAppconfigIdResponse404ApplicationJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type getApiAppconfigIdResponse404TextJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type getApiAppconfigIdResponseSuccess = (getApiAppconfigIdResponse200TextPlain | getApiAppconfigIdResponse200ApplicationJson | getApiAppconfigIdResponse200TextJson) & {
+  headers: Headers;
+};
+export type getApiAppconfigIdResponseError = (getApiAppconfigIdResponse404TextPlain | getApiAppconfigIdResponse404ApplicationJson | getApiAppconfigIdResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type getApiAppconfigIdResponse = (getApiAppconfigIdResponseSuccess | getApiAppconfigIdResponseError)
+
+export const getGetApiAppconfigIdUrl = (id: string,) => {
+
+
+  
+
+  return `/api/appconfig/${id}`
+}
+
+export const getApiAppconfigId = async (id: string, options?: RequestInit): Promise<getApiAppconfigIdResponse> => {
+  
+  const res = await fetch(getGetApiAppconfigIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiAppconfigIdResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiAppconfigIdResponse
+}
+  
+
+
+export type postApiAppconfigIdUpdateResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAppconfigIdUpdateResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAppconfigIdUpdateResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAppconfigIdUpdateResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiAppconfigIdUpdateResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiAppconfigIdUpdateResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiAppconfigIdUpdateResponse404TextPlain = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAppconfigIdUpdateResponse404ApplicationJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAppconfigIdUpdateResponse404TextJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAppconfigIdUpdateResponseSuccess = (postApiAppconfigIdUpdateResponse200TextPlain | postApiAppconfigIdUpdateResponse200ApplicationJson | postApiAppconfigIdUpdateResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiAppconfigIdUpdateResponseError = (postApiAppconfigIdUpdateResponse400TextPlain | postApiAppconfigIdUpdateResponse400ApplicationJson | postApiAppconfigIdUpdateResponse400TextJson | postApiAppconfigIdUpdateResponse404TextPlain | postApiAppconfigIdUpdateResponse404ApplicationJson | postApiAppconfigIdUpdateResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type postApiAppconfigIdUpdateResponse = (postApiAppconfigIdUpdateResponseSuccess | postApiAppconfigIdUpdateResponseError)
+
+export const getPostApiAppconfigIdUpdateUrl = (id: string,) => {
+
+
+  
+
+  return `/api/appconfig/${id}/update`
+}
+
+export const postApiAppconfigIdUpdate = async (id: string,
+    updateAppConfigRequest: UpdateAppConfigRequest, options?: RequestInit): Promise<postApiAppconfigIdUpdateResponse> => {
+  
+  const res = await fetch(getPostApiAppconfigIdUpdateUrl(id),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateAppConfigRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAppconfigIdUpdateResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAppconfigIdUpdateResponse
+}
+  
+
+
+export type postApiAppconfigIdDeleteResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAppconfigIdDeleteResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAppconfigIdDeleteResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAppconfigIdDeleteResponse404TextPlain = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAppconfigIdDeleteResponse404ApplicationJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAppconfigIdDeleteResponse404TextJson = {
+  data: ResponseMessageDto
+  status: 404
+}
+
+export type postApiAppconfigIdDeleteResponseSuccess = (postApiAppconfigIdDeleteResponse200TextPlain | postApiAppconfigIdDeleteResponse200ApplicationJson | postApiAppconfigIdDeleteResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiAppconfigIdDeleteResponseError = (postApiAppconfigIdDeleteResponse404TextPlain | postApiAppconfigIdDeleteResponse404ApplicationJson | postApiAppconfigIdDeleteResponse404TextJson) & {
+  headers: Headers;
+};
+
+export type postApiAppconfigIdDeleteResponse = (postApiAppconfigIdDeleteResponseSuccess | postApiAppconfigIdDeleteResponseError)
+
+export const getPostApiAppconfigIdDeleteUrl = (id: string,) => {
+
+
+  
+
+  return `/api/appconfig/${id}/delete`
+}
+
+export const postApiAppconfigIdDelete = async (id: string, options?: RequestInit): Promise<postApiAppconfigIdDeleteResponse> => {
+  
+  const res = await fetch(getPostApiAppconfigIdDeleteUrl(id),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAppconfigIdDeleteResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAppconfigIdDeleteResponse
 }
   
 
@@ -2716,6 +2983,45 @@ export const getApiIdNotificationsUnreadCount = async (id: string, options?: Req
   
   const data: getApiIdNotificationsUnreadCountResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as getApiIdNotificationsUnreadCountResponse
+}
+  
+
+
+export type getHealthLiveResponse200 = {
+  data: void
+  status: 200
+}
+
+export type getHealthLiveResponseSuccess = (getHealthLiveResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getHealthLiveResponse = (getHealthLiveResponseSuccess)
+
+export const getGetHealthLiveUrl = () => {
+
+
+  
+
+  return `/health/live`
+}
+
+export const getHealthLive = async ( options?: RequestInit): Promise<getHealthLiveResponse> => {
+  
+  const res = await fetch(getGetHealthLiveUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getHealthLiveResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getHealthLiveResponse
 }
   
 
@@ -5598,6 +5904,55 @@ export const postApiRolesUsersIdRoles = async (id: string,
   
 
 
+export type getApiTraineeInvitationsResponse200TextPlain = {
+  data: TrainerInvitationDto[]
+  status: 200
+}
+
+export type getApiTraineeInvitationsResponse200ApplicationJson = {
+  data: TrainerInvitationDto[]
+  status: 200
+}
+
+export type getApiTraineeInvitationsResponse200TextJson = {
+  data: TrainerInvitationDto[]
+  status: 200
+}
+
+export type getApiTraineeInvitationsResponseSuccess = (getApiTraineeInvitationsResponse200TextPlain | getApiTraineeInvitationsResponse200ApplicationJson | getApiTraineeInvitationsResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type getApiTraineeInvitationsResponse = (getApiTraineeInvitationsResponseSuccess)
+
+export const getGetApiTraineeInvitationsUrl = () => {
+
+
+  
+
+  return `/api/trainee/invitations`
+}
+
+export const getApiTraineeInvitations = async ( options?: RequestInit): Promise<getApiTraineeInvitationsResponse> => {
+  
+  const res = await fetch(getGetApiTraineeInvitationsUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiTraineeInvitationsResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiTraineeInvitationsResponse
+}
+  
+
+
 export type postApiTraineeInvitationsInvitationIdAcceptResponse200TextPlain = {
   data: ResponseMessageDto
   status: 200
@@ -6183,205 +6538,6 @@ export const getApiTrainerCheckToken = async ( options?: RequestInit): Promise<g
   
 
 
-export type postApiTrainerInvitationsResponse200TextPlain = {
-  data: TrainerInvitationDto
-  status: 200
-}
-
-export type postApiTrainerInvitationsResponse200ApplicationJson = {
-  data: TrainerInvitationDto
-  status: 200
-}
-
-export type postApiTrainerInvitationsResponse200TextJson = {
-  data: TrainerInvitationDto
-  status: 200
-}
-
-export type postApiTrainerInvitationsResponseSuccess = (postApiTrainerInvitationsResponse200TextPlain | postApiTrainerInvitationsResponse200ApplicationJson | postApiTrainerInvitationsResponse200TextJson) & {
-  headers: Headers;
-};
-;
-
-export type postApiTrainerInvitationsResponse = (postApiTrainerInvitationsResponseSuccess)
-
-export const getPostApiTrainerInvitationsUrl = () => {
-
-
-  
-
-  return `/api/trainer/invitations`
-}
-
-export const postApiTrainerInvitations = async (createTrainerInvitationRequest: CreateTrainerInvitationRequest, options?: RequestInit): Promise<postApiTrainerInvitationsResponse> => {
-  
-  const res = await fetch(getPostApiTrainerInvitationsUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createTrainerInvitationRequest,)
-  }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: postApiTrainerInvitationsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsResponse
-}
-  
-
-
-export type postApiTrainerInvitationsPaginatedResponse200TextPlain = {
-  data: PaginatedTrainerInvitationResult
-  status: 200
-}
-
-export type postApiTrainerInvitationsPaginatedResponse200ApplicationJson = {
-  data: PaginatedTrainerInvitationResult
-  status: 200
-}
-
-export type postApiTrainerInvitationsPaginatedResponse200TextJson = {
-  data: PaginatedTrainerInvitationResult
-  status: 200
-}
-
-export type postApiTrainerInvitationsPaginatedResponseSuccess = (postApiTrainerInvitationsPaginatedResponse200TextPlain | postApiTrainerInvitationsPaginatedResponse200ApplicationJson | postApiTrainerInvitationsPaginatedResponse200TextJson) & {
-  headers: Headers;
-};
-;
-
-export type postApiTrainerInvitationsPaginatedResponse = (postApiTrainerInvitationsPaginatedResponseSuccess)
-
-export const getPostApiTrainerInvitationsPaginatedUrl = () => {
-
-
-  
-
-  return `/api/trainer/invitations/paginated`
-}
-
-export const postApiTrainerInvitationsPaginated = async (paginatedTrainerInvitationRequest: PaginatedTrainerInvitationRequest, options?: RequestInit): Promise<postApiTrainerInvitationsPaginatedResponse> => {
-  
-  const res = await fetch(getPostApiTrainerInvitationsPaginatedUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      paginatedTrainerInvitationRequest,)
-  }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: postApiTrainerInvitationsPaginatedResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsPaginatedResponse
-}
-  
-
-
-export type postApiTrainerInvitationsByEmailResponse200TextPlain = {
-  data: TrainerInvitationDto
-  status: 200
-}
-
-export type postApiTrainerInvitationsByEmailResponse200ApplicationJson = {
-  data: TrainerInvitationDto
-  status: 200
-}
-
-export type postApiTrainerInvitationsByEmailResponse200TextJson = {
-  data: TrainerInvitationDto
-  status: 200
-}
-
-export type postApiTrainerInvitationsByEmailResponseSuccess = (postApiTrainerInvitationsByEmailResponse200TextPlain | postApiTrainerInvitationsByEmailResponse200ApplicationJson | postApiTrainerInvitationsByEmailResponse200TextJson) & {
-  headers: Headers;
-};
-;
-
-export type postApiTrainerInvitationsByEmailResponse = (postApiTrainerInvitationsByEmailResponseSuccess)
-
-export const getPostApiTrainerInvitationsByEmailUrl = () => {
-
-
-  
-
-  return `/api/trainer/invitations/by-email`
-}
-
-export const postApiTrainerInvitationsByEmail = async (createTrainerInvitationByEmailRequest: CreateTrainerInvitationByEmailRequest, options?: RequestInit): Promise<postApiTrainerInvitationsByEmailResponse> => {
-  
-  const res = await fetch(getPostApiTrainerInvitationsByEmailUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createTrainerInvitationByEmailRequest,)
-  }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: postApiTrainerInvitationsByEmailResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsByEmailResponse
-}
-  
-
-
-export type postApiTrainerInvitationsInvitationIdRevokeResponse200TextPlain = {
-  data: ResponseMessageDto
-  status: 200
-}
-
-export type postApiTrainerInvitationsInvitationIdRevokeResponse200ApplicationJson = {
-  data: ResponseMessageDto
-  status: 200
-}
-
-export type postApiTrainerInvitationsInvitationIdRevokeResponse200TextJson = {
-  data: ResponseMessageDto
-  status: 200
-}
-
-export type postApiTrainerInvitationsInvitationIdRevokeResponseSuccess = (postApiTrainerInvitationsInvitationIdRevokeResponse200TextPlain | postApiTrainerInvitationsInvitationIdRevokeResponse200ApplicationJson | postApiTrainerInvitationsInvitationIdRevokeResponse200TextJson) & {
-  headers: Headers;
-};
-;
-
-export type postApiTrainerInvitationsInvitationIdRevokeResponse = (postApiTrainerInvitationsInvitationIdRevokeResponseSuccess)
-
-export const getPostApiTrainerInvitationsInvitationIdRevokeUrl = (invitationId: string,) => {
-
-
-  
-
-  return `/api/trainer/invitations/${invitationId}/revoke`
-}
-
-export const postApiTrainerInvitationsInvitationIdRevoke = async (invitationId: string, options?: RequestInit): Promise<postApiTrainerInvitationsInvitationIdRevokeResponse> => {
-  
-  const res = await fetch(getPostApiTrainerInvitationsInvitationIdRevokeUrl(invitationId),
-  {      
-    ...options,
-    method: 'POST'
-    
-    
-  }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: postApiTrainerInvitationsInvitationIdRevokeResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsInvitationIdRevokeResponse
-}
-  
-
-
 export type getApiTrainerTraineesResponse200TextPlain = {
   data: TrainerDashboardTraineesResponse
   status: 200
@@ -6892,6 +7048,205 @@ export const postApiTrainerTraineesTraineeIdUnlink = async (traineeId: string, o
   
   const data: postApiTrainerTraineesTraineeIdUnlinkResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as postApiTrainerTraineesTraineeIdUnlinkResponse
+}
+  
+
+
+export type postApiTrainerInvitationsResponse200TextPlain = {
+  data: TrainerInvitationDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsResponse200ApplicationJson = {
+  data: TrainerInvitationDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsResponse200TextJson = {
+  data: TrainerInvitationDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsResponseSuccess = (postApiTrainerInvitationsResponse200TextPlain | postApiTrainerInvitationsResponse200ApplicationJson | postApiTrainerInvitationsResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiTrainerInvitationsResponse = (postApiTrainerInvitationsResponseSuccess)
+
+export const getPostApiTrainerInvitationsUrl = () => {
+
+
+  
+
+  return `/api/trainer/invitations`
+}
+
+export const postApiTrainerInvitations = async (createTrainerInvitationRequest: CreateTrainerInvitationRequest, options?: RequestInit): Promise<postApiTrainerInvitationsResponse> => {
+  
+  const res = await fetch(getPostApiTrainerInvitationsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      createTrainerInvitationRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTrainerInvitationsResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsResponse
+}
+  
+
+
+export type postApiTrainerInvitationsPaginatedResponse200TextPlain = {
+  data: PaginatedTrainerInvitationResult
+  status: 200
+}
+
+export type postApiTrainerInvitationsPaginatedResponse200ApplicationJson = {
+  data: PaginatedTrainerInvitationResult
+  status: 200
+}
+
+export type postApiTrainerInvitationsPaginatedResponse200TextJson = {
+  data: PaginatedTrainerInvitationResult
+  status: 200
+}
+
+export type postApiTrainerInvitationsPaginatedResponseSuccess = (postApiTrainerInvitationsPaginatedResponse200TextPlain | postApiTrainerInvitationsPaginatedResponse200ApplicationJson | postApiTrainerInvitationsPaginatedResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiTrainerInvitationsPaginatedResponse = (postApiTrainerInvitationsPaginatedResponseSuccess)
+
+export const getPostApiTrainerInvitationsPaginatedUrl = () => {
+
+
+  
+
+  return `/api/trainer/invitations/paginated`
+}
+
+export const postApiTrainerInvitationsPaginated = async (paginatedTrainerInvitationRequest: PaginatedTrainerInvitationRequest, options?: RequestInit): Promise<postApiTrainerInvitationsPaginatedResponse> => {
+  
+  const res = await fetch(getPostApiTrainerInvitationsPaginatedUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      paginatedTrainerInvitationRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTrainerInvitationsPaginatedResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsPaginatedResponse
+}
+  
+
+
+export type postApiTrainerInvitationsByEmailResponse200TextPlain = {
+  data: TrainerInvitationDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsByEmailResponse200ApplicationJson = {
+  data: TrainerInvitationDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsByEmailResponse200TextJson = {
+  data: TrainerInvitationDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsByEmailResponseSuccess = (postApiTrainerInvitationsByEmailResponse200TextPlain | postApiTrainerInvitationsByEmailResponse200ApplicationJson | postApiTrainerInvitationsByEmailResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiTrainerInvitationsByEmailResponse = (postApiTrainerInvitationsByEmailResponseSuccess)
+
+export const getPostApiTrainerInvitationsByEmailUrl = () => {
+
+
+  
+
+  return `/api/trainer/invitations/by-email`
+}
+
+export const postApiTrainerInvitationsByEmail = async (createTrainerInvitationByEmailRequest: CreateTrainerInvitationByEmailRequest, options?: RequestInit): Promise<postApiTrainerInvitationsByEmailResponse> => {
+  
+  const res = await fetch(getPostApiTrainerInvitationsByEmailUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      createTrainerInvitationByEmailRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTrainerInvitationsByEmailResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsByEmailResponse
+}
+  
+
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponseSuccess = (postApiTrainerInvitationsInvitationIdRevokeResponse200TextPlain | postApiTrainerInvitationsInvitationIdRevokeResponse200ApplicationJson | postApiTrainerInvitationsInvitationIdRevokeResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiTrainerInvitationsInvitationIdRevokeResponse = (postApiTrainerInvitationsInvitationIdRevokeResponseSuccess)
+
+export const getPostApiTrainerInvitationsInvitationIdRevokeUrl = (invitationId: string,) => {
+
+
+  
+
+  return `/api/trainer/invitations/${invitationId}/revoke`
+}
+
+export const postApiTrainerInvitationsInvitationIdRevoke = async (invitationId: string, options?: RequestInit): Promise<postApiTrainerInvitationsInvitationIdRevokeResponse> => {
+  
+  const res = await fetch(getPostApiTrainerInvitationsInvitationIdRevokeUrl(invitationId),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTrainerInvitationsInvitationIdRevokeResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerInvitationsInvitationIdRevokeResponse
 }
   
 
@@ -8977,15 +9332,15 @@ export const getPostApiChangeVisibilityInRankingUrl = () => {
   return `/api/changeVisibilityInRanking`
 }
 
-export const postApiChangeVisibilityInRanking = async (postApiChangeVisibilityInRankingBody: PostApiChangeVisibilityInRankingBodyOne | PostApiChangeVisibilityInRankingBodyTwo | PostApiChangeVisibilityInRankingBodyThree, options?: RequestInit): Promise<postApiChangeVisibilityInRankingResponse> => {
+export const postApiChangeVisibilityInRanking = async (changeVisibilityInRankingRequest: ChangeVisibilityInRankingRequest, options?: RequestInit): Promise<postApiChangeVisibilityInRankingResponse> => {
   
   const res = await fetch(getPostApiChangeVisibilityInRankingUrl(),
   {      
     ...options,
-    method: 'POST'
-    ,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(
-      postApiChangeVisibilityInRankingBody,)
+      changeVisibilityInRankingRequest,)
   }
 )
 

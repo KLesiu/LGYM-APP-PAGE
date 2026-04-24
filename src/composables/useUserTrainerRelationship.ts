@@ -3,18 +3,16 @@ import { useRoute, useRouter } from "vue-router";
 
 import {
   getApiInvitationsInvitationId,
+  getApiTraineeInvitations,
   postApiTraineeInvitationsInvitationIdAccept,
   postApiTraineeInvitationsInvitationIdReject,
 } from "../api/generated/demo";
-import {
-  getApiErrorMessage,
-  getTraineeInvitations,
-} from "../api/userTrainerInvitations";
 import type {
   GetApiInvitationsInvitationIdParams,
   PublicInvitationStatusDto,
   TrainerInvitationDto,
 } from "../api/model";
+import { getApiErrorMessage } from "../api/trainerInvitations";
 import { clearAuthSession } from "./useAuthSession";
 import { getCurrentUser } from "./useCurrentUser";
 import { useToast } from "./useToast";
@@ -121,7 +119,7 @@ export const useUserTrainerRelationship = () => {
 
     if (hasInvitationContext.value) return "skipped" as const;
 
-    const response = await getTraineeInvitations();
+    const response = await getApiTraineeInvitations();
 
     if (await handleUnauthorizedResponse(response.status)) {
       return "unauthorized" as const;
