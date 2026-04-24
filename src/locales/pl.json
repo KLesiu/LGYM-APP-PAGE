@@ -608,8 +608,13 @@
     "invitations": {
       "eyebrow": "Oczekujące zaproszenia",
       "title": "Zaproszenia przypisane do Twojego konta",
+      "subtitle": "Masz {count} oczekujące zaproszenie od trenera. Możesz zaakceptować relację albo odrzucić zaproszenie bez linku z maila.",
       "itemTitle": "Zaproszenie od trenera",
-      "expiresAt": "Ważne do"
+      "itemDescription": "To zaproszenie zostało wysłane na adres przypisany do Twojego konta albo bezpośrednio do Twojego profilu zawodnika.",
+      "expiresAt": "Ważne do",
+      "sentTo": "Wysłane na",
+      "emptyTitle": "Brak oczekujących zaproszeń",
+      "emptySubtitle": "Jeśli trener wysłał nowe zaproszenie, odśwież widok. Lista korzysta z endpointu /api/trainee/invitations dla zalogowanego zawodnika."
     },
     "common": {
       "yes": "Tak",
@@ -713,6 +718,7 @@
     },
     "feedback": {
       "loadFailed": "Nie udało się pobrać danych zaproszenia lub relacji z trenerem.",
+      "invitationsEndpointMissing": "Backend nie udostępnia jeszcze endpointu /api/trainee/invitations. Wdróż najnowszą gałąź API, aby panel zawodnika mógł pobierać zaproszenia bez linku z maila.",
       "acceptSuccess": "Zaproszenie zostało zaakceptowane.",
       "acceptFailed": "Nie udało się zaakceptować relacji z trenerem.",
       "rejectSuccess": "Zaproszenie zostało odrzucone.",

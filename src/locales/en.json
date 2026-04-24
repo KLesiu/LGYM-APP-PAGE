@@ -608,8 +608,13 @@
     "invitations": {
       "eyebrow": "Pending invitations",
       "title": "Invitations assigned to your account",
+      "subtitle": "You have {count} pending trainer invitation. You can accept the relationship or reject the invitation without using the email link.",
       "itemTitle": "Trainer invitation",
-      "expiresAt": "Expires at"
+      "itemDescription": "This invitation was sent to the email assigned to your account or directly to your athlete profile.",
+      "expiresAt": "Expires at",
+      "sentTo": "Sent to",
+      "emptyTitle": "No pending invitations",
+      "emptySubtitle": "If a trainer has just sent an invitation, refresh this view. The list uses /api/trainee/invitations for the signed-in athlete."
     },
     "common": {
       "yes": "Yes",
@@ -713,6 +718,7 @@
     },
     "feedback": {
       "loadFailed": "Failed to load invitation or trainer relationship data.",
+      "invitationsEndpointMissing": "The backend does not expose /api/trainee/invitations yet. Deploy the latest API branch so the athlete panel can load invitations without the email link.",
       "acceptSuccess": "Invitation accepted successfully.",
       "acceptFailed": "Failed to accept the trainer relationship.",
       "rejectSuccess": "Invitation rejected successfully.",
