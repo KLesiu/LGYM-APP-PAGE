@@ -178,6 +178,8 @@ const activePlan = computed(() => plans.value.find((item) => item.isActive) ?? n
 
 let requestToken = 0;
 
+const isEmptyListStatus = (status: number) => status === 404;
+
 const loadPlans = async () => {
   if (!props.traineeId) return;
 
@@ -198,6 +200,11 @@ const loadPlans = async () => {
         `/trainer/members/${props.traineeId}`,
       )
     ) {
+      return;
+    }
+
+    if (isEmptyListStatus(response.status)) {
+      plans.value = [];
       return;
     }
 

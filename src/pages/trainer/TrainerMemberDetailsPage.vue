@@ -37,18 +37,31 @@
       </div>
     </section>
 
-    <section class="overflow-hidden rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-4 py-2.5 sm:px-5 lg:px-6">
-        <v-tabs v-model="activeTab" color="primary" align-tabs="start">
-          <v-tab value="overview">{{ t("trainerMemberDetails.tabs.overview") }}</v-tab>
-          <v-tab value="trainings">{{ t("trainerMemberDetails.tabs.trainings") }}</v-tab>
-          <v-tab value="plans">{{ t("trainerMemberDetails.tabs.plans") }}</v-tab>
-          <v-tab value="reports">{{ t("trainerMemberDetails.tabs.reports") }}</v-tab>
-          <v-tab value="measurements">{{ t("trainerMemberDetails.tabs.measurements") }}</v-tab>
+    <section
+      class="flex min-h-0 min-w-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+    >
+      <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+        <div
+          class="rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-2 sm:p-3"
+        >
+          <v-tabs v-model="activeTab" color="primary" grow align-tabs="center">
+            <v-tab
+              v-for="tab in tabs"
+              :key="tab.value"
+              :value="tab.value"
+              rounded="xl"
+              class="min-h-[50px] px-4 normal-case font-semibold tracking-normal"
+            >
+              <div class="flex items-center gap-2">
+                <v-icon :icon="tab.icon" size="18" />
+                <span>{{ tab.label }}</span>
+              </div>
+            </v-tab>
         </v-tabs>
+        </div>
       </div>
 
-      <div class="p-4 sm:p-5 lg:p-6">
+      <div class="min-h-0 flex-1 px-6 py-6 lg:px-8 lg:py-8">
         <TrainerMemberOverviewTab
           v-if="activeTab === 'overview'"
           :snapshot="snapshot"
@@ -116,6 +129,33 @@ const router = useRouter();
 
 const traineeId = computed(() => String(route.params.traineeId ?? ""));
 const activeTab = ref<MemberDetailsTab>("overview");
+const tabs = computed(() => [
+  {
+    value: "overview" as const,
+    label: t("trainerMemberDetails.tabs.overview"),
+    icon: "mdi-view-dashboard-outline",
+  },
+  {
+    value: "trainings" as const,
+    label: t("trainerMemberDetails.tabs.trainings"),
+    icon: "mdi-dumbbell",
+  },
+  {
+    value: "plans" as const,
+    label: t("trainerMemberDetails.tabs.plans"),
+    icon: "mdi-clipboard-list-outline",
+  },
+  {
+    value: "reports" as const,
+    label: t("trainerMemberDetails.tabs.reports"),
+    icon: "mdi-file-chart-outline",
+  },
+  {
+    value: "measurements" as const,
+    label: t("trainerMemberDetails.tabs.measurements"),
+    icon: "mdi-tape-measure",
+  },
+]);
 
 const {
   snapshot,

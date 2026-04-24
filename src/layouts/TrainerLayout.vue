@@ -65,7 +65,7 @@ const sidebarItems = computed<SidebarItem[]>(() => [
   {
     key: "trainingPlans",
     label: t("trainerDashboard.navigation.trainingPlans"),
-    icon: "mdi-notebook-multiple-outline",
+    icon: "mdi-clipboard-list-outline",
     to: "/trainer/training-plans",
   },
   {
