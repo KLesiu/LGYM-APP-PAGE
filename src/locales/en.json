@@ -605,6 +605,12 @@
       "retry": "Retry",
       "dismissInvitationContext": "Open default view"
     },
+    "invitations": {
+      "eyebrow": "Pending invitations",
+      "title": "Invitations assigned to your account",
+      "itemTitle": "Trainer invitation",
+      "expiresAt": "Expires at"
+    },
     "common": {
       "yes": "Yes",
       "no": "No",

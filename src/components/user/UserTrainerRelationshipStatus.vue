@@ -158,6 +158,62 @@
                 </p>
               </article>
             </div>
+
+            <div
+              v-if="pendingInvitations.length > 0 && !hasInvitationContext"
+              class="mt-5 border-t border-[var(--lgym-border)] pt-5"
+            >
+              <div class="mb-4 space-y-2">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-text-soft)]">
+                  {{ t("userRelationship.invitations.eyebrow") }}
+                </p>
+                <h4 class="text-lg font-semibold text-[var(--lgym-text)]">
+                  {{ t("userRelationship.invitations.title") }}
+                </h4>
+              </div>
+
+              <div class="grid gap-3">
+                <article
+                  v-for="invitation in pendingInvitations"
+                  :key="invitation._id || invitation.code || 'invitation'"
+                  class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface)]/88 px-5 py-5"
+                >
+                  <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    <div class="min-w-0">
+                      <p class="text-sm font-semibold text-[var(--lgym-text)]">
+                        {{ t("userRelationship.invitations.itemTitle") }}
+                      </p>
+                      <p class="mt-2 break-words text-sm leading-6 text-[var(--lgym-text-muted)]">
+                        {{ t("userRelationship.invitations.expiresAt") }}:
+                        {{ formatDateTime(invitation.expiresAt) }}
+                      </p>
+                    </div>
+
+                    <div class="flex flex-col gap-2 sm:flex-row">
+                      <v-btn
+                        color="primary"
+                        class="min-h-11 rounded-xl px-5"
+                        :loading="isSubmittingAccept && activeInvitationId === invitation._id"
+                        :disabled="!invitation._id || isSubmittingAccept || isSubmittingReject"
+                        @click="acceptInvitation(invitation._id || '')"
+                      >
+                        {{ t("userRelationship.actions.accept") }}
+                      </v-btn>
+                      <v-btn
+                        variant="outlined"
+                        color="secondary"
+                        class="min-h-11 rounded-xl px-5"
+                        :loading="isSubmittingReject && activeInvitationId === invitation._id"
+                        :disabled="!invitation._id || isSubmittingAccept || isSubmittingReject"
+                        @click="rejectInvitation(invitation._id || '')"
+                      >
+                        {{ t("userRelationship.actions.reject") }}
+                      </v-btn>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -249,6 +305,8 @@ const {
   currentUser,
   invitationId,
   invitationCode,
+  activeInvitationId,
+  pendingInvitations,
   hasInvitationContext,
   hasKnownAccount,
   invitationStatus,
@@ -267,6 +325,21 @@ const {
 
 const userDisplayName = computed(() => currentUser.value?.name?.trim() || "—");
 const userDisplayEmail = computed(() => currentUser.value?.email?.trim() || "—");
+
+const formatDateTime = (value: string | null | undefined) => {
+  if (!value) return "—";
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+
+  return new Intl.DateTimeFormat(undefined, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(parsed);
+};
 
 const userExistsLabel = computed(() => {
   const value = invitationStatus.value?.userExists;
@@ -339,7 +412,7 @@ const heroStats = computed(() => [
   },
   {
     label: t("userRelationship.summary.contractLabel"),
-    value: hasInvitationContext.value
+    value: hasInvitationContext.value || pendingInvitations.value.length > 0
       ? t("userRelationship.summary.contractWithContext")
       : t("userRelationship.summary.contractWithoutContext"),
     meta: t("userRelationship.summary.contractMeta"),

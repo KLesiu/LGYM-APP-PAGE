@@ -605,6 +605,12 @@
       "retry": "Spróbuj ponownie",
       "dismissInvitationContext": "Otwórz widok domyślny"
     },
+    "invitations": {
+      "eyebrow": "Oczekujące zaproszenia",
+      "title": "Zaproszenia przypisane do Twojego konta",
+      "itemTitle": "Zaproszenie od trenera",
+      "expiresAt": "Ważne do"
+    },
     "common": {
       "yes": "Tak",
       "no": "Nie",
