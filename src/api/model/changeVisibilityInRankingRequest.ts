@@ -5,4 +5,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export type PostApiChangeVisibilityInRankingBodyThree = {[key: string]: boolean};
+export interface ChangeVisibilityInRankingRequest {
+  /** @nullable */
+  isVisibleInRanking?: boolean | null;
+}

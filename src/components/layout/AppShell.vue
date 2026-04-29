@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid h-screen overflow-hidden bg-[var(--lgym-page-glow),var(--lgym-bg)] supports-[height:100dvh]:h-[100dvh] lg:grid-cols-[288px_1fr]"
+    class="grid h-full min-h-0 overflow-hidden bg-[var(--lgym-page-glow),var(--lgym-bg)] lg:grid-cols-[minmax(0,288px)_minmax(0,1fr)]"
   >
     <!-- Desktop Sidebar -->
     <AppSidebar
@@ -18,7 +18,7 @@
 
     <!-- Right column: header + content -->
     <div
-      class="flex h-screen min-h-0 flex-col overflow-hidden supports-[height:100dvh]:h-[100dvh]"
+      class="flex min-h-0 min-w-0 flex-col overflow-hidden"
     >
       <AppHeader
         :title="headerTitle"
@@ -32,7 +32,9 @@
         </template>
       </AppHeader>
 
-      <main class="flex min-h-0 flex-1 overflow-hidden p-4 sm:p-5 lg:p-6">
+      <main
+        class="flex min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-5 lg:p-6"
+      >
         <slot />
       </main>
     </div>

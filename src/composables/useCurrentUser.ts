@@ -3,6 +3,9 @@ import {
   getAuthUserId,
   getStoredRole,
   getStoredRoles,
+  getStoredUserAvatar,
+  getStoredUserEmail,
+  getStoredUserName,
 } from "./useAuthSession";
 
 const CLAIM_KEYS_NAME = [
@@ -73,17 +76,31 @@ const deriveInitials = (name: string, email: string): string => {
   return source.charAt(0).toUpperCase();
 };
 
+const toDisplayRole = (value: string): string => {
+  if (!value) return "";
+
+  return value
+    .split(/[_\s-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
+};
+
 export const getCurrentUser = (): CurrentUser | null => {
   const token = getAuthToken();
   if (!token) return null;
 
   const payload = decodeJwtPayload(token);
   const id = getAuthUserId();
-  const role = getStoredRole();
+  const role = toDisplayRole(getStoredRole());
   const roles = getStoredRoles();
-  const name = findClaim(payload, CLAIM_KEYS_NAME) || role || "User";
-  const email = findClaim(payload, CLAIM_KEYS_EMAIL);
-  const avatar = findClaim(payload, ["picture", "avatar"]);
+  const storedName = getStoredUserName().trim();
+  const storedEmail = getStoredUserEmail().trim();
+  const storedAvatar = getStoredUserAvatar().trim();
+  const name =
+    storedName || findClaim(payload, CLAIM_KEYS_NAME) || role || "User";
+  const email = storedEmail || findClaim(payload, CLAIM_KEYS_EMAIL);
+  const avatar = storedAvatar || findClaim(payload, ["picture", "avatar"]);
   const initials = deriveInitials(name, email);
 
   return { id, name, email, avatar, role, roles, initials };

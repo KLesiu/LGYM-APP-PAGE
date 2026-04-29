@@ -201,14 +201,22 @@
 body {
   margin: 0;
   min-width: 320px;
+  min-height: 100%;
   font-family: "Inter", sans-serif;
+  overflow-x: hidden;
 }
 
 html,
 body,
 #app {
-  min-height: 100vh;
   height: 100%;
-  overflow: auto !important;
-  
+}
+
+html {
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+#app {
+  min-height: 100%;
 }

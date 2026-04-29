@@ -6,7 +6,8 @@ export type ToastParams = Record<string, unknown>;
 
 export type ToastInput = {
   type: ToastType;
-  resourceKey: string;
+  resourceKey?: string;
+  message?: string;
   params?: ToastParams;
   timeout?: number;
 };
@@ -71,11 +72,19 @@ export function useToast() {
     toast: (input: ToastInput) => push(input),
     success: (resourceKey: string, params?: ToastParams, timeout?: number) =>
       push({ type: "success", resourceKey, params, timeout }),
+    successMessage: (message: string, timeout?: number) =>
+      push({ type: "success", message, timeout }),
     error: (resourceKey: string, params?: ToastParams, timeout?: number) =>
       push({ type: "error", resourceKey, params, timeout }),
+    errorMessage: (message: string, timeout?: number) =>
+      push({ type: "error", message, timeout }),
     warning: (resourceKey: string, params?: ToastParams, timeout?: number) =>
       push({ type: "warning", resourceKey, params, timeout }),
+    warningMessage: (message: string, timeout?: number) =>
+      push({ type: "warning", message, timeout }),
     info: (resourceKey: string, params?: ToastParams, timeout?: number) =>
       push({ type: "info", resourceKey, params, timeout }),
+    infoMessage: (message: string, timeout?: number) =>
+      push({ type: "info", message, timeout }),
   };
 }

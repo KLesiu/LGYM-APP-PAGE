@@ -1,12 +1,26 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import { hasAdminAccess } from "../composables/useAuthSession";
+import {
+  hasAdminAccess,
+  hasTrainerAccess,
+  hasUserAccess,
+} from "../composables/useAuthSession";
 import AdminLayout from "../layouts/AdminLayout.vue";
+import TrainerLayout from "../layouts/TrainerLayout.vue";
+import UserLayout from "../layouts/UserLayout.vue";
 import AdminUsersPage from "../pages/admin/AdminUsersPage.vue";
 import AdminVersionsPage from "../pages/admin/AdminVersionsPage.vue";
+import TrainerMemberDetailsPage from "../pages/trainer/TrainerMemberDetailsPage.vue";
+import TrainerInvitationsPage from "../pages/trainer/TrainerInvitationsPage.vue";
+import TrainerMembersPage from "../pages/trainer/TrainerMembersPage.vue";
+import TrainerTrainingPlanDayEditorPage from "../pages/trainer/TrainerTrainingPlanDayEditorPage.vue";
+import TrainerTrainingPlanDetailsPage from "../pages/trainer/TrainerTrainingPlanDetailsPage.vue";
+import TrainerTrainingPlansPage from "../pages/trainer/TrainerTrainingPlansPage.vue";
+import TrainerReportTemplatesPage from "../pages/trainer/TrainerReportTemplatesPage.vue";
 import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
+import UserRelationshipPage from "../pages/user/UserRelationshipPage.vue";
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -54,11 +68,93 @@ export const router = createRouter({
         },
       ],
     },
+    {
+      path: "/athlete",
+      component: UserLayout,
+      meta: {
+        requiresUser: true,
+        hasLayout: true,
+      },
+      children: [
+        {
+          path: "",
+          redirect: "/athlete/relationship",
+        },
+        {
+          path: "relationship",
+          name: "user-relationship-status",
+          component: UserRelationshipPage,
+        },
+        {
+          path: "invitations/:invitationId",
+          name: "user-relationship-invitation",
+          component: UserRelationshipPage,
+        },
+      ],
+    },
+    {
+      path: "/trainer",
+      component: TrainerLayout,
+      meta: {
+        requiresTrainer: true,
+        hasLayout: true,
+      },
+      children: [
+        {
+          path: "",
+          redirect: "/trainer/members",
+        },
+        {
+          path: "members",
+          name: "trainer-members",
+          component: TrainerMembersPage,
+        },
+        {
+          path: "members/:traineeId",
+          name: "trainer-member-details",
+          component: TrainerMemberDetailsPage,
+        },
+        {
+          path: "invitations",
+          name: "trainer-invitations",
+          component: TrainerInvitationsPage,
+        },
+        {
+          path: "report-templates",
+          name: "trainer-report-templates",
+          component: TrainerReportTemplatesPage,
+        },
+        {
+          path: "training-plans",
+          name: "trainer-training-plans",
+          component: TrainerTrainingPlansPage,
+        },
+        {
+          path: "training-plans/:planId",
+          name: "trainer-training-plan-details",
+          component: TrainerTrainingPlanDetailsPage,
+        },
+        {
+          path: "training-plans/:planId/plan-days/new",
+          name: "trainer-training-plan-day-create",
+          component: TrainerTrainingPlanDayEditorPage,
+        },
+        {
+          path: "training-plans/:planId/plan-days/:planDayId",
+          name: "trainer-training-plan-day-edit",
+          component: TrainerTrainingPlanDayEditorPage,
+        },
+      ],
+    },
   ],
 });
 
 router.beforeEach((to) => {
   const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin);
+  const requiresTrainer = to.matched.some(
+    (record) => record.meta.requiresTrainer,
+  );
+  const requiresUser = to.matched.some((record) => record.meta.requiresUser);
 
   if (requiresAdmin && !hasAdminAccess()) {
     return {
@@ -69,9 +165,39 @@ router.beforeEach((to) => {
     };
   }
 
+  if (requiresTrainer && !hasTrainerAccess()) {
+    return {
+      name: "login",
+      query: {
+        redirect: to.fullPath,
+      },
+    };
+  }
+
+  if (requiresUser && !hasUserAccess()) {
+    return {
+      name: "login",
+      query: {
+        redirect: to.fullPath,
+      },
+    };
+  }
+
   if (to.name === "login-admin" && hasAdminAccess()) {
     return {
       name: "admin-users",
+    };
+  }
+
+  if (to.name === "login" && hasTrainerAccess()) {
+    return {
+      path: "/trainer/members",
+    };
+  }
+
+  if (to.name === "login" && hasUserAccess()) {
+    return {
+      path: "/athlete/relationship",
     };
   }
 

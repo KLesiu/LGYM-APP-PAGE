@@ -10,12 +10,12 @@
     :user="currentUser"
     @logout="logout"
   >
-    <template #header-actions>
+    <template v-if="$slots['header-actions']" #header-actions>
       <slot name="header-actions" />
     </template>
 
     <router-view v-slot="{ Component }">
-      <div class="h-full min-h-0 w-full">
+      <div class="h-full min-h-0 min-w-0 w-full">
         <component :is="Component" />
       </div>
     </router-view>

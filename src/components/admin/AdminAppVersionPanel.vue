@@ -1,7 +1,7 @@
 <template>
   <v-card
     rounded="[32px]"
-    class="flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+    class="flex min-h-0 min-w-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
   >
     <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-5">
@@ -51,17 +51,17 @@
     </div>
 
     <v-card-text
-      class="min-h-0 flex-1 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8"
+      class="min-h-0 flex-1 px-6 py-6 lg:px-8 lg:py-8"
     >
-      <v-window v-model="activePlatform" class="h-full min-h-0">
+      <v-window v-model="activePlatform" class="min-h-0">
         <v-window-item
           v-for="platform in platformOptions"
           :key="platform.value"
           :value="platform.value"
-          class="h-full min-h-0"
+          class="min-h-0"
         >
           <div
-            class="grid h-full min-h-0 gap-6 2xl:gap-8 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
+            class="grid min-h-0 gap-6 2xl:gap-8 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
           >
             <section class="space-y-5">
               <AdminVersionCurrentSummary

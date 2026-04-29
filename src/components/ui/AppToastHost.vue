@@ -16,7 +16,7 @@
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="pointer-events-auto flex flex-col gap-2 overflow-hidden rounded-2xl border  border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)] backdrop-blur"
+        class="pointer-events-auto flex flex-col gap-2 overflow-hidden rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)] backdrop-blur"
       >
         <div :class="accentClassMap[toast.type]" class="h-1 w-full" />
 
@@ -32,8 +32,13 @@
             <p class="text-sm leading-5 font-semibold text-[var(--lgym-text)]">
               {{ t(titleKeyMap[toast.type]) }}
             </p>
-            <p class=" text-sm leading-6 text-[var(--lgym-text-muted)]">
-              {{ t(toast.resourceKey, toast.params ?? {}) }}
+            <p class="text-sm leading-6 text-[var(--lgym-text-muted)]">
+              {{
+                toast.message ??
+                (toast.resourceKey
+                  ? t(toast.resourceKey, toast.params ?? {})
+                  : "")
+              }}
             </p>
           </div>
 
