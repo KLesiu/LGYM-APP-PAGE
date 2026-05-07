@@ -38,6 +38,7 @@
     "appSubtitle": "Panel trenera",
     "navigation": {
       "dashboard": "Dashboard",
+      "exercises": "Cwiczenia",
       "trainingPlans": "Plany Treningowe",
       "members": "Podopieczni",
       "myClients": "Moi Klienci",
@@ -80,9 +81,14 @@
     "appName": "LGYM",
     "appSubtitle": "Strefa zawodnika",
     "navigation": {
-      "relationship": "Relacja z trenerem"
+      "relationship": "Relacja z trenerem",
+      "exercises": "Cwiczenia"
     },
     "layout": {
+      "exercises": {
+        "title": "Cwiczenia",
+        "subtitle": "Przegladaj biblioteke globalnych i wlasnych cwiczen, filtruj po zrodle i szybko wyszukuj po nazwie albo partii ciala."
+      },
       "relationship": {
         "title": "Relacja z trenerem",
         "subtitle": "Sprawdz aktualny status relacji z trenerem i reaguj na zaproszenia wspierane przez obecny kontrakt API."
@@ -220,6 +226,10 @@
       "reportTemplates": {
         "title": "Szablony raportow",
         "subtitle": "Zarzadzaj globalna biblioteka szablonow raportow dla calej strefy trenera."
+      },
+      "exercises": {
+        "title": "Cwiczenia",
+        "subtitle": "Korzystaj z biblioteki cwiczen, przelaczaj miedzy globalnymi i prywatnymi pozycjami oraz szybko znajduj ruchy potrzebne do pracy z podopiecznymi."
       }
     }
   },
@@ -293,12 +303,13 @@
     "page": {
       "eyebrow": "Builder planu",
       "title": "Szczegoly planu treningowego",
-      "subtitle": "Zarzadzaj dniami planu, edytuj cwiczenia inline i generuj kod udostepniania dla tego globalnego planu.",
+      "subtitle": "Zarzadzaj dniami planu na jednej planszy, otwieraj szybki podglad i generuj kod udostepniania dla tego globalnego planu.",
       "badge": "Globalny plan",
       "planIdLabel": "ID planu: {id}"
     },
     "actions": {
       "back": "Wroc do planow",
+      "close": "Zamknij",
       "retry": "Sprobuj ponownie"
     },
     "error": {
@@ -319,10 +330,19 @@
     "planDays": {
       "eyebrow": "Dni planu",
       "title": "Lista dni planu",
-      "subtitle": "Wybierz dzien planu do edycji albo utworz nowy dzien dla tego globalnego planu.",
+      "subtitle": "Przegladaj dni planu w kafelkach, uruchamiaj szybki podglad i przechodz do pelnej edycji tylko wtedy, gdy tego potrzebujesz.",
       "empty": "Nie dodano jeszcze zadnych dni planu.",
+      "badges": {
+        "selected": "Podglad aktywny",
+        "available": "Gotowy do podgladu"
+      },
       "fallback": {
         "noName": "Dzien bez nazwy"
+      },
+      "stats": {
+        "exercises": "Cwiczenia",
+        "series": "Serie",
+        "lastTraining": "Ostatni trening"
       },
       "meta": {
         "exercises": "Cwiczenia: {count}",
@@ -331,7 +351,8 @@
       },
       "actions": {
         "create": "Nowy dzien planu",
-        "open": "Otworz workspace",
+        "preview": "Podglad",
+        "edit": "Edytuj",
         "delete": "Usun",
         "deleteConfirm": "Usunac dzien planu \"{name}\"?"
       },
@@ -342,6 +363,36 @@
     "workspace": {
       "eyebrow": "Workspace dnia planu",
       "subtitle": "Flow z mobile najlepiej dziala wtedy, gdy edycja dnia planu ma osobna przestrzen robocza. Otworz dzien i edytuj go w szerokim builderze zamiast w ciasnym formularzu inline.",
+      "empty": {
+        "title": "Wybierz dzien do podgladu",
+        "subtitle": "Kliknij podglad na dowolnym kafelku, aby zobaczyc cwiczenia, serie i ostatnia aktywnosc bez wychodzenia z tej strony.",
+        "helper": "Uzyj akcji Podglad na wybranym kafelku, aby zobaczyc szczegoly dnia planu, a Edytuj gdy chcesz przejsc do pelnego workspace."
+      },
+      "preview": {
+        "eyebrow": "Podglad dnia planu",
+        "subtitle": "Szybki podglad szczegolow dnia planu przed przejsciem do pelnej edycji.",
+        "error": "Nie udalo sie pobrac podgladu wybranego dnia planu.",
+        "emptyExercises": "Ten dzien planu nie ma jeszcze przypisanych cwiczen.",
+        "stats": {
+          "exercises": "Cwiczenia",
+          "series": "Serie",
+          "lastTraining": "Ostatni trening"
+        },
+        "exerciseMeta": {
+          "reps": "Powtorzenia: {value}",
+          "series": "Serie: {value}"
+        }
+      },
+      "summary": {
+        "eyebrow": "Przeglad planu",
+        "title": "Szybkie liczby",
+        "subtitle": "Na jednej wyspie widzisz skale planu i latwiej oceniasz, czy rozklad dni jest juz kompletny.",
+        "stats": {
+          "totalDays": "Liczba dni",
+          "totalExercises": "Suma cwiczen",
+          "totalSeries": "Suma serii"
+        }
+      },
       "sections": {
         "create": {
           "eyebrow": "Tworzenie",
@@ -1111,6 +1162,12 @@
           "title": "Publikacje Android i iOS",
           "description": "Zarzadzaj aktualnymi wersjami mobilnymi, minimalnymi wymaganiami oraz linkami do aktualizacji dla Androida i iOS.",
           "menuHint": "Android, iOS i rollout"
+        },
+        "exercises": {
+          "label": "Cwiczenia",
+          "title": "Biblioteka cwiczen",
+          "description": "Przegladaj globalne i prywatne cwiczenia administratora oraz dodawaj nowe pozycje do obu bibliotek.",
+          "menuHint": "Globalne i prywatne cwiczenia"
         }
       }
     },
@@ -1214,5 +1271,141 @@
     "pagination": {
       "summary": "Strona {page} z {totalPages} • lacznie {totalCount} uzytkownikow"
     }
+  },
+  "exerciseLibrary": {
+    "page": {
+      "title": "Biblioteka cwiczen",
+      "summary": "Widoczne cwiczenia: {totalCount}"
+    },
+    "roles": {
+      "admin": {
+        "eyebrow": "Panel administratora",
+        "subtitle": "Zarzadzaj biblioteka cwiczen i dodawaj nowe ruchy jako globalne albo prywatne dla swojego konta administratora."
+      },
+      "trainer": {
+        "eyebrow": "Strefa trenera",
+        "subtitle": "Przegladaj cwiczenia globalne oraz swoje prywatne pozycje i filtruj biblioteke pod aktualne potrzeby planowania."
+      },
+      "user": {
+        "eyebrow": "Strefa zawodnika",
+        "subtitle": "Zobacz wszystkie dostepne cwiczenia, rozdziel biblioteke na globalne i prywatne oraz szybko znajduj interesujace pozycje."
+      }
+    },
+    "filters": {
+      "search": "Szukaj",
+      "searchPlaceholder": "Wpisz nazwe lub opis cwiczenia",
+      "bodyPart": "Partia ciala",
+      "allBodyParts": "Wszystkie partie",
+      "all": "Wszystkie",
+      "global": "Globalne",
+      "user": "Prywatne"
+    },
+    "source": {
+      "global": "Globalne",
+      "user": "Prywatne"
+    },
+    "bodyParts": {
+      "unknown": "Nieznana partia",
+      "chest": "Klatka piersiowa",
+      "back": "Plecy",
+      "shoulders": "Barki",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "forearms": "Przedramiona",
+      "abs": "Brzuch",
+      "quads": "Czworoglowe uda",
+      "hamstrings": "Dwuglowe uda",
+      "calves": "Lydki",
+      "glutes": "Posladki"
+    },
+    "meta": {
+      "imageAttached": "Dodany link do grafiki",
+      "noImage": "Brak grafiki"
+    },
+    "fallback": {
+      "name": "Cwiczenie bez nazwy",
+      "description": "Brak opisu dla tego cwiczenia.",
+      "bodyPart": "Nieznana partia"
+    },
+    "dialog": {
+      "eyebrow": "Nowe cwiczenie",
+      "editEyebrow": "Edycja cwiczenia",
+      "title": "Dodaj cwiczenie",
+      "editTitle": "Edytuj cwiczenie",
+      "subtitle": "Administrator moze utworzyc cwiczenie globalne albo prywatne, a wlasciciel prywatnego cwiczenia moze je pozniej edytowac lub usunac.",
+      "fields": {
+        "visibility": "Widocznosc",
+        "name": "Nazwa",
+        "bodyPart": "Partia ciala",
+        "description": "Opis",
+        "image": "Link do grafiki"
+      },
+      "placeholders": {
+        "name": "Np. Wyciskanie sztangi lezac",
+        "description": "Dodaj wskazowki techniczne albo krotki opis cwiczenia",
+        "image": "https://..."
+      },
+      "visibilityOptions": {
+        "global": "Globalne",
+        "user": "Prywatne"
+      }
+    },
+    "translationDialog": {
+      "eyebrow": "Nowe tlumaczenie",
+      "title": "Dodaj tlumaczenie",
+      "subtitle": "Dodajesz nowe tlumaczenie dla cwiczenia: {name}.",
+      "fields": {
+        "culture": "Kod jezyka",
+        "name": "Przetlumaczona nazwa"
+      },
+      "placeholders": {
+        "culture": "Np. en, pl, de",
+        "name": "Wpisz nazwe w wybranym jezyku"
+      }
+    },
+    "deleteDialog": {
+      "eyebrow": "Usuwanie cwiczenia",
+      "title": "Potwierdz usuniecie",
+      "description": "Czy na pewno chcesz usunac cwiczenie \"{name}\"? Tej operacji nie da sie cofnac."
+    },
+    "columns": {
+      "name": "Nazwa",
+      "bodyPart": "Partia ciala",
+      "source": "Zrodlo",
+      "description": "Opis",
+      "image": "Grafika",
+      "actions": "Akcje"
+    },
+    "actions": {
+      "add": "Dodaj cwiczenie",
+      "save": "Zapisz",
+      "saveTranslation": "Zapisz tlumaczenie",
+      "cancel": "Anuluj",
+      "confirmDelete": "Usun cwiczenie",
+      "retry": "Sprobuj ponownie",
+      "openImage": "Otworz grafike",
+      "edit": "Edytuj",
+      "delete": "Usun",
+      "addTranslation": "Dodaj tlumaczenie"
+    },
+    "feedback": {
+      "loadFailed": "Nie udalo sie pobrac biblioteki cwiczen.",
+      "saveFailed": "Nie udalo sie zapisac cwiczenia.",
+      "saveSuccess": "Cwiczenie zostalo zapisane poprawnie.",
+      "updateFailed": "Nie udalo sie zaktualizowac cwiczenia.",
+      "updateSuccess": "Cwiczenie zostalo zaktualizowane poprawnie.",
+      "deleteFailed": "Nie udalo sie usunac cwiczenia.",
+      "deleteSuccess": "Cwiczenie zostalo usuniete poprawnie.",
+      "translationFailed": "Nie udalo sie zapisac tlumaczenia.",
+      "translationSuccess": "Tlumaczenie zostalo zapisane poprawnie.",
+      "nameRequired": "Nazwa cwiczenia jest wymagana.",
+      "bodyPartRequired": "Wybierz partie ciala dla cwiczenia.",
+      "translationCultureRequired": "Kod jezyka jest wymagany.",
+      "translationNameRequired": "Przetlumaczona nazwa jest wymagana.",
+      "userTargetUnavailable": "Nie mozna utworzyc prywatnego cwiczenia bez identyfikatora uzytkownika.",
+      "deleteContextMissing": "Brakuje identyfikatora uzytkownika potrzebnego do usuniecia cwiczenia.",
+      "unauthorized": "Sesja wygasla albo nie masz juz dostepu do biblioteki cwiczen. Zaloguj sie ponownie."
+    },
+    "empty": "Brak cwiczen pasujacych do aktualnych filtrow."
   }
 }

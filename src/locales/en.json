@@ -38,6 +38,7 @@
     "appSubtitle": "Coach workspace",
     "navigation": {
       "dashboard": "Dashboard",
+      "exercises": "Exercises",
       "trainingPlans": "Training Plans",
       "members": "Members",
       "myClients": "My Clients",
@@ -80,9 +81,14 @@
     "appName": "LGYM",
     "appSubtitle": "Athlete workspace",
     "navigation": {
-      "relationship": "Trainer Relationship"
+      "relationship": "Trainer Relationship",
+      "exercises": "Exercises"
     },
     "layout": {
+      "exercises": {
+        "title": "Exercises",
+        "subtitle": "Browse the global and personal exercise library, filter by source, and quickly search by name or body part."
+      },
       "relationship": {
         "title": "Trainer relationship",
         "subtitle": "See your current trainer relationship status and respond to invitations supported by the current API contract."
@@ -220,6 +226,10 @@
       "reportTemplates": {
         "title": "Report Templates",
         "subtitle": "Manage reusable report templates globally for your trainer workspace."
+      },
+      "exercises": {
+        "title": "Exercises",
+        "subtitle": "Work with the exercise library, switch between global and private items, and quickly find movements needed for athlete programming."
       }
     }
   },
@@ -293,12 +303,13 @@
     "page": {
       "eyebrow": "Plan builder",
       "title": "Training plan details",
-      "subtitle": "Manage plan days, edit exercises inline, and generate a reusable share code for this global plan.",
+      "subtitle": "Manage plan days on one board, open quick previews, and generate a reusable share code for this global plan.",
       "badge": "Global plan",
       "planIdLabel": "Plan ID: {id}"
     },
     "actions": {
       "back": "Back to plans",
+      "close": "Close",
       "retry": "Retry"
     },
     "error": {
@@ -319,10 +330,19 @@
     "planDays": {
       "eyebrow": "Plan days",
       "title": "Plan day list",
-      "subtitle": "Select one plan day to edit, or create a new day for this global plan.",
+      "subtitle": "Browse plan days as tiles, open a quick preview, and jump into full editing only when you need it.",
       "empty": "No plan days added yet.",
+      "badges": {
+        "selected": "Preview active",
+        "available": "Ready to preview"
+      },
       "fallback": {
         "noName": "Unnamed day"
+      },
+      "stats": {
+        "exercises": "Exercises",
+        "series": "Series",
+        "lastTraining": "Last training"
       },
       "meta": {
         "exercises": "Exercises: {count}",
@@ -331,7 +351,8 @@
       },
       "actions": {
         "create": "New plan day",
-        "open": "Open workspace",
+        "preview": "Preview",
+        "edit": "Edit",
         "delete": "Delete",
         "deleteConfirm": "Delete plan day \"{name}\"?"
       },
@@ -342,6 +363,36 @@
     "workspace": {
       "eyebrow": "Plan day workspace",
       "subtitle": "The mobile flow works best when plan-day editing has its own dedicated space. Open a day to edit it in a wider builder instead of a cramped inline form.",
+      "empty": {
+        "title": "Pick a day to preview",
+        "subtitle": "Click preview on any tile to inspect exercises, series, and recent activity without leaving this page.",
+        "helper": "Use the Preview action on any tile to inspect the day, and Edit when you want to switch into the full workspace."
+      },
+      "preview": {
+        "eyebrow": "Plan day preview",
+        "subtitle": "A fast read-only preview of the selected day before jumping into full editing.",
+        "error": "Failed to load the selected day preview.",
+        "emptyExercises": "This plan day has no exercises assigned yet.",
+        "stats": {
+          "exercises": "Exercises",
+          "series": "Series",
+          "lastTraining": "Last training"
+        },
+        "exerciseMeta": {
+          "reps": "Reps: {value}",
+          "series": "Series: {value}"
+        }
+      },
+      "summary": {
+        "eyebrow": "Plan overview",
+        "title": "Quick numbers",
+        "subtitle": "This island gives you the scale of the plan at a glance so you can judge whether the split is already complete.",
+        "stats": {
+          "totalDays": "Total days",
+          "totalExercises": "Total exercises",
+          "totalSeries": "Total series"
+        }
+      },
       "sections": {
         "create": {
           "eyebrow": "Create",
@@ -1111,6 +1162,12 @@
           "title": "Android and iOS releases",
           "description": "Manage current mobile builds, minimum required versions, and update URLs for both Android and iOS.",
           "menuHint": "Android, iOS, and rollout"
+        },
+        "exercises": {
+          "label": "Exercises",
+          "title": "Exercise library",
+          "description": "Browse the administrator's global and private exercises and add new entries to either library.",
+          "menuHint": "Global and private exercises"
         }
       }
     },
@@ -1214,5 +1271,141 @@
     "pagination": {
       "summary": "Page {page} of {totalPages} • {totalCount} users total"
     }
+  },
+  "exerciseLibrary": {
+    "page": {
+      "title": "Exercise library",
+      "summary": "Visible exercises: {totalCount}"
+    },
+    "roles": {
+      "admin": {
+        "eyebrow": "Administrator workspace",
+        "subtitle": "Manage the exercise library and add new movements either globally or privately for your administrator account."
+      },
+      "trainer": {
+        "eyebrow": "Trainer workspace",
+        "subtitle": "Browse global exercises and your own private items, then filter the library for the exercises you need right now."
+      },
+      "user": {
+        "eyebrow": "Athlete workspace",
+        "subtitle": "See all available exercises, split the library into global and private items, and quickly find the movements you care about."
+      }
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Type an exercise name or description",
+      "bodyPart": "Body part",
+      "allBodyParts": "All body parts",
+      "all": "All",
+      "global": "Global",
+      "user": "Private"
+    },
+    "source": {
+      "global": "Global",
+      "user": "Private"
+    },
+    "bodyParts": {
+      "unknown": "Unknown",
+      "chest": "Chest",
+      "back": "Back",
+      "shoulders": "Shoulders",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "forearms": "Forearms",
+      "abs": "Abs",
+      "quads": "Quads",
+      "hamstrings": "Hamstrings",
+      "calves": "Calves",
+      "glutes": "Glutes"
+    },
+    "meta": {
+      "imageAttached": "Image link attached",
+      "noImage": "No image"
+    },
+    "fallback": {
+      "name": "Untitled exercise",
+      "description": "No description provided for this exercise.",
+      "bodyPart": "Unknown body part"
+    },
+    "dialog": {
+      "eyebrow": "New exercise",
+      "editEyebrow": "Edit exercise",
+      "title": "Add exercise",
+      "editTitle": "Edit exercise",
+      "subtitle": "Administrators can create exercises as global or private, and the owner of a private exercise can later edit or delete it.",
+      "fields": {
+        "visibility": "Visibility",
+        "name": "Name",
+        "bodyPart": "Body part",
+        "description": "Description",
+        "image": "Image URL"
+      },
+      "placeholders": {
+        "name": "E.g. Barbell bench press",
+        "description": "Add coaching notes or a short description of the movement",
+        "image": "https://..."
+      },
+      "visibilityOptions": {
+        "global": "Global",
+        "user": "Private"
+      }
+    },
+    "translationDialog": {
+      "eyebrow": "New translation",
+      "title": "Add translation",
+      "subtitle": "You are adding a translation for: {name}.",
+      "fields": {
+        "culture": "Language code",
+        "name": "Translated name"
+      },
+      "placeholders": {
+        "culture": "E.g. en, pl, de",
+        "name": "Enter the name in the selected language"
+      }
+    },
+    "deleteDialog": {
+      "eyebrow": "Delete exercise",
+      "title": "Confirm deletion",
+      "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone."
+    },
+    "columns": {
+      "name": "Name",
+      "bodyPart": "Body part",
+      "source": "Source",
+      "description": "Description",
+      "image": "Image",
+      "actions": "Actions"
+    },
+    "actions": {
+      "add": "Add exercise",
+      "save": "Save",
+      "saveTranslation": "Save translation",
+      "cancel": "Cancel",
+      "confirmDelete": "Delete exercise",
+      "retry": "Try again",
+      "openImage": "Open image",
+      "edit": "Edit",
+      "delete": "Delete",
+      "addTranslation": "Add translation"
+    },
+    "feedback": {
+      "loadFailed": "Failed to load the exercise library.",
+      "saveFailed": "Failed to save the exercise.",
+      "saveSuccess": "Exercise saved successfully.",
+      "updateFailed": "Failed to update the exercise.",
+      "updateSuccess": "Exercise updated successfully.",
+      "deleteFailed": "Failed to delete the exercise.",
+      "deleteSuccess": "Exercise deleted successfully.",
+      "translationFailed": "Failed to save the translation.",
+      "translationSuccess": "Translation saved successfully.",
+      "nameRequired": "Exercise name is required.",
+      "bodyPartRequired": "Select a body part for the exercise.",
+      "translationCultureRequired": "Language code is required.",
+      "translationNameRequired": "Translated name is required.",
+      "userTargetUnavailable": "A private exercise cannot be created without a user identifier.",
+      "deleteContextMissing": "The user identifier required to delete this exercise is missing.",
+      "unauthorized": "Your session expired or you no longer have access to the exercise library. Please sign in again."
+    },
+    "empty": "No exercises match the current filters."
   }
 }

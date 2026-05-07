@@ -4,6 +4,28 @@ import { i18n } from '../plugins/i18n'
 
 export type AppLocale = 'pl' | 'en'
 
+export type AppLocaleOption = {
+  value: AppLocale
+  code: 'PL' | 'EN'
+  labelKey: 'ui.language.polish' | 'ui.language.english'
+  flag: string
+}
+
+export const appLocaleOptions: AppLocaleOption[] = [
+  {
+    value: 'pl',
+    code: 'PL',
+    labelKey: 'ui.language.polish',
+    flag: '🇵🇱',
+  },
+  {
+    value: 'en',
+    code: 'EN',
+    labelKey: 'ui.language.english',
+    flag: '🇬🇧',
+  },
+]
+
 const LOCALE_STORAGE_KEY = 'lgym-locale'
 
 const isLocale = (value: string | null): value is AppLocale => {

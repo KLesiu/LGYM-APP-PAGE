@@ -216,7 +216,10 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
   };
 
   const loadSelectedPlanDay = async (nextPlanDayId?: string | null) => {
-    const normalizedPlanDayId = nextPlanDayId?.trim() || selectedPlanDayId.value;
+    const normalizedPlanDayId =
+      nextPlanDayId === undefined
+        ? selectedPlanDayId.value
+        : (nextPlanDayId?.trim() || null);
     selectedPlanDayId.value = normalizedPlanDayId || null;
 
     if (!normalizedPlanDayId) {
@@ -228,6 +231,7 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
     const currentToken = ++selectedDayRequestToken;
     isLoadingSelectedPlanDay.value = true;
     hasSelectedPlanDayError.value = false;
+    selectedPlanDay.value = null;
 
     try {
       const response = await getApiPlanDayIdGetPlanDay(normalizedPlanDayId);
@@ -249,6 +253,7 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
         const message = getApiErrorMessage(response.data);
         if (message) toast.errorMessage(message);
         else toast.error("trainerTrainingPlanDetails.feedback.loadPlanDayFailed");
+        selectedPlanDay.value = null;
         hasSelectedPlanDayError.value = true;
         return;
       }
@@ -259,6 +264,7 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
 
       console.error(error);
       toast.error("trainerTrainingPlanDetails.feedback.loadPlanDayFailed");
+      selectedPlanDay.value = null;
       hasSelectedPlanDayError.value = true;
     } finally {
       if (currentToken === selectedDayRequestToken) {
@@ -426,6 +432,9 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
     const normalizedPlanDayId = planDayId.trim();
     if (!normalizedPlanDayId) return false;
     const wasSelectedPlanDay = selectedPlanDayId.value === normalizedPlanDayId;
+    const nextSelectedPlanDayId = wasSelectedPlanDay
+      ? null
+      : selectedPlanDayId.value;
 
     deletingPlanDayId.value = normalizedPlanDayId;
 
@@ -451,10 +460,12 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
       }
 
       toast.success("trainerTrainingPlanDetails.feedback.deletePlanDaySuccess");
-      await loadPlanDaySummaries(false);
+      await loadPlanDaySummaries(!wasSelectedPlanDay);
 
       if (wasSelectedPlanDay) {
         await loadSelectedPlanDay(planDaySummaries.value[0]?._id ?? null);
+      } else if (nextSelectedPlanDayId?.trim()) {
+        await loadSelectedPlanDay(nextSelectedPlanDayId);
       }
 
       return true;
@@ -530,10 +541,6 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
     selectedPlanDay.value = null;
     selectedPlanDayId.value = null;
     await Promise.all([loadPlan(), loadPlanDaySummaries(false), loadExercises()]);
-
-    if (selectedPlanDayId.value) {
-      await loadSelectedPlanDay(selectedPlanDayId.value);
-    }
   };
 
   return {

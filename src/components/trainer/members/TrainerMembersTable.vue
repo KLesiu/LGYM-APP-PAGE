@@ -1,23 +1,23 @@
 <template>
-  <section class="flex min-h-0 min-w-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
-    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
-      <div class="flex flex-col gap-4">
-        <div class="space-y-3">
-          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
-            {{ t("trainerMembers.list.eyebrow") }}
-          </p>
-
-          <div>
-            <h2 class="text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
-              {{ t("trainerMembers.list.title") }}
-            </h2>
-            <p class="mt-2 max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
-              {{ t("trainerMembers.list.subtitle") }}
-            </p>
-          </div>
-        </div>
-
-         <div class="grid gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(220px,240px)_auto_auto] xl:items-center">
+  <AppDataSection
+    :eyebrow="t('trainerMembers.list.eyebrow')"
+    :title="t('trainerMembers.list.title')"
+    :subtitle="t('trainerMembers.list.subtitle')"
+    :pagination-summary="
+      t('trainerMembers.list.pagination.summary', {
+        page,
+        totalPages,
+        totalCount,
+      })
+    "
+    :previous-label="t('trainerMembers.actions.previous')"
+    :next-label="t('trainerMembers.actions.next')"
+    :disable-previous="!hasPreviousPage || isLoading"
+    :disable-next="!hasNextPage || isLoading"
+    @previous="emit('update:page', page - 1)"
+    @next="emit('update:page', page + 1)"
+  >
+    <template #controls>
           <v-text-field
             :model-value="searchQuery"
             :label="t('trainerMembers.list.filters.search')"
@@ -59,9 +59,9 @@
             class="xl:min-w-[128px]"
             @update:model-value="onPageSizeUpdate"
           />
-        </div>
+    </template>
 
-        <div class="flex flex-wrap gap-2">
+    <template #filters>
           <v-chip
             v-for="filter in statusFilters"
             :key="filter.value"
@@ -72,11 +72,7 @@
           >
             {{ filter.label }}
           </v-chip>
-        </div>
-      </div>
-    </div>
-
-    <v-progress-linear v-if="isLoading" indeterminate color="primary" />
+    </template>
 
     <div class="min-h-0 flex-1 px-0 py-0">
       <div v-if="hasLoadError && !isLoading" class="p-4 sm:p-5">
@@ -98,125 +94,127 @@
         </div>
       </div>
 
-      <div v-else-if="isMobileLayout" class="border-y border-[var(--lgym-border)]">
-        <template v-if="members.length > 0">
-          <article
-            v-for="(item, index) in members"
-            :key="memberRowKey(item, index)"
-            class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
-          >
-            <div class="flex flex-col gap-4">
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex min-w-0 items-center gap-3">
-                  <v-avatar size="48">
-                    <v-img v-if="item.avatar" :src="item.avatar" />
-                    <span v-else class="text-sm font-bold text-[var(--lgym-text)]">
-                      {{ getInitials(item.name || item.email) }}
-                    </span>
-                  </v-avatar>
-
-                  <div class="min-w-0 space-y-1">
-                    <p class="truncate text-sm font-semibold text-[var(--lgym-text)]">
-                      {{ item.name || t("trainerMembers.list.fallback.noName") }}
-                    </p>
-                    <p class="break-all text-xs text-[var(--lgym-text-muted)]">
-                      {{ item.email || t("trainerMembers.list.fallback.noEmail") }}
-                    </p>
-                  </div>
-                </div>
-
-                <v-chip :color="getMemberStatusColor(item.status)" size="small">
-                  {{ t(getMemberStatusTranslationKey(item.status)) }}
-                </v-chip>
-              </div>
-
-              <dl class="grid gap-3 sm:grid-cols-2">
-                <div class="space-y-1">
-                  <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                    {{ t("trainerMembers.list.columns.relationship") }}
-                  </dt>
-                  <dd class="m-0 text-sm text-[var(--lgym-text)]">
-                    {{ relationshipLabel(item) }}
-                  </dd>
-                </div>
-
-                <div class="space-y-1">
-                  <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                    {{ t("trainerMembers.list.columns.lastUpdate") }}
-                  </dt>
-                  <dd class="m-0 text-sm text-[var(--lgym-text)]">
-                    {{ relationshipDate(item) }}
-                  </dd>
-                </div>
-              </dl>
-
-              <div class="flex flex-col gap-3 sm:flex-row">
-                <v-btn color="primary" variant="flat" class="min-h-10 rounded-md px-4" @click="emit('openDetails', item)">
-                  {{ t("trainerMembers.actions.openDetails") }}
-                </v-btn>
-                <v-btn
-                  variant="outlined"
-                  color="error"
-                  class="min-h-10 rounded-md px-4"
-                  :disabled="!canUnlinkMember(item) || isUnlinking(item._id)"
-                  :loading="isUnlinking(item._id)"
-                  @click="emit('unlink', item)"
-                >
-                  {{ t("trainerMembers.actions.unlink") }}
-                </v-btn>
-              </div>
-            </div>
-          </article>
-        </template>
-
-        <div
-          v-else
-          class="m-4 rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]"
-        >
-          <div class="mx-auto flex max-w-md flex-col items-center gap-3">
-            <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
-              <v-icon icon="mdi-account-group-outline" size="26" />
-            </div>
-            <p class="text-base font-semibold text-[var(--lgym-text)]">
-              {{ t("trainerMembers.list.empty.title") }}
-            </p>
-            <p class="leading-6">
-              {{ t("trainerMembers.list.empty.subtitle") }}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <v-data-table-server
+      <AppDataTable
         v-else
-        class="trainer-members-table"
         :headers="headers"
         :items="members"
         :items-length="totalCount"
         :items-per-page="pageSize"
         :page="page"
         :loading="isLoading"
+        server
         item-value="_id"
         hide-default-footer
         hover
         @update:page="emit('update:page', $event)"
         @update:items-per-page="onPageSizeUpdate"
       >
+        <template #mobile>
+          <div class="border-y border-[var(--lgym-border)]">
+            <template v-if="members.length > 0">
+              <article
+                v-for="(item, index) in members"
+                :key="memberRowKey(item, index)"
+                class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+              >
+                <div class="flex flex-col gap-4">
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex min-w-0 items-center gap-3">
+                      <v-avatar size="48">
+                        <v-img v-if="item.avatar" :src="item.avatar" />
+                        <span v-else class="text-sm font-bold text-[var(--lgym-text)]">
+                          {{ getInitials(item.name || item.email) }}
+                        </span>
+                      </v-avatar>
+
+                      <div class="min-w-0 space-y-1">
+                        <p class="truncate text-sm font-semibold text-[var(--lgym-text)]">
+                          {{ item.name || t("trainerMembers.list.fallback.noName") }}
+                        </p>
+                        <p class="break-all text-xs text-[var(--lgym-text-muted)]">
+                          {{ item.email || t("trainerMembers.list.fallback.noEmail") }}
+                        </p>
+                      </div>
+                    </div>
+
+                    <v-chip :color="getMemberStatusColor(item.status)" size="small">
+                      {{ t(getMemberStatusTranslationKey(item.status)) }}
+                    </v-chip>
+                  </div>
+
+                  <dl class="grid gap-3 sm:grid-cols-2">
+                    <div class="space-y-1">
+                      <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                        {{ t("trainerMembers.list.columns.relationship") }}
+                      </dt>
+                      <dd class="m-0 text-sm text-[var(--lgym-text)]">
+                        {{ relationshipLabel(item) }}
+                      </dd>
+                    </div>
+
+                    <div class="space-y-1">
+                      <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                        {{ t("trainerMembers.list.columns.lastUpdate") }}
+                      </dt>
+                      <dd class="m-0 text-sm text-[var(--lgym-text)]">
+                        {{ relationshipDate(item) }}
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <div class="flex flex-col gap-3 sm:flex-row">
+                    <v-btn color="primary" variant="flat" class="min-h-10 rounded-md px-4" @click="emit('openDetails', item)">
+                      {{ t("trainerMembers.actions.openDetails") }}
+                    </v-btn>
+                    <v-btn
+                      variant="outlined"
+                      color="error"
+                      class="min-h-10 rounded-md px-4"
+                      :disabled="!canUnlinkMember(item) || isUnlinking(item._id)"
+                      :loading="isUnlinking(item._id)"
+                      @click="emit('unlink', item)"
+                    >
+                      {{ t("trainerMembers.actions.unlink") }}
+                    </v-btn>
+                  </div>
+                </div>
+              </article>
+            </template>
+
+            <div
+              v-else
+              class="m-4 rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]"
+            >
+              <div class="mx-auto flex max-w-md flex-col items-center gap-3">
+                <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
+                  <v-icon icon="mdi-account-group-outline" size="26" />
+                </div>
+                <p class="text-base font-semibold text-[var(--lgym-text)]">
+                  {{ t("trainerMembers.list.empty.title") }}
+                </p>
+                <p class="leading-6">
+                  {{ t("trainerMembers.list.empty.subtitle") }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </template>
+
         <template #item.member="{ item, index }">
-          <div :key="memberRowKey(item, index)" class="flex items-center gap-3 px-4 py-4 lg:px-5">
+          <div :key="memberRowKey(toMember(item), index)" class="flex items-center gap-3 px-4 py-4 lg:px-5">
             <v-avatar size="44">
-              <v-img v-if="item.avatar" :src="item.avatar" />
+              <v-img v-if="toMember(item).avatar" :src="toImageSrc(toMember(item).avatar)" />
               <span v-else class="text-sm font-bold text-[var(--lgym-text)]">
-                {{ getInitials(item.name || item.email) }}
+                {{ getInitials(toMember(item).name || toMember(item).email) }}
               </span>
             </v-avatar>
 
             <div class="min-w-0 space-y-1 text-sm">
               <p class="truncate font-semibold text-[var(--lgym-text)]">
-                {{ item.name || t("trainerMembers.list.fallback.noName") }}
+                {{ toMember(item).name || t("trainerMembers.list.fallback.noName") }}
               </p>
               <p class="break-all text-[var(--lgym-text-muted)]">
-                {{ item.email || t("trainerMembers.list.fallback.noEmail") }}
+                {{ toMember(item).email || t("trainerMembers.list.fallback.noEmail") }}
               </p>
             </div>
           </div>
@@ -224,33 +222,33 @@
 
         <template #item.status="{ item }">
           <div class="px-4 py-4 lg:px-5">
-            <v-chip :color="getMemberStatusColor(item.status)" size="small">
-              {{ t(getMemberStatusTranslationKey(item.status)) }}
+            <v-chip :color="getMemberStatusColor(toMember(item).status)" size="small">
+              {{ t(getMemberStatusTranslationKey(toMember(item).status)) }}
             </v-chip>
           </div>
         </template>
 
         <template #item.relationship="{ item }">
           <div class="space-y-1 px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
-            <p>{{ relationshipLabel(item) }}</p>
+            <p>{{ relationshipLabel(toMember(item)) }}</p>
             <p class="text-xs text-[var(--lgym-text-muted)]">
-              {{ relationshipDate(item) }}
+              {{ relationshipDate(toMember(item)) }}
             </p>
           </div>
         </template>
 
         <template #item.actions="{ item }">
           <div class="flex flex-wrap gap-2 px-4 py-4 lg:px-5">
-            <v-btn color="primary" variant="tonal" class="min-h-10 rounded-md px-4" @click="emit('openDetails', item)">
+            <v-btn color="primary" variant="tonal" class="min-h-10 rounded-md px-4" @click="emit('openDetails', toMember(item))">
               {{ t("trainerMembers.actions.openDetails") }}
             </v-btn>
             <v-btn
               variant="outlined"
               color="error"
               class="min-h-10 rounded-md px-4"
-              :disabled="!canUnlinkMember(item) || isUnlinking(item._id)"
-              :loading="isUnlinking(item._id)"
-              @click="emit('unlink', item)"
+              :disabled="!canUnlinkMember(toMember(item)) || isUnlinking(toMember(item)._id)"
+              :loading="isUnlinking(toMember(item)._id)"
+              @click="emit('unlink', toMember(item))"
             >
               {{ t("trainerMembers.actions.unlink") }}
             </v-btn>
@@ -272,55 +270,21 @@
             </div>
           </div>
         </template>
-      </v-data-table-server>
+      </AppDataTable>
     </div>
-
-    <div class="border-t border-[var(--lgym-border)] px-4 py-4 sm:px-5">
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-sm text-[var(--lgym-text-muted)]">
-          {{
-            t("trainerMembers.list.pagination.summary", {
-              page,
-              totalPages,
-              totalCount,
-            })
-          }}
-        </p>
-
-        <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-          <v-btn
-            variant="outlined"
-            color="primary"
-            class="min-h-10 rounded-md px-4"
-            :disabled="!hasPreviousPage || isLoading"
-            @click="emit('update:page', page - 1)"
-          >
-            {{ t("trainerMembers.actions.previous") }}
-          </v-btn>
-          <v-btn
-            variant="outlined"
-            color="primary"
-            class="min-h-10 rounded-md px-4"
-            :disabled="!hasNextPage || isLoading"
-            @click="emit('update:page', page + 1)"
-          >
-            {{ t("trainerMembers.actions.next") }}
-          </v-btn>
-        </div>
-      </div>
-    </div>
-  </section>
+  </AppDataSection>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useDisplay } from "vuetify";
 import { useI18n } from "vue-i18n";
 
 import type {
   TrainerDashboardTraineeDto,
   TrainerDashboardTraineeDtoStatus,
 } from "../../../api/model";
+import AppDataTable from "../../ui/AppDataTable.vue";
+import AppDataSection from "../../ui/AppDataSection.vue";
 import {
   canUnlinkMember,
   getInitials,
@@ -368,10 +332,10 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { lgAndUp } = useDisplay();
 
-const isMobileLayout = computed(() => !lgAndUp.value);
 const pageSizeOptions = [10, 20, 50];
+
+const toMember = (item: unknown) => item as TrainerDashboardTraineeDto;
 
 const statusFilters = computed<
   { label: string; value: MemberStatusFilter }[]
@@ -457,6 +421,9 @@ const relationshipDate = (member: TrainerDashboardTraineeDto) =>
       member.lastInvitationExpiresAt,
   );
 
-const memberRowKey = (member: TrainerDashboardTraineeDto, index: number) =>
-  member._id ?? `${member.email ?? "member"}-${index}`;
+const toImageSrc = (value: string | null | undefined) => value ?? undefined;
+
+const memberRowKey = (member: TrainerDashboardTraineeDto, index: unknown) =>
+  member._id ??
+  `${member.email ?? "member"}-${typeof index === "number" ? index : Number(index) || 0}`;
 </script>

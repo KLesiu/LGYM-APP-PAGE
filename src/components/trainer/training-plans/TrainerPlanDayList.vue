@@ -1,6 +1,6 @@
 <template>
-  <section class="overflow-hidden border-y border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/40">
-    <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 lg:px-6">
+  <section class="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
+    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -29,10 +29,10 @@
 
     <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
-    <div class="divide-y divide-[var(--lgym-border)]">
+    <div class="min-h-0 flex-1 px-4 py-4 sm:px-5 lg:px-6">
       <div
         v-if="hasError && !isLoading"
-        class="px-4 py-8 text-center sm:px-5 lg:px-6"
+        class="rounded-xl border border-dashed border-[var(--lgym-border)] px-4 py-8 text-center"
       >
         <p class="text-sm text-[var(--lgym-text-muted)]">
           {{ t("trainerTrainingPlanDetails.planDays.error.load") }}
@@ -44,56 +44,92 @@
 
       <div
         v-else-if="items.length === 0"
-        class="px-4 py-8 text-center text-sm text-[var(--lgym-text-muted)] sm:px-5 lg:px-6"
+        class="rounded-xl border border-dashed border-[var(--lgym-border)] px-4 py-8 text-center text-sm text-[var(--lgym-text-muted)]"
       >
         {{ t("trainerTrainingPlanDetails.planDays.empty") }}
       </div>
 
-      <button
-        v-for="item in items"
-        :key="item._id || item.name || 'plan-day'"
-        type="button"
-        class="w-full px-4 py-4 text-left transition-colors hover:bg-[var(--lgym-note-bg)]/28 sm:px-5 lg:px-6"
-        :class="item._id?.trim() === selectedPlanDayId ? 'bg-[var(--lgym-note-bg)]/42' : ''"
-        @click="$emit('open', item)"
-      >
-        <div class="flex items-start justify-between gap-3">
-          <div class="min-w-0">
-            <h4 class="truncate text-sm font-semibold text-[var(--lgym-text)] sm:text-base">
-              {{ item.name || t("trainerTrainingPlanDetails.planDays.fallback.noName") }}
-            </h4>
-            <div class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-[var(--lgym-text-muted)]">
-              <span>
-                {{ t("trainerTrainingPlanDetails.planDays.meta.exercises", { count: item.totalNumberOfExercises ?? 0 }) }}
-              </span>
-              <span>
-                {{ t("trainerTrainingPlanDetails.planDays.meta.series", { count: item.totalNumberOfSeries ?? 0 }) }}
-              </span>
-              <span>
-                {{ t("trainerTrainingPlanDetails.planDays.meta.lastTraining", { value: formatDate(item.lastTrainingDate) }) }}
-              </span>
+      <div v-else class="grid gap-4 xl:grid-cols-2">
+        <article
+          v-for="item in items"
+          :key="item._id || item.name || 'plan-day'"
+          class="group flex h-full min-h-[220px] flex-col rounded-2xl border bg-[var(--lgym-note-bg)]/18 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[var(--lgym-note-bg)]/30"
+          :class="item._id?.trim() === selectedPlanDayId
+            ? 'border-[var(--lgym-primary)] shadow-[0_0_0_1px_color-mix(in_srgb,var(--lgym-primary)_50%,transparent)]'
+            : 'border-[var(--lgym-border)]'"
+        >
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0 flex-1">
+              <v-chip
+                size="x-small"
+                :color="item._id?.trim() === selectedPlanDayId ? 'primary' : undefined"
+                :variant="item._id?.trim() === selectedPlanDayId ? 'flat' : 'outlined'"
+              >
+                {{ item._id?.trim() === selectedPlanDayId
+                  ? t("trainerTrainingPlanDetails.planDays.badges.selected")
+                  : t("trainerTrainingPlanDetails.planDays.badges.available") }}
+              </v-chip>
+
+              <h4 class="mt-3 line-clamp-2 text-base font-semibold text-[var(--lgym-text)]">
+                {{ item.name || t("trainerTrainingPlanDetails.planDays.fallback.noName") }}
+              </h4>
             </div>
           </div>
 
-          <v-btn
-            variant="outlined"
-            color="primary"
-            size="small"
-            @click.stop="$emit('open', item)"
-          >
-            {{ t("trainerTrainingPlanDetails.planDays.actions.open") }}
-          </v-btn>
-          <v-btn
-            variant="text"
-            color="error"
-            size="small"
-            :loading="deletingPlanDayId === item._id"
-            @click.stop="$emit('delete', item)"
-          >
-            {{ t("trainerTrainingPlanDetails.planDays.actions.delete") }}
-          </v-btn>
-        </div>
-      </button>
+          <div class="mt-4 grid gap-2 sm:grid-cols-3">
+            <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/76 px-3 py-3">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)]">
+                {{ t("trainerTrainingPlanDetails.planDays.stats.exercises") }}
+              </p>
+              <p class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">
+                {{ item.totalNumberOfExercises ?? 0 }}
+              </p>
+            </div>
+
+            <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/76 px-3 py-3">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)]">
+                {{ t("trainerTrainingPlanDetails.planDays.stats.series") }}
+              </p>
+              <p class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">
+                {{ item.totalNumberOfSeries ?? 0 }}
+              </p>
+            </div>
+
+            <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/76 px-3 py-3">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)]">
+                {{ t("trainerTrainingPlanDetails.planDays.stats.lastTraining") }}
+              </p>
+              <p class="mt-2 text-sm font-medium text-[var(--lgym-text)]">
+                {{ formatDate(item.lastTrainingDate) }}
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-4 rounded-xl border border-dashed border-[var(--lgym-border)] px-3 py-3 text-xs leading-5 text-[var(--lgym-text-muted)]">
+            {{ t("trainerTrainingPlanDetails.planDays.meta.series", { count: item.totalNumberOfSeries ?? 0 }) }}
+            ·
+            {{ t("trainerTrainingPlanDetails.planDays.meta.exercises", { count: item.totalNumberOfExercises ?? 0 }) }}
+          </div>
+
+          <div class="mt-auto flex flex-wrap gap-2 pt-4">
+            <v-btn variant="outlined" color="primary" size="small" @click="$emit('preview', item)">
+              {{ t("trainerTrainingPlanDetails.planDays.actions.preview") }}
+            </v-btn>
+            <v-btn color="primary" size="small" @click="$emit('edit', item)">
+              {{ t("trainerTrainingPlanDetails.planDays.actions.edit") }}
+            </v-btn>
+            <v-btn
+              variant="text"
+              color="error"
+              size="small"
+              :loading="deletingPlanDayId === item._id"
+              @click="$emit('delete', item)"
+            >
+              {{ t("trainerTrainingPlanDetails.planDays.actions.delete") }}
+            </v-btn>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 </template>
@@ -115,8 +151,8 @@ defineProps<{
 
 defineEmits<{
   retry: [];
-  select: [value: string | null];
-  open: [value: PlanDayBaseInfoDto];
+  preview: [value: PlanDayBaseInfoDto];
+  edit: [value: PlanDayBaseInfoDto];
   delete: [value: PlanDayBaseInfoDto];
   "create-new": [];
 }>();

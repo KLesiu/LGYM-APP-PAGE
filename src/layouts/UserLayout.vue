@@ -36,6 +36,7 @@ const router = useRouter();
 const sectionByRouteName: Record<string, string> = {
   "user-relationship-status": "relationship",
   "user-relationship-invitation": "relationship",
+  "user-exercises": "exercises",
 };
 
 const activeSection = computed(() => {
@@ -49,6 +50,12 @@ const sidebarItems = computed<SidebarItem[]>(() => [
     label: t("userArea.navigation.relationship"),
     icon: "mdi-account-heart-outline",
     to: "/athlete/relationship",
+  },
+  {
+    key: "exercises",
+    label: t("userArea.navigation.exercises"),
+    icon: "mdi-dumbbell",
+    to: "/athlete/exercises",
   },
 ]);
 

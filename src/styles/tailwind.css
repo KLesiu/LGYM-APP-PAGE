@@ -35,6 +35,7 @@
   --lgym-text: #1a1a1a;
   --lgym-text-muted: rgba(26, 26, 26, 0.72);
   --lgym-text-soft: rgba(26, 26, 26, 0.52);
+  --lgym-control-label: rgba(26, 26, 26, 0.88);
 
   /* ── Borders ── */
   --lgym-border: rgba(0, 0, 0, 0.12);
@@ -124,6 +125,7 @@
   --lgym-text: #e8e6e6;
   --lgym-text-muted: rgba(232, 230, 230, 0.76);
   --lgym-text-soft: rgba(232, 230, 230, 0.52);
+  --lgym-control-label: rgba(232, 230, 230, 0.9);
 
   /* ── Borders ── */
   --lgym-border: rgba(232, 230, 230, 0.12);
@@ -219,4 +221,19 @@ html {
 
 #app {
   min-height: 100%;
+}
+
+.v-field .v-label,
+.v-field-label,
+.v-field__outline .v-label {
+  color: var(--lgym-control-label) !important;
+  opacity: 1 !important;
+}
+
+.v-field.v-field--focused .v-label,
+.v-field.v-field--focused .v-field-label,
+.v-field.v-field--active .v-label,
+.v-field.v-field--active .v-field-label {
+  color: rgb(var(--v-theme-primary)) !important;
+  opacity: 1 !important;
 }

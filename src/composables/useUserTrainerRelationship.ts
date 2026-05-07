@@ -125,10 +125,6 @@ export const useUserTrainerRelationship = () => {
       return "unauthorized" as const;
     }
 
-    if (response.status === 204) {
-      return "loaded" as const;
-    }
-
     if (response.status !== 200) {
       const message = getApiErrorMessage(response.data);
       errorKey.value =

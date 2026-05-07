@@ -8,8 +8,10 @@ import {
 import AdminLayout from "../layouts/AdminLayout.vue";
 import TrainerLayout from "../layouts/TrainerLayout.vue";
 import UserLayout from "../layouts/UserLayout.vue";
+import AdminExercisesPage from "../pages/admin/AdminExercisesPage.vue";
 import AdminUsersPage from "../pages/admin/AdminUsersPage.vue";
 import AdminVersionsPage from "../pages/admin/AdminVersionsPage.vue";
+import TrainerExercisesPage from "../pages/trainer/TrainerExercisesPage.vue";
 import TrainerMemberDetailsPage from "../pages/trainer/TrainerMemberDetailsPage.vue";
 import TrainerInvitationsPage from "../pages/trainer/TrainerInvitationsPage.vue";
 import TrainerMembersPage from "../pages/trainer/TrainerMembersPage.vue";
@@ -20,6 +22,7 @@ import TrainerReportTemplatesPage from "../pages/trainer/TrainerReportTemplatesP
 import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
+import UserExercisesPage from "../pages/user/UserExercisesPage.vue";
 import UserRelationshipPage from "../pages/user/UserRelationshipPage.vue";
 
 export const router = createRouter({
@@ -66,6 +69,11 @@ export const router = createRouter({
           name: "admin-versions",
           component: AdminVersionsPage,
         },
+        {
+          path: "exercises",
+          name: "admin-exercises",
+          component: AdminExercisesPage,
+        },
       ],
     },
     {
@@ -84,6 +92,11 @@ export const router = createRouter({
           path: "relationship",
           name: "user-relationship-status",
           component: UserRelationshipPage,
+        },
+        {
+          path: "exercises",
+          name: "user-exercises",
+          component: UserExercisesPage,
         },
         {
           path: "invitations/:invitationId",
@@ -123,6 +136,11 @@ export const router = createRouter({
           path: "report-templates",
           name: "trainer-report-templates",
           component: TrainerReportTemplatesPage,
+        },
+        {
+          path: "exercises",
+          name: "trainer-exercises",
+          component: TrainerExercisesPage,
         },
         {
           path: "training-plans",

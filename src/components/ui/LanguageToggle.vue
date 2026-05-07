@@ -36,33 +36,11 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-import type { AppLocale } from '../../composables/useAppLocale'
-import { useAppLocale } from '../../composables/useAppLocale'
-
-type LanguageOption = {
-  value: AppLocale
-  code: 'PL' | 'EN'
-  labelKey: 'ui.language.polish' | 'ui.language.english'
-  flag: string
-}
-
-const languageOptions: LanguageOption[] = [
-  {
-    value: 'pl',
-    code: 'PL',
-    labelKey: 'ui.language.polish',
-    flag: '🇵🇱',
-  },
-  {
-    value: 'en',
-    code: 'EN',
-    labelKey: 'ui.language.english',
-    flag: '🇬🇧',
-  },
-]
+import { appLocaleOptions, useAppLocale } from '../../composables/useAppLocale'
 
 const { t } = useI18n()
 const { currentLocale, setLocale } = useAppLocale()
+const languageOptions = appLocaleOptions
 
 const activeLanguage = computed(() => {
   const selected = languageOptions.find(option => option.value === currentLocale.value)

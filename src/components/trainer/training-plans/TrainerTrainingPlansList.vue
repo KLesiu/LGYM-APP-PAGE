@@ -20,9 +20,7 @@
       </div>
     </div>
 
-    <v-progress-linear v-if="isLoadingPlans" indeterminate color="primary" />
-
-    <div class="divide-y divide-[var(--lgym-border)]">
+    <div>
       <div v-if="hasLoadError && !isLoadingPlans" class="px-4 py-8 text-center sm:px-5 lg:px-6">
         <p class="text-sm text-[var(--lgym-text-muted)]">
           {{ t("trainerTrainingPlans.error.load") }}
@@ -32,106 +30,138 @@
         </v-btn>
       </div>
 
-      <div
-        v-else-if="plans.length === 0"
-        class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8"
+      <AppDataTable
+        v-else
+        :headers="headers"
+        :items="plans"
+        :loading="isLoadingPlans"
+        item-value="_id"
+        hide-default-footer
+        hover
+        row-clickable
+        @row-click="handleRowClick"
       >
-        {{ t("trainerTrainingPlans.empty.title") }}
-      </div>
-
-      <article
-        v-for="plan in plans"
-        :key="plan._id || plan.name || 'plan'"
-        class="px-6 py-5 lg:px-8"
-      >
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div class="min-w-0">
-            <div class="flex flex-wrap items-center gap-3">
-              <h4 class="truncate text-lg font-semibold text-[var(--lgym-text)]">
-                {{ plan.name || t("trainerTrainingPlans.fallback.noName") }}
-              </h4>
-              <v-chip
-                :color="plan.isActive ? 'success' : 'secondary'"
-                size="small"
-                variant="outlined"
+        <template #mobile>
+          <div class="border-y border-[var(--lgym-border)]">
+            <template v-if="plans.length > 0">
+              <article
+                v-for="plan in plans"
+                :key="plan._id || plan.name || 'plan'"
+                class="cursor-pointer border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0 transition-colors hover:bg-[var(--lgym-table-row-hover)]"
+                @click="openDetails(plan._id || '')"
               >
-                {{
-                  plan.isActive
-                    ? t("trainerTrainingPlans.status.active")
-                    : t("trainerTrainingPlans.status.inactive")
-                }}
-              </v-chip>
+                <div class="flex items-start justify-between gap-4">
+                  <div class="min-w-0 flex-1">
+                    <div class="flex flex-wrap items-center gap-3">
+                      <h4 class="truncate text-base font-semibold text-[var(--lgym-text)]">
+                        {{ plan.name || t("trainerTrainingPlans.fallback.noName") }}
+                      </h4>
+                      <v-chip
+                        :color="plan.isActive ? 'success' : 'secondary'"
+                        size="small"
+                        variant="outlined"
+                      >
+                        {{
+                          plan.isActive
+                            ? t("trainerTrainingPlans.status.active")
+                            : t("trainerTrainingPlans.status.inactive")
+                        }}
+                      </v-chip>
+                    </div>
+                  </div>
+
+                  <div class="flex shrink-0 items-center gap-1">
+                    <v-btn
+                      icon="mdi-pencil-outline"
+                      size="small"
+                      variant="text"
+                      color="primary"
+                      :disabled="!plan._id"
+                      :title="t('trainerTrainingPlans.actions.rename')"
+                      :aria-label="t('trainerTrainingPlans.actions.rename')"
+                      @click.stop="openRenameDialog(plan)"
+                    />
+                    <v-btn
+                      icon="mdi-delete-outline"
+                      size="small"
+                      variant="text"
+                      color="error"
+                      :disabled="!plan._id"
+                      :loading="deletingPlanId === plan._id"
+                      :title="t('trainerTrainingPlans.actions.delete')"
+                      :aria-label="t('trainerTrainingPlans.actions.delete')"
+                      @click.stop="handleDelete(plan)"
+                    />
+                  </div>
+                </div>
+              </article>
+            </template>
+
+            <div
+              v-else
+              class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8"
+            >
+              {{ t("trainerTrainingPlans.empty.title") }}
             </div>
           </div>
+        </template>
 
-          <div class="flex flex-wrap gap-2">
-            <v-btn
-              color="primary"
-              variant="tonal"
-              class="min-h-10 rounded-md px-4"
-              :disabled="!plan._id"
-              @click="openDetails(plan._id || '')"
-            >
-              {{ t("trainerTrainingPlans.actions.open") }}
-            </v-btn>
-            <v-btn
+        <template #item.name="{ item }">
+          <div class="px-4 py-4 lg:px-5">
+            <p class="font-semibold text-[var(--lgym-text)]">
+              {{ toPlan(item).name || t("trainerTrainingPlans.fallback.noName") }}
+            </p>
+          </div>
+        </template>
+
+        <template #item.status="{ item }">
+          <div class="px-4 py-4 lg:px-5">
+            <v-chip
+              :color="toPlan(item).isActive ? 'success' : 'secondary'"
+              size="small"
               variant="outlined"
-              color="primary"
-              class="min-h-10 rounded-md px-4"
-              :disabled="!plan._id"
-              @click="openRenameDialog(plan)"
             >
-              {{ t("trainerTrainingPlans.actions.rename") }}
-            </v-btn>
+              {{
+                toPlan(item).isActive
+                  ? t("trainerTrainingPlans.status.active")
+                  : t("trainerTrainingPlans.status.inactive")
+              }}
+            </v-chip>
+          </div>
+        </template>
+
+        <template #item.actions="{ item }">
+          <div class="flex items-center justify-end gap-1 px-4 py-4 lg:px-5">
             <v-btn
-              variant="outlined"
+              icon="mdi-pencil-outline"
+              size="small"
+              variant="text"
               color="primary"
-              class="min-h-10 rounded-md px-4"
-              :disabled="!plan._id"
-              :loading="settingActivePlanId === plan._id"
-              @click="handleSetActive(plan)"
-            >
-              {{ t("trainerTrainingPlans.actions.setActive") }}
-            </v-btn>
+              :disabled="!toPlan(item)._id"
+              :title="t('trainerTrainingPlans.actions.rename')"
+              :aria-label="t('trainerTrainingPlans.actions.rename')"
+              @click.stop="openRenameDialog(toPlan(item))"
+            />
             <v-btn
-              variant="outlined"
-              color="primary"
-              class="min-h-10 rounded-md px-4"
-              :disabled="!plan._id"
-              :loading="sharingPlanId === plan._id"
-              @click="handleShare(plan._id || '')"
-            >
-              {{ t("trainerTrainingPlans.actions.share") }}
-            </v-btn>
-            <v-btn
-              variant="outlined"
+              icon="mdi-delete-outline"
+              size="small"
+              variant="text"
               color="error"
-              class="min-h-10 rounded-md px-4"
-              :disabled="!plan._id"
-              :loading="deletingPlanId === plan._id"
-              @click="handleDelete(plan)"
-            >
-              {{ t("trainerTrainingPlans.actions.delete") }}
-            </v-btn>
+              :disabled="!toPlan(item)._id"
+              :loading="deletingPlanId === toPlan(item)._id"
+              :title="t('trainerTrainingPlans.actions.delete')"
+              :aria-label="t('trainerTrainingPlans.actions.delete')"
+              @click.stop="handleDelete(toPlan(item))"
+            />
           </div>
-        </div>
+        </template>
 
-        <div v-if="shareStateByPlanId[plan._id || '']" class="mt-4 rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-3">
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div class="min-w-0">
-              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                {{ t("trainerTrainingPlans.share.codeLabel") }}
-              </p>
-              <p class="mt-2 break-all font-mono text-sm font-semibold text-[var(--lgym-text)]">
-                {{ shareStateByPlanId[plan._id || ''] }}
-              </p>
-            </div>
-            <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click="copyShareCode(shareStateByPlanId[plan._id || ''] || '')">
-              {{ t("trainerTrainingPlans.share.copy") }}
-            </v-btn>
+        <template #no-data>
+          <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8">
+            {{ t("trainerTrainingPlans.empty.title") }}
           </div>
-        </div>
-      </article>
+        </template>
+      </AppDataTable>
     </div>
 
     <v-dialog v-model="isPlanDialogOpen" max-width="520">
@@ -167,17 +197,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import type { PlanFormDto } from "../../../api/model";
-import { useToast } from "../../../composables/useToast";
 import { useTrainerTrainingPlans } from "../../../composables/useTrainerTrainingPlans";
+import AppDataTable from "../../ui/AppDataTable.vue";
 
 const { t } = useI18n();
 const router = useRouter();
-const toast = useToast();
 
 const {
   plans,
@@ -185,20 +214,28 @@ const {
   hasLoadError,
   savingPlanId,
   deletingPlanId,
-  settingActivePlanId,
-  sharingPlanId,
   loadPlans,
   savePlan,
   deletePlan,
-  setActivePlan,
-  sharePlan,
 } = useTrainerTrainingPlans();
 
 const isPlanDialogOpen = ref(false);
 const editingPlanId = ref<string | null>(null);
 const editingPlanIsActive = ref<boolean | null>(false);
 const planName = ref("");
-const shareStateByPlanId = ref<Record<string, string>>({});
+
+const headers = computed(() => [
+  { title: t("trainerTrainingPlans.form.name"), key: "name", sortable: false },
+  { title: t("trainerTrainingPlans.status.active"), key: "status", sortable: false },
+  {
+    title: t("trainerTrainingPlans.actions.delete"),
+    key: "actions",
+    sortable: false,
+    align: "end" as const,
+  },
+]);
+
+const toPlan = (item: unknown) => item as PlanFormDto;
 
 const openCreateDialog = () => {
   editingPlanId.value = null;
@@ -238,39 +275,14 @@ const handleDelete = async (plan: PlanFormDto) => {
   await deletePlan(planId);
 };
 
-const handleSetActive = async (plan: PlanFormDto) => {
-  const planId = plan._id?.trim();
-  if (!planId || plan.isActive) return;
-
-  await setActivePlan(planId);
-};
-
-const handleShare = async (planId: string) => {
-  const response = await sharePlan(planId);
-  const shareCode = response?.shareCode?.trim();
-  if (!shareCode) return;
-
-  shareStateByPlanId.value = {
-    ...shareStateByPlanId.value,
-    [planId]: shareCode,
-  };
-};
-
-const copyShareCode = async (shareCode: string) => {
-  if (!shareCode) return;
-
-  try {
-    await navigator.clipboard.writeText(shareCode);
-    toast.success("trainerTrainingPlans.feedback.copyShareCodeSuccess");
-  } catch (error) {
-    console.error(error);
-    toast.error("trainerTrainingPlans.feedback.copyShareCodeFailed");
-  }
-};
-
 const openDetails = async (planId: string) => {
   if (!planId.trim()) return;
   await router.push(`/trainer/training-plans/${planId}`);
+};
+
+const handleRowClick = async (item: unknown) => {
+  const planId = toPlan(item)._id?.trim() ?? "";
+  await openDetails(planId);
 };
 
 onMounted(async () => {

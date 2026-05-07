@@ -13,81 +13,141 @@
     </section>
 
     <template v-else>
-      <TrainerPlanSharePanel
-        :share-code="shareCode"
-        :is-sharing="isSharingPlan"
-        @generate="handleShare"
-        @copy="copyShareCode"
-      />
-
-      <section class="grid gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
+      <section class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
         <TrainerPlanDayList
           :items="planDaySummaries"
           :is-loading="isLoadingPlanDays"
           :has-error="hasPlanDaysError"
           :is-saving="false"
           :deleting-plan-day-id="deletingPlanDayId"
-          :selected-plan-day-id="null"
+          :selected-plan-day-id="highlightedPlanDayId"
           :format-date="formatDate"
           @retry="reloadPlanDays"
-          @select="() => undefined"
-          @open="openPlanDayEditor"
+          @preview="previewPlanDay"
+          @edit="openPlanDayEditor"
           @delete="handleDeletePlanDay"
           @create-new="openCreatePlanDayDraft"
         />
 
-        <section class="border-y border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/40">
-          <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 lg:px-6">
-            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-              {{ t("trainerTrainingPlanDetails.workspace.eyebrow") }}
-            </p>
-            <h3 class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">
-              {{ plan?.name || t("trainerTrainingPlans.fallback.noName") }}
-            </h3>
-            <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
-              {{ t("trainerTrainingPlanDetails.workspace.subtitle") }}
-            </p>
-          </div>
+        <TrainerPlanSharePanel
+          :share-code="shareCode"
+          :is-sharing="isSharingPlan"
+          @generate="handleShare"
+          @copy="copyShareCode"
+        />
+      </section>
 
-          <div class="grid gap-4 px-4 py-4 sm:px-5 lg:px-6 xl:grid-cols-2">
-            <div class="border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]/35 px-4 py-4">
-              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                {{ t("trainerTrainingPlanDetails.workspace.sections.create.eyebrow") }}
-              </p>
-              <h4 class="mt-2 text-base font-semibold text-[var(--lgym-text)]">
-                {{ t("trainerTrainingPlanDetails.workspace.sections.create.title") }}
-              </h4>
-              <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
-                {{ t("trainerTrainingPlanDetails.workspace.sections.create.subtitle") }}
-              </p>
-              <v-btn class="mt-4 min-h-10 rounded-md px-4" color="primary" @click="openCreatePlanDayDraft">
-                {{ t("trainerTrainingPlanDetails.planDays.actions.create") }}
-              </v-btn>
-            </div>
+      <v-dialog v-model="isPreviewDialogOpen" max-width="980">
+        <section class="overflow-hidden rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
+          <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div class="min-w-0 max-w-3xl">
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                  {{ t("trainerTrainingPlanDetails.workspace.preview.eyebrow") }}
+                </p>
+                <h3 class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">
+                  {{ previewDialogTitle }}
+                </h3>
+                <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+                  {{ hasPreviewContext
+                    ? t("trainerTrainingPlanDetails.workspace.preview.subtitle")
+                    : t("trainerTrainingPlanDetails.workspace.empty.subtitle") }}
+                </p>
+              </div>
 
-            <div class="border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]/35 px-4 py-4">
-              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                {{ t("trainerTrainingPlanDetails.workspace.sections.edit.eyebrow") }}
-              </p>
-              <h4 class="mt-2 text-base font-semibold text-[var(--lgym-text)]">
-                {{ t("trainerTrainingPlanDetails.workspace.sections.edit.title") }}
-              </h4>
-              <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
-                {{ t("trainerTrainingPlanDetails.workspace.sections.edit.subtitle") }}
-              </p>
-              <div class="mt-4 rounded-md border border-dashed border-[var(--lgym-border)] px-3 py-3 text-sm text-[var(--lgym-text-muted)]">
-                {{ t("trainerTrainingPlanDetails.workspace.sections.edit.helper") }}
+              <div class="flex flex-wrap gap-2">
+                <v-btn variant="outlined" color="primary" @click="closePreviewDialog">
+                  {{ t("trainerTrainingPlanDetails.actions.close") }}
+                </v-btn>
+                <v-btn v-if="selectedPlanDayId" color="primary" @click="openPlanDayEditorById(selectedPlanDayId)">
+                  {{ t("trainerTrainingPlanDetails.planDays.actions.edit") }}
+                </v-btn>
               </div>
             </div>
           </div>
+
+          <v-progress-linear v-if="isLoadingSelectedPlanDay" indeterminate color="primary" />
+
+          <div v-if="hasSelectedPlanDayError && !isLoadingSelectedPlanDay" class="px-6 py-8 text-center lg:px-8">
+            <p class="text-sm text-[var(--lgym-text-muted)]">
+              {{ t("trainerTrainingPlanDetails.workspace.preview.error") }}
+            </p>
+            <v-btn class="mt-4" variant="outlined" color="primary" @click="previewPlanDayById(selectedPlanDayId)">
+              {{ t("trainerTrainingPlanDetails.actions.retry") }}
+            </v-btn>
+          </div>
+
+          <div v-else-if="isPreviewVisible" class="grid gap-4 px-4 py-4 sm:px-5 lg:px-6">
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/72 px-4 py-4">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)]">
+                  {{ t("trainerTrainingPlanDetails.workspace.preview.stats.exercises") }}
+                </p>
+                <p class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">{{ selectedExerciseCount }}</p>
+              </div>
+              <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/72 px-4 py-4">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)]">
+                  {{ t("trainerTrainingPlanDetails.workspace.preview.stats.series") }}
+                </p>
+                <p class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">{{ selectedSeriesCount }}</p>
+              </div>
+              <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/72 px-4 py-4">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)]">
+                  {{ t("trainerTrainingPlanDetails.workspace.preview.stats.lastTraining") }}
+                </p>
+                <p class="mt-2 text-sm font-medium text-[var(--lgym-text)]">{{ selectedLastTraining }}</p>
+              </div>
+            </div>
+
+            <div v-if="selectedExercises.length === 0" class="rounded-xl border border-dashed border-[var(--lgym-border)] px-4 py-6 text-sm text-[var(--lgym-text-muted)]">
+              {{ t("trainerTrainingPlanDetails.workspace.preview.emptyExercises") }}
+            </div>
+
+            <div v-else class="grid gap-3">
+              <article
+                v-for="(exercise, index) in selectedExercises"
+                :key="`${exercise.exercise?._id || exercise.exercise?.name || 'exercise'}-${index}`"
+                class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]/20 px-4 py-4"
+              >
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold text-[var(--lgym-text)]">
+                      {{ exercise.exercise?.name || t("trainerTrainingPlanDetails.exercises.fallback.noName") }}
+                    </p>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                      <v-chip v-if="exercise.exercise?.bodyPart?.displayName || exercise.exercise?.bodyPart?.name" size="x-small" variant="outlined">
+                        {{ exercise.exercise?.bodyPart?.displayName || exercise.exercise?.bodyPart?.name }}
+                      </v-chip>
+                      <v-chip size="x-small" color="primary" variant="outlined">
+                        {{ t("trainerTrainingPlanDetails.workspace.preview.exerciseMeta.reps", { value: exercise.reps || '—' }) }}
+                      </v-chip>
+                      <v-chip size="x-small" variant="outlined">
+                        {{ t("trainerTrainingPlanDetails.workspace.preview.exerciseMeta.series", { value: exercise.series ?? 0 }) }}
+                      </v-chip>
+                    </div>
+                  </div>
+
+                  <div class="rounded-full border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-3 py-1 text-xs font-semibold text-[var(--lgym-text-muted)]">
+                    #{{ index + 1 }}
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div v-else class="px-6 py-8 lg:px-8">
+            <div class="rounded-xl border border-dashed border-[var(--lgym-border)] px-4 py-6 text-sm leading-6 text-[var(--lgym-text-muted)]">
+              {{ t("trainerTrainingPlanDetails.workspace.empty.helper") }}
+            </div>
+          </div>
         </section>
-      </section>
+      </v-dialog>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -105,6 +165,7 @@ const props = defineProps<{
 const { locale, t } = useI18n();
 const toast = useToast();
 const router = useRouter();
+const isPreviewDialogOpen = ref(false);
 
 const planIdRef = {
   get value() {
@@ -114,29 +175,94 @@ const planIdRef = {
 };
 
 const {
-  plan,
   planDaySummaries,
+  selectedPlanDayId,
+  selectedPlanDay,
   shareCode,
   isLoadingPlan,
   hasPlanError,
   isLoadingPlanDays,
   hasPlanDaysError,
+  isLoadingSelectedPlanDay,
+  hasSelectedPlanDayError,
   deletingPlanDayId,
   isSharingPlan,
-  loadPlan,
+  loadInitialState,
   loadPlanDaySummaries,
+  loadSelectedPlanDay,
   deletePlanDay,
   sharePlan,
 } = useTrainerTrainingPlanDetails(planIdRef);
+
+const formatDate = (value: string | null | undefined) =>
+  formatTrainerDate(locale.value, value);
+
+const selectedPlanDaySummary = computed(
+  () =>
+    planDaySummaries.value.find(
+      (item) => item._id?.trim() === selectedPlanDayId.value,
+    ) ?? null,
+);
+
+const highlightedPlanDayId = computed(() =>
+  isPreviewDialogOpen.value ? selectedPlanDayId.value : null,
+);
+
+const selectedExercises = computed(() => selectedPlanDay.value?.exercises ?? []);
+
+const hasPreviewContext = computed(() => Boolean(selectedPlanDayId.value?.trim()));
+
+const isPreviewVisible = computed(
+  () =>
+    Boolean(selectedPlanDay.value?._id?.trim()) &&
+    selectedPlanDay.value?._id?.trim() === selectedPlanDayId.value,
+);
+
+const previewDialogTitle = computed(
+  () =>
+    selectedPlanDay.value?.name ||
+    selectedPlanDaySummary.value?.name ||
+    t("trainerTrainingPlanDetails.workspace.empty.title"),
+);
+
+const selectedExerciseCount = computed(() => selectedExercises.value.length);
+
+const selectedSeriesCount = computed(() =>
+  selectedExercises.value.reduce((total, exercise) => total + (exercise.series ?? 0), 0),
+);
+
+const selectedLastTraining = computed(() =>
+  formatDate(selectedPlanDaySummary.value?.lastTrainingDate),
+);
 
 const openCreatePlanDayDraft = async () => {
   await router.push(`/trainer/training-plans/${props.planId}/plan-days/new`);
 };
 
+const openPlanDayEditorById = async (planDayId: string | null) => {
+  const normalizedPlanDayId = planDayId?.trim();
+  if (!normalizedPlanDayId) return;
+  await router.push(`/trainer/training-plans/${props.planId}/plan-days/${normalizedPlanDayId}`);
+};
+
 const openPlanDayEditor = async (planDay: PlanDayBaseInfoDto) => {
-  const planDayId = planDay._id?.trim();
-  if (!planDayId) return;
-  await router.push(`/trainer/training-plans/${props.planId}/plan-days/${planDayId}`);
+  await openPlanDayEditorById(planDay._id ?? null);
+};
+
+const closePreviewDialog = async () => {
+  isPreviewDialogOpen.value = false;
+  await loadSelectedPlanDay(null);
+};
+
+const previewPlanDayById = async (planDayId: string | null) => {
+  const normalizedPlanDayId = planDayId?.trim();
+  if (!normalizedPlanDayId) return;
+  isPreviewDialogOpen.value = true;
+  await loadSelectedPlanDay(normalizedPlanDayId);
+};
+
+const previewPlanDay = async (planDay: PlanDayBaseInfoDto) => {
+  await previewPlanDayById(planDay._id ?? null);
 };
 
 const handleDeletePlanDay = async (planDay: PlanDayBaseInfoDto) => {
@@ -151,7 +277,6 @@ const handleDeletePlanDay = async (planDay: PlanDayBaseInfoDto) => {
   if (!confirmed) return;
 
   await deletePlanDay(planDayId);
-  await loadPlanDaySummaries(false);
 };
 
 const handleShare = async () => {
@@ -171,21 +296,23 @@ const copyShareCode = async () => {
 };
 
 const reloadAll = async () => {
-  await Promise.all([loadPlan(), loadPlanDaySummaries(false)]);
+  isPreviewDialogOpen.value = false;
+  await loadInitialState();
 };
 
 const reloadPlanDays = async () => {
-  await loadPlanDaySummaries(false);
+  await loadPlanDaySummaries(isPreviewDialogOpen.value);
+  if (isPreviewDialogOpen.value && selectedPlanDayId.value) {
+    await loadSelectedPlanDay(selectedPlanDayId.value);
+  }
 };
 
 watch(
   () => props.planId,
   async () => {
-    await Promise.all([loadPlan(), loadPlanDaySummaries(false)]);
+    isPreviewDialogOpen.value = false;
+    await loadInitialState();
   },
   { immediate: true },
 );
-
-const formatDate = (value: string | null | undefined) =>
-  formatTrainerDate(locale.value, value);
 </script>

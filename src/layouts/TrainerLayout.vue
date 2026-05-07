@@ -42,6 +42,7 @@ const sectionByRouteName: Record<string, string> = {
   "trainer-training-plan-day-create": "trainingPlans",
   "trainer-training-plan-day-edit": "trainingPlans",
   "trainer-report-templates": "reportTemplates",
+  "trainer-exercises": "exercises",
 };
 
 const activeSection = computed(() => {
@@ -67,6 +68,12 @@ const sidebarItems = computed<SidebarItem[]>(() => [
     label: t("trainerDashboard.navigation.trainingPlans"),
     icon: "mdi-clipboard-list-outline",
     to: "/trainer/training-plans",
+  },
+  {
+    key: "exercises",
+    label: t("trainerDashboard.navigation.exercises"),
+    icon: "mdi-dumbbell",
+    to: "/trainer/exercises",
   },
   {
     key: "reportTemplates",

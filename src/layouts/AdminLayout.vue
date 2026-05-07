@@ -40,6 +40,7 @@ const router = useRouter();
 const sectionByRouteName: Record<string, string> = {
   "admin-users": "users",
   "admin-versions": "versions",
+  "admin-exercises": "exercises",
 };
 
 const activeSection = computed(() => {
@@ -52,6 +53,10 @@ const activeSection = computed(() => {
 
   if (route.path.startsWith("/admin/versions")) {
     return "versions";
+  }
+
+  if (route.path.startsWith("/admin/exercises")) {
+    return "exercises";
   }
 
   return "users";
@@ -69,6 +74,12 @@ const sidebarItems = computed<SidebarItem[]>(() => [
     label: t("admin.tabs.items.versions.label"),
     icon: "mdi-cellphone-arrow-down",
     to: { name: "admin-versions" },
+  },
+  {
+    key: "exercises",
+    label: t("admin.tabs.items.exercises.label"),
+    icon: "mdi-dumbbell",
+    to: { name: "admin-exercises" },
   },
 ]);
 
