@@ -169,6 +169,7 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
 
     try {
       const response = await getApiPlanDayIdGetPlanDaysInfo(planId.value);
+      const responseStatus = Number(response.status);
 
       if (currentToken !== planDaysRequestToken) return;
 
@@ -183,7 +184,14 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
         return;
       }
 
-      if (response.status !== 200) {
+      if (responseStatus === 404 || responseStatus === 204) {
+        planDaySummaries.value = [];
+        selectedPlanDayId.value = null;
+        hasPlanDaysError.value = false;
+        return;
+      }
+
+      if (responseStatus !== 200) {
         const message = getApiErrorMessage(response.data);
         if (message) toast.errorMessage(message);
         else toast.error("trainerTrainingPlanDetails.feedback.loadPlanDaysFailed");
@@ -191,7 +199,7 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
         return;
       }
 
-      planDaySummaries.value = response.data ?? [];
+      planDaySummaries.value = Array.isArray(response.data) ? response.data : [];
 
       const selectedExists = planDaySummaries.value.some(
         (item) => item._id?.trim() === previousSelected,

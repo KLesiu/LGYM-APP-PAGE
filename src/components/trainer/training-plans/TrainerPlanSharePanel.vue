@@ -1,5 +1,5 @@
 <template>
-  <section class="h-fit overflow-hidden rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
+  <section class="flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
     <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-4">
         <div class="max-w-3xl">
@@ -40,10 +40,10 @@
       </div>
     </div>
 
-    <div class="px-4 py-4 sm:px-5 lg:px-6">
+    <div class="flex min-h-0 flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6">
       <div
         v-if="shareCode"
-        class="flex flex-col gap-3 rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-4"
+        class="flex min-h-full flex-1 flex-col gap-3 rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-4"
       >
         <div class="min-w-0">
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
@@ -56,10 +56,10 @@
       </div>
 
       <div
-        v-else
-        class="rounded-xl border border-dashed border-[var(--lgym-border)] px-4 py-6 text-sm text-[var(--lgym-text-muted)]"
+        v-else-if="shareEmptyText"
+        class="flex min-h-full flex-1 items-center rounded-xl border border-dashed border-[var(--lgym-border)] px-4 py-6 text-sm text-[var(--lgym-text-muted)]"
       >
-        {{ t("trainerTrainingPlanDetails.share.empty") }}
+        {{ shareEmptyText }}
       </div>
     </div>
   </section>
@@ -79,4 +79,5 @@ defineEmits<{
 }>();
 
 const { t } = useI18n();
+const shareEmptyText = t("trainerTrainingPlanDetails.share.empty").trim();
 </script>

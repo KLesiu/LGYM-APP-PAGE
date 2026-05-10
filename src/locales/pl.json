@@ -318,9 +318,9 @@
     "share": {
       "eyebrow": "Udostepnianie",
       "title": "Udostepnij ten plan kodem",
-      "subtitle": "Backend zwraca obecnie tylko kod udostepniania, dlatego ten panel zachowuje prosty, operacyjny workflow oparty o kod.",
+      "subtitle": "Dzieki temu kodowi dowolny uzytkownik bedzie mogl wgrac caly twoj plan.",
       "codeLabel": "Aktualny kod udostepniania",
-      "empty": "Wygeneruj kod udostepniania, gdy chcesz pozniej skopiowac ten plan do innego workflow.",
+      "empty": "",
       "actions": {
         "generate": "Generuj kod",
         "regenerate": "Generuj ponownie",
@@ -332,6 +332,9 @@
       "title": "Lista dni planu",
       "subtitle": "Przegladaj dni planu w kafelkach, uruchamiaj szybki podglad i przechodz do pelnej edycji tylko wtedy, gdy tego potrzebujesz.",
       "empty": "Nie dodano jeszcze zadnych dni planu.",
+      "columns": {
+        "actions": "Akcje"
+      },
       "badges": {
         "selected": "Podglad aktywny",
         "available": "Gotowy do podgladu"
@@ -507,7 +510,9 @@
       },
       "actions": {
         "add": "Dodaj",
-        "added": "Dodane"
+        "added": "Dodane",
+        "drag": "Przeciagnij do wybranych cwiczen",
+        "dragShort": "Przeciagnij"
       },
       "empty": "Brak cwiczen pasujacych do aktualnych filtrow.",
       "error": {
@@ -522,7 +527,12 @@
       "empty": "Dodaj cwiczenia z biblioteki po lewej, aby zaczac budowac dzien planu.",
       "fields": {
         "reps": "Powtorzenia",
-        "series": "Serie"
+        "series": "Serie",
+        "order": "Kolejnosc"
+      },
+      "actions": {
+        "drag": "Przeciagnij, aby zmienic kolejnosc",
+        "dragShort": "Przesun"
       },
       "meta": {
         "unknownExercise": "Brak szczegolow cwiczenia"

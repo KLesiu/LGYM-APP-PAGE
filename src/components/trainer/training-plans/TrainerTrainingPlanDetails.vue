@@ -13,27 +13,28 @@
     </section>
 
     <template v-else>
-      <section class="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
+      <section class="flex min-h-0 min-w-0 flex-col gap-4">
+        <TrainerPlanSharePanel
+          class="h-full flex-1"
+          :share-code="shareCode"
+          :is-sharing="isSharingPlan"
+          @generate="handleShare"
+          @copy="copyShareCode"
+        />
+
         <TrainerPlanDayList
+          class="h-full flex-1"
           :items="planDaySummaries"
           :is-loading="isLoadingPlanDays"
           :has-error="hasPlanDaysError"
           :is-saving="false"
           :deleting-plan-day-id="deletingPlanDayId"
           :selected-plan-day-id="highlightedPlanDayId"
-          :format-date="formatDate"
           @retry="reloadPlanDays"
           @preview="previewPlanDay"
           @edit="openPlanDayEditor"
           @delete="handleDeletePlanDay"
           @create-new="openCreatePlanDayDraft"
-        />
-
-        <TrainerPlanSharePanel
-          :share-code="shareCode"
-          :is-sharing="isSharingPlan"
-          @generate="handleShare"
-          @copy="copyShareCode"
         />
       </section>
 

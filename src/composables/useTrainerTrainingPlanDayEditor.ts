@@ -19,16 +19,10 @@ import { getApiErrorMessage } from "../api/trainerInvitations";
 import { getCurrentUser } from "./useCurrentUser";
 import { useToast } from "./useToast";
 
-const createDefaultExerciseRow = () => ({
-  exercise: null,
-  reps: "Max",
-  series: 1,
-});
-
 const createEmptyDraft = (): PlanDayFormDto => ({
   _id: null,
   name: "",
-  exercises: [createDefaultExerciseRow()],
+  exercises: [],
 });
 
 const mapPlanDayToDraft = (planDay: PlanDayVmDto | null | undefined): PlanDayFormDto => ({
@@ -39,7 +33,7 @@ const mapPlanDayToDraft = (planDay: PlanDayVmDto | null | undefined): PlanDayFor
       exercise: exercise.exercise?._id ?? null,
       reps: exercise.reps ?? "Max",
       series: exercise.series ?? 1,
-    })) ?? [createDefaultExerciseRow()],
+    })) ?? [],
 });
 
 const normalizeDraft = (draft: PlanDayFormDto): PlanDayFormDto => ({
@@ -264,13 +258,6 @@ export const useTrainerTrainingPlanDayEditor = (
         return { success: true, createdPlanDayId: payload._id };
       }
 
-      const beforeResponse = await getApiPlanDayIdGetPlanDaysInfo(planId.value);
-      const previousIds = new Set(
-        beforeResponse.status === 200
-          ? (beforeResponse.data ?? []).map((item) => item._id?.trim()).filter(Boolean)
-          : [],
-      );
-
       const createResponse = await postApiPlanDayIdCreatePlanDay(planId.value, {
         name: payload.name,
         exercises: payload.exercises ?? [],
@@ -286,12 +273,9 @@ export const useTrainerTrainingPlanDayEditor = (
       const afterResponse = await getApiPlanDayIdGetPlanDaysInfo(planId.value);
       const createdPlanDayId =
         afterResponse.status === 200
-          ? ((afterResponse.data ?? []).find(
-              (item) => item._id?.trim() && !previousIds.has(item._id.trim()),
-            )?._id?.trim() ??
-            (afterResponse.data ?? []).find((item) => item.name?.trim() === payload.name)
-              ?._id?.trim() ??
-            null)
+          ? ((afterResponse.data ?? []).find((item) => item.name?.trim() === payload.name)
+               ?._id?.trim() ??
+             null)
           : null;
 
       toast.success("trainerTrainingPlanDayEditor.feedback.createSuccess");

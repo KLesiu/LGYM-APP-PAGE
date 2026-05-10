@@ -318,9 +318,9 @@
     "share": {
       "eyebrow": "Share",
       "title": "Share this plan by code",
-      "subtitle": "The backend currently returns only a share code, so this panel keeps the workflow simple and code-based.",
+      "subtitle": "With this code, any user will be able to import your entire plan.",
       "codeLabel": "Current share code",
-      "empty": "Generate a share code when you want to copy this plan into another workflow later.",
+      "empty": "",
       "actions": {
         "generate": "Generate code",
         "regenerate": "Regenerate code",
@@ -332,6 +332,9 @@
       "title": "Plan day list",
       "subtitle": "Browse plan days as tiles, open a quick preview, and jump into full editing only when you need it.",
       "empty": "No plan days added yet.",
+      "columns": {
+        "actions": "Actions"
+      },
       "badges": {
         "selected": "Preview active",
         "available": "Ready to preview"
@@ -507,7 +510,9 @@
       },
       "actions": {
         "add": "Add",
-        "added": "Added"
+        "added": "Added",
+        "drag": "Drag into selected exercises",
+        "dragShort": "Drag"
       },
       "empty": "No exercises match the current filters.",
       "error": {
@@ -522,7 +527,12 @@
       "empty": "Add exercises from the library on the left to start building this plan day.",
       "fields": {
         "reps": "Reps",
-        "series": "Series"
+        "series": "Series",
+        "order": "Order"
+      },
+      "actions": {
+        "drag": "Drag to reorder",
+        "dragShort": "Move"
       },
       "meta": {
         "unknownExercise": "Exercise details unavailable"
