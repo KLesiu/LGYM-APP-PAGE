@@ -1,5 +1,5 @@
 <template>
-  <section class="flex min-h-0 min-w-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
+  <section class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
     <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -110,16 +110,16 @@
                 </dl>
 
                 <div class="flex flex-wrap gap-2">
-                  <v-btn variant="outlined" color="primary" size="small" @click="$emit('preview', item)">
+                  <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click="$emit('preview', item)">
                     {{ t("trainerTrainingPlanDetails.planDays.actions.preview") }}
                   </v-btn>
-                  <v-btn color="primary" size="small" @click="$emit('edit', item)">
+                  <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click="$emit('edit', item)">
                     {{ t("trainerTrainingPlanDetails.planDays.actions.edit") }}
                   </v-btn>
                   <v-btn
-                    variant="text"
+                    variant="outlined"
                     color="error"
-                    size="small"
+                    class="min-h-10 rounded-md px-4"
                     :loading="deletingPlanDayId === item._id"
                     @click="$emit('delete', item)"
                   >
@@ -167,17 +167,17 @@
         </template>
 
         <template #item.actions="{ item }">
-          <div class="flex items-center justify-end gap-1 px-4 py-4 lg:px-5">
-            <v-btn variant="outlined" color="primary" size="small" @click.stop="$emit('preview', toPlanDay(item))">
+          <div class="flex flex-wrap items-center justify-end gap-2 px-4 py-4 lg:px-5">
+            <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click.stop="$emit('preview', toPlanDay(item))">
               {{ t("trainerTrainingPlanDetails.planDays.actions.preview") }}
             </v-btn>
-            <v-btn color="primary" size="small" @click.stop="$emit('edit', toPlanDay(item))">
+            <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click.stop="$emit('edit', toPlanDay(item))">
               {{ t("trainerTrainingPlanDetails.planDays.actions.edit") }}
             </v-btn>
             <v-btn
-              variant="text"
+              variant="outlined"
               color="error"
-              size="small"
+              class="min-h-10 rounded-md px-4"
               :loading="deletingPlanDayId === toPlanDay(item)._id"
               @click.stop="$emit('delete', toPlanDay(item))"
             >

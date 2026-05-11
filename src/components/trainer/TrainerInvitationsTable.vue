@@ -144,7 +144,6 @@
                   <v-btn
                     variant="outlined"
                     color="error"
-                    prepend-icon="mdi-close-circle-outline"
                     class="min-h-10 w-full rounded-md px-4 sm:w-auto"
                     :loading="isRevoking(item._id)"
                     :disabled="!canRevoke(item) || isRevoking(item._id)"
@@ -235,7 +234,6 @@
             <v-btn
               variant="outlined"
               color="error"
-              prepend-icon="mdi-close-circle-outline"
               class="min-h-10 min-w-[132px] rounded-md px-4"
               :loading="isRevoking(toInvitation(item)._id)"
               :disabled="!canRevoke(toInvitation(item)) || isRevoking(toInvitation(item)._id)"

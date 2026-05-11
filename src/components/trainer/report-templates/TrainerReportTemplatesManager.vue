@@ -1,5 +1,5 @@
 <template>
-  <section class="overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
+  <section class="overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)] flex-1">
     <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
@@ -20,12 +20,10 @@
       </div>
     </div>
 
-    <v-progress-linear v-if="isLoadingTemplates" indeterminate color="primary" />
-
-    <div class="flex flex-col gap-0 px-4 py-0 sm:px-5 lg:px-6">
+    <div>
       <div
         v-if="hasTemplatesError && !isLoadingTemplates"
-        class="my-4 rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center"
+        class="mx-4 my-4 rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center sm:mx-5 lg:mx-6"
       >
         <p class="text-sm text-[var(--lgym-text-muted)]">
           {{ t("trainerMemberDetails.trainerReportTemplates.error.templates") }}
@@ -35,58 +33,152 @@
         </v-btn>
       </div>
 
-      <template v-else>
-        <article
-          v-for="template in templates"
-          :key="template._id || template.name || 'template'"
-          class="border-b border-[var(--lgym-border)] py-4 last:border-b-0"
-        >
-          <div class="flex flex-col gap-4">
-            <div class="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
-                  {{ template.name || t("trainerMemberDetails.trainerReportTemplates.fallback.noTemplateName") }}
-                </h3>
-                <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
-                  {{ template.description || t("trainerMemberDetails.trainerReportTemplates.fallback.noDescription") }}
-                </p>
-              </div>
+      <AppDataTable
+        v-else
+        :headers="headers"
+        :items="templates"
+        :loading="isLoadingTemplates"
+        item-value="_id"
+        hide-default-footer
+        hover
+      >
+        <template #mobile>
+          <div class="border-y border-[var(--lgym-border)]">
+            <template v-if="templates.length > 0">
+              <article
+                v-for="template in templates"
+                :key="template._id || template.name || 'template'"
+                class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+              >
+                <div class="flex flex-col gap-4">
+                  <div class="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
+                        {{
+                          template.name ||
+                          t("trainerMemberDetails.trainerReportTemplates.fallback.noTemplateName")
+                        }}
+                      </h3>
+                      <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+                        {{
+                          template.description ||
+                          t("trainerMemberDetails.trainerReportTemplates.fallback.noDescription")
+                        }}
+                      </p>
+                    </div>
 
-              <div class="flex flex-wrap gap-2">
-                <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click="openTemplateDialog(template)">
-                  {{ t("trainerMemberDetails.trainerReportTemplates.actions.editTemplate") }}
-                </v-btn>
-                <v-btn variant="outlined" color="error" class="min-h-10 rounded-md px-4" @click="deleteTemplate(template)">
-                  {{ t("trainerMemberDetails.trainerReportTemplates.actions.deleteTemplate") }}
-                </v-btn>
-              </div>
-            </div>
+                    <div class="flex flex-wrap gap-2">
+                      <v-btn
+                        variant="outlined"
+                        color="primary"
+                        class="min-h-10 rounded-md px-4"
+                        @click="openTemplateDialog(template)"
+                      >
+                        {{ t("trainerMemberDetails.trainerReportTemplates.actions.editTemplate") }}
+                      </v-btn>
+                      <v-btn
+                        variant="outlined"
+                        color="error"
+                        class="min-h-10 rounded-md px-4"
+                        @click="deleteTemplate(template)"
+                      >
+                        {{ t("trainerMemberDetails.trainerReportTemplates.actions.deleteTemplate") }}
+                      </v-btn>
+                    </div>
+                  </div>
 
-            <div class="border-t border-[var(--lgym-border)] pt-4">
-              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                {{ t("trainerMemberDetails.trainerReportTemplates.preview.fields") }}
-              </p>
-              <div class="mt-3 flex flex-wrap gap-2">
-                <v-chip
-                  v-for="field in orderedFields(template.fields)"
-                  :key="field.key || field.label || 'field'"
-                  size="small"
-                  variant="outlined"
-                >
-                  {{ field.label || field.key }} · {{ field.type || t("trainerMemberDetails.trainerReportTemplates.fallback.noFieldType") }}
-                </v-chip>
-              </div>
+                  <div class="border-t border-[var(--lgym-border)] pt-4">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.trainerReportTemplates.preview.fields") }}
+                    </p>
+                    <div class="mt-3 flex flex-wrap gap-2">
+                      <v-chip
+                        v-for="field in orderedFields(template.fields)"
+                        :key="field.key || field.label || 'field'"
+                        size="small"
+                        variant="outlined"
+                      >
+                        {{ field.label || field.key }} ·
+                        {{
+                          field.type ||
+                          t("trainerMemberDetails.trainerReportTemplates.fallback.noFieldType")
+                        }}
+                      </v-chip>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </template>
+
+            <div
+              v-else
+              class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8"
+            >
+              {{ t("trainerMemberDetails.trainerReportTemplates.empty.templates") }}
             </div>
           </div>
-        </article>
+        </template>
 
-        <div
-          v-if="templates.length === 0"
-           class="my-4 rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]"
-        >
-          {{ t("trainerMemberDetails.trainerReportTemplates.empty.templates") }}
-        </div>
-      </template>
+        <template #item.template="{ item }">
+          <div class="px-4 py-4 lg:px-5">
+            <h3 class="text-base font-semibold text-[var(--lgym-text)]">
+              {{
+                toTemplate(item).name ||
+                t("trainerMemberDetails.trainerReportTemplates.fallback.noTemplateName")
+              }}
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+              {{
+                toTemplate(item).description ||
+                t("trainerMemberDetails.trainerReportTemplates.fallback.noDescription")
+              }}
+            </p>
+          </div>
+        </template>
+
+        <template #item.fields="{ item }">
+          <div class="px-4 py-4 lg:px-5">
+            <div class="flex flex-wrap gap-2">
+              <v-chip
+                v-for="field in orderedFields(toTemplate(item).fields)"
+                :key="field.key || field.label || 'field'"
+                size="small"
+                variant="outlined"
+              >
+                {{ field.label || field.key }} ·
+                {{ field.type || t("trainerMemberDetails.trainerReportTemplates.fallback.noFieldType") }}
+              </v-chip>
+            </div>
+          </div>
+        </template>
+
+        <template #item.actions="{ item }">
+          <div class="flex flex-wrap justify-end gap-2 px-4 py-4 lg:px-5">
+            <v-btn
+              variant="outlined"
+              color="primary"
+              class="min-h-10 rounded-md px-4"
+              @click="openTemplateDialog(toTemplate(item))"
+            >
+              {{ t("trainerMemberDetails.trainerReportTemplates.actions.editTemplate") }}
+            </v-btn>
+            <v-btn
+              variant="outlined"
+              color="error"
+              class="min-h-10 rounded-md px-4"
+              @click="deleteTemplate(toTemplate(item))"
+            >
+              {{ t("trainerMemberDetails.trainerReportTemplates.actions.deleteTemplate") }}
+            </v-btn>
+          </div>
+        </template>
+
+        <template #no-data>
+          <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8">
+            {{ t("trainerMemberDetails.trainerReportTemplates.empty.templates") }}
+          </div>
+        </template>
+      </AppDataTable>
     </div>
   </section>
 
@@ -249,6 +341,7 @@ import {
 import { getApiErrorMessage } from "../../../api/trainerInvitations";
 import { handleTrainerUnauthorizedResponse } from "../../../composables/useTrainerMembers";
 import { useToast } from "../../../composables/useToast";
+import AppDataTable from "../../ui/AppDataTable.vue";
 
 type EditableTemplateField = {
   key: string;
@@ -304,6 +397,25 @@ let templateToken = 0;
 
 const redirectPath = computed(() => props.redirectPath || "/trainer/report-templates");
 
+const headers = computed(() => [
+  {
+    title: t("trainerMemberDetails.trainerReportTemplates.form.templateName"),
+    key: "template",
+    sortable: false,
+  },
+  {
+    title: t("trainerMemberDetails.trainerReportTemplates.preview.fields"),
+    key: "fields",
+    sortable: false,
+  },
+  {
+    title: "akcje",
+    key: "actions",
+    sortable: false,
+    align: "end" as const,
+  },
+]);
+
 const isEmptyTemplatesResponse = (status: number, data: unknown) => {
   if (status === 204 || status === 404) return true;
 
@@ -317,6 +429,8 @@ const isEmptyTemplatesResponse = (status: number, data: unknown) => {
 
 const orderedFields = (fields: OrderedFieldLike[] | null | undefined) =>
   [...(fields ?? [])].sort((left, right) => (left.order ?? 0) - (right.order ?? 0));
+
+const toTemplate = (item: unknown) => item as ReportTemplateDto;
 
 const resetTemplateForm = () => {
   templateForm.value = {

@@ -55,40 +55,37 @@
         </div>
       </template>
 
-      <template #item.actions="{ item }">
-        <div class="flex min-w-[170px] flex-wrap justify-end gap-1 py-2">
-          <v-btn
-            v-if="canManageExercise(toExercise(item))"
-            icon="mdi-pencil-outline"
-            size="small"
-            variant="text"
-            color="primary"
-            :title="t('exerciseLibrary.actions.edit')"
-            :aria-label="t('exerciseLibrary.actions.edit')"
-            @click="$emit('edit', toExercise(item))"
-          />
-          <v-btn
-            v-if="canManageExercise(toExercise(item))"
-            icon="mdi-delete-outline"
-            size="small"
-            variant="text"
-            color="error"
-            :title="t('exerciseLibrary.actions.delete')"
-            :aria-label="t('exerciseLibrary.actions.delete')"
-            @click="$emit('delete', toExercise(item))"
-          />
-          <v-btn
-            v-if="canTranslateExercise(toExercise(item))"
-            icon="mdi-translate"
-            size="small"
-            variant="text"
-            color="secondary"
-            :title="t('exerciseLibrary.actions.addTranslation')"
-            :aria-label="t('exerciseLibrary.actions.addTranslation')"
-            @click="$emit('translate', toExercise(item))"
-          />
-        </div>
-      </template>
+        <template #item.actions="{ item }">
+          <div class="flex min-w-[170px] flex-wrap justify-end gap-2 py-2">
+            <v-btn
+              v-if="canManageExercise(toExercise(item))"
+              variant="outlined"
+              color="primary"
+              class="min-h-10 rounded-md px-4"
+              @click="$emit('edit', toExercise(item))"
+            >
+              {{ t("exerciseLibrary.actions.edit") }}
+            </v-btn>
+            <v-btn
+              v-if="canManageExercise(toExercise(item))"
+              variant="outlined"
+              color="error"
+              class="min-h-10 rounded-md px-4"
+              @click="$emit('delete', toExercise(item))"
+            >
+              {{ t("exerciseLibrary.actions.delete") }}
+            </v-btn>
+            <v-btn
+              v-if="canTranslateExercise(toExercise(item))"
+              variant="outlined"
+              color="secondary"
+              class="min-h-10 rounded-md px-4"
+              @click="$emit('translate', toExercise(item))"
+            >
+              {{ t("exerciseLibrary.actions.addTranslation") }}
+            </v-btn>
+          </div>
+        </template>
 
       <template #no-data>
         <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">

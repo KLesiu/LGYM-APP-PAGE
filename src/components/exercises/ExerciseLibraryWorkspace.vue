@@ -12,6 +12,7 @@
       :disable-next="exercisePage >= exerciseTotalPages || isLoading"
       @previous="exercisePage = Math.max(1, exercisePage - 1)"
       @next="exercisePage = Math.min(exerciseTotalPages, exercisePage + 1)"
+      class="flex-1"
     >
       <template #header-actions>
         <v-btn

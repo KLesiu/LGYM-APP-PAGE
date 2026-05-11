@@ -243,7 +243,7 @@
     "list": {
       "eyebrow": "Plan list",
       "title": "All global plans",
-      "subtitle": "This view shows only fields available in the current plan DTO and refreshes after every mutation."
+      "subtitle": "Manage your own training plans, modify, add, and assign them to your trainees"
     },
     "status": {
       "active": "Active",
@@ -570,7 +570,7 @@
     "list": {
       "eyebrow": "Members list",
       "title": "Your trainee relationships",
-      "subtitle": "Search by name or email, narrow the list by status, sort on the server, and jump straight into the member workspace.",
+      "subtitle": "Search by name or email, filter by status, and manage your relationship with your trainee",
       "filters": {
         "search": "Search members",
         "sortBy": "Sort by",
@@ -1056,7 +1056,7 @@
     "form": {
       "eyebrow": "New invitation",
       "title": "Invite a new customer",
-      "subtitle": "Provide the customer email together with the preferred language and time zone so the backend can create the invitation with the right defaults.",
+      "subtitle": "Provide the customer email together with the preferred language and time zone",
       "note": "After a successful submit the form resets automatically and the invitation history on the right refreshes without a full page reload.",
       "fields": {
         "email": "Customer email",

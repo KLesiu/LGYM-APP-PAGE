@@ -1,10 +1,6 @@
 <template>
-  <div class="flex min-h-full min-w-0 flex-col gap-4">
-    <section
-      class="grid min-h-0 min-w-0 items-stretch gap-4 xl:grid-cols-[minmax(300px,380px)_minmax(0,1fr)]"
-    >
+  <div class="flex min-h-full min-w-0 flex-col gap-2">
       <TrainerInvitationFormCard
-        class="h-full flex-1"
         ref="formCardRef"
         :default-language="defaultLanguage"
         :default-time-zone="defaultTimeZone"
@@ -13,7 +9,7 @@
       />
 
       <TrainerInvitationsTable
-        class="h-full flex-1"
+        class="flex-1"
         :invitations="invitations"
         :is-loading="isLoadingList"
         :search-query="searchQuery"
@@ -34,7 +30,6 @@
         @toggle-sort-direction="sortDescending = !sortDescending"
         @revoke="handleRevokeInvitation"
       />
-    </section>
   </div>
 </template>
 

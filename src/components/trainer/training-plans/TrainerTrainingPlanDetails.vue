@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-0 min-w-0 flex-col gap-4">
+  <div class="flex min-h-0 min-w-0 flex-col gap-4 flex-1">
     <section
       v-if="hasPlanError && !isLoadingPlan"
       class="border-y border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/40 px-4 py-8 text-center sm:px-5 lg:px-6"
@@ -13,9 +13,9 @@
     </section>
 
     <template v-else>
-      <section class="flex min-h-0 min-w-0 flex-col gap-4">
+      <section class="flex min-h-0 min-w-0 flex-col gap-4 flex-1">
         <TrainerPlanSharePanel
-          class="h-full flex-1"
+          class=""
           :share-code="shareCode"
           :is-sharing="isSharingPlan"
           @generate="handleShare"

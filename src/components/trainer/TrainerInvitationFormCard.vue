@@ -1,5 +1,5 @@
 <template>
-  <section class="flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
+  <section class="flex h-full min-h-0 w-full  flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
     <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <p
         class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]"
@@ -19,7 +19,7 @@
         ref="formRef"
         v-model="isFormValid"
         validate-on="submit lazy"
-        class="flex flex-1 flex-col gap-4"
+        class="flex flex-1 flex-row items-center gap-4"
         @submit.prevent="submitForm"
       >
         <v-text-field
@@ -30,9 +30,10 @@
           :rules="emailRules"
           autocomplete="email"
           :disabled="isSubmitting"
+          
         />
 
-        <v-select
+        <v-combobox
           v-model="preferredLanguage"
           :label="t('trainerInvitations.form.fields.preferredLanguage')"
           :items="languageOptions"
@@ -44,6 +45,7 @@
             )
           "
           :disabled="isSubmitting"
+          :hide-details="true"
         />
 
         <v-combobox
@@ -57,10 +59,11 @@
           "
           :disabled="isSubmitting"
           :menu-props="{ maxHeight: 320 }"
+                    :hide-details="true"
+
         />
 
       
-        <div class="border-t border-[var(--lgym-border)] pt-4">
           <v-btn
             type="submit"
             color="primary"
@@ -71,7 +74,6 @@
           >
             {{ t("trainerInvitations.form.actions.submit") }}
           </v-btn>
-        </div>
       </v-form>
     </div>
   </section>

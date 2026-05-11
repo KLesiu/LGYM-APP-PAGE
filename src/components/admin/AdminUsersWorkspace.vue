@@ -101,9 +101,8 @@
                   <div class="flex flex-col gap-2">
                     <v-btn
                       color="primary"
-                      :variant="hasPendingChanges(item) ? 'flat' : 'outlined'"
-                      :prepend-icon="recentlySavedRoleUserId === item.id && !hasPendingChanges(item) ? 'mdi-check-circle-outline' : 'mdi-content-save-outline'"
-                      class="min-h-11 w-full px-5"
+                      variant="outlined"
+                      class="min-h-10 w-full rounded-md px-4"
                       :loading="isSavingRoles(item.id)"
                       :disabled="!item.id || isSavingRoles(item.id) || !hasPendingChanges(item)"
                       @click="item.id && $emit('saveRoles', item.id)"
@@ -234,13 +233,8 @@
             <div class="flex flex-col items-start gap-2">
               <v-btn
                 color="primary"
-                :variant="hasPendingChanges(toUser(item)) ? 'flat' : 'outlined'"
-                :prepend-icon="
-                  recentlySavedRoleUserId === toUser(item).id && !hasPendingChanges(toUser(item))
-                    ? 'mdi-check-circle-outline'
-                    : 'mdi-content-save-outline'
-                "
-                class="min-h-11 min-w-[148px] px-5"
+                variant="outlined"
+                class="min-h-10 min-w-[148px] rounded-md px-4"
                 :loading="isSavingRoles(toUser(item).id)"
                 :disabled="!toUser(item).id || isSavingRoles(toUser(item).id) || !hasPendingChanges(toUser(item))"
                 @click="saveRolesForUser(toUser(item))"

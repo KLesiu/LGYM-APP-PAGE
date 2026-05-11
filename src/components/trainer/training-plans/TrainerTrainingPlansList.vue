@@ -1,5 +1,5 @@
 <template>
-  <section class="overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
+  <section class="overflow-hidden flex-1 border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
     <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
@@ -70,28 +70,26 @@
                     </div>
                   </div>
 
-                  <div class="flex shrink-0 items-center gap-1">
+                  <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
                     <v-btn
-                      icon="mdi-pencil-outline"
-                      size="small"
-                      variant="text"
+                      variant="outlined"
                       color="primary"
+                      class="min-h-10 rounded-md px-4"
                       :disabled="!plan._id"
-                      :title="t('trainerTrainingPlans.actions.rename')"
-                      :aria-label="t('trainerTrainingPlans.actions.rename')"
                       @click.stop="openRenameDialog(plan)"
-                    />
+                    >
+                      {{ t("trainerTrainingPlans.actions.rename") }}
+                    </v-btn>
                     <v-btn
-                      icon="mdi-delete-outline"
-                      size="small"
-                      variant="text"
+                      variant="outlined"
                       color="error"
+                      class="min-h-10 rounded-md px-4"
                       :disabled="!plan._id"
                       :loading="deletingPlanId === plan._id"
-                      :title="t('trainerTrainingPlans.actions.delete')"
-                      :aria-label="t('trainerTrainingPlans.actions.delete')"
                       @click.stop="handleDelete(plan)"
-                    />
+                    >
+                      {{ t("trainerTrainingPlans.actions.delete") }}
+                    </v-btn>
                   </div>
                 </div>
               </article>
@@ -131,28 +129,26 @@
         </template>
 
         <template #item.actions="{ item }">
-          <div class="flex items-center justify-end gap-1 px-4 py-4 lg:px-5">
+          <div class="flex flex-wrap items-center justify-end gap-2 px-4 py-4 lg:px-5">
             <v-btn
-              icon="mdi-pencil-outline"
-              size="small"
-              variant="text"
+              variant="outlined"
               color="primary"
+              class="min-h-10 rounded-md px-4"
               :disabled="!toPlan(item)._id"
-              :title="t('trainerTrainingPlans.actions.rename')"
-              :aria-label="t('trainerTrainingPlans.actions.rename')"
               @click.stop="openRenameDialog(toPlan(item))"
-            />
+            >
+              {{ t("trainerTrainingPlans.actions.rename") }}
+            </v-btn>
             <v-btn
-              icon="mdi-delete-outline"
-              size="small"
-              variant="text"
+              variant="outlined"
               color="error"
+              class="min-h-10 rounded-md px-4"
               :disabled="!toPlan(item)._id"
               :loading="deletingPlanId === toPlan(item)._id"
-              :title="t('trainerTrainingPlans.actions.delete')"
-              :aria-label="t('trainerTrainingPlans.actions.delete')"
               @click.stop="handleDelete(toPlan(item))"
-            />
+            >
+              {{ t("trainerTrainingPlans.actions.delete") }}
+            </v-btn>
           </div>
         </template>
 
@@ -225,10 +221,10 @@ const editingPlanIsActive = ref<boolean | null>(false);
 const planName = ref("");
 
 const headers = computed(() => [
-  { title: t("trainerTrainingPlans.form.name"), key: "name", sortable: false },
-  { title: t("trainerTrainingPlans.status.active"), key: "status", sortable: false },
+  { title: "nazwa planu", key: "name", sortable: false },
+  { title: "status", key: "status", sortable: false },
   {
-    title: t("trainerTrainingPlans.actions.delete"),
+    title: "akcje",
     key: "actions",
     sortable: false,
     align: "end" as const,

@@ -14,6 +14,7 @@
     :next-label="t('trainerMembers.actions.next')"
     :disable-previous="!hasPreviousPage || isLoading"
     :disable-next="!hasNextPage || isLoading"
+    class="flex-1"
     @previous="emit('update:page', page - 1)"
     @next="emit('update:page', page + 1)"
   >
@@ -163,7 +164,7 @@
                   </dl>
 
                   <div class="flex flex-col gap-3 sm:flex-row">
-                    <v-btn color="primary" variant="flat" class="min-h-10 rounded-md px-4" @click="emit('openDetails', item)">
+                    <v-btn color="primary" variant="outlined" class="min-h-10 rounded-md px-4" @click="emit('openDetails', item)">
                       {{ t("trainerMembers.actions.openDetails") }}
                     </v-btn>
                     <v-btn
@@ -239,7 +240,7 @@
 
         <template #item.actions="{ item }">
           <div class="flex flex-wrap gap-2 px-4 py-4 lg:px-5">
-            <v-btn color="primary" variant="tonal" class="min-h-10 rounded-md px-4" @click="emit('openDetails', toMember(item))">
+            <v-btn color="primary" variant="outlined" class="min-h-10 rounded-md px-4" @click="emit('openDetails', toMember(item))">
               {{ t("trainerMembers.actions.openDetails") }}
             </v-btn>
             <v-btn
