@@ -6,43 +6,9 @@
     :brand-name="t('trainerDashboard.appName')"
     :brand-subtitle="t('trainerDashboard.appSubtitle')"
     :header-breadcrumbs="headerBreadcrumbs"
-    :header-title="headerTitle"
-    :header-subtitle="headerSubtitle"
     :user="currentUser"
     @logout="logout"
   >
-    <template v-if="isMemberDetailsRoute" #header-title>
-      <div class="flex min-w-0 items-center gap-3 sm:gap-4">
-        <v-avatar size="52" class="shrink-0">
-          <v-img v-if="memberDetailsSnapshot?.avatar" :src="memberDetailsSnapshot.avatar" />
-          <span v-else class="text-sm font-bold text-[var(--lgym-text)]">
-            {{ memberInitials }}
-          </span>
-        </v-avatar>
-
-        <div class="min-w-0">
-          <div class="flex min-w-0 flex-wrap items-center gap-2">
-            <h1 class="truncate text-lg leading-6 font-semibold text-[var(--lgym-text)] sm:text-xl">
-              {{ headerTitle }}
-            </h1>
-
-            <v-chip
-              v-if="memberDetailsSnapshot?.status"
-              :color="getMemberStatusColor(memberDetailsSnapshot.status)"
-              size="small"
-              variant="tonal"
-            >
-              {{ memberStatusLabel }}
-            </v-chip>
-          </div>
-
-          <p v-if="memberDetailsEmail" class="mt-1 truncate text-sm leading-5 text-[var(--lgym-text-muted)]">
-            {{ memberDetailsEmail }}
-          </p>
-        </div>
-      </div>
-    </template>
-
     <router-view v-slot="{ Component }">
       <div class="h-full min-h-0 min-w-0 w-full">
         <component :is="Component" />
@@ -62,12 +28,7 @@ import AppShell from "../components/layout/AppShell.vue";
 import type { SidebarItem } from "../components/layout/AppSidebar.vue";
 import { clearAuthSession } from "../composables/useAuthSession";
 import { getCurrentUser } from "../composables/useCurrentUser";
-import {
-  getInitials,
-  getMemberStatusColor,
-  getMemberStatusTranslationKey,
-  getRememberedMemberSnapshot,
-} from "../composables/useTrainerMembers";
+import { getRememberedMemberSnapshot } from "../composables/useTrainerMembers";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -116,30 +77,6 @@ const memberDetailsTitle = computed(() => {
   if (email) return email;
 
   return t("trainerMemberDetails.header.fallbackName");
-});
-
-const memberDetailsEmail = computed(
-  () => memberDetailsSnapshot.value?.email?.trim() || "",
-);
-
-const memberInitials = computed(() =>
-  getInitials(memberDetailsTitle.value || memberDetailsEmail.value),
-);
-
-const headerTitle = computed(() => {
-  if (!isMemberDetailsRoute.value) {
-    return t(`trainerArea.layout.${activeSection.value}.title`);
-  }
-
-  return memberDetailsTitle.value;
-});
-
-const headerSubtitle = computed(() => {
-  if (!isMemberDetailsRoute.value) {
-    return t(`trainerArea.layout.${activeSection.value}.subtitle`);
-  }
-
-  return "";
 });
 
 const sectionRouteByKey = {
@@ -239,11 +176,6 @@ const headerBreadcrumbs = computed<AppBreadcrumbItem[]>(() => {
   }
 
   return items;
-});
-
-const memberStatusLabel = computed(() => {
-  if (!memberDetailsSnapshot.value?.status) return "";
-  return t(getMemberStatusTranslationKey(memberDetailsSnapshot.value.status));
 });
 
 const sidebarItems = computed<SidebarItem[]>(() => [
