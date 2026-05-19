@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex w-full max-w-md flex-col items-center px-5 py-5 text-center text-[var(--lgym-text)] sm:px-6 sm:py-6"
+ class="flex w-full max-w-md flex-col items-center px-5 py-5 text-center text-[var(--lgym-text)] sm:px-6 sm:py-6"
   >
     <div class="flex w-full flex-col items-center gap-5">
       <div class="flex w-full flex-col items-center gap-2">
