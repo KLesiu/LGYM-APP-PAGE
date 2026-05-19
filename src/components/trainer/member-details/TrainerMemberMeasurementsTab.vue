@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-0 min-w-0 flex-col gap-4">
-    <v-card class="overflow-hidden rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-5">
+    <section>
+      <div>
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
@@ -40,7 +40,7 @@
 
       <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
-      <v-card-text class="flex flex-col gap-4 px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-6">
+      <div class="flex flex-col gap-4 pt-4">
         <div v-if="hasError && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
           <p class="text-sm text-[var(--lgym-text-muted)]">
             {{ t("trainerMemberDetails.measurements.error.subtitle") }}
@@ -123,8 +123,8 @@
             {{ t("trainerMemberDetails.measurements.empty.title") }}
           </div>
         </template>
-      </v-card-text>
-    </v-card>
+      </div>
+    </section>
   </div>
 </template>
 

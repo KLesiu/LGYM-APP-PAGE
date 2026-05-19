@@ -1,7 +1,9 @@
 <template>
-  <div class="grid gap-4 xl:grid-cols-[minmax(240px,300px)_minmax(0,1fr)]">
-    <v-card class="overflow-hidden rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5">
+  <div class="grid gap-5 xl:grid-cols-[minmax(260px,320px)_minmax(0,1fr)]">
+    <section
+      class="min-h-0 rounded-2xl border-r border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] p-5  sm:p-6"
+    >
+      <div>
         <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
           {{ t("trainerMemberDetails.trainings.eyebrow") }}
         </p>
@@ -10,10 +12,10 @@
         </h2>
       </div>
 
-      <v-progress-linear v-if="isLoadingDates" indeterminate color="primary" />
+      <v-progress-linear v-if="isLoadingDates" indeterminate color="primary" class="mt-4" />
 
-      <v-card-text class="min-h-0 px-0 py-0">
-        <div v-if="hasDatesError && !isLoadingDates" class="p-4 sm:p-6 text-center">
+      <div class="min-h-0 pt-4">
+        <div v-if="hasDatesError && !isLoadingDates" class="rounded-2xl border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
           <p class="text-sm text-[var(--lgym-text-muted)]">
             {{ t("trainerMemberDetails.trainings.error.subtitle") }}
           </p>
@@ -22,47 +24,55 @@
           </v-btn>
         </div>
 
-        <v-list v-else-if="trainingDates.length > 0" class="bg-transparent py-0">
-          <v-list-item
+        <div v-else-if="trainingDates.length > 0" class="overflow-hidden rounded-xl bg-[var(--lgym-note-bg)]">
+          <button
             v-for="dateValue in trainingDates"
             :key="dateValue"
-            :active="selectedDate === dateValue"
-            rounded="md"
-            class="mx-2 my-1 rounded-md"
+            type="button"
+          class="w-full border-l-2 border-transparent px-4 py-4 text-left transition-colors duration-150 not-last:border-b not-last:border-[var(--lgym-border)]"
+            :class="
+              selectedDate === dateValue
+                ? 'border-l-[var(--lgym-primary)] bg-[var(--lgym-surface)]'
+                : 'hover:bg-[var(--lgym-surface)]'
+            "
             @click="selectedDate = dateValue"
           >
-            <template #prepend>
-              <v-icon icon="mdi-calendar-month-outline" />
-            </template>
-            <v-list-item-title class="text-sm font-semibold">
-              {{ formatDate(dateValue) }}
-            </v-list-item-title>
-            <v-list-item-subtitle>
-              {{ formatDateTime(dateValue) }}
-            </v-list-item-subtitle>
-          </v-list-item>
-        </v-list>
+            <div class="flex items-start gap-3">
+          <div class="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--lgym-note-icon-bg)] text-[var(--lgym-note-icon-text)]">
+                <v-icon icon="mdi-calendar-month-outline" />
+              </div>
+              <div class="min-w-0">
+                <p class="text-sm font-semibold sm:text-base" :class="selectedDate === dateValue ? 'text-[var(--lgym-primary)]' : 'text-[var(--lgym-text)]'">
+                  {{ formatLongDate(dateValue) }}
+                </p>
+                <p class="mt-1 text-xs text-[var(--lgym-text-muted)] sm:text-sm">
+                  {{ formatTime(dateValue) }}
+                </p>
+              </div>
+            </div>
+          </button>
+        </div>
 
-        <div v-else class="px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]">
+        <div v-else class="rounded-2xl border border-dashed border-[var(--lgym-border)] px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]">
           {{ t("trainerMemberDetails.trainings.empty.title") }}
         </div>
-      </v-card-text>
-    </v-card>
+      </div>
+    </section>
 
-    <v-card class="overflow-hidden rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 sm:py-5 lg:px-6">
+    <section class="min-h-0">
+      <div>
         <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
           {{ t("trainerMemberDetails.trainings.detailsEyebrow") }}
         </p>
-        <h2 class="mt-3 text-xl font-semibold text-[var(--lgym-text)]">
-          {{ selectedDate ? formatDate(selectedDate) : t("trainerMemberDetails.trainings.selectDate") }}
+        <h2 class="mt-3 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+          {{ selectedDate ? formatTrainingTitle(selectedDate) : t("trainerMemberDetails.trainings.selectDate") }}
         </h2>
       </div>
 
-      <v-progress-linear v-if="isLoadingDetails" indeterminate color="primary" />
+      <v-progress-linear v-if="isLoadingDetails" indeterminate color="primary" class="mt-4" />
 
-      <v-card-text class="flex flex-col gap-4 px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-6">
-        <div v-if="hasDetailsError && !isLoadingDetails" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
+      <div class="mt-6 flex flex-col gap-6">
+        <div v-if="hasDetailsError && !isLoadingDetails" class="rounded-2xl border border-dashed border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-6 py-10 text-center">
           <p class="text-sm text-[var(--lgym-text-muted)]">
             {{ t("trainerMemberDetails.trainings.error.details") }}
           </p>
@@ -71,92 +81,103 @@
           </v-btn>
         </div>
 
-        <div v-else-if="selectedTrainings.length === 0" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
+        <div v-else-if="selectedTrainings.length === 0 && !isLoadingDetails" class="rounded-2xl border border-dashed border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
           {{ t("trainerMemberDetails.trainings.empty.details") }}
         </div>
 
         <article
-          v-for="training in selectedTrainings"
-          :key="training._id || training.createdAt || 'training'"
-          class="rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-4"
+          v-for="(training, trainingIndex) in selectedTrainings"
+          :key="getTrainingKey(training, trainingIndex)"
+          class="overflow-hidden rounded-2xl bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
         >
-          <div class="flex flex-col gap-4">
-            <div class="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
-                  {{ training.type || t("trainerMemberDetails.trainings.fallback.noType") }}
-                </h3>
-                <p class="mt-1 text-sm text-[var(--lgym-text-muted)]">
-                  {{ formatDateTime(training.createdAt) }}
-                </p>
+      <div class="space-y-6 px-5 py-5 sm:px-6 sm:py-6">
+            <div v-if="training.planDay?.name" class="flex flex-wrap items-start justify-between gap-3">
+              <div
+                class="inline-flex items-center rounded-full bg-[var(--lgym-note-bg)] px-3 py-1 text-xs font-medium text-[var(--lgym-text-muted)]"
+              >
+                {{ training.planDay.name }}
               </div>
-              <v-chip color="primary" variant="outlined">
-                {{ training.planDay?.name || t("trainerMemberDetails.trainings.fallback.noPlanDay") }}
-              </v-chip>
             </div>
 
-            <dl class="grid gap-4 md:grid-cols-2">
-              <div>
-                <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                  {{ t("trainerMemberDetails.trainings.columns.gym") }}
+            <dl class="mt-5 grid gap-3 md:grid-cols-3">
+            <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
+              <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                  {{ t("trainerMemberDetails.trainings.summary.startTime") }}
                 </dt>
-                <dd class="mt-2 text-sm text-[var(--lgym-text)]">
+                <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
+                  {{ formatTime(training.createdAt) }}
+                </dd>
+              </div>
+
+            <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
+              <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                  {{ t("trainerMemberDetails.trainings.summary.gym") }}
+                </dt>
+                <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
                   {{ training.gym || t("trainerMemberDetails.trainings.fallback.noGym") }}
                 </dd>
               </div>
-              <div>
-                <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                  {{ t("trainerMemberDetails.trainings.columns.exercises") }}
+
+            <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
+              <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                  {{ t("trainerMemberDetails.trainings.summary.exercisesCount") }}
                 </dt>
-                <dd class="mt-2 text-sm text-[var(--lgym-text)]">
+                <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
                   {{ training.exercises?.length ?? 0 }}
                 </dd>
               </div>
             </dl>
 
-            <div class="space-y-3">
-              <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+            <section class="mt-8">
+              <h3 class="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--lgym-text-soft)]">
                 {{ t("trainerMemberDetails.trainings.exerciseList") }}
-              </h4>
+              </h3>
 
-              <div
-                v-if="training.exercises?.length"
-                class="grid gap-3"
-              >
-                <div
-                  v-for="exercise in training.exercises"
-                  :key="exercise.exerciseScoreId || exercise.exerciseDetails?._id || 'exercise'"
-                   class="rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] p-4"
+              <div v-if="training.exercises?.length" class="mt-5 grid gap-6">
+                <article
+                  v-for="(exercise, exerciseIndex) in training.exercises"
+                  :key="getExerciseKey(exercise, exerciseIndex, training, trainingIndex)"
+          class="rounded-xl bg-[var(--lgym-note-bg)] px-5 py-5"
                 >
-                  <div class="flex flex-col gap-2">
-                    <p class="font-semibold text-[var(--lgym-text)]">
-                      {{ exercise.exerciseDetails?.name || t("trainerMemberDetails.trainings.fallback.noExercise") }}
-                    </p>
-                    <p class="text-sm text-[var(--lgym-text-muted)]">
-                      {{ exercise.exerciseDetails?.bodyPart?.displayName || exercise.exerciseDetails?.bodyPart?.name || t("trainerMemberDetails.trainings.fallback.noBodyPart") }}
-                    </p>
-                    <div class="flex flex-wrap gap-2">
-                      <v-chip
-                        v-for="score in exercise.scoresDetails || []"
-                        :key="score._id || `${score.series}-${score.reps}-${score.weight}`"
-                        size="small"
-                        variant="outlined"
-                      >
-                        {{ score.series ?? 0 }}x{{ score.reps ?? 0 }} · {{ score.weight ?? 0 }} {{ score.unit?.displayName || score.unit?.name || "" }}
-                      </v-chip>
+                  <p class="text-lg font-semibold text-[var(--lgym-text)]">
+                    {{ exercise.exerciseDetails?.name || t("trainerMemberDetails.trainings.fallback.noExercise") }}
+                  </p>
+                  <p class="mt-1 text-sm text-[var(--lgym-text-muted)]">
+                    {{ exercise.exerciseDetails?.bodyPart?.displayName || exercise.exerciseDetails?.bodyPart?.name || t("trainerMemberDetails.trainings.fallback.noBodyPart") }}
+                  </p>
+
+                  <div
+                    v-if="exercise.scoresDetails?.length"
+                    class="mt-4 overflow-hidden rounded-lg bg-transparent"
+                  >
+                    <div
+                      v-for="(score, scoreIndex) in exercise.scoresDetails"
+                      :key="getScoreKey(score, scoreIndex)"
+                      class="flex flex-col gap-1 px-4 py-3 not-last:border-b not-last:border-[var(--lgym-border)] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+                    >
+                      <span class="text-sm font-medium text-[var(--lgym-text)]">
+                        {{ t("trainerMemberDetails.trainings.seriesLabel", { series: score.series ?? scoreIndex + 1 }) }}
+                      </span>
+                      <span class="text-sm text-[var(--lgym-text-muted)] sm:text-right">
+                        {{ formatScoreSummary(score, scoreIndex) }}
+                      </span>
                     </div>
                   </div>
-                </div>
+
+                  <p v-else class="mt-4 text-sm text-[var(--lgym-text-muted)]">
+                    {{ t("trainerMemberDetails.trainings.empty.series") }}
+                  </p>
+                </article>
               </div>
 
-              <p v-else class="text-sm text-[var(--lgym-text-muted)]">
+              <p v-else class="mt-5 text-sm text-[var(--lgym-text-muted)]">
                 {{ t("trainerMemberDetails.trainings.empty.exercises") }}
               </p>
-            </div>
+            </section>
           </div>
         </article>
-      </v-card-text>
-    </v-card>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -168,7 +189,7 @@ import {
   getApiTrainerTraineesTraineeIdTrainingsDates,
   postApiTrainerTraineesTraineeIdTrainingsByDate,
 } from "../../../api/generated/demo";
-import type { TrainingByDateDetailsDto } from "../../../api/model";
+import type { ExerciseScoreResponseDto, TrainingByDateDetailsDto } from "../../../api/model";
 import { getApiErrorMessage } from "../../../api/trainerInvitations";
 
 const props = defineProps<{
@@ -177,7 +198,7 @@ const props = defineProps<{
   formatDateTime: (value: string | null | undefined) => string;
 }>();
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const trainingDates = ref<string[]>([]);
 const selectedDate = ref<string | null>(null);
@@ -190,10 +211,98 @@ const hasDetailsError = ref(false);
 let datesToken = 0;
 let detailsToken = 0;
 
+const getUserLocale = () => (locale.value === "pl" ? "pl-PL" : "en-US");
+
+const formatLongDate = (value: string | null | undefined) => {
+  if (!value) return "—";
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+
+  return new Intl.DateTimeFormat(getUserLocale(), {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(parsed);
+};
+
+const formatTime = (value: string | null | undefined) => {
+  if (!value) return "—";
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+
+  return new Intl.DateTimeFormat(getUserLocale(), {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(parsed);
+};
+
+const formatTrainingTitle = (value: string | null | undefined) =>
+  t("trainerMemberDetails.trainings.summary.trainingDate", {
+    date: formatLongDate(value),
+  });
+
+const formatScoreValue = (value: number | null | undefined) => {
+  if (value === null || value === undefined) return "0";
+
+  return new Intl.NumberFormat(getUserLocale(), {
+    maximumFractionDigits: 2,
+  }).format(value);
+};
+
+const formatScoreSummary = (
+  score: ExerciseScoreResponseDto,
+  scoreIndex: number,
+) => {
+  const weight = formatScoreValue(score.weight);
+  const reps = score.reps ?? 0;
+  const unit = score.unit?.displayName || score.unit?.name || "";
+
+  return t("trainerMemberDetails.trainings.seriesValue", {
+    series: score.series ?? scoreIndex + 1,
+    weight,
+    unit,
+    reps,
+  });
+};
+
 const sortDatesDescending = (values: string[]) =>
   [...values].sort(
     (left, right) => new Date(right).getTime() - new Date(left).getTime(),
   );
+
+const getTrainingKey = (
+  training: TrainingByDateDetailsDto,
+  trainingIndex: number,
+) => [
+  selectedDate.value ?? "no-date",
+  training._id ?? training.createdAt ?? "no-training-id",
+  trainingIndex,
+].join(":");
+
+const getExerciseKey = (
+  exercise: NonNullable<TrainingByDateDetailsDto["exercises"]>[number],
+  exerciseIndex: number,
+  training: TrainingByDateDetailsDto,
+  trainingIndex: number,
+) => [
+  getTrainingKey(training, trainingIndex),
+  exercise.exerciseScoreId ?? exercise.exerciseDetails?._id ?? `exercise-${exerciseIndex}`,
+  exerciseIndex,
+].join(":");
+
+const getScoreKey = (
+  score: ExerciseScoreResponseDto,
+  scoreIndex: number,
+) =>
+  score._id ??
+  [
+    score.series ?? scoreIndex + 1,
+    score.reps ?? 0,
+    score.weight ?? 0,
+    scoreIndex,
+  ].join(":");
 
 const loadTrainingDates = async () => {
   if (!props.traineeId) return;
@@ -231,19 +340,24 @@ const loadTrainingDates = async () => {
 };
 
 const loadTrainingDetails = async () => {
-  if (!props.traineeId || !selectedDate.value) {
+  const requestedDate = selectedDate.value;
+  const currentToken = ++detailsToken;
+
+  if (!props.traineeId || !requestedDate) {
     selectedTrainings.value = [];
+    isLoadingDetails.value = false;
+    hasDetailsError.value = false;
     return;
   }
 
-  const currentToken = ++detailsToken;
+  selectedTrainings.value = [];
   isLoadingDetails.value = true;
   hasDetailsError.value = false;
 
   try {
     const response = await postApiTrainerTraineesTraineeIdTrainingsByDate(
       props.traineeId,
-      { createdAt: selectedDate.value },
+      { createdAt: requestedDate },
     );
 
     if (currentToken !== detailsToken) return;
@@ -255,7 +369,7 @@ const loadTrainingDetails = async () => {
       return;
     }
 
-    selectedTrainings.value = response.data ?? [];
+    selectedTrainings.value = [...(response.data ?? [])];
   } catch (error) {
     if (currentToken !== detailsToken) return;
 
