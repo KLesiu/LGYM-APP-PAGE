@@ -6,8 +6,6 @@
     :brand-name="t('userArea.appName')"
     :brand-subtitle="t('userArea.appSubtitle')"
     :header-breadcrumbs="headerBreadcrumbs"
-    :header-title="t(`userArea.layout.${activeSection}.title`)"
-    :header-subtitle="t(`userArea.layout.${activeSection}.subtitle`)"
     :user="currentUser"
     @logout="logout"
   >

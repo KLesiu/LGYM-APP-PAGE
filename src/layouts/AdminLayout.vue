@@ -6,8 +6,6 @@
     :brand-name="t('admin.panel.brandTitle')"
     :brand-subtitle="t('admin.panel.eyebrow')"
     :header-breadcrumbs="headerBreadcrumbs"
-    :header-title="t(`admin.tabs.items.${activeSection}.title`)"
-    :header-subtitle="t(`admin.tabs.items.${activeSection}.description`)"
     :user="currentUser"
     @logout="logout"
   >

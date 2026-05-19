@@ -22,20 +22,10 @@
     >
       <AppHeader
         :breadcrumbs="headerBreadcrumbs"
-        :title="headerTitle"
-        :subtitle="headerSubtitle"
         :user="user"
         @logout="$emit('logout')"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       >
-        <template v-if="$slots['header-title']" #title>
-          <slot name="header-title" />
-        </template>
-
-        <template v-if="$slots['header-subtitle']" #subtitle>
-          <slot name="header-subtitle" />
-        </template>
-
         <template v-if="$slots['header-actions']" #actions>
           <slot name="header-actions" />
         </template>
@@ -100,8 +90,6 @@ defineProps<{
   logoSrc: string;
   brandName: string;
   brandSubtitle?: string;
-  headerTitle?: string;
-  headerSubtitle?: string;
   headerBreadcrumbs?: AppBreadcrumbItem[];
   user: CurrentUser | null;
 }>();
