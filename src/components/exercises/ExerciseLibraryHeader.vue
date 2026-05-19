@@ -1,6 +1,6 @@
 <template>
   <section class="overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
-    <div class="px-6 py-6 lg:px-8 lg:py-7">
+  <div class="px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div class="max-w-3xl space-y-3">
           <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">

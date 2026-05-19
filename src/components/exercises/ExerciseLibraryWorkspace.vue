@@ -402,15 +402,7 @@ const exercisePageSizeLabel = computed(() =>
 const exercisePaginationSummary = computed(() => {
   const totalCount = filteredExercises.value.length;
 
-  if (props.roleMode === "admin") {
-    return t("admin.pagination.summary", {
-      page: exercisePage.value,
-      totalPages: exerciseTotalPages.value,
-      totalCount,
-    });
-  }
-
-  return t("trainerMembers.list.pagination.summary", {
+  return t("exerciseLibrary.pagination.summary", {
     page: exercisePage.value,
     totalPages: exerciseTotalPages.value,
     totalCount,

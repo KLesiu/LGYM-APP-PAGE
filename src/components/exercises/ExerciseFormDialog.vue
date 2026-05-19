@@ -13,7 +13,7 @@
         </p>
       </div>
 
-      <v-card-text class="px-6 py-6">
+  <v-card-text class="px-6 py-6">
         <div class="grid gap-5">
           <v-select
             :model-value="draft.source"
