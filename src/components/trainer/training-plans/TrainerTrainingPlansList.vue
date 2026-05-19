@@ -1,15 +1,15 @@
 <template>
   <section class="overflow-hidden flex-1 border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
-    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+  <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
+        <div class="lgym-section-heading">
           <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
             {{ t("trainerTrainingPlans.list.eyebrow") }}
           </p>
-          <h3 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+          <h3 class="text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
             {{ t("trainerTrainingPlans.list.title") }}
           </h3>
-          <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+          <p class="lgym-section-heading__subtitle text-sm leading-6 text-[var(--lgym-text-muted)]">
             {{ t("trainerTrainingPlans.list.subtitle") }}
           </p>
         </div>
@@ -47,7 +47,7 @@
               <article
                 v-for="plan in plans"
                 :key="plan._id || plan.name || 'plan'"
-                class="cursor-pointer border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0 transition-colors hover:bg-[var(--lgym-table-row-hover)]"
+        class="cursor-pointer border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0 transition-colors hover:bg-[var(--lgym-table-row-hover)]"
                 @click="openDetails(plan._id || '')"
               >
                 <div class="flex items-start justify-between gap-4">
@@ -105,7 +105,7 @@
         </template>
 
         <template #item.name="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+      <div class="px-4 py-4 lg:px-5">
             <p class="font-semibold text-[var(--lgym-text)]">
               {{ toPlan(item).name || t("trainerTrainingPlans.fallback.noName") }}
             </p>
@@ -113,7 +113,7 @@
         </template>
 
         <template #item.status="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+      <div class="px-4 py-4 lg:px-5">
             <v-chip
               :color="toPlan(item).isActive ? 'success' : 'secondary'"
               size="small"
@@ -129,7 +129,7 @@
         </template>
 
         <template #item.actions="{ item }">
-          <div class="flex flex-wrap items-center justify-end gap-2 px-4 py-4 lg:px-5">
+      <div class="flex flex-wrap items-center justify-end gap-2 px-4 py-4 lg:px-5">
             <v-btn
               variant="outlined"
               color="primary"
@@ -198,11 +198,13 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import type { PlanFormDto } from "../../../api/model";
+import { useConfirmDialog } from "../../../composables/useConfirmDialog";
 import { useTrainerTrainingPlans } from "../../../composables/useTrainerTrainingPlans";
 import AppDataTable from "../../ui/AppDataTable.vue";
 
 const { t } = useI18n();
 const router = useRouter();
+const { confirm } = useConfirmDialog();
 
 const {
   plans,
@@ -261,11 +263,16 @@ const handleDelete = async (plan: PlanFormDto) => {
   const planId = plan._id?.trim();
   if (!planId) return;
 
-  const confirmed = window.confirm(
-    t("trainerTrainingPlans.actions.deleteConfirm", {
+  const confirmed = await confirm({
+    title: t("trainerTrainingPlans.actions.delete"),
+    description: t("trainerTrainingPlans.actions.deleteConfirm", {
       name: plan.name || t("trainerTrainingPlans.fallback.noName"),
     }),
-  );
+    confirmLabel: t("trainerTrainingPlans.actions.delete"),
+    cancelLabel: t("trainerTrainingPlans.actions.cancel"),
+    confirmColor: "error",
+    isDestructive: true,
+  });
   if (!confirmed) return;
 
   await deletePlan(planId);

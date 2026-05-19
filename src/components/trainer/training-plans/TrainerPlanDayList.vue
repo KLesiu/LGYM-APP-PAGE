@@ -1,16 +1,16 @@
 <template>
   <section class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
-    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+  <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div>
+          <div class="lgym-section-heading">
             <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
               {{ t("trainerTrainingPlanDetails.planDays.eyebrow") }}
             </p>
-            <h3 class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">
+            <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
               {{ t("trainerTrainingPlanDetails.planDays.title") }}
             </h3>
-            <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+            <p class="lgym-section-heading__subtitle text-sm leading-6 text-[var(--lgym-text-muted)]">
               {{ t("trainerTrainingPlanDetails.planDays.subtitle") }}
             </p>
           </div>
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div class="flex min-h-0 flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6">
+  <div class="flex min-h-0 flex-1 flex-col px-4 py-4 sm:px-5 lg:px-6">
       <div
         v-if="hasError && !isLoading"
         class="flex min-h-full flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-[var(--lgym-border)] px-4 py-8 text-center"
@@ -62,7 +62,7 @@
             <article
               v-for="(item, index) in items"
               :key="item._id || item.name || `plan-day-${index}`"
-              class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+        class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
             >
               <div class="flex flex-col gap-4">
                 <div class="flex items-start justify-between gap-3">
@@ -132,7 +132,7 @@
         </template>
 
         <template #item.name="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+      <div class="px-4 py-4 lg:px-5">
             <div class="flex flex-wrap items-center gap-2">
               <p class="font-semibold text-[var(--lgym-text)]">
                 {{ toPlanDay(item).name || t("trainerTrainingPlanDetails.planDays.fallback.noName") }}
@@ -151,7 +151,7 @@
         </template>
 
         <template #item.exercises="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+      <div class="px-4 py-4 lg:px-5">
             <p class="font-semibold text-[var(--lgym-text)]">
               {{ toPlanDay(item).totalNumberOfExercises ?? 0 }}
             </p>
@@ -159,7 +159,7 @@
         </template>
 
         <template #item.series="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+      <div class="px-4 py-4 lg:px-5">
             <p class="font-semibold text-[var(--lgym-text)]">
               {{ toPlanDay(item).totalNumberOfSeries ?? 0 }}
             </p>
@@ -167,7 +167,7 @@
         </template>
 
         <template #item.actions="{ item }">
-          <div class="flex flex-wrap items-center justify-end gap-2 px-4 py-4 lg:px-5">
+      <div class="flex flex-wrap items-center justify-end gap-2 px-4 py-4 lg:px-5">
             <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click.stop="$emit('preview', toPlanDay(item))">
               {{ t("trainerTrainingPlanDetails.planDays.actions.preview") }}
             </v-btn>
