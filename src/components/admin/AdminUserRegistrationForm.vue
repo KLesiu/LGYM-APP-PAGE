@@ -23,7 +23,7 @@
         {{ t("admin.register.scope") }}
       </p>
       <div
-        class="absolute -right-10 -bottom-20 h-[180px] w-[180px] rounded-full bg-[var(--lgym-register-glow)] pointer-events-none"
+      class="absolute -right-10 -bottom-20 h-[180px] w-[180px] rounded-full bg-[var(--lgym-register-glow)] pointer-events-none"
       ></div>
     </div>
 

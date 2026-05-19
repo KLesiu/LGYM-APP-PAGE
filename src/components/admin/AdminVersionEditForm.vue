@@ -56,7 +56,7 @@
     />
 
     <div
-      class="rounded-3xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-6 py-6"
+ class="rounded-3xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-6 py-6"
     >
       <div
         class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between"

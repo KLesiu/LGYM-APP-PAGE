@@ -43,7 +43,7 @@
                 <div class="flex flex-col gap-4">
                   <div class="flex items-start gap-4">
                     <div
-                      class="inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[18px] bg-[var(--lgym-avatar-bg)] text-[var(--lgym-text)] text-base font-bold shadow-[inset_0_1px_0_rgba(232,230,230,0.12)]"
+ class="inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[18px] bg-[var(--lgym-avatar-bg)] text-[var(--lgym-text)] text-base font-bold shadow-[inset_0_1px_0_rgba(232,230,230,0.12)]"
                     >
                       {{ getUserInitial(item) }}
                     </div>
@@ -135,11 +135,11 @@
             :ref="index === 0 ? setFirstRowRef : undefined"
             :key="userRowKey(toUser(item), index)"
             data-admin-user-row="true"
-            class="px-6 py-6"
+ class="px-6 py-6"
           >
             <div class="flex items-start gap-4">
               <div
-                  class="inline-flex h-[52px] w-[52px] items-center justify-center rounded-[18px] bg-[var(--lgym-avatar-bg)] text-[var(--lgym-text)] text-base font-bold shadow-[inset_0_1px_0_rgba(232,230,230,0.12)]"
+ class="inline-flex h-[52px] w-[52px] items-center justify-center rounded-[18px] bg-[var(--lgym-avatar-bg)] text-[var(--lgym-text)] text-base font-bold shadow-[inset_0_1px_0_rgba(232,230,230,0.12)]"
                 >
                   {{ getUserInitial(toUser(item)) }}
                 </div>
@@ -174,7 +174,7 @@
         </template>
 
         <template #item.email="{ item }">
-          <div class="px-6 py-6 text-sm text-[var(--lgym-text)]">
+        <div class="px-6 py-6 text-sm text-[var(--lgym-text)]">
             <div class="space-y-1">
               <p>{{ toUser(item).email || "—" }}</p>
               <p class="text-[var(--lgym-text-muted)] text-xs">
@@ -185,7 +185,7 @@
         </template>
 
         <template #item.status="{ item }">
-          <div class="px-6 py-6">
+        <div class="px-6 py-6">
             <div class="flex flex-wrap gap-2">
               <v-chip
                 size="small"
@@ -211,7 +211,7 @@
         </template>
 
         <template #item.roles="{ item }">
-          <div class="px-6 py-6 xl:min-w-[300px]">
+        <div class="px-6 py-6 xl:min-w-[300px]">
             <v-select
               :model-value="editableRoles[toUser(item).id ?? ''] ?? []"
               :items="availableRoles"
@@ -229,7 +229,7 @@
         </template>
 
         <template #item.actions="{ item }">
-          <div class="px-6 py-6 pr-7">
+        <div class="px-6 py-6 pr-7">
             <div class="flex flex-col items-start gap-2">
               <v-btn
                 color="primary"
