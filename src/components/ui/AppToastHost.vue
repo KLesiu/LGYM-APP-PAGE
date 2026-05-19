@@ -23,7 +23,7 @@
         <div class="flex items-start gap-3 px-5 py-4.5 sm:px-5.5">
           <div
             :class="iconClassMap[toast.type]"
-            class="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--lgym-note-bg)]"
+          class="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--lgym-note-bg)]"
           >
             <v-icon :icon="iconMap[toast.type]" size="18" />
           </div>
@@ -44,7 +44,7 @@
 
           <button
             type="button"
-            class="mt-0.5 ml-1 inline-flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-xl text-[var(--lgym-text-soft)] transition-colors hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
+          class="mt-0.5 ml-1 inline-flex h-9 w-9 shrink-0 items-center justify-center self-start rounded-xl text-[var(--lgym-text-soft)] transition-colors hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
             :aria-label="t('common.actions.dismiss')"
             @click="remove(toast.id)"
           >

@@ -42,7 +42,7 @@
             variant="outlined"
             color="primary"
             prepend-icon="mdi-swap-vertical"
-            class="min-h-10 rounded-md px-4"
+            class="min-h-10 w-full rounded-md px-4 xl:w-auto"
             @click="emit('toggleSortDirection')"
           >
             {{
@@ -68,6 +68,7 @@
             :key="filter.value"
             :color="statusFilter === filter.value ? 'primary' : undefined"
             :variant="statusFilter === filter.value ? 'flat' : 'outlined'"
+            size="default"
             class="cursor-pointer rounded-md font-semibold"
             @click="emit('update:statusFilter', filter.value)"
           >
@@ -75,11 +76,11 @@
           </v-chip>
     </template>
 
-    <div class="min-h-0 flex-1 px-0 py-0">
+    <div class="min-h-0 flex-1 px-0 pb-0 pt-3">
       <div v-if="hasLoadError && !isLoading" class="p-4 sm:p-5">
         <div class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
           <div class="mx-auto flex max-w-md flex-col items-center gap-3">
-            <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
+        <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
               <v-icon icon="mdi-alert-circle-outline" size="26" />
             </div>
             <p class="text-base font-semibold text-[var(--lgym-text)]">
@@ -105,8 +106,10 @@
         :loading="isLoading"
         server
         item-value="_id"
+        row-clickable
         hide-default-footer
         hover
+        @row-click="emit('openDetails', toMember($event))"
         @update:page="emit('update:page', $event)"
         @update:items-per-page="onPageSizeUpdate"
       >
@@ -116,7 +119,8 @@
               <article
                 v-for="(item, index) in members"
                 :key="memberRowKey(item, index)"
-                class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+      class="cursor-pointer border-b border-[var(--lgym-border)] px-4 py-4 transition-colors hover:bg-[var(--lgym-table-row-hover)] last:border-b-0"
+                @click="emit('openDetails', item)"
               >
                 <div class="flex flex-col gap-4">
                   <div class="flex items-start justify-between gap-3">
@@ -164,16 +168,13 @@
                   </dl>
 
                   <div class="flex flex-col gap-3 sm:flex-row">
-                    <v-btn color="primary" variant="outlined" class="min-h-10 rounded-md px-4" @click="emit('openDetails', item)">
-                      {{ t("trainerMembers.actions.openDetails") }}
-                    </v-btn>
                     <v-btn
                       variant="outlined"
                       color="error"
                       class="min-h-10 rounded-md px-4"
                       :disabled="!canUnlinkMember(item) || isUnlinking(item._id)"
                       :loading="isUnlinking(item._id)"
-                      @click="emit('unlink', item)"
+                      @click.stop="emit('unlink', item)"
                     >
                       {{ t("trainerMembers.actions.unlink") }}
                     </v-btn>
@@ -187,7 +188,7 @@
               class="m-4 rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]"
             >
               <div class="mx-auto flex max-w-md flex-col items-center gap-3">
-                <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
+      <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
                   <v-icon icon="mdi-account-group-outline" size="26" />
                 </div>
                 <p class="text-base font-semibold text-[var(--lgym-text)]">
@@ -202,7 +203,7 @@
         </template>
 
         <template #item.member="{ item, index }">
-          <div :key="memberRowKey(toMember(item), index)" class="flex items-center gap-3 px-4 py-4 lg:px-5">
+        <div :key="memberRowKey(toMember(item), index)" class="flex items-center gap-3 px-4 py-4 lg:px-5">
             <v-avatar size="44">
               <v-img v-if="toMember(item).avatar" :src="toImageSrc(toMember(item).avatar)" />
               <span v-else class="text-sm font-bold text-[var(--lgym-text)]">
@@ -222,7 +223,7 @@
         </template>
 
         <template #item.status="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+        <div class="px-4 py-4 lg:px-5">
             <v-chip :color="getMemberStatusColor(toMember(item).status)" size="small">
               {{ t(getMemberStatusTranslationKey(toMember(item).status)) }}
             </v-chip>
@@ -230,7 +231,7 @@
         </template>
 
         <template #item.relationship="{ item }">
-          <div class="space-y-1 px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
+        <div class="space-y-1 px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
             <p>{{ relationshipLabel(toMember(item)) }}</p>
             <p class="text-xs text-[var(--lgym-text-muted)]">
               {{ relationshipDate(toMember(item)) }}
@@ -239,17 +240,14 @@
         </template>
 
         <template #item.actions="{ item }">
-          <div class="flex flex-wrap gap-2 px-4 py-4 lg:px-5">
-            <v-btn color="primary" variant="outlined" class="min-h-10 rounded-md px-4" @click="emit('openDetails', toMember(item))">
-              {{ t("trainerMembers.actions.openDetails") }}
-            </v-btn>
+        <div class="flex flex-wrap gap-2 px-4 py-4 lg:px-5">
             <v-btn
               variant="outlined"
               color="error"
               class="min-h-10 rounded-md px-4"
               :disabled="!canUnlinkMember(toMember(item)) || isUnlinking(toMember(item)._id)"
               :loading="isUnlinking(toMember(item)._id)"
-              @click="emit('unlink', toMember(item))"
+              @click.stop="emit('unlink', toMember(item))"
             >
               {{ t("trainerMembers.actions.unlink") }}
             </v-btn>
@@ -259,7 +257,7 @@
         <template #no-data>
           <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
             <div class="mx-auto flex max-w-md flex-col items-center gap-3">
-              <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
+      <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
                 <v-icon icon="mdi-account-group-outline" size="26" />
               </div>
               <p class="text-base font-semibold text-[var(--lgym-text)]">

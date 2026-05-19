@@ -1,20 +1,22 @@
 <template>
   <section class="flex h-full min-h-0 w-full  flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
-    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
-      <p
-        class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]"
-      >
-        {{ t("trainerInvitations.form.eyebrow") }}
-      </p>
-      <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)]">
-        {{ t("trainerInvitations.form.title") }}
-      </h2>
-      <p class="mt-2 max-w-md text-sm leading-6 text-[var(--lgym-text-muted)]">
-        {{ t("trainerInvitations.form.subtitle") }}
-      </p>
+  <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+      <div class="lgym-section-heading max-w-md">
+        <p
+          class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]"
+        >
+          {{ t("trainerInvitations.form.eyebrow") }}
+        </p>
+        <h2 class="text-xl font-semibold text-[var(--lgym-text)]">
+          {{ t("trainerInvitations.form.title") }}
+        </h2>
+        <p class="lgym-section-heading__subtitle text-sm leading-6 text-[var(--lgym-text-muted)]">
+          {{ t("trainerInvitations.form.subtitle") }}
+        </p>
+      </div>
     </div>
 
-    <div class="flex flex-1 flex-col gap-5 px-6 py-6 lg:px-8 lg:py-8">
+  <div class="flex flex-1 flex-col gap-5 px-6 py-6 lg:px-8 lg:py-8">
       <v-form
         ref="formRef"
         v-model="isFormValid"

@@ -86,7 +86,7 @@
               <article
                 v-for="(item, index) in invitations"
                 :key="invitationRowKey(item, index)"
-                class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+        class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
               >
                 <div class="flex flex-col gap-4">
                   <div class="flex flex-wrap items-start justify-between gap-3">
@@ -161,7 +161,7 @@
             >
               <div class="mx-auto flex max-w-md flex-col items-center gap-3">
                 <div
-                  class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
+        class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
                 >
                   <v-icon icon="mdi-email-outline" size="26" />
                 </div>
@@ -179,7 +179,7 @@
         <template #item.inviteeEmail="{ item, index }">
           <div
             :key="invitationRowKey(toInvitation(item), index)"
-            class="space-y-1 px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5"
+      class="space-y-1 px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5"
           >
             <p class="break-words font-semibold">
               {{ toInvitation(item).inviteeEmail || "—" }}
@@ -191,7 +191,7 @@
         </template>
 
         <template #item.trainee="{ item }">
-          <div class="space-y-1 px-4 py-4 text-sm lg:px-5">
+      <div class="space-y-1 px-4 py-4 text-sm lg:px-5">
             <p class="font-semibold text-[var(--lgym-text)]">
               {{
                 toInvitation(item).traineeName ||
@@ -208,7 +208,7 @@
         </template>
 
         <template #item.status="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+      <div class="px-4 py-4 lg:px-5">
             <v-chip
               :color="statusColor(toInvitation(item).status)"
               size="small"
@@ -220,7 +220,7 @@
         </template>
 
         <template #item.sentAt="{ item }">
-          <div class="space-y-1 px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
+      <div class="space-y-1 px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
             <p>{{ formatDate(toInvitation(item).createdAt) }}</p>
             <p class="text-xs text-[var(--lgym-text-muted)]">
               {{ t("trainerInvitations.history.meta.expiresAt") }}:
@@ -230,7 +230,7 @@
         </template>
 
         <template #item.actions="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+      <div class="px-4 py-4 lg:px-5">
             <v-btn
               variant="outlined"
               color="error"
@@ -248,7 +248,7 @@
           <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
             <div class="mx-auto flex max-w-md flex-col items-center gap-3">
               <div
-                class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
+        class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]"
               >
                 <v-icon icon="mdi-email-outline" size="26" />
               </div>
