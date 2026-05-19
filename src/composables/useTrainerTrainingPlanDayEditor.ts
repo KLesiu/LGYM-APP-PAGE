@@ -6,6 +6,7 @@ import {
   getApiIdGetPlansList,
   getApiPlanDayIdGetPlanDay,
   getApiPlanDayIdGetPlanDaysInfo,
+  getApiTrainerTraineesTraineeIdPlans,
   postApiPlanDayIdCreatePlanDay,
   postApiPlanDayUpdatePlanDay,
 } from "../api/generated/demo";
@@ -54,6 +55,7 @@ const normalizeDraft = (draft: PlanDayFormDto): PlanDayFormDto => ({
 export const useTrainerTrainingPlanDayEditor = (
   planId: { value: string },
   planDayId: { value: string },
+  traineeId?: { value: string },
 ) => {
   const toast = useToast();
 
@@ -71,6 +73,7 @@ export const useTrainerTrainingPlanDayEditor = (
   const isSaving = ref(false);
 
   const currentUserId = computed(() => getCurrentUser()?.id?.trim() ?? "");
+  const isMemberPlanContext = computed(() => Boolean(traineeId?.value?.trim()));
   const isEditing = computed(() => Boolean(planDayId.value.trim()));
   const userExercises = computed(() =>
     allExercises.value.filter((exercise) => Boolean(exercise.user?.trim())),
@@ -81,7 +84,7 @@ export const useTrainerTrainingPlanDayEditor = (
   let exercisesToken = 0;
 
   const loadPlan = async () => {
-    if (!currentUserId.value || !planId.value.trim()) {
+    if ((!currentUserId.value && !isMemberPlanContext.value) || !planId.value.trim()) {
       plan.value = null;
       hasPlanError.value = true;
       return;
@@ -92,7 +95,9 @@ export const useTrainerTrainingPlanDayEditor = (
     hasPlanError.value = false;
 
     try {
-      const response = await getApiIdGetPlansList(currentUserId.value);
+      const response = isMemberPlanContext.value && traineeId?.value
+        ? await getApiTrainerTraineesTraineeIdPlans(traineeId.value)
+        : await getApiIdGetPlansList(currentUserId.value);
 
       if (currentToken !== planToken) return;
 

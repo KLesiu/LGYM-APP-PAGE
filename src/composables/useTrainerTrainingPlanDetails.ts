@@ -7,6 +7,7 @@ import {
   getApiPlanDayIdDeletePlanDay,
   getApiPlanDayIdGetPlanDay,
   getApiPlanDayIdGetPlanDaysInfo,
+  getApiTrainerTraineesTraineeIdPlans,
   postApiIdShare,
   postApiPlanDayIdCreatePlanDay,
   postApiPlanDayUpdatePlanDay,
@@ -61,7 +62,10 @@ const getShareCodePayload = (value: unknown): ShareCodeResponseDto | null => {
   return typeof candidate.shareCode === "string" ? candidate : null;
 };
 
-export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
+export const useTrainerTrainingPlanDetails = (
+  planId: { value: string },
+  traineeId?: { value: string },
+) => {
   const router = useRouter();
   const toast = useToast();
 
@@ -90,13 +94,17 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
   let exercisesRequestToken = 0;
 
   const currentUserId = computed(() => getCurrentUser()?.id?.trim() ?? "");
+  const isMemberPlanContext = computed(() => Boolean(traineeId?.value?.trim()));
 
   const redirectPath = computed(
-    () => `/trainer/training-plans/${planId.value || ""}`,
+    () =>
+      isMemberPlanContext.value
+        ? `/trainer/members/${traineeId?.value || ""}/plans/${planId.value || ""}`
+        : `/trainer/training-plans/${planId.value || ""}`,
   );
 
   const loadPlan = async () => {
-    if (!planId.value || !currentUserId.value) {
+    if (!planId.value || (!currentUserId.value && !isMemberPlanContext.value)) {
       plan.value = null;
       hasPlanError.value = true;
       return;
@@ -107,7 +115,9 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
     hasPlanError.value = false;
 
     try {
-      const response = await getApiIdGetPlansList(currentUserId.value);
+      const response = isMemberPlanContext.value && traineeId?.value
+        ? await getApiTrainerTraineesTraineeIdPlans(traineeId.value)
+        : await getApiIdGetPlansList(currentUserId.value);
 
       if (currentToken !== planRequestToken) return;
 
@@ -487,6 +497,7 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
   };
 
   const sharePlan = async (): Promise<ShareCodeResponseDto | null> => {
+    if (isMemberPlanContext.value) return null;
     if (!planId.value) return null;
 
     isSharingPlan.value = true;
@@ -552,6 +563,7 @@ export const useTrainerTrainingPlanDetails = (planId: { value: string }) => {
   };
 
   return {
+    isMemberPlanContext,
     plan,
     planDaySummaries,
     selectedPlanDayId,
