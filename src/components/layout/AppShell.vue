@@ -21,12 +21,21 @@
       class="flex min-h-0 min-w-0 flex-col overflow-hidden"
     >
       <AppHeader
+        :breadcrumbs="headerBreadcrumbs"
         :title="headerTitle"
         :subtitle="headerSubtitle"
         :user="user"
         @logout="$emit('logout')"
         @toggle-sidebar="sidebarOpen = !sidebarOpen"
       >
+        <template v-if="$slots['header-title']" #title>
+          <slot name="header-title" />
+        </template>
+
+        <template v-if="$slots['header-subtitle']" #subtitle>
+          <slot name="header-subtitle" />
+        </template>
+
         <template v-if="$slots['header-actions']" #actions>
           <slot name="header-actions" />
         </template>
@@ -78,6 +87,8 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
+
+import type { AppBreadcrumbItem } from "./appBreadcrumbs";
 import AppSidebar from "./AppSidebar.vue";
 import AppHeader from "./AppHeader.vue";
 import type { SidebarItem } from "./AppSidebar.vue";
@@ -91,6 +102,7 @@ defineProps<{
   brandSubtitle?: string;
   headerTitle?: string;
   headerSubtitle?: string;
+  headerBreadcrumbs?: AppBreadcrumbItem[];
   user: CurrentUser | null;
 }>();
 
