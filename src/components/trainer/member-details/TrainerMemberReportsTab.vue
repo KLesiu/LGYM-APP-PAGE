@@ -1,33 +1,35 @@
 <template>
   <div class="grid gap-4">
-    <v-card class="overflow-hidden rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-5">
+    <section>
+      <div>
         <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
           {{ t("trainerMemberDetails.reports.submissionsEyebrow") }}
         </p>
         <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
           {{ t("trainerMemberDetails.reports.submissionsTitle") }}
         </h2>
-        <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
-          {{ t("trainerMemberDetails.reports.submissionsSubtitle") }}
-        </p>
       </div>
 
-      <v-card-text class="flex flex-col gap-4 px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-6">
-        <div class="rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-4">
+      <div class="grid gap-4 pt-4">
+        <section>
           <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-            <div>
-              <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
-                {{ t("trainerMemberDetails.reports.requestTitle") }}
-              </h3>
-              <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
-                {{ t("trainerMemberDetails.reports.requestSubtitle") }}
-              </p>
+            <div class="flex flex-wrap gap-2">
+              <v-btn
+                variant="outlined"
+                color="primary"
+                class="min-h-10 rounded-md px-4"
+                to="/trainer/report-templates"
+              >
+                {{ t("trainerMemberDetails.reports.actions.manageTemplates") }}
+              </v-btn>
+              <v-btn
+                color="primary"
+                class="min-h-10 rounded-md px-4"
+                @click="openRequestDialog"
+              >
+                {{ t("trainerMemberDetails.reports.actions.sendRequest") }}
+              </v-btn>
             </div>
-
-            <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" to="/trainer/report-templates">
-              {{ t("trainerMemberDetails.reports.actions.manageTemplates") }}
-            </v-btn>
           </div>
 
           <v-progress-linear v-if="isLoadingTemplates" class="mt-4" indeterminate color="primary" />
@@ -56,89 +58,232 @@
             </v-btn>
           </div>
 
-          <div v-else class="mt-4 grid gap-3 border-t border-[var(--lgym-border)] pt-4">
-            <v-select
-              v-model="reportRequest.templateId"
-              :items="templateOptions"
-              item-title="label"
-              item-value="value"
-              :label="t('trainerMemberDetails.reports.form.template')"
-            />
-            <v-text-field
-              v-model="reportRequest.dueAt"
-              type="datetime-local"
-              :label="t('trainerMemberDetails.reports.form.dueAt')"
-            />
-            <v-textarea
-              v-model="reportRequest.note"
-              rows="3"
-              :label="t('trainerMemberDetails.reports.form.note')"
-            />
+          <div v-else class="mt-4 border-t border-[var(--lgym-border)] pt-4" />
+        </section>
 
-            <div class="flex justify-end">
-                <v-btn color="primary" class="min-h-10 rounded-md px-4" :loading="isCreatingRequest" @click="createReportRequest">
-                {{ t("trainerMemberDetails.reports.actions.sendRequest") }}
-              </v-btn>
-            </div>
-          </div>
-        </div>
+        <section>
+          <v-progress-linear v-if="isLoadingSubmissions" indeterminate color="primary" />
 
-        <v-progress-linear v-if="isLoadingSubmissions" indeterminate color="primary" />
-
-        <div v-if="hasSubmissionsError && !isLoadingSubmissions" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
-          <p class="text-sm text-[var(--lgym-text-muted)]">
-            {{ t("trainerMemberDetails.reports.error.submissions") }}
-          </p>
-          <v-btn class="mt-4" color="primary" variant="outlined" @click="loadSubmissions">
-            {{ t("trainerMemberDetails.actions.retry") }}
-          </v-btn>
-        </div>
-
-        <template v-else>
-          <article
-            v-for="submission in submissions"
-            :key="submission._id || submission.reportRequestId || 'submission'"
-            class="rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-4"
+          <div
+            v-if="hasSubmissionsError && !isLoadingSubmissions"
+            class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center"
           >
-            <div class="flex flex-col gap-4">
-              <div class="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
-                    {{ submission.request?.template?.name || t("trainerMemberDetails.reports.fallback.noTemplateName") }}
-                  </h3>
-                  <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
-                    {{ t("trainerMemberDetails.reports.meta.submittedAt") }}:
-                    {{ formatDateTime(submission.submittedAt) }}
-                  </p>
+            <p class="text-sm text-[var(--lgym-text-muted)]">
+              {{ t("trainerMemberDetails.reports.error.submissions") }}
+            </p>
+            <v-btn class="mt-4" color="primary" variant="outlined" @click="loadSubmissions">
+              {{ t("trainerMemberDetails.actions.retry") }}
+            </v-btn>
+          </div>
+
+          <AppDataTable
+            v-else
+            :headers="headers"
+            :items="submissions"
+            :loading="isLoadingSubmissions"
+            item-value="_id"
+            hide-default-footer
+            hover
+          >
+            <template #mobile>
+              <div class="border-y border-[var(--lgym-border)]">
+                <template v-if="submissions.length > 0">
+                  <article
+                    v-for="submission in submissions"
+                    :key="submission._id || submission.reportRequestId || 'submission'"
+        class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+                  >
+                    <div class="flex flex-col gap-4">
+                      <div class="flex flex-wrap items-start justify-between gap-3">
+                        <div class="min-w-0 flex-1">
+                          <h3 class="text-base font-semibold text-[var(--lgym-text)]">
+                            {{ submission.request?.template?.name || t("trainerMemberDetails.reports.fallback.noTemplateName") }}
+                          </h3>
+                          <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+                            {{ t("trainerMemberDetails.reports.meta.submittedAt") }}:
+                            {{ formatDateTime(submission.submittedAt) }}
+                          </p>
+                        </div>
+
+                        <v-chip color="primary" size="small" variant="outlined">
+                          {{ submission.request?.status || t("trainerMemberDetails.reports.fallback.noStatus") }}
+                        </v-chip>
+                      </div>
+
+                      <div class="grid gap-3">
+                        <div
+                          v-for="field in orderedFields(submission.request?.template?.fields)"
+                          :key="field.key || field.label || 'field-answer'"
+                          class="border-l-2 border-[var(--lgym-border)] pl-4"
+                        >
+                          <p class="text-sm font-semibold text-[var(--lgym-text)]">
+                            {{ field.label || field.key }}
+                          </p>
+                          <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+                            {{ formatAnswer(submission.answers?.[field.key || ""]) }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </template>
+
+                <div
+                  v-else
+                  class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8"
+                >
+                  {{ t("trainerMemberDetails.reports.empty.submissions") }}
                 </div>
-                <v-chip color="primary" variant="outlined">
-                  {{ submission.request?.status || t("trainerMemberDetails.reports.fallback.noStatus") }}
+              </div>
+            </template>
+
+            <template #item.template="{ item }">
+      <div class="px-4 py-4 lg:px-5">
+                <p class="font-semibold text-[var(--lgym-text)]">
+                  {{ toSubmission(item).request?.template?.name || t("trainerMemberDetails.reports.fallback.noTemplateName") }}
+                </p>
+                <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+                  {{ submissionAnswerSummary(toSubmission(item)) }}
+                </p>
+              </div>
+            </template>
+
+            <template #item.status="{ item }">
+      <div class="px-4 py-4 lg:px-5">
+                <v-chip color="primary" size="small" variant="outlined">
+                  {{ toSubmission(item).request?.status || t("trainerMemberDetails.reports.fallback.noStatus") }}
                 </v-chip>
               </div>
+            </template>
 
-              <div class="grid gap-3">
-                <div
-                  v-for="field in orderedFields(submission.request?.template?.fields)"
-                  :key="field.key || field.label || 'field-answer'"
-                   class="rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] p-4"
-                >
-                  <p class="text-sm font-semibold text-[var(--lgym-text)]">
-                    {{ field.label || field.key }}
-                  </p>
-                  <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
-                    {{ formatAnswer(submission.answers?.[field.key || ""]) }}
+            <template #item.submittedAt="{ item }">
+      <div class="px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
+                {{ formatDateTime(toSubmission(item).submittedAt) }}
+              </div>
+            </template>
+
+            <template #no-data>
+              <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8">
+                {{ t("trainerMemberDetails.reports.empty.submissions") }}
+              </div>
+            </template>
+          </AppDataTable>
+        </section>
+      </div>
+
+      <v-dialog v-model="isRequestDialogOpen" max-width="720">
+        <v-card rounded="lg" class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
+          <div class="border-b border-[var(--lgym-border)] px-6 py-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">
+              {{ t("trainerMemberDetails.reports.requestEyebrow") }}
+            </p>
+            <h3 class="mt-2 text-xl font-semibold text-[var(--lgym-text)]">
+              {{ t("trainerMemberDetails.reports.requestTitle") }}
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+              {{ t("trainerMemberDetails.reports.requestSubtitle") }}
+            </p>
+          </div>
+
+      <v-card-text class="px-6 py-6">
+            <div class="grid gap-5">
+              <div
+        class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]/45 px-4 py-4 sm:px-5"
+              >
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div class="space-y-1.5">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.reports.preview.title") }}
+                    </p>
+                    <p class="text-sm leading-6 text-[var(--lgym-text-muted)]">
+                      {{
+                        selectedTemplate
+                          ? selectedTemplate.description || t("trainerMemberDetails.reports.fallback.noDescription")
+                          : t("trainerMemberDetails.reports.preview.empty")
+                      }}
+                    </p>
+                  </div>
+
+                  <div class="flex flex-wrap gap-2">
+                    <v-chip size="small" variant="outlined" color="primary">
+                      {{ t("trainerMemberDetails.reports.preview.fieldsCount", { count: selectedTemplateFieldCount }) }}
+                    </v-chip>
+                    <v-chip size="small" variant="outlined">
+                      {{ selectedTemplate?.name || t("trainerMemberDetails.reports.fallback.noTemplateName") }}
+                    </v-chip>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+                <v-select
+                  v-model="reportRequest.templateId"
+                  :items="templateOptions"
+                  item-title="label"
+                  item-value="value"
+                  :label="t('trainerMemberDetails.reports.form.template')"
+                  :placeholder="t('trainerMemberDetails.reports.form.templatePlaceholder')"
+                  density="comfortable"
+                  variant="outlined"
+                  hide-details
+                  class="report-request-control"
+                  :disabled="templateOptions.length === 0 || isCreatingRequest"
+                />
+
+                <div class="space-y-2">
+                  <v-text-field
+                    v-model="reportRequest.dueAt"
+                    type="datetime-local"
+                    :label="t('trainerMemberDetails.reports.form.dueAt')"
+                    density="comfortable"
+                    variant="outlined"
+                    hide-details
+                    class="report-request-control"
+                    :disabled="isCreatingRequest"
+                  />
+                  <p class="text-xs leading-5 text-[var(--lgym-text-muted)]">
+                    {{ t("trainerMemberDetails.reports.form.dueAtHint") }}
                   </p>
                 </div>
               </div>
-            </div>
-          </article>
 
-          <div v-if="submissions.length === 0" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
-            {{ t("trainerMemberDetails.reports.empty.submissions") }}
-          </div>
-        </template>
-      </v-card-text>
-    </v-card>
+              <div class="grid gap-2">
+                <v-textarea
+                  v-model="reportRequest.note"
+                  rows="4"
+                  auto-grow
+                  :label="t('trainerMemberDetails.reports.form.note')"
+                  :placeholder="t('trainerMemberDetails.reports.form.notePlaceholder')"
+                  density="comfortable"
+                  variant="outlined"
+                  hide-details
+                  class="report-request-control"
+                  :disabled="isCreatingRequest"
+                />
+                <p class="text-xs leading-5 text-[var(--lgym-text-muted)]">
+                  {{ t("trainerMemberDetails.reports.form.noteHint") }}
+                </p>
+              </div>
+            </div>
+          </v-card-text>
+
+          <v-card-actions class="justify-end gap-3 px-6 pb-6">
+            <v-btn variant="outlined" color="primary" @click="closeRequestDialog">
+              {{ t("trainerMemberDetails.actions.cancel") }}
+            </v-btn>
+            <v-btn
+              color="primary"
+              class="min-h-10 rounded-md px-4"
+              :loading="isCreatingRequest"
+              :disabled="templateOptions.length === 0"
+              @click="submitReportRequest"
+            >
+              {{ t("trainerMemberDetails.reports.actions.sendRequest") }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </section>
   </div>
 </template>
 
@@ -160,6 +305,7 @@ import {
 import { getApiErrorMessage } from "../../../api/trainerInvitations";
 import { handleTrainerUnauthorizedResponse } from "../../../composables/useTrainerMembers";
 import { useToast } from "../../../composables/useToast";
+import AppDataTable from "../../ui/AppDataTable.vue";
 
 const props = defineProps<{
   traineeId: string;
@@ -177,6 +323,7 @@ const isLoadingSubmissions = ref(false);
 const hasTemplatesError = ref(false);
 const hasSubmissionsError = ref(false);
 const isCreatingRequest = ref(false);
+const isRequestDialogOpen = ref(false);
 
 const reportRequest = ref<CreateReportRequestRequest>({
   templateId: null,
@@ -190,6 +337,21 @@ const templateOptions = computed(() =>
     value: template._id || "",
   })),
 );
+
+const selectedTemplate = computed(
+  () =>
+    templates.value.find((template) => template._id === reportRequest.value.templateId) ?? null,
+);
+
+const selectedTemplateFieldCount = computed(
+  () => orderedFields(selectedTemplate.value?.fields).length,
+);
+
+const headers = computed(() => [
+  { title: t("trainerMemberDetails.reports.form.template"), key: "template", sortable: false },
+  { title: t("trainerMemberDetails.reports.fallback.noStatus"), key: "status", sortable: false },
+  { title: t("trainerMemberDetails.reports.meta.submittedAt"), key: "submittedAt", sortable: false },
+]);
 
 let templateToken = 0;
 let submissionToken = 0;
@@ -206,6 +368,31 @@ type OrderedFieldLike = {
 
 const orderedFields = (fields: OrderedFieldLike[] | null | undefined) =>
   [...(fields ?? [])].sort((left, right) => (left.order ?? 0) - (right.order ?? 0));
+
+const toSubmission = (item: unknown) => item as ReportSubmissionDto;
+
+const submissionAnswerSummary = (submission: ReportSubmissionDto) => {
+  const answers = Object.values(submission.answers ?? {});
+  if (answers.length === 0) return t("trainerMemberDetails.reports.fallback.noAnswer");
+  return formatAnswer(answers[0]);
+};
+
+const resetReportRequest = () => {
+  reportRequest.value = {
+    templateId: null,
+    dueAt: null,
+    note: null,
+  };
+};
+
+const openRequestDialog = () => {
+  resetReportRequest();
+  isRequestDialogOpen.value = true;
+};
+
+const closeRequestDialog = () => {
+  isRequestDialogOpen.value = false;
+};
 
 const loadTemplates = async () => {
   const currentToken = ++templateToken;
@@ -318,7 +505,7 @@ const createReportRequest = async () => {
       props.traineeId,
       {
         templateId: reportRequest.value.templateId,
-        dueAt: reportRequest.value.dueAt || null,
+        dueAt: toUtcIsoString(reportRequest.value.dueAt),
         note: reportRequest.value.note || null,
       },
     );
@@ -341,13 +528,10 @@ const createReportRequest = async () => {
       return;
     }
 
-    toast.success("trainerMemberDetails.reports.feedback.createRequestSuccess");
-    reportRequest.value = {
-      templateId: null,
-      dueAt: null,
-      note: null,
-    };
-    await loadSubmissions();
+     toast.success("trainerMemberDetails.reports.feedback.createRequestSuccess");
+      closeRequestDialog();
+      resetReportRequest();
+      await loadSubmissions();
   } catch (error) {
     console.error(error);
     toast.error("trainerMemberDetails.reports.feedback.createRequestFailed");
@@ -356,13 +540,28 @@ const createReportRequest = async () => {
   }
 };
 
+const submitReportRequest = async () => {
+  await createReportRequest();
+};
+
+const toUtcIsoString = (value: string | null | undefined) => {
+  if (!value) return null;
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return null;
+
+  return parsed.toISOString();
+};
+
 const formatAnswer = (value: unknown) => {
   if (value === null || value === undefined || value === "") {
     return t("trainerMemberDetails.reports.fallback.noAnswer");
   }
 
   if (typeof value === "boolean") {
-    return value ? t("trainerMemberDetails.reports.boolean.true") : t("trainerMemberDetails.reports.boolean.false");
+    return value
+      ? t("trainerMemberDetails.reports.boolean.true")
+      : t("trainerMemberDetails.reports.boolean.false");
   }
 
   if (typeof value === "number" || typeof value === "string") {
@@ -386,3 +585,9 @@ watch(
   { immediate: true },
 );
 </script>
+
+<style scoped>
+.report-request-control :deep(.v-field) {
+  border-radius: 0.75rem;
+}
+</style>

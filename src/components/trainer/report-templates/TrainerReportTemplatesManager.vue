@@ -1,15 +1,15 @@
 <template>
   <section class="overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)] flex-1">
-    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+  <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
+        <div class="lgym-section-heading">
           <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
             {{ t("trainerMemberDetails.trainerReportTemplates.page.eyebrow") }}
           </p>
-          <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+          <h2 class="text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
             {{ t("trainerMemberDetails.trainerReportTemplates.page.title") }}
           </h2>
-          <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+          <p class="lgym-section-heading__subtitle text-sm leading-6 text-[var(--lgym-text-muted)]">
             {{ t("trainerMemberDetails.trainerReportTemplates.page.subtitle") }}
           </p>
         </div>
@@ -48,7 +48,7 @@
               <article
                 v-for="template in templates"
                 :key="template._id || template.name || 'template'"
-                class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+        class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
               >
                 <div class="flex flex-col gap-4">
                   <div class="flex flex-wrap items-start justify-between gap-3">
@@ -120,7 +120,7 @@
         </template>
 
         <template #item.template="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+      <div class="px-4 py-4 lg:px-5">
             <h3 class="text-base font-semibold text-[var(--lgym-text)]">
               {{
                 toTemplate(item).name ||
@@ -137,7 +137,7 @@
         </template>
 
         <template #item.fields="{ item }">
-          <div class="px-4 py-4 lg:px-5">
+      <div class="px-4 py-4 lg:px-5">
             <div class="flex flex-wrap gap-2">
               <v-chip
                 v-for="field in orderedFields(toTemplate(item).fields)"
@@ -153,7 +153,7 @@
         </template>
 
         <template #item.actions="{ item }">
-          <div class="flex flex-wrap justify-end gap-2 px-4 py-4 lg:px-5">
+      <div class="flex flex-wrap justify-end gap-2 px-4 py-4 lg:px-5">
             <v-btn
               variant="outlined"
               color="primary"
@@ -182,140 +182,232 @@
     </div>
   </section>
 
-  <v-dialog v-model="isTemplateDialogOpen" max-width="1180">
-    <v-card rounded="lg">
-      <v-card-title class="border-b border-[var(--lgym-border)] px-5 py-5 text-lg font-semibold sm:px-6 sm:py-6">
-        <div class="flex flex-col gap-2">
-          <span>
-            {{
-              editingTemplateId
-                ? t("trainerMemberDetails.trainerReportTemplates.dialog.editTemplateTitle")
-                : t("trainerMemberDetails.trainerReportTemplates.dialog.createTemplateTitle")
-            }}
-          </span>
-          <span class="text-sm font-normal text-[var(--lgym-text-muted)]">
-            {{ t("trainerMemberDetails.trainerReportTemplates.page.subtitle") }}
-          </span>
-        </div>
-      </v-card-title>
-      <v-card-text class="px-5 py-5 sm:px-6 sm:py-6">
-        <div class="grid gap-4 border-b border-[var(--lgym-border)] pb-5 lg:grid-cols-[minmax(280px,1fr)_minmax(0,1.4fr)] lg:gap-5">
-          <v-text-field
-            v-model="templateForm.name"
-            :label="t('trainerMemberDetails.trainerReportTemplates.form.templateName')"
-            density="compact"
-            variant="outlined"
-            hide-details
-            class="template-field-control"
-          />
-          <v-textarea
-            v-model="templateForm.description"
-            rows="2"
-            auto-grow
-            :label="t('trainerMemberDetails.trainerReportTemplates.form.templateDescription')"
-            density="compact"
-            variant="outlined"
-            hide-details
-            class="template-field-control"
-          />
-        </div>
-
-        <div class="pt-6">
-          <div class="mb-4 flex items-center justify-between gap-4 border-b border-[var(--lgym-border)] pb-3">
-            <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-              {{ t("trainerMemberDetails.trainerReportTemplates.form.fieldsTitle") }}
-            </h4>
-            <v-btn size="small" variant="outlined" class="rounded-md px-3.5" prepend-icon="mdi-plus" @click="appendField">
-              {{ t("trainerMemberDetails.trainerReportTemplates.actions.addField") }}
-            </v-btn>
+  <v-dialog v-model="isTemplateDialogOpen" max-width="1120">
+    <v-card rounded="md" class="report-template-dialog overflow-hidden">
+      <div class="template-dialog-hero sticky top-0 z-10 px-4 py-4 sm:px-5 sm:py-4">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div class="max-w-3xl">
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]">
+              {{ t("trainerMemberDetails.trainerReportTemplates.page.eyebrow") }}
+            </p>
+            <h3 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+              {{
+                editingTemplateId
+                  ? t("trainerMemberDetails.trainerReportTemplates.dialog.editTemplateTitle")
+                  : t("trainerMemberDetails.trainerReportTemplates.dialog.createTemplateTitle")
+              }}
+            </h3>
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-[var(--lgym-text-muted)]">
+              {{ t("trainerMemberDetails.trainerReportTemplates.page.subtitle") }}
+            </p>
           </div>
 
-          <div class="hidden border-b border-[var(--lgym-border)] text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)] lg:grid lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1.2fr)_140px_96px_124px_52px] lg:gap-x-4 lg:px-1 lg:py-3">
-            <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldLabel') }}</span>
-            <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldKey') }}</span>
-            <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldType') }}</span>
-            <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldOrder') }}</span>
-            <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldRequired') }}</span>
-            <span class="text-right">#</span>
+          <div class="flex items-center gap-2 text-sm text-[var(--lgym-text-muted)] lg:max-w-[320px] lg:justify-end">
+            <span>{{ templateFieldCount }} {{ t("trainerMemberDetails.trainerReportTemplates.preview.fields") }}</span>
           </div>
+        </div>
+      </div>
 
-          <div class="divide-y divide-[var(--lgym-border)]">
-            <div
-              v-for="(field, index) in templateForm.fields"
-              :key="`${field.key}-${index}`"
-              class="template-field-row py-4 transition-colors hover:bg-[var(--lgym-note-bg)]/28"
-            >
-              <div class="grid gap-3 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1.2fr)_140px_96px_124px_52px] lg:items-center lg:gap-x-4 lg:gap-y-3">
+      <v-card-text class="px-5 pb-5 pt-5 sm:px-6 sm:pb-6 sm:pt-6">
+        <div>
+          <div class="space-y-5">
+            <section class="template-dialog-panel">
+              <div class="flex flex-col gap-2">
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                  {{ t("trainerMemberDetails.trainerReportTemplates.form.templateName") }}
+                </p>
+              </div>
+
+              <div class="mt-5 grid gap-4 lg:grid-cols-[minmax(240px,0.95fr)_minmax(0,1.25fr)]">
                 <v-text-field
-                  v-model="field.label"
-                  :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldLabel')"
-                  density="compact"
+                  v-model="templateForm.name"
+                  :label="t('trainerMemberDetails.trainerReportTemplates.form.templateName')"
+                  density="comfortable"
                   variant="outlined"
                   hide-details
                   class="template-field-control"
                 />
-                <v-text-field
-                  v-model="field.key"
-                  :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldKey')"
-                  density="compact"
+                <v-textarea
+                  v-model="templateForm.description"
+                  rows="3"
+                  auto-grow
+                  :label="t('trainerMemberDetails.trainerReportTemplates.form.templateDescription')"
+                  density="comfortable"
                   variant="outlined"
                   hide-details
                   class="template-field-control"
                 />
-                <v-select
-                  v-model="field.type"
-                  :items="fieldTypeOptions"
-                  item-title="label"
-                  item-value="value"
-                  :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldType')"
-                  density="compact"
-                  variant="outlined"
-                  hide-details
-                  class="template-field-control"
-                />
-                <v-text-field
-                  v-model.number="field.order"
-                  type="number"
-                  :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldOrder')"
-                  density="compact"
-                  variant="outlined"
-                  hide-details
-                  class="template-field-control"
-                />
-                <div class="flex min-h-11 items-center lg:pl-2 lg:justify-center">
-                  <v-checkbox
-                    v-model="field.isRequired"
-                    :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldRequired')"
-                    density="compact"
-                    hide-details
-                    class="template-inline-checkbox"
-                  />
+              </div>
+            </section>
+
+            <section class="template-dialog-panel">
+              <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                    {{ t("trainerMemberDetails.trainerReportTemplates.form.fieldsTitle") }}
+                  </p>
                 </div>
-                <div class="flex min-h-11 items-center justify-end lg:pr-1">
+
+                <div class="flex flex-wrap items-center gap-2">
                   <v-btn
-                    icon="mdi-delete-outline"
                     size="small"
-                    variant="text"
-                    color="error"
-                    @click="removeField(index)"
-                  />
+                    color="primary"
+                    variant="outlined"
+                    class="rounded-md px-3.5"
+                    prepend-icon="mdi-plus"
+                    @click="appendField"
+                  >
+                    {{ t("trainerMemberDetails.trainerReportTemplates.actions.addField") }}
+                  </v-btn>
                 </div>
               </div>
-            </div>
 
-            <div v-if="templateForm.fields.length === 0" class="py-8 text-sm text-[var(--lgym-text-muted)]">
-              {{ t("trainerMemberDetails.trainerReportTemplates.empty.templates") }}
-            </div>
-          </div>
-        </div>
+               <div class="template-fields-head mt-4 hidden xl:grid">
+                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldLabel') }}</span>
+                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldKey') }}</span>
+                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldType') }}</span>
+                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldOrder') }}</span>
+                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldRequired') }}</span>
+                 <span class="text-right">#</span>
+               </div>
+
+               <VueDraggable
+                 v-model="templateForm.fields"
+                 handle=".template-drag-handle"
+                 class="template-fields-scroll mt-5 grid gap-3"
+                 ghost-class="template-field-ghost"
+                 chosen-class="template-field-chosen"
+                 drag-class="template-field-drag"
+                 :animation="180"
+                 @update="syncTemplateFieldOrders"
+               >
+                 <div
+                   v-for="(field, index) in templateForm.fields"
+                   :key="field.localId"
+                   class="template-field-card"
+                 >
+                   <div class="flex flex-col gap-3">
+                     <div class="flex items-center justify-between gap-3 xl:hidden">
+                       <div class="flex min-w-0 items-center gap-3">
+                         <button
+                           type="button"
+                           class="template-drag-handle template-field-index"
+                           :title="t('trainerMemberDetails.trainerReportTemplates.form.fieldOrder')"
+                           :aria-label="t('trainerMemberDetails.trainerReportTemplates.form.fieldOrder')"
+                         >
+                           <v-icon icon="mdi-drag" size="16" />
+                         </button>
+                         <span class="template-field-index template-field-index--order">
+                           {{ String(index + 1).padStart(2, "0") }}
+                         </span>
+
+                         <div class="min-w-0">
+                          <p class="truncate text-sm font-semibold text-[var(--lgym-text)]">
+                            {{ `${t('trainerMemberDetails.trainerReportTemplates.form.fieldLabel')} ${index + 1}` }}
+                          </p>
+                          <div class="mt-1 flex flex-wrap gap-2">
+                            <v-chip size="x-small" variant="outlined" color="primary">
+                              {{ getFieldTypeLabel(field.type) }}
+                            </v-chip>
+                            <v-chip v-if="field.isRequired" size="x-small" variant="flat" color="primary">
+                              {{ t("trainerMemberDetails.trainerReportTemplates.form.fieldRequired") }}
+                            </v-chip>
+                          </div>
+                        </div>
+                      </div>
+
+                      <v-btn
+                        icon="mdi-delete-outline"
+                        size="small"
+                        variant="text"
+                        color="error"
+                        @click="removeField(index)"
+                      />
+                    </div>
+
+                    <div class="template-field-grid">
+                      <v-text-field
+                        v-model="field.label"
+                        :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldLabel')"
+                        density="comfortable"
+                        variant="outlined"
+                        hide-details
+                        class="template-field-control template-field-row"
+                      />
+                       <v-text-field
+                         v-model="field.key"
+                         :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldKey')"
+                        density="comfortable"
+                        variant="outlined"
+                        hide-details
+                        class="template-field-control template-field-row"
+                      />
+                       <v-select
+                         v-model="field.type"
+                        :items="fieldTypeOptions"
+                        item-title="label"
+                        item-value="value"
+                        :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldType')"
+                        density="comfortable"
+                        variant="outlined"
+                        hide-details
+                        class="template-field-control template-field-row"
+                      />
+                       <div class="template-drag-slot flex min-h-11 items-center xl:justify-center">
+                         <button
+                           type="button"
+                           class="template-drag-handle template-drag-button"
+                           :title="t('trainerMemberDetails.trainerReportTemplates.form.fieldOrder')"
+                           :aria-label="t('trainerMemberDetails.trainerReportTemplates.form.fieldOrder')"
+                         >
+                           <v-icon icon="mdi-drag" size="18" />
+                           <span class="hidden text-xs font-medium xl:inline">
+                             {{ String(index + 1).padStart(2, '0') }}
+                           </span>
+                         </button>
+                       </div>
+                       <div class="template-checkbox-wrap flex min-h-11 items-center xl:justify-center">
+                         <v-checkbox
+                           v-model="field.isRequired"
+                          :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldRequired')"
+                          density="comfortable"
+                          hide-details
+                          class="template-inline-checkbox"
+                        />
+                      </div>
+                      <div class="hidden min-h-11 items-center justify-end xl:flex">
+                        <v-btn
+                          icon="mdi-delete-outline"
+                          size="small"
+                          variant="text"
+                          color="error"
+                          @click="removeField(index)"
+                        />
+                      </div>
+                    </div>
+                   </div>
+                 </div>
+
+                 <div v-if="templateForm.fields.length === 0" class="template-empty-state">
+                   <p class="text-sm leading-6 text-[var(--lgym-text-muted)]">
+                     {{ t("trainerMemberDetails.trainerReportTemplates.empty.templates") }}
+                   </p>
+                 </div>
+               </VueDraggable>
+             </section>
+           </div>
+         </div>
       </v-card-text>
-      <v-card-actions class="sticky bottom-0 mt-2 justify-end gap-2 border-t border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/95 px-5 py-4 backdrop-blur-sm sm:px-6 sm:py-4.5">
-        <v-btn variant="text" class="rounded-md px-3.5" @click="isTemplateDialogOpen = false">
-          {{ t("trainerMemberDetails.trainerReportTemplates.actions.cancel") }}
-        </v-btn>
-        <v-btn color="primary" class="rounded-md px-4.5" :loading="isSavingTemplate" @click="saveTemplate">
-          {{ t("trainerMemberDetails.trainerReportTemplates.actions.save") }}
-        </v-btn>
+
+      <v-card-actions class="sticky bottom-0 z-10 mt-1 justify-end gap-3 border-t border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
+        <div class="flex flex-wrap justify-end gap-2">
+          <v-btn variant="text" class="rounded-md px-3.5" @click="isTemplateDialogOpen = false">
+            {{ t("trainerMemberDetails.trainerReportTemplates.actions.cancel") }}
+          </v-btn>
+          <v-btn color="primary" class="rounded-md px-4.5" :loading="isSavingTemplate" @click="saveTemplate">
+            {{ t("trainerMemberDetails.trainerReportTemplates.actions.save") }}
+          </v-btn>
+        </div>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -323,6 +415,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
+import { VueDraggable } from "vue-draggable-plus";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -339,11 +432,13 @@ import {
   type ReportTemplateFieldRequest,
 } from "../../../api/model";
 import { getApiErrorMessage } from "../../../api/trainerInvitations";
+import { useConfirmDialog } from "../../../composables/useConfirmDialog";
 import { handleTrainerUnauthorizedResponse } from "../../../composables/useTrainerMembers";
 import { useToast } from "../../../composables/useToast";
 import AppDataTable from "../../ui/AppDataTable.vue";
 
 type EditableTemplateField = {
+  localId: string;
   key: string;
   label: string;
   type: ReportTemplateFieldRequest["type"];
@@ -358,6 +453,7 @@ type TemplateFormState = {
 };
 
 type OrderedFieldLike = {
+  localId?: string;
   key?: string | null;
   label?: string | null;
   type?: string | null;
@@ -372,6 +468,7 @@ const props = defineProps<{
 const { t } = useI18n();
 const router = useRouter();
 const toast = useToast();
+const { confirm } = useConfirmDialog();
 
 const templates = ref<ReportTemplateDto[]>([]);
 const isLoadingTemplates = ref(false);
@@ -393,7 +490,10 @@ const fieldTypeOptions = computed(() => [
   { label: ReportTemplateFieldRequestType.Date, value: ReportTemplateFieldRequestType.Date },
 ]);
 
+const templateFieldCount = computed(() => templateForm.value.fields.length);
+
 let templateToken = 0;
+let nextTemplateFieldLocalId = 0;
 
 const redirectPath = computed(() => props.redirectPath || "/trainer/report-templates");
 
@@ -432,6 +532,28 @@ const orderedFields = (fields: OrderedFieldLike[] | null | undefined) =>
 
 const toTemplate = (item: unknown) => item as ReportTemplateDto;
 
+const createEditableField = (
+  field?: Partial<Omit<EditableTemplateField, "localId">>,
+): EditableTemplateField => ({
+  localId: `template-field-${++nextTemplateFieldLocalId}`,
+  key: field?.key ?? "",
+  label: field?.label ?? "",
+  type: field?.type ?? ReportTemplateFieldRequestType.Text,
+  isRequired: field?.isRequired ?? false,
+  order: field?.order ?? templateForm.value.fields.length + 1,
+});
+
+const getFieldTypeLabel = (value: ReportTemplateFieldRequest["type"]) => {
+  return fieldTypeOptions.value.find((option) => option.value === value)?.label ?? value;
+};
+
+const syncTemplateFieldOrders = () => {
+  templateForm.value.fields = templateForm.value.fields.map((field, index) => ({
+    ...field,
+    order: index + 1,
+  }));
+};
+
 const resetTemplateForm = () => {
   templateForm.value = {
     name: "",
@@ -441,17 +563,13 @@ const resetTemplateForm = () => {
 };
 
 const appendField = () => {
-  templateForm.value.fields.push({
-    key: "",
-    label: "",
-    type: ReportTemplateFieldRequestType.Text,
-    isRequired: false,
-    order: templateForm.value.fields.length + 1,
-  });
+  templateForm.value.fields.push(createEditableField());
+  syncTemplateFieldOrders();
 };
 
 const removeField = (index: number) => {
   templateForm.value.fields.splice(index, 1);
+  syncTemplateFieldOrders();
 };
 
 const openTemplateDialog = async (template?: ReportTemplateDto) => {
@@ -472,22 +590,25 @@ const openTemplateDialog = async (template?: ReportTemplateDto) => {
       return;
     }
 
-    if (response.status === 200) {
-      const data = response.data;
-      templateForm.value = {
-        name: data.name ?? "",
-        description: data.description ?? "",
-        fields: orderedFields(data.fields).map((field) => ({
-          key: field.key ?? "",
-          label: field.label ?? "",
-          type:
-            (field.type as ReportTemplateFieldRequest["type"]) ??
-            ReportTemplateFieldRequestType.Text,
-          isRequired: Boolean(field.isRequired),
-          order: field.order ?? 0,
-        })),
-      };
-    }
+      if (response.status === 200) {
+        const data = response.data;
+          templateForm.value = {
+          name: data.name ?? "",
+          description: data.description ?? "",
+          fields: orderedFields(data.fields).map((field) =>
+            createEditableField({
+              key: field.key ?? "",
+              label: field.label ?? "",
+              type:
+                (field.type as ReportTemplateFieldRequest["type"]) ??
+                ReportTemplateFieldRequestType.Text,
+              isRequired: Boolean(field.isRequired),
+              order: field.order ?? 0,
+            }),
+          ),
+        };
+        syncTemplateFieldOrders();
+      }
   }
 
   if (templateForm.value.fields.length === 0) {
@@ -557,7 +678,7 @@ const saveTemplate = async () => {
       label: field.label.trim(),
       type: field.type,
       isRequired: field.isRequired,
-      order: field.order || index + 1,
+      order: index + 1,
     }))
     .filter((field) => field.key && field.label && field.type);
 
@@ -629,11 +750,16 @@ const deleteTemplate = async (template: ReportTemplateDto) => {
   const templateId = template._id?.trim();
   if (!templateId) return;
 
-  const confirmed = window.confirm(
-    t("trainerMemberDetails.trainerReportTemplates.actions.deleteTemplateConfirm", {
+  const confirmed = await confirm({
+    title: t("trainerMemberDetails.trainerReportTemplates.actions.deleteTemplate"),
+    description: t("trainerMemberDetails.trainerReportTemplates.actions.deleteTemplateConfirm", {
       name: template.name || t("trainerMemberDetails.trainerReportTemplates.fallback.noTemplateName"),
     }),
-  );
+    confirmLabel: t("trainerMemberDetails.trainerReportTemplates.actions.deleteTemplate"),
+    cancelLabel: t("trainerMemberDetails.trainerReportTemplates.actions.cancel"),
+    confirmColor: "error",
+    isDestructive: true,
+  });
   if (!confirmed) return;
 
   try {
@@ -675,18 +801,154 @@ watch(
 </script>
 
 <style scoped>
+.report-template-dialog {
+  background: var(--lgym-surface-card);
+  box-shadow: var(--lgym-shadow-surface);
+  border: 1px solid var(--lgym-border);
+  max-height: min(92vh, 960px);
+  display: flex;
+  flex-direction: column;
+}
+
+.template-dialog-hero {
+  border-bottom: 1px solid var(--lgym-border);
+  background: var(--lgym-surface-card);
+}
+
+.template-dialog-panel {
+  border: 0;
+  border-radius: 0.625rem;
+  padding: 1.25rem;
+  background: var(--lgym-note-bg);
+}
+
+.template-dialog-stat {
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.875rem;
+  background: color-mix(in srgb, var(--lgym-surface-card) 82%, transparent);
+}
+
+.template-fields-head {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.15fr) 140px 96px 132px 44px;
+  gap: 0.75rem;
+  align-items: center;
+  color: var(--lgym-text-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.template-field-card {
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.template-fields-scroll {
+  overflow-y: auto;
+  max-height: min(48vh, 460px);
+  padding-right: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+
+.template-field-grid {
+  display: grid;
+  gap: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .template-field-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .template-field-grid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.15fr) 140px 96px 132px 44px;
+    align-items: center;
+  }
+}
+
+.template-field-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background: var(--lgym-note-bg);
+  color: rgb(var(--v-theme-primary));
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.template-field-index--order {
+  color: var(--lgym-text);
+}
+
+.template-drag-handle {
+  cursor: grab;
+}
+
+.template-drag-handle:active {
+  cursor: grabbing;
+}
+
+.template-drag-button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 0;
+  border-radius: 0.5rem;
+  padding-inline: 0.65rem;
+  background: var(--lgym-surface-elevated);
+  color: var(--lgym-text-muted);
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.template-drag-button:hover {
+  background: var(--lgym-note-bg);
+  color: var(--lgym-text);
+}
+
+.template-drag-slot {
+  min-width: 0;
+}
+
 .template-field-control :deep(.v-field) {
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   min-height: 44px;
+  background: var(--lgym-surface-elevated);
+}
+
+.template-field-control :deep(.v-field--variant-outlined .v-field__outline) {
+  opacity: 1;
+}
+
+.template-field-control :deep(.v-field--variant-outlined .v-field__outline__start),
+.template-field-control :deep(.v-field--variant-outlined .v-field__outline__notch),
+.template-field-control :deep(.v-field--variant-outlined .v-field__outline__end) {
+  border-color: var(--lgym-border-strong);
 }
 
 .template-field-control :deep(.v-field__input) {
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
 }
 
 .template-inline-checkbox {
   margin: 0;
+}
+
+.template-checkbox-wrap {
+  border: 0;
+  border-radius: 0.5rem;
+  padding-inline: 0.65rem;
+  background: var(--lgym-surface-elevated);
 }
 
 .template-inline-checkbox :deep(.v-selection-control) {
@@ -695,6 +957,23 @@ watch(
 
 .template-inline-checkbox :deep(.v-label) {
   font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.template-empty-state {
+  border: 1px dashed var(--lgym-border);
+  border-radius: 0.625rem;
+  padding: 1.25rem;
+  background: var(--lgym-surface-card);
+}
+
+.template-field-ghost {
+  opacity: 0.6;
+}
+
+.template-field-chosen,
+.template-field-drag {
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
 }
 
 @media (min-width: 1024px) {

@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-0 min-w-0 flex-col gap-4">
-    <v-card class="overflow-hidden rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-5">
+    <section>
+      <div>
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
@@ -15,16 +15,21 @@
             </p>
           </div>
 
-          <v-btn color="primary" class="min-h-10 rounded-md px-4" @click="openCreateDialog">
-            {{ t("trainerMemberDetails.plans.actions.create") }}
-          </v-btn>
+          <div class="flex flex-wrap gap-2">
+            <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click="openAssignExistingDialog">
+              {{ t("trainerMemberDetails.plans.actions.assignExisting") }}
+            </v-btn>
+            <v-btn color="primary" class="min-h-10 rounded-md px-4" @click="openCreateDialog">
+              {{ t("trainerMemberDetails.plans.actions.create") }}
+            </v-btn>
+          </div>
         </div>
       </div>
 
       <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
-      <v-card-text class="flex flex-col gap-0 px-4 py-0 sm:px-5 lg:px-6">
-        <div v-if="hasError && !isLoading" class="my-4 rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
+      <div class="pt-4">
+        <div v-if="hasError && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
           <p class="text-sm text-[var(--lgym-text-muted)]">
             {{ t("trainerMemberDetails.plans.error.subtitle") }}
           </p>
@@ -33,39 +38,127 @@
           </v-btn>
         </div>
 
-        <div v-else-if="plans.length === 0" class="my-4 rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
-          {{ t("trainerMemberDetails.plans.empty.title") }}
-        </div>
-
-        <article
-          v-for="plan in plans"
-          :key="plan._id || plan.name || 'plan'"
-          class="border-b border-[var(--lgym-border)] py-4 last:border-b-0"
+        <AppDataTable
+          v-else
+          :headers="headers"
+          :items="plans"
+          :loading="isLoading"
+          item-value="_id"
+          hide-default-footer
+          hover
+          row-clickable
+          @row-click="onPlanRowClick"
         >
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <div class="flex flex-wrap items-center gap-3">
-                <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
-                  {{ plan.name || t("trainerMemberDetails.plans.fallback.noName") }}
-                </h3>
-                <v-chip v-if="plan.isActive" color="success" size="small">
-                  {{ t("trainerMemberDetails.plans.badges.active") }}
-                </v-chip>
+          <template #mobile>
+            <div class="border-y border-[var(--lgym-border)]">
+              <template v-if="plans.length > 0">
+                <article
+                  v-for="plan in plans"
+                  :key="plan._id || plan.name || 'plan'"
+        class="cursor-pointer border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+                  @click="openPlanDetails(plan)"
+                >
+                  <div class="flex flex-col gap-4">
+                    <div class="flex flex-wrap items-start justify-between gap-3">
+                      <div class="min-w-0 flex-1">
+                        <div class="flex flex-wrap items-center gap-3">
+                          <h3 class="truncate text-base font-semibold text-[var(--lgym-text)]">
+                            {{ plan.name || t("trainerMemberDetails.plans.fallback.noName") }}
+                          </h3>
+                          <v-chip
+                            :color="plan.isActive ? 'success' : 'secondary'"
+                            size="small"
+                            variant="outlined"
+                          >
+                            {{ planStatusLabel(plan) }}
+                          </v-chip>
+                        </div>
+                        <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+                          {{ t("trainerMemberDetails.plans.meta.createdAt") }}:
+                          {{ formatDateTime(plan.createdAt) }}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                      <v-btn
+                        color="primary"
+                        variant="tonal"
+                        class="min-h-10 rounded-md px-4"
+                        :disabled="plan.isActive || !plan._id"
+                        :loading="assigningPlanId === plan._id"
+                        @click.stop="assignPlan(plan)"
+                      >
+                        {{ t("trainerMemberDetails.plans.actions.assign") }}
+                      </v-btn>
+                      <v-btn
+                        variant="outlined"
+                        color="primary"
+                        class="min-h-10 rounded-md px-4"
+                        :disabled="!plan._id"
+                        @click.stop="openRenameDialog(plan)"
+                      >
+                        {{ t("trainerMemberDetails.plans.actions.rename") }}
+                      </v-btn>
+                      <v-btn
+                        variant="outlined"
+                        color="error"
+                        class="min-h-10 rounded-md px-4"
+                        :disabled="!plan._id"
+                        :loading="deletingPlanId === plan._id"
+                        @click.stop="deletePlan(plan)"
+                      >
+                        {{ t("trainerMemberDetails.plans.actions.delete") }}
+                      </v-btn>
+                    </div>
+                  </div>
+                </article>
+              </template>
+
+              <div
+                v-else
+                class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8"
+              >
+                {{ t("trainerMemberDetails.plans.empty.title") }}
               </div>
-              <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
-                {{ t("trainerMemberDetails.plans.meta.createdAt") }}:
-                {{ formatDateTime(plan.createdAt) }}
+            </div>
+          </template>
+
+          <template #item.name="{ item }">
+      <div class="px-4 py-4 lg:px-5">
+              <p class="font-semibold text-[var(--lgym-text)]">
+                {{ toPlan(item).name || t("trainerMemberDetails.plans.fallback.noName") }}
               </p>
             </div>
+          </template>
 
-            <div class="flex flex-wrap gap-2">
+          <template #item.createdAt="{ item }">
+      <div class="px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
+              {{ formatDateTime(toPlan(item).createdAt) }}
+            </div>
+          </template>
+
+          <template #item.status="{ item }">
+      <div class="px-4 py-4 lg:px-5">
+              <v-chip
+                :color="toPlan(item).isActive ? 'success' : 'secondary'"
+                size="small"
+                variant="outlined"
+              >
+                {{ planStatusLabel(toPlan(item)) }}
+              </v-chip>
+            </div>
+          </template>
+
+          <template #item.actions="{ item }">
+      <div class="flex flex-wrap items-center justify-end gap-2 px-4 py-4 lg:px-5">
               <v-btn
                 color="primary"
                 variant="tonal"
                 class="min-h-10 rounded-md px-4"
-                :disabled="plan.isActive || !plan._id"
-                :loading="assigningPlanId === plan._id"
-                @click="assignPlan(plan)"
+                :disabled="toPlan(item).isActive || !toPlan(item)._id"
+                :loading="assigningPlanId === toPlan(item)._id"
+                @click.stop="assignPlan(toPlan(item))"
               >
                 {{ t("trainerMemberDetails.plans.actions.assign") }}
               </v-btn>
@@ -73,8 +166,8 @@
                 variant="outlined"
                 color="primary"
                 class="min-h-10 rounded-md px-4"
-                :disabled="!plan._id"
-                @click="openRenameDialog(plan)"
+                :disabled="!toPlan(item)._id"
+                @click.stop="openRenameDialog(toPlan(item))"
               >
                 {{ t("trainerMemberDetails.plans.actions.rename") }}
               </v-btn>
@@ -82,15 +175,21 @@
                 variant="outlined"
                 color="error"
                 class="min-h-10 rounded-md px-4"
-                :disabled="!plan._id"
-                :loading="deletingPlanId === plan._id"
-                @click="deletePlan(plan)"
+                :disabled="!toPlan(item)._id"
+                :loading="deletingPlanId === toPlan(item)._id"
+                @click.stop="deletePlan(toPlan(item))"
               >
                 {{ t("trainerMemberDetails.plans.actions.delete") }}
               </v-btn>
             </div>
-          </div>
-        </article>
+          </template>
+
+          <template #no-data>
+            <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8">
+              {{ t("trainerMemberDetails.plans.empty.title") }}
+            </div>
+          </template>
+        </AppDataTable>
 
         <div class="flex justify-end py-4">
           <v-btn
@@ -104,8 +203,8 @@
             {{ t("trainerMemberDetails.plans.actions.unassign") }}
           </v-btn>
         </div>
-      </v-card-text>
-    </v-card>
+      </div>
+    </section>
 
     <v-dialog v-model="isPlanDialogOpen" max-width="520">
       <v-card rounded="lg">
@@ -133,6 +232,55 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="isAssignExistingDialogOpen" max-width="620">
+      <v-card rounded="lg">
+        <v-card-title class="border-b border-[var(--lgym-border)] px-6 py-5">
+          <div class="flex flex-col gap-2">
+            <span class="text-lg font-semibold text-[var(--lgym-text)]">
+              {{ t("trainerMemberDetails.plans.dialog.assignExistingTitle") }}
+            </span>
+            <span class="text-sm font-normal text-[var(--lgym-text-muted)]">
+              {{ t("trainerMemberDetails.plans.dialog.assignExistingSubtitle") }}
+            </span>
+          </div>
+        </v-card-title>
+
+        <v-card-text class="grid gap-4 px-6 py-5">
+          <v-progress-linear v-if="isLoadingAvailablePlans" indeterminate color="primary" />
+
+          <div
+            v-else-if="availableTrainerPlans.length === 0"
+            class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]"
+          >
+            {{ t("trainerMemberDetails.plans.empty.assignable") }}
+          </div>
+
+          <v-select
+            v-else
+            v-model="selectedTrainerPlanId"
+            :items="availableTrainerPlanOptions"
+            item-title="label"
+            item-value="value"
+            :label="t('trainerMemberDetails.plans.form.assignExisting')"
+          />
+        </v-card-text>
+
+        <v-card-actions class="justify-end gap-3 px-6 py-5">
+          <v-btn variant="outlined" color="primary" @click="isAssignExistingDialogOpen = false">
+            {{ t("trainerMemberDetails.actions.cancel") }}
+          </v-btn>
+          <v-btn
+            color="primary"
+            :disabled="!selectedTrainerPlanId"
+            :loading="Boolean(assigningPlanId)"
+            @click="assignSelectedTrainerPlan"
+          >
+            {{ t("trainerMemberDetails.plans.actions.assign") }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -142,6 +290,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import {
+  getApiIdGetPlansList,
   getApiTrainerTraineesTraineeIdPlans,
   postApiTrainerTraineesTraineeIdPlans,
   postApiTrainerTraineesTraineeIdPlansPlanIdAssign,
@@ -149,10 +298,13 @@ import {
   postApiTrainerTraineesTraineeIdPlansPlanIdUpdate,
   postApiTrainerTraineesTraineeIdPlansUnassign,
 } from "../../../api/generated/demo";
-import type { TrainerManagedPlanDto } from "../../../api/model";
+import type { PlanFormDto, TrainerManagedPlanDto } from "../../../api/model";
 import { getApiErrorMessage } from "../../../api/trainerInvitations";
+import { getCurrentUser } from "../../../composables/useCurrentUser";
+import { useConfirmDialog } from "../../../composables/useConfirmDialog";
 import { handleTrainerUnauthorizedResponse } from "../../../composables/useTrainerMembers";
 import { useToast } from "../../../composables/useToast";
+import AppDataTable from "../../ui/AppDataTable.vue";
 
 const props = defineProps<{
   traineeId: string;
@@ -162,6 +314,7 @@ const props = defineProps<{
 const { t } = useI18n();
 const router = useRouter();
 const toast = useToast();
+const { confirm } = useConfirmDialog();
 
 const plans = ref<TrainerManagedPlanDto[]>([]);
 const isLoading = ref(false);
@@ -173,12 +326,37 @@ const isSavingPlan = ref(false);
 const assigningPlanId = ref<string | null>(null);
 const deletingPlanId = ref<string | null>(null);
 const isUnassigning = ref(false);
+const isAssignExistingDialogOpen = ref(false);
+const isLoadingAvailablePlans = ref(false);
+const availableTrainerPlans = ref<PlanFormDto[]>([]);
+const selectedTrainerPlanId = ref<string | null>(null);
 
 const activePlan = computed(() => plans.value.find((item) => item.isActive) ?? null);
+
+const availableTrainerPlanOptions = computed(() =>
+  availableTrainerPlans.value.map((plan) => ({
+    label: plan.name || t("trainerMemberDetails.plans.fallback.noName"),
+    value: plan._id || "",
+  })),
+);
+
+const headers = computed(() => [
+  { title: t("trainerMemberDetails.plans.form.name"), key: "name", sortable: false },
+  { title: t("trainerMemberDetails.plans.meta.createdAt"), key: "createdAt", sortable: false },
+  { title: t("trainerMemberDetails.plans.badges.active"), key: "status", sortable: false },
+  { title: t("common.actions"), key: "actions", sortable: false, align: "end" as const },
+]);
 
 let requestToken = 0;
 
 const isEmptyListStatus = (status: number) => status === 404;
+
+const toPlan = (item: unknown) => item as TrainerManagedPlanDto;
+
+const planStatusLabel = (plan: TrainerManagedPlanDto) =>
+  plan.isActive
+    ? t("trainerMemberDetails.plans.badges.active")
+    : t("trainerMemberDetails.overview.emptyValue");
 
 const loadPlans = async () => {
   if (!props.traineeId) return;
@@ -236,10 +414,57 @@ const openCreateDialog = () => {
   isPlanDialogOpen.value = true;
 };
 
+const loadAvailableTrainerPlans = async () => {
+  const trainerId = getCurrentUser()?.id?.trim();
+  if (!trainerId) {
+    availableTrainerPlans.value = [];
+    return;
+  }
+
+  isLoadingAvailablePlans.value = true;
+
+  try {
+    const response = await getApiIdGetPlansList(trainerId);
+
+    if (response.status !== 200) {
+      availableTrainerPlans.value = [];
+      return;
+    }
+
+    availableTrainerPlans.value = [...(response.data ?? [])].sort((left, right) => {
+      if (left.isActive && !right.isActive) return -1;
+      if (!left.isActive && right.isActive) return 1;
+      return (left.name || "").localeCompare(right.name || "");
+    });
+  } catch (error) {
+    console.error(error);
+    availableTrainerPlans.value = [];
+  } finally {
+    isLoadingAvailablePlans.value = false;
+  }
+};
+
+const openAssignExistingDialog = async () => {
+  selectedTrainerPlanId.value = null;
+  isAssignExistingDialogOpen.value = true;
+  await loadAvailableTrainerPlans();
+};
+
 const openRenameDialog = (plan: TrainerManagedPlanDto) => {
   editingPlanId.value = plan._id ?? null;
   planName.value = plan.name ?? "";
   isPlanDialogOpen.value = true;
+};
+
+const openPlanDetails = async (plan: TrainerManagedPlanDto) => {
+  const planId = plan._id?.trim();
+  if (!planId) return;
+
+  await router.push(`/trainer/members/${props.traineeId}/plans/${planId}`);
+};
+
+const onPlanRowClick = (item: unknown) => {
+  void openPlanDetails(toPlan(item));
 };
 
 const savePlan = async () => {
@@ -309,12 +534,19 @@ const assignPlan = async (plan: TrainerManagedPlanDto) => {
   const planId = plan._id?.trim();
   if (!planId) return;
 
-  assigningPlanId.value = planId;
+  await assignPlanById(planId);
+};
+
+const assignPlanById = async (planId: string) => {
+  const normalizedPlanId = planId.trim();
+  if (!normalizedPlanId) return;
+
+  assigningPlanId.value = normalizedPlanId;
 
   try {
     const response = await postApiTrainerTraineesTraineeIdPlansPlanIdAssign(
       props.traineeId,
-      planId,
+      normalizedPlanId,
     );
 
     if (
@@ -336,6 +568,7 @@ const assignPlan = async (plan: TrainerManagedPlanDto) => {
     }
 
     toast.success("trainerMemberDetails.plans.feedback.assignSuccess");
+    isAssignExistingDialogOpen.value = false;
     await loadPlans();
   } catch (error) {
     console.error(error);
@@ -343,6 +576,11 @@ const assignPlan = async (plan: TrainerManagedPlanDto) => {
   } finally {
     assigningPlanId.value = null;
   }
+};
+
+const assignSelectedTrainerPlan = async () => {
+  if (!selectedTrainerPlanId.value) return;
+  await assignPlanById(selectedTrainerPlanId.value);
 };
 
 const unassignPlan = async () => {
@@ -385,11 +623,16 @@ const deletePlan = async (plan: TrainerManagedPlanDto) => {
   const planId = plan._id?.trim();
   if (!planId) return;
 
-  const confirmed = window.confirm(
-    t("trainerMemberDetails.plans.actions.deleteConfirm", {
+  const confirmed = await confirm({
+    title: t("trainerMemberDetails.plans.actions.delete"),
+    description: t("trainerMemberDetails.plans.actions.deleteConfirm", {
       name: plan.name || t("trainerMemberDetails.plans.fallback.noName"),
     }),
-  );
+    confirmLabel: t("trainerMemberDetails.plans.actions.delete"),
+    cancelLabel: t("trainerMemberDetails.actions.cancel"),
+    confirmColor: "error",
+    isDestructive: true,
+  });
   if (!confirmed) return;
 
   deletingPlanId.value = planId;
