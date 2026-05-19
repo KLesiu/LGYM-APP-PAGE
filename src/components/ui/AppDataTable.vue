@@ -185,7 +185,8 @@ defineExpose({
 
 .app-data-table__table :deep(.v-table__wrapper) {
   overflow-x: auto;
-  overflow-y: visible;
+  overflow-y: hidden;
+  padding-right: 0.25rem;
 }
 
 .app-data-table__table :deep(table) {
@@ -225,8 +226,7 @@ defineExpose({
 
 .app-data-table__table :deep(tbody tr) {
   transition:
-    background-color 0.18s ease,
-    box-shadow 0.18s ease;
+    background-color 0.18s ease;
 }
 
 .app-data-table__table--hover :deep(tbody tr:hover) {

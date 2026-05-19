@@ -1,21 +1,19 @@
 <template>
-  <section class="flex min-h-0 min-w-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
-    <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+  <section class="flex min-h-0 min-w-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
+  <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-6">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div class="max-w-3xl space-y-3">
+          <div class="max-w-3xl lgym-section-heading">
             <p v-if="eyebrow" class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
               {{ eyebrow }}
             </p>
 
-            <div>
-              <h2 class="text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
-                {{ title }}
-              </h2>
-              <p v-if="subtitle" class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
-                {{ subtitle }}
-              </p>
-            </div>
+            <h2 class="text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+              {{ title }}
+            </h2>
+            <p v-if="subtitle" class="lgym-section-heading__subtitle text-sm leading-6 text-[var(--lgym-text-muted)]">
+              {{ subtitle }}
+            </p>
           </div>
 
           <div class="flex flex-wrap items-center gap-3 self-start lg:self-auto lg:justify-end">
@@ -44,7 +42,7 @@
       <slot />
     </div>
 
-    <div v-if="showPagination" class="border-t border-[var(--lgym-border)] px-4 py-4 sm:px-5">
+    <div v-if="showPagination" class="border-t border-[var(--lgym-border)] px-4 pb-5 pt-7 sm:px-5 sm:pb-5 sm:pt-7">
       <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-sm text-[var(--lgym-text-muted)]">
           {{ paginationSummary }}

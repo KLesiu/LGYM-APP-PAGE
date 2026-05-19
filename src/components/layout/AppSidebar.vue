@@ -28,15 +28,15 @@
       nav
       density="comfortable"
       bg-color="transparent"
-      class="mt-6 flex min-h-0 flex-1 flex-col gap-1 overflow-x-hidden overflow-y-auto p-0"
+      class="mt-6 flex min-h-0 flex-1 flex-col gap-0 overflow-x-hidden overflow-y-auto p-0"
     >
       <v-list-item
         v-for="item in items"
         :key="item.key"
         :to="item.to"
         :active="item.key === activeItem"
-        rounded="xl"
-        class="relative min-h-12 rounded-2xl px-4 py-2 text-sm font-medium text-[var(--lgym-text-muted)] transition-all duration-150 hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
+        rounded="0"
+        class="relative min-h-12 px-4 py-3 text-sm font-medium text-[var(--lgym-text-muted)] transition-all duration-150 hover:bg-[var(--lgym-overlay)] hover:text-[var(--lgym-text)]"
         :class="
           item.key === activeItem
             ? 'bg-[var(--lgym-nav-active-bg)] font-semibold text-[var(--lgym-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.22)]'
