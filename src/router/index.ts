@@ -13,6 +13,8 @@ import AdminUsersPage from "../pages/admin/AdminUsersPage.vue";
 import AdminVersionsPage from "../pages/admin/AdminVersionsPage.vue";
 import TrainerExercisesPage from "../pages/trainer/TrainerExercisesPage.vue";
 import TrainerMemberDetailsPage from "../pages/trainer/TrainerMemberDetailsPage.vue";
+import TrainerMemberPlanDayEditorPage from "../pages/trainer/TrainerMemberPlanDayEditorPage.vue";
+import TrainerMemberPlanDetailsPage from "../pages/trainer/TrainerMemberPlanDetailsPage.vue";
 import TrainerInvitationsPage from "../pages/trainer/TrainerInvitationsPage.vue";
 import TrainerMembersPage from "../pages/trainer/TrainerMembersPage.vue";
 import TrainerTrainingPlanDayEditorPage from "../pages/trainer/TrainerTrainingPlanDayEditorPage.vue";
@@ -126,6 +128,21 @@ export const router = createRouter({
           path: "members/:traineeId",
           name: "trainer-member-details",
           component: TrainerMemberDetailsPage,
+        },
+        {
+          path: "members/:traineeId/plans/:planId",
+          name: "trainer-member-plan-details",
+          component: TrainerMemberPlanDetailsPage,
+        },
+        {
+          path: "members/:traineeId/plans/:planId/plan-days/new",
+          name: "trainer-member-plan-day-create",
+          component: TrainerMemberPlanDayEditorPage,
+        },
+        {
+          path: "members/:traineeId/plans/:planId/plan-days/:planDayId",
+          name: "trainer-member-plan-day-edit",
+          component: TrainerMemberPlanDayEditorPage,
         },
         {
           path: "invitations",
