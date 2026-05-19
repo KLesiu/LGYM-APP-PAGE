@@ -188,6 +188,17 @@
     }
   },
   "ui": {
+    "header": {
+      "accountMenu": "User account menu",
+      "logout": "Log out"
+    },
+    "breadcrumbs": {
+      "invitationDetails": "Invitation details",
+      "memberPlanDetails": "Member plan",
+      "trainingPlanDetails": "Plan details",
+      "planDayCreate": "New plan day",
+      "planDayEdit": "Edit plan day"
+    },
     "theme": {
       "switchToLight": "Switch to light mode",
       "switchToDark": "Switch to dark mode"
@@ -788,8 +799,8 @@
   },
   "trainerMemberDetails": {
     "header": {
-      "fallbackName": "Member snapshot unavailable",
-      "snapshotHint": "The page header uses the latest member snapshot already available in the trainer workspace."
+      "fallbackName": "Member details",
+      "fallbackSubtitle": "Header data appears after loading this member from the trainer list."
     },
     "tabs": {
       "overview": "Overview",
@@ -832,14 +843,23 @@
     },
     "trainings": {
       "eyebrow": "Training history",
-      "title": "Recorded training dates",
+      "title": "Training history",
       "detailsEyebrow": "Training details",
-      "selectDate": "Select a recorded date",
+      "selectDate": "Select a training from history",
       "columns": {
         "gym": "Gym",
         "exercises": "Exercises"
       },
       "exerciseList": "Exercises",
+      "seriesLabel": "Set {series}",
+      "seriesValue": "{weight} {unit} × {reps} reps",
+      "summary": {
+        "subtitle": "The key information for the selected training is grouped in a quick summary below.",
+        "trainingDate": "Training: {date}",
+        "startTime": "Start time",
+        "gym": "Gym",
+        "exercisesCount": "Exercise count"
+      },
       "fallback": {
         "noType": "Training type unavailable",
         "noPlanDay": "No plan day",
@@ -850,7 +870,8 @@
       "empty": {
         "title": "No recorded training dates found.",
         "details": "Select a date from the left to load training details.",
-        "exercises": "No exercises recorded for this training."
+        "exercises": "No exercises recorded for this training.",
+        "series": "No sets recorded for this exercise."
       },
       "error": {
         "subtitle": "Failed to load recorded training dates.",
@@ -871,19 +892,25 @@
         "noName": "Untitled plan"
       },
       "empty": {
-        "title": "No plans created for this member yet."
+        "title": "No plans created for this member yet.",
+        "assignable": "There are no trainer-wide plans available to assign to this member."
       },
       "dialog": {
         "createTitle": "Create plan",
-        "renameTitle": "Rename plan"
+        "renameTitle": "Rename plan",
+        "assignExistingTitle": "Assign an existing plan",
+        "assignExistingSubtitle": "Choose one of your trainer-wide plans and assign it to this member."
       },
       "form": {
         "name": "Plan name",
-        "namePlaceholder": "Enter plan name"
+        "namePlaceholder": "Enter plan name",
+        "assignExisting": "Plan to assign"
       },
       "actions": {
         "create": "Create plan",
+        "assignExisting": "Assign plan",
         "assign": "Assign",
+        "managePlanDays": "Plan days",
         "rename": "Rename",
         "delete": "Delete",
         "unassign": "Unassign active plan",
@@ -910,18 +937,28 @@
     "reports": {
       "submissionsEyebrow": "Member reports",
       "submissionsTitle": "Report requests and submissions",
-      "submissionsSubtitle": "Request a report from this member and review all submitted answers.",
+      "submissionsSubtitle": "",
+      "requestEyebrow": "New request",
       "requestTitle": "Request report from this member",
       "requestSubtitle": "Choose one of your global report templates, set the due date, and send the request to this member.",
       "form": {
         "template": "Template",
         "dueAt": "Due at",
-        "note": "Trainer note"
+        "note": "Trainer note",
+        "templatePlaceholder": "Choose the template you want to send",
+        "dueAtHint": "The due date is optional, but it helps the member know when you expect the answer.",
+        "notePlaceholder": "Add a short instruction or context for this report",
+        "noteHint": "A short note makes it easier for the member to send exactly the update you need."
+      },
+      "preview": {
+        "title": "Quick preview",
+        "empty": "After you choose a template, this area will show its description and the number of fields to complete.",
+        "fieldsCount": "Fields: {count}"
       },
       "actions": {
         "manageTemplates": "Manage templates",
         "goToTemplateLibrary": "Open template library",
-        "sendRequest": "Send request"
+        "sendRequest": "Request report"
       },
       "meta": {
         "submittedAt": "Submitted"
@@ -1286,6 +1323,9 @@
     "page": {
       "title": "Exercise library",
       "summary": "Visible exercises: {totalCount}"
+    },
+    "pagination": {
+      "summary": "Page {page} of {totalPages} · total exercises: {totalCount}"
     },
     "roles": {
       "admin": {

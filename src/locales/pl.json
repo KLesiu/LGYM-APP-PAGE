@@ -188,6 +188,17 @@
     }
   },
   "ui": {
+    "header": {
+      "accountMenu": "Menu konta użytkownika",
+      "logout": "Wyloguj"
+    },
+    "breadcrumbs": {
+      "invitationDetails": "Szczegóły zaproszenia",
+      "memberPlanDetails": "Plan podopiecznego",
+      "trainingPlanDetails": "Szczegóły planu",
+      "planDayCreate": "Nowy dzień planu",
+      "planDayEdit": "Edycja dnia planu"
+    },
     "theme": {
       "switchToLight": "Przełącz na jasny motyw",
       "switchToDark": "Przełącz na ciemny motyw"
@@ -788,8 +799,8 @@
   },
   "trainerMemberDetails": {
     "header": {
-      "fallbackName": "Brak migawki podopiecznego",
-      "snapshotHint": "Nagłówek korzysta z ostatniej migawki podopiecznego dostępnej już w strefie trenera."
+      "fallbackName": "Szczegóły podopiecznego",
+      "fallbackSubtitle": "Dane nagłówka pojawią się po załadowaniu podopiecznego z listy trenera."
     },
     "tabs": {
       "overview": "Przegląd",
@@ -832,14 +843,23 @@
     },
     "trainings": {
       "eyebrow": "Historia treningów",
-      "title": "Zapisane daty treningów",
+      "title": "Historia treningów",
       "detailsEyebrow": "Szczegóły treningu",
-      "selectDate": "Wybierz zapisaną datę",
+      "selectDate": "Wybierz trening z historii",
       "columns": {
         "gym": "Siłownia",
       "exercises": "Ćwiczenia"
       },
       "exerciseList": "Lista ćwiczeń",
+      "seriesLabel": "Seria {series}",
+      "seriesValue": "{weight} {unit} × {reps} powt.",
+      "summary": {
+        "subtitle": "Najważniejsze informacje o wybranym treningu znajdziesz w skrócie poniżej.",
+        "trainingDate": "Trening: {date}",
+        "startTime": "Godzina rozpoczęcia",
+        "gym": "Siłownia",
+        "exercisesCount": "Ilość ćwiczeń"
+      },
       "fallback": {
         "noType": "Brak typu treningu",
         "noPlanDay": "Brak dnia planu",
@@ -850,7 +870,8 @@
       "empty": {
         "title": "Brak zapisanych dat treningów.",
         "details": "Wybierz datę z lewej strony, aby pobrać szczegóły treningu.",
-        "exercises": "Brak zapisanych ćwiczeń dla tego treningu."
+        "exercises": "Brak zapisanych ćwiczeń dla tego treningu.",
+        "series": "Brak zapisanych serii dla tego ćwiczenia."
       },
       "error": {
         "subtitle": "Nie udało się pobrać dat treningów.",
@@ -871,19 +892,25 @@
         "noName": "Plan bez nazwy"
       },
       "empty": {
-        "title": "Brak planów utworzonych dla tego podopiecznego."
+        "title": "Brak planów utworzonych dla tego podopiecznego.",
+        "assignable": "Brak globalnych planów trenera, które można przypisać temu podopiecznemu."
       },
       "dialog": {
         "createTitle": "Utwórz plan",
-        "renameTitle": "Zmień nazwę planu"
+        "renameTitle": "Zmień nazwę planu",
+        "assignExistingTitle": "Przypisz istniejący plan",
+        "assignExistingSubtitle": "Wybierz jeden z globalnych planów trenera i przypisz go temu podopiecznemu."
       },
       "form": {
         "name": "Nazwa planu",
-        "namePlaceholder": "Wpisz nazwę planu"
+        "namePlaceholder": "Wpisz nazwę planu",
+        "assignExisting": "Plan do przypisania"
       },
       "actions": {
         "create": "Utwórz plan",
+        "assignExisting": "Przypisz plan",
         "assign": "Przypisz",
+        "managePlanDays": "Dni planu",
         "rename": "Zmień nazwę",
         "delete": "Usuń",
         "unassign": "Odepnij aktywny plan",
@@ -910,18 +937,28 @@
     "reports": {
       "submissionsEyebrow": "Raporty podopiecznego",
       "submissionsTitle": "Prośby o raport i wysłane odpowiedzi",
-      "submissionsSubtitle": "Wyślij prośbę o raport do tego podopiecznego i przeglądaj wszystkie przesłane odpowiedzi.",
+      "submissionsSubtitle": "",
+      "requestEyebrow": "Nowa prośba",
       "requestTitle": "Poproś o raport tego podopiecznego",
       "requestSubtitle": "Wybierz jeden z globalnych szablonów raportu, ustaw termin i wyślij prośbę do tego podopiecznego.",
       "form": {
         "template": "Szablon",
         "dueAt": "Termin",
-        "note": "Notatka trenera"
+        "note": "Notatka trenera",
+        "templatePlaceholder": "Wybierz szablon, który chcesz wysłać",
+        "dueAtHint": "Termin jest opcjonalny, ale pomaga podopiecznemu wiedzieć, do kiedy ma odpowiedzieć.",
+        "notePlaceholder": "Dodaj krótką instrukcję lub kontekst do raportu",
+        "noteHint": "Krótka notatka zwiększa szansę, że podopieczny wyśle dokładnie to, czego potrzebujesz."
+      },
+      "preview": {
+        "title": "Szybki podgląd",
+        "empty": "Po wybraniu szablonu pokażemy tutaj jego opis oraz liczbę pól do uzupełnienia.",
+        "fieldsCount": "Liczba pól: {count}"
       },
       "actions": {
         "manageTemplates": "Zarządzaj szablonami",
         "goToTemplateLibrary": "Otwórz bibliotekę szablonów",
-        "sendRequest": "Wyślij prośbę"
+        "sendRequest": "Poproś o raport"
       },
       "meta": {
         "submittedAt": "Wysłano"
@@ -1286,6 +1323,9 @@
     "page": {
       "title": "Biblioteka ćwiczeń",
       "summary": "Widoczne ćwiczenia: {totalCount}"
+    },
+    "pagination": {
+      "summary": "Strona {page} z {totalPages} · wszystkich ćwiczeń: {totalCount}"
     },
     "roles": {
       "admin": {
