@@ -1,9 +1,9 @@
 <template>
   <header
-    class="border-b border-[var(--lgym-border)] bg-[var(--lgym-shell-surface)] px-4 py-3 sm:px-5 lg:px-6"
+    class="border-b border-[var(--lgym-border)] bg-[var(--lgym-shell-surface)] px-5 py-4 sm:px-6 sm:py-4.5 lg:px-7"
   >
-    <div class="flex min-h-[72px] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div class="flex min-w-0 items-start gap-3 sm:flex-1 sm:items-center">
+    <div class="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+      <div class="flex min-w-0 items-center gap-3 sm:flex-1">
         <div class="lg:hidden">
           <v-btn icon variant="text" size="small" @click="$emit('toggleSidebar')">
             <v-icon icon="mdi-menu" />
@@ -15,41 +15,24 @@
             v-if="hasBreadcrumbs"
             :items="breadcrumbs"
             density="compact"
-            class="mb-1 min-w-0 px-0 py-0"
+            class="app-header-breadcrumbs min-w-0 px-0 py-0"
           >
             <template #divider>
               <v-icon
                 icon="mdi-chevron-right"
-                size="14"
+                size="16"
                 class="text-[var(--lgym-text-muted)]"
               />
             </template>
 
             <template #title="{ item }">
-              <span class="truncate text-xs text-[var(--lgym-text-muted)] sm:text-sm">
+              <span class="truncate text-base font-medium text-[var(--lgym-text-muted)]">
                 {{ item.title }}
               </span>
             </template>
           </v-breadcrumbs>
           <slot v-else name="breadcrumbs" />
 
-          <slot name="title">
-            <h1
-              v-if="title"
-              class="m-0 text-lg leading-6 font-semibold text-[var(--lgym-text)] sm:text-xl"
-            >
-              {{ title }}
-            </h1>
-          </slot>
-
-          <slot name="subtitle">
-            <p
-              v-if="subtitle"
-              class="mt-1 max-w-3xl text-sm leading-5 text-[var(--lgym-text-muted)]"
-            >
-              {{ subtitle }}
-            </p>
-          </slot>
         </div>
       </div>
 
@@ -148,8 +131,6 @@ import ThemeToggle from "../ui/ThemeToggle.vue";
 import type { CurrentUser } from "../../composables/useCurrentUser";
 
 const props = defineProps<{
-  title?: string;
-  subtitle?: string;
   user: CurrentUser | null;
   breadcrumbs?: AppBreadcrumbItem[];
 }>();
@@ -161,7 +142,7 @@ defineEmits<{
 
 const { t, te } = useI18n();
 const slots = useSlots();
-const { breadcrumbs, subtitle, title, user } = toRefs(props);
+const { breadcrumbs, user } = toRefs(props);
 const hasActionsSlot = computed(() => !!slots.actions);
 const hasBreadcrumbs = computed(() => (breadcrumbs.value?.length ?? 0) > 0);
 
@@ -180,6 +161,14 @@ const displayUserMeta = (user: CurrentUser) => {
 </script>
 
 <style scoped>
+.app-header-breadcrumbs :deep(.v-breadcrumbs__item) {
+  padding-inline: 0;
+}
+
+.app-header-breadcrumbs :deep(.v-breadcrumbs-divider) {
+  padding-inline: 0.375rem;
+}
+
 .app-header-user-menu {
   min-width: 0;
   max-width: min(100%, 280px);
