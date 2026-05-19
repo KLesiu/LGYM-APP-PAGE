@@ -5,6 +5,7 @@
     :logo-src="logoLgym"
     :brand-name="t('userArea.appName')"
     :brand-subtitle="t('userArea.appSubtitle')"
+    :header-breadcrumbs="headerBreadcrumbs"
     :header-title="t(`userArea.layout.${activeSection}.title`)"
     :header-subtitle="t(`userArea.layout.${activeSection}.subtitle`)"
     :user="currentUser"
@@ -24,6 +25,7 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import logoLgym from "../assets/logoLGYM.png";
+import type { AppBreadcrumbItem } from "../components/layout/appBreadcrumbs";
 import AppShell from "../components/layout/AppShell.vue";
 import type { SidebarItem } from "../components/layout/AppSidebar.vue";
 import { clearAuthSession } from "../composables/useAuthSession";
@@ -58,6 +60,34 @@ const sidebarItems = computed<SidebarItem[]>(() => [
     to: "/athlete/exercises",
   },
 ]);
+
+const sectionRouteByKey = {
+  relationship: { name: "user-relationship-status" as const },
+  exercises: { name: "user-exercises" as const },
+};
+
+const headerBreadcrumbs = computed<AppBreadcrumbItem[]>(() => {
+  const items: AppBreadcrumbItem[] = [
+    {
+      title: t("userArea.appName"),
+      to: { name: "user-relationship-status" },
+      exact: true,
+    },
+    {
+      title: t(`userArea.layout.${activeSection.value}.title`),
+      to: sectionRouteByKey[activeSection.value as keyof typeof sectionRouteByKey],
+      exact: true,
+    },
+  ];
+
+  if (route.name === "user-relationship-invitation") {
+    items.push({ title: t("ui.breadcrumbs.invitationDetails") });
+  } else {
+    items[items.length - 1] = { title: items[items.length - 1].title };
+  }
+
+  return items;
+});
 
 const currentUser = computed(() => getCurrentUser());
 
