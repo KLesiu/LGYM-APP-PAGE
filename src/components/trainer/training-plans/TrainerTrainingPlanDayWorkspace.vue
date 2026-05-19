@@ -28,7 +28,7 @@
       v-else
       class="flex min-h-0 flex-1 flex-col overflow-hidden bg-[var(--lgym-surface-card)]/35"
     >
-      <div class="sticky top-0 z-10 border-b border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/96 px-4 py-4 backdrop-blur-sm sm:px-6 lg:px-8">
+    <div class="sticky top-0 z-10 border-b border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/96 px-4 py-4 backdrop-blur-sm sm:px-6 lg:px-8">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div class="min-w-0">
             <h3 class="truncate text-lg font-semibold text-[var(--lgym-text)]">
@@ -58,7 +58,7 @@
 
       <div class="grid min-h-0 flex-1 gap-0 xl:grid-cols-[minmax(300px,0.92fr)_minmax(0,1.08fr)]">
         <section class="flex min-h-0 flex-col overflow-hidden border-b border-[var(--lgym-border)] xl:border-r xl:border-b-0">
-          <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-6">
+      <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-6">
             <div class="flex items-center justify-between gap-2">
               <h4 class="text-sm font-semibold text-[var(--lgym-text)]">
                 {{ t("trainerTrainingPlanDayEditor.library.title") }}
@@ -191,7 +191,7 @@
         </section>
 
         <section class="flex min-h-0 flex-col overflow-hidden bg-[var(--lgym-surface-card)]/18">
-          <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-6">
+      <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-6">
             <div class="flex items-center justify-between gap-2">
               <h4 class="text-sm font-semibold text-[var(--lgym-text)]">
                 {{ t("trainerTrainingPlanDayEditor.selection.title") }}
@@ -310,6 +310,7 @@ type DraftExerciseRow = {
 const props = defineProps<{
   planId: string;
   planDayId?: string;
+  traineeId?: string;
 }>();
 
 const { t } = useI18n();
@@ -335,7 +336,11 @@ const {
   loadInitialState,
   loadExercises,
   savePlanDay,
-} = useTrainerTrainingPlanDayEditor(planIdRef, planDayIdRef);
+} = useTrainerTrainingPlanDayEditor(planIdRef, planDayIdRef, {
+  get value() {
+    return props.traineeId ?? "";
+  },
+});
 
 const searchQuery = ref("");
 const selectedBodyPart = ref("all");
@@ -533,7 +538,11 @@ const getExerciseName = (exerciseId: string | null | undefined) => {
 };
 
 const goBackToPlan = async () => {
-  await router.push(`/trainer/training-plans/${planIdRef.value}`);
+  await router.push(
+    props.traineeId
+      ? `/trainer/members/${props.traineeId}/plans/${planIdRef.value}`
+      : `/trainer/training-plans/${planIdRef.value}`,
+  );
 };
 
 const reloadAll = async () => {

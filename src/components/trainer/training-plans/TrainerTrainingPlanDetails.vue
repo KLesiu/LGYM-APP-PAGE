@@ -15,6 +15,7 @@
     <template v-else>
       <section class="flex min-h-0 min-w-0 flex-col gap-4 flex-1">
         <TrainerPlanSharePanel
+          v-if="!isMemberPlanContext"
           class=""
           :share-code="shareCode"
           :is-sharing="isSharingPlan"
@@ -40,7 +41,7 @@
 
       <v-dialog v-model="isPreviewDialogOpen" max-width="980">
         <section class="overflow-hidden rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]">
-          <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+  <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
             <div class="flex flex-wrap items-start justify-between gap-3">
               <div class="min-w-0 max-w-3xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
@@ -78,21 +79,21 @@
             </v-btn>
           </div>
 
-          <div v-else-if="isPreviewVisible" class="grid gap-4 px-4 py-4 sm:px-5 lg:px-6">
+    <div v-else-if="isPreviewVisible" class="grid gap-4 px-4 py-4 sm:px-5 lg:px-6">
             <div class="grid gap-3 sm:grid-cols-3">
-              <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/72 px-4 py-4">
+      <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/72 px-4 py-4">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)]">
                   {{ t("trainerTrainingPlanDetails.workspace.preview.stats.exercises") }}
                 </p>
                 <p class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">{{ selectedExerciseCount }}</p>
               </div>
-              <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/72 px-4 py-4">
+      <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/72 px-4 py-4">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)]">
                   {{ t("trainerTrainingPlanDetails.workspace.preview.stats.series") }}
                 </p>
                 <p class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">{{ selectedSeriesCount }}</p>
               </div>
-              <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/72 px-4 py-4">
+      <div class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/72 px-4 py-4">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)]">
                   {{ t("trainerTrainingPlanDetails.workspace.preview.stats.lastTraining") }}
                 </p>
@@ -108,7 +109,7 @@
               <article
                 v-for="(exercise, index) in selectedExercises"
                 :key="`${exercise.exercise?._id || exercise.exercise?.name || 'exercise'}-${index}`"
-                class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]/20 px-4 py-4"
+        class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]/20 px-4 py-4"
               >
                 <div class="flex flex-wrap items-start justify-between gap-3">
                   <div class="min-w-0">
@@ -153,6 +154,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import type { PlanDayBaseInfoDto } from "../../../api/model";
+import { useConfirmDialog } from "../../../composables/useConfirmDialog";
 import { formatTrainerDate } from "../../../composables/useTrainerMembers";
 import { useToast } from "../../../composables/useToast";
 import { useTrainerTrainingPlanDetails } from "../../../composables/useTrainerTrainingPlanDetails";
@@ -161,11 +163,13 @@ import TrainerPlanSharePanel from "./TrainerPlanSharePanel.vue";
 
 const props = defineProps<{
   planId: string;
+  traineeId?: string;
 }>();
 
 const { locale, t } = useI18n();
 const toast = useToast();
 const router = useRouter();
+const { confirm } = useConfirmDialog();
 const isPreviewDialogOpen = ref(false);
 
 const planIdRef = {
@@ -176,6 +180,7 @@ const planIdRef = {
 };
 
 const {
+  isMemberPlanContext,
   planDaySummaries,
   selectedPlanDayId,
   selectedPlanDay,
@@ -193,7 +198,11 @@ const {
   loadSelectedPlanDay,
   deletePlanDay,
   sharePlan,
-} = useTrainerTrainingPlanDetails(planIdRef);
+} = useTrainerTrainingPlanDetails(planIdRef, {
+  get value() {
+    return props.traineeId ?? "";
+  },
+});
 
 const formatDate = (value: string | null | undefined) =>
   formatTrainerDate(locale.value, value);
@@ -237,13 +246,21 @@ const selectedLastTraining = computed(() =>
 );
 
 const openCreatePlanDayDraft = async () => {
-  await router.push(`/trainer/training-plans/${props.planId}/plan-days/new`);
+  await router.push(
+    props.traineeId
+      ? `/trainer/members/${props.traineeId}/plans/${props.planId}/plan-days/new`
+      : `/trainer/training-plans/${props.planId}/plan-days/new`,
+  );
 };
 
 const openPlanDayEditorById = async (planDayId: string | null) => {
   const normalizedPlanDayId = planDayId?.trim();
   if (!normalizedPlanDayId) return;
-  await router.push(`/trainer/training-plans/${props.planId}/plan-days/${normalizedPlanDayId}`);
+  await router.push(
+    props.traineeId
+      ? `/trainer/members/${props.traineeId}/plans/${props.planId}/plan-days/${normalizedPlanDayId}`
+      : `/trainer/training-plans/${props.planId}/plan-days/${normalizedPlanDayId}`,
+  );
 };
 
 const openPlanDayEditor = async (planDay: PlanDayBaseInfoDto) => {
@@ -270,11 +287,16 @@ const handleDeletePlanDay = async (planDay: PlanDayBaseInfoDto) => {
   const planDayId = planDay._id?.trim();
   if (!planDayId) return;
 
-  const confirmed = window.confirm(
-    t("trainerTrainingPlanDetails.planDays.actions.deleteConfirm", {
+  const confirmed = await confirm({
+    title: t("trainerTrainingPlanDetails.planDays.actions.delete"),
+    description: t("trainerTrainingPlanDetails.planDays.actions.deleteConfirm", {
       name: planDay.name || t("trainerTrainingPlanDetails.planDays.fallback.noName"),
     }),
-  );
+    confirmLabel: t("trainerTrainingPlanDetails.planDays.actions.delete"),
+    cancelLabel: t("trainerTrainingPlans.actions.cancel"),
+    confirmColor: "error",
+    isDestructive: true,
+  });
   if (!confirmed) return;
 
   await deletePlanDay(planDayId);

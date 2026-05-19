@@ -1,6 +1,6 @@
 <template>
   <section class="overflow-hidden border-y border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]/40">
-    <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 lg:px-6">
+  <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 lg:px-6">
       <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
@@ -51,7 +51,7 @@
       </v-btn>
     </div>
 
-    <div v-else class="px-4 py-4 sm:px-5 lg:px-6">
+  <div v-else class="px-4 py-4 sm:px-5 lg:px-6">
       <div class="grid gap-4 border-b border-[var(--lgym-border)] pb-5 lg:grid-cols-[minmax(0,1.2fr)_auto] lg:items-end">
         <v-text-field
           :model-value="draft.name ?? ''"
