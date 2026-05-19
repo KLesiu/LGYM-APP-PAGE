@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-h-0 min-w-0 flex-col gap-4">
     <v-card class="overflow-hidden rounded-md border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-5">
+  <div class="border-b border-[var(--lgym-border)] px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-5">
         <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
           {{ t("trainerMemberDetails.overview.eyebrow") }}
         </p>
@@ -15,10 +15,10 @@
 
       <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
-      <v-card-text class="px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-6">
+  <v-card-text class="px-4 py-4 sm:px-5 sm:py-5 lg:px-6 lg:py-6">
         <div v-if="hasError && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
           <div class="mx-auto flex max-w-md flex-col items-center gap-3">
-            <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
+      <div class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[var(--lgym-note-bg)] text-[var(--lgym-text-soft)]">
               <v-icon icon="mdi-alert-circle-outline" size="26" />
             </div>
             <p class="text-base font-semibold text-[var(--lgym-text)]">

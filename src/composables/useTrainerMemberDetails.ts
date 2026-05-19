@@ -22,7 +22,6 @@ import {
 } from "./useTrainerMembers";
 
 export type MemberDetailsTab =
-  | "overview"
   | "trainings"
   | "plans"
   | "reports"
