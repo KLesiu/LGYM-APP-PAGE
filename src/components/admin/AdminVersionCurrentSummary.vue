@@ -1,6 +1,6 @@
 <template>
   <article
-    class="rounded-3xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-muted)] px-6 py-6 lg:px-7 lg:py-7"
+ class="rounded-3xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-muted)] px-6 py-6 lg:px-7 lg:py-7"
   >
     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div class="space-y-2">
@@ -38,7 +38,7 @@
     <template v-else>
       <div v-if="currentConfig" class="mt-6 grid gap-5 sm:grid-cols-2">
         <div
-          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5"
+ class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5"
         >
           <p
             class="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]"
@@ -53,7 +53,7 @@
         </div>
 
         <div
-          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5"
+ class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5"
         >
           <p
             class="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]"
@@ -68,7 +68,7 @@
         </div>
 
         <div
-          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5 sm:col-span-2"
+ class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5 sm:col-span-2"
         >
           <p
             class="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]"
@@ -83,7 +83,7 @@
         </div>
 
         <div
-          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5 sm:col-span-2"
+ class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5 sm:col-span-2"
         >
           <p
             class="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]"
@@ -100,7 +100,7 @@
 
       <div
         v-else
-        class="mt-6 rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5"
+ class="mt-6 rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5"
       >
         <p class="text-sm leading-7 text-[var(--lgym-text-muted)]">
           {{ t("admin.versions.feedback.noConfig") }}

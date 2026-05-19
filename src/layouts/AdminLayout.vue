@@ -5,6 +5,7 @@
     :logo-src="logoLgym"
     :brand-name="t('admin.panel.brandTitle')"
     :brand-subtitle="t('admin.panel.eyebrow')"
+    :header-breadcrumbs="headerBreadcrumbs"
     :header-title="t(`admin.tabs.items.${activeSection}.title`)"
     :header-subtitle="t(`admin.tabs.items.${activeSection}.description`)"
     :user="currentUser"
@@ -28,6 +29,7 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 import logoLgym from "../assets/logoLGYM.png";
+import type { AppBreadcrumbItem } from "../components/layout/appBreadcrumbs";
 import AppShell from "../components/layout/AppShell.vue";
 import type { SidebarItem } from "../components/layout/AppSidebar.vue";
 import { clearAuthSession } from "../composables/useAuthSession";
@@ -80,6 +82,24 @@ const sidebarItems = computed<SidebarItem[]>(() => [
     label: t("admin.tabs.items.exercises.label"),
     icon: "mdi-dumbbell",
     to: { name: "admin-exercises" },
+  },
+]);
+
+const sectionRouteByKey = {
+  users: { name: "admin-users" as const },
+  versions: { name: "admin-versions" as const },
+  exercises: { name: "admin-exercises" as const },
+};
+
+const headerBreadcrumbs = computed<AppBreadcrumbItem[]>(() => [
+  {
+    title: t("admin.panel.brandTitle"),
+    to: { name: "admin-users" },
+    exact: true,
+  },
+  {
+    title: t(`admin.tabs.items.${activeSection.value}.title`),
+    to: sectionRouteByKey[activeSection.value as keyof typeof sectionRouteByKey],
   },
 ]);
 
