@@ -43,6 +43,7 @@ import type {
 } from "../../api/model";
 import TrainerInvitationFormCard from "../../components/trainer/TrainerInvitationFormCard.vue";
 import TrainerInvitationsTable from "../../components/trainer/TrainerInvitationsTable.vue";
+import { useConfirmDialog } from "../../composables/useConfirmDialog";
 import { useTrainerInvitations } from "../../composables/useTrainerInvitations";
 
 type TrainerInvitationFormCardRef = {
@@ -51,6 +52,7 @@ type TrainerInvitationFormCardRef = {
 
 const { t } = useI18n();
 const formCardRef = ref<TrainerInvitationFormCardRef | null>(null);
+const { confirm } = useConfirmDialog();
 
 const {
   invitations,
@@ -84,11 +86,16 @@ const handleCreateInvitation = async (
 
 const handleRevokeInvitation = async (invitation: TrainerInvitationDto) => {
   const inviteeEmail = invitation.inviteeEmail || "—";
-  const confirmed = window.confirm(
-    t("trainerInvitations.actions.revokeConfirm", {
+  const confirmed = await confirm({
+    title: t("trainerInvitations.actions.revoke"),
+    description: t("trainerInvitations.actions.revokeConfirm", {
       email: inviteeEmail,
     }),
-  );
+    confirmLabel: t("trainerInvitations.actions.revoke"),
+    cancelLabel: t("trainerMemberDetails.actions.cancel"),
+    confirmColor: "error",
+    isDestructive: true,
+  });
 
   if (!confirmed) return;
 

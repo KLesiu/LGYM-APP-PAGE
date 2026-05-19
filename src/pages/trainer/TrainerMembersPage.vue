@@ -35,6 +35,7 @@ import { useRouter } from "vue-router";
 
 import type { TrainerDashboardTraineeDto } from "../../api/model";
 import TrainerMembersTable from "../../components/trainer/members/TrainerMembersTable.vue";
+import { useConfirmDialog } from "../../composables/useConfirmDialog";
 import {
   rememberMemberSnapshot,
   useTrainerMembers,
@@ -42,6 +43,7 @@ import {
 
 const { t } = useI18n();
 const router = useRouter();
+const { confirm } = useConfirmDialog();
 
 const {
   members,
@@ -72,12 +74,17 @@ const openDetails = async (member: TrainerDashboardTraineeDto) => {
 };
 
 const handleUnlink = async (member: TrainerDashboardTraineeDto) => {
-  const confirmed = window.confirm(
-    t("trainerMembers.actions.unlinkConfirm", {
+  const confirmed = await confirm({
+    title: t("trainerMembers.actions.unlink"),
+    description: t("trainerMembers.actions.unlinkConfirm", {
       name:
         member.name || member.email || t("trainerMembers.list.fallback.noName"),
     }),
-  );
+    confirmLabel: t("trainerMembers.actions.unlink"),
+    cancelLabel: t("trainerMemberDetails.actions.cancel"),
+    confirmColor: "error",
+    isDestructive: true,
+  });
 
   if (!confirmed) return;
   await unlinkMember(member);
