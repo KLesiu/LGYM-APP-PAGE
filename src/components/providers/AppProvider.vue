@@ -11,6 +11,7 @@
       <slot />
     </v-main>
 
+    <AppConfirmDialogHost />
     <AppToastHost />
   </v-app>
 </template>
@@ -21,6 +22,7 @@ import { useRoute } from "vue-router";
 
 import { useAppLocale } from "../../composables/useAppLocale";
 import { useAppTheme } from "../../composables/useAppTheme";
+import AppConfirmDialogHost from "../ui/AppConfirmDialogHost.vue";
 import AppToastHost from "../ui/AppToastHost.vue";
 import LanguageToggle from "../ui/LanguageToggle.vue";
 import ThemeToggle from "../ui/ThemeToggle.vue";
