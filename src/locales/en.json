@@ -144,6 +144,18 @@
         "unexpectedError": "Unexpected login error. Please try again."
       }
     },
+    "google": {
+      "feedback": {
+        "success": "Signed in with Google successfully.",
+        "failed": "Google sign-in failed. Please try again.",
+        "missingClientId": "Google sign-in is not configured for this environment.",
+        "popupBlocked": "The Google sign-in popup was blocked. Please allow popups and try again.",
+        "popupClosed": "Google sign-in was cancelled.",
+        "timeout": "Google sign-in timed out. Please try again.",
+        "accessDenied": "Google sign-in was cancelled before completion.",
+        "invalidResponse": "Google sign-in returned an invalid response."
+      }
+    },
     "loginAdmin": {
       "title": "Administrator login",
       "subtitle": "Sign in with an account that can manage users, roles, and application access",
@@ -238,10 +250,41 @@
         "title": "Report Templates",
         "subtitle": "Manage reusable report templates globally for your trainer workspace."
       },
+      "settings": {
+        "title": "Settings",
+        "subtitle": "Manage account preferences and connected sign-in providers for your trainer workspace."
+      },
       "exercises": {
         "title": "Exercises",
         "subtitle": "Work with the exercise library, switch between global and private items, and quickly find movements needed for athlete programming."
       }
+    }
+  },
+  "trainerSettings": {
+    "page": {
+      "eyebrow": "Account settings",
+      "title": "Connected sign-in providers",
+      "subtitle": "Link Google to your existing trainer account and review external logins already connected to your profile."
+    },
+    "google": {
+      "title": "Google sign-in",
+      "subtitle": "Use a Google account to sign in faster and keep your trainer account connected across devices.",
+      "provider": "Google",
+      "loading": "Loading connected accounts...",
+      "emptyState": "No external sign-in providers are currently linked to this account.",
+      "notLinked": "No Google account linked yet.",
+      "statusLinked": "Linked",
+      "statusNotLinked": "Not linked",
+      "linkAction": "Link Google",
+      "alreadyLinked": "Google linked",
+      "unknownProvider": "External provider",
+      "noProviderEmail": "No provider email returned"
+    },
+    "feedback": {
+      "loadFailed": "Failed to load connected sign-in providers.",
+      "linkFailed": "Failed to link the Google account.",
+      "linkSuccess": "Google account linked successfully.",
+      "unauthorized": "Your session expired. Please sign in again."
     }
   },
   "trainerTrainingPlans": {
@@ -842,7 +885,7 @@
       }
     },
     "trainings": {
-      "eyebrow": "Training history",
+      "eyebrow": "History",
       "title": "Training history",
       "detailsEyebrow": "Training details",
       "selectDate": "Select a training from history",
@@ -953,7 +996,9 @@
       "preview": {
         "title": "Quick preview",
         "empty": "After you choose a template, this area will show its description and the number of fields to complete.",
-        "fieldsCount": "Fields: {count}"
+        "fieldsCount": "Fields: {count}",
+        "submissionEyebrow": "Report preview",
+        "answersTitle": "Member answers"
       },
       "actions": {
         "manageTemplates": "Manage templates",
@@ -961,6 +1006,7 @@
         "sendRequest": "Request report"
       },
       "meta": {
+        "status": "Status",
         "submittedAt": "Submitted"
       },
       "fallback": {

@@ -144,6 +144,18 @@
         "unexpectedError": "Wystąpił nieoczekiwany błąd logowania. Spróbuj ponownie."
       }
     },
+    "google": {
+      "feedback": {
+        "success": "Logowanie przez Google zakończone sukcesem.",
+        "failed": "Logowanie przez Google nie powiodło się. Spróbuj ponownie.",
+        "missingClientId": "Logowanie przez Google nie jest skonfigurowane w tym środowisku.",
+        "popupBlocked": "Okno logowania Google zostało zablokowane. Zezwól na popupy i spróbuj ponownie.",
+        "popupClosed": "Logowanie przez Google zostało anulowane.",
+        "timeout": "Przekroczono czas logowania przez Google. Spróbuj ponownie.",
+        "accessDenied": "Logowanie przez Google zostało anulowane przed zakończeniem.",
+        "invalidResponse": "Logowanie przez Google zwróciło nieprawidłową odpowiedź."
+      }
+    },
     "loginAdmin": {
       "title": "Logowanie administratora",
       "subtitle": "Zaloguj się na konto z uprawnieniami do zarządzania użytkownikami i rolami",
@@ -238,10 +250,41 @@
         "title": "Szablony raportów",
         "subtitle": "Zarządzaj globalną biblioteką szablonów raportów dla całej strefy trenera."
       },
+      "settings": {
+        "title": "Ustawienia",
+        "subtitle": "Zarządzaj preferencjami konta i podłączonymi metodami logowania w strefie trenera."
+      },
       "exercises": {
         "title": "Ćwiczenia",
         "subtitle": "Korzystaj z biblioteki ćwiczeń, przełączaj między globalnymi i prywatnymi pozycjami oraz szybko znajduj ruchy potrzebne do pracy z podopiecznymi."
       }
+    }
+  },
+  "trainerSettings": {
+    "page": {
+      "eyebrow": "Ustawienia konta",
+      "title": "Podłączone metody logowania",
+      "subtitle": "Połącz Google z istniejącym kontem trenera i sprawdź zewnętrzne logowania przypisane do profilu."
+    },
+    "google": {
+      "title": "Logowanie Google",
+      "subtitle": "Używaj konta Google do szybszego logowania i wygodnego dostępu na różnych urządzeniach.",
+      "provider": "Google",
+      "loading": "Trwa ładowanie podłączonych kont...",
+      "emptyState": "Do tego konta nie podłączono jeszcze żadnych zewnętrznych metod logowania.",
+      "notLinked": "Brak podłączonego konta Google.",
+      "statusLinked": "Podłączone",
+      "statusNotLinked": "Niepodłączone",
+      "linkAction": "Połącz Google",
+      "alreadyLinked": "Google połączone",
+      "unknownProvider": "Zewnętrzny dostawca",
+      "noProviderEmail": "Brak adresu e-mail od dostawcy"
+    },
+    "feedback": {
+      "loadFailed": "Nie udało się pobrać podłączonych metod logowania.",
+      "linkFailed": "Nie udało się połączyć konta Google.",
+      "linkSuccess": "Konto Google zostało połączone.",
+      "unauthorized": "Sesja wygasła. Zaloguj się ponownie."
     }
   },
   "trainerTrainingPlans": {
@@ -842,7 +885,7 @@
       }
     },
     "trainings": {
-      "eyebrow": "Historia treningów",
+      "eyebrow": "Historia",
       "title": "Historia treningów",
       "detailsEyebrow": "Szczegóły treningu",
       "selectDate": "Wybierz trening z historii",
@@ -953,7 +996,9 @@
       "preview": {
         "title": "Szybki podgląd",
         "empty": "Po wybraniu szablonu pokażemy tutaj jego opis oraz liczbę pól do uzupełnienia.",
-        "fieldsCount": "Liczba pól: {count}"
+        "fieldsCount": "Liczba pól: {count}",
+        "submissionEyebrow": "Podgląd raportu",
+        "answersTitle": "Odpowiedzi podopiecznego"
       },
       "actions": {
         "manageTemplates": "Zarządzaj szablonami",
@@ -961,6 +1006,7 @@
         "sendRequest": "Poproś o raport"
       },
       "meta": {
+        "status": "Status",
         "submittedAt": "Wysłano"
       },
       "fallback": {
