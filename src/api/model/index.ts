@@ -156,6 +156,7 @@ export * from './unreadCountDto';
 export * from './updateAppConfigRequest';
 export * from './updateAppConfigRequestPlatform';
 export * from './updateTimeZoneRequest';
+export * from './updateReportSubmissionFeedbackRequest';
 export * from './updateUserRequest';
 export * from './updateUserRolesRequest';
 export * from './upsertReportTemplateRequest';

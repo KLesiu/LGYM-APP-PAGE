@@ -100,6 +100,7 @@ import type {
   UnreadCountDto,
   UpdateAppConfigRequest,
   UpdateTimeZoneRequest,
+  UpdateReportSubmissionFeedbackRequest,
   UpdateUserRequest,
   UpdateUserRolesRequest,
   UpsertReportTemplateRequest,
@@ -7985,7 +7986,75 @@ export const getApiTrainerTraineesTraineeIdReportSubmissions = async (traineeId:
   const data: getApiTrainerTraineesTraineeIdReportSubmissionsResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as getApiTrainerTraineesTraineeIdReportSubmissionsResponse
 }
+
+
+
+export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse200TextPlain = {
+  data: ReportSubmissionDto
+  status: 200
+}
+
+export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse200ApplicationJson = {
+  data: ReportSubmissionDto
+  status: 200
+}
+
+export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse200TextJson = {
+  data: ReportSubmissionDto
+  status: 200
+}
+
+export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponseSuccess = (postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse200TextPlain | postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse200ApplicationJson | postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponseError = (postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse400TextPlain | postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse400ApplicationJson | postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse = (postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponseSuccess | postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponseError)
+
+export const getPostApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackUrl = (traineeId: string, submissionId: string,) => {
+
+
   
+
+  return `/api/trainer/trainees/${traineeId}/report-submissions/${submissionId}/feedback`
+}
+
+export const postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedback = async (traineeId: string, submissionId: string,
+    updateReportSubmissionFeedbackRequest: UpdateReportSubmissionFeedbackRequest, options?: RequestInit): Promise<postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse> => {
+  
+  const res = await fetch(getPostApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackUrl(traineeId, submissionId),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      updateReportSubmissionFeedbackRequest,)
+  }
+  )
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse
+}
+   
 
 
 export type getApiTrainerTraineesTraineeIdSupplementPlansResponse200TextPlain = {
