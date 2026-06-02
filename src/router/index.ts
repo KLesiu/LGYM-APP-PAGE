@@ -17,6 +17,7 @@ import TrainerMemberPlanDayEditorPage from "../pages/trainer/TrainerMemberPlanDa
 import TrainerMemberPlanDetailsPage from "../pages/trainer/TrainerMemberPlanDetailsPage.vue";
 import TrainerInvitationsPage from "../pages/trainer/TrainerInvitationsPage.vue";
 import TrainerMembersPage from "../pages/trainer/TrainerMembersPage.vue";
+import TrainerSettingsPage from "../pages/trainer/TrainerSettingsPage.vue";
 import TrainerTrainingPlanDayEditorPage from "../pages/trainer/TrainerTrainingPlanDayEditorPage.vue";
 import TrainerTrainingPlanDetailsPage from "../pages/trainer/TrainerTrainingPlanDetailsPage.vue";
 import TrainerTrainingPlansPage from "../pages/trainer/TrainerTrainingPlansPage.vue";
@@ -153,6 +154,11 @@ export const router = createRouter({
           path: "report-templates",
           name: "trainer-report-templates",
           component: TrainerReportTemplatesPage,
+        },
+        {
+          path: "settings",
+          name: "trainer-settings",
+          component: TrainerSettingsPage,
         },
         {
           path: "exercises",

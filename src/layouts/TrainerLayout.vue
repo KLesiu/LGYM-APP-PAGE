@@ -46,6 +46,7 @@ const sectionByRouteName: Record<string, string> = {
   "trainer-training-plan-day-create": "trainingPlans",
   "trainer-training-plan-day-edit": "trainingPlans",
   "trainer-report-templates": "reportTemplates",
+  "trainer-settings": "settings",
   "trainer-exercises": "exercises",
 };
 
@@ -85,6 +86,7 @@ const sectionRouteByKey = {
   trainingPlans: { name: "trainer-training-plans" as const },
   exercises: { name: "trainer-exercises" as const },
   reportTemplates: { name: "trainer-report-templates" as const },
+  settings: { name: "trainer-settings" as const },
 };
 
 const headerBreadcrumbs = computed<AppBreadcrumbItem[]>(() => {
@@ -208,6 +210,12 @@ const sidebarItems = computed<SidebarItem[]>(() => [
     label: t("trainerDashboard.navigation.reportTemplates"),
     icon: "mdi-file-document-multiple-outline",
     to: "/trainer/report-templates",
+  },
+  {
+    key: "settings",
+    label: t("trainerDashboard.navigation.settings"),
+    icon: "mdi-cog-outline",
+    to: "/trainer/settings",
   },
 ]);
 
