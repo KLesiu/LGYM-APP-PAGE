@@ -84,6 +84,8 @@
             item-value="_id"
             hide-default-footer
             hover
+            row-clickable
+            @row-click="openSubmissionPreview"
           >
             <template #mobile>
               <div class="border-y border-[var(--lgym-border)]">
@@ -91,7 +93,12 @@
                   <article
                     v-for="submission in submissions"
                     :key="submission._id || submission.reportRequestId || 'submission'"
-        class="border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+                    class="cursor-pointer border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
+                    role="button"
+                    tabindex="0"
+                    @click="openSubmissionPreview(submission)"
+                    @keydown.enter.prevent="openSubmissionPreview(submission)"
+                    @keydown.space.prevent="openSubmissionPreview(submission)"
                   >
                     <div class="flex flex-col gap-4">
                       <div class="flex flex-wrap items-start justify-between gap-3">
@@ -283,6 +290,112 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog v-model="isPreviewDialogOpen" max-width="860">
+        <v-card rounded="lg" class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
+          <template v-if="selectedSubmission">
+            <div class="border-b border-[var(--lgym-border)] px-6 py-5">
+              <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">
+                    {{ t("trainerMemberDetails.reports.preview.submissionEyebrow") }}
+                  </p>
+                  <h3 class="mt-2 text-xl font-semibold text-[var(--lgym-text)]">
+                    {{
+                      selectedSubmission.request?.template?.name ||
+                      t("trainerMemberDetails.reports.fallback.noTemplateName")
+                    }}
+                  </h3>
+                  <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+                    {{
+                      selectedSubmission.request?.template?.description ||
+                      t("trainerMemberDetails.reports.fallback.noDescription")
+                    }}
+                  </p>
+                </div>
+
+                <v-chip color="primary" size="small" variant="outlined">
+                  {{ selectedSubmission.request?.status || t("trainerMemberDetails.reports.fallback.noStatus") }}
+                </v-chip>
+              </div>
+            </div>
+
+            <v-card-text class="px-6 py-6">
+              <div class="grid gap-6">
+                <div class="grid gap-4 rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]/45 px-4 py-4 sm:grid-cols-2 sm:px-5">
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.reports.meta.status") }}
+                    </p>
+                    <p class="mt-2 text-sm text-[var(--lgym-text)]">
+                      {{ selectedSubmission.request?.status || t("trainerMemberDetails.reports.fallback.noStatus") }}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.reports.meta.submittedAt") }}
+                    </p>
+                    <p class="mt-2 text-sm text-[var(--lgym-text)]">
+                      {{ formatDateTime(selectedSubmission.submittedAt) }}
+                    </p>
+                  </div>
+
+                  <div v-if="selectedSubmission.request?.dueAt">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.reports.form.dueAt") }}
+                    </p>
+                    <p class="mt-2 text-sm text-[var(--lgym-text)]">
+                      {{ formatDateTime(selectedSubmission.request?.dueAt) }}
+                    </p>
+                  </div>
+
+                  <div v-if="selectedSubmission.request?.note">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.reports.form.note") }}
+                    </p>
+                    <p class="mt-2 whitespace-pre-wrap text-sm text-[var(--lgym-text)]">
+                      {{ selectedSubmission.request?.note }}
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                    {{ t("trainerMemberDetails.reports.preview.answersTitle") }}
+                  </h4>
+
+                  <div class="mt-4 grid gap-4">
+                    <div
+                      v-for="entry in selectedSubmissionAnswerEntries"
+                      :key="entry.key"
+                      class="overflow-hidden rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface)]"
+                    >
+                      <div class="border-b border-[var(--lgym-border)] px-5 py-4">
+                        <p class="text-sm font-semibold leading-6 text-[var(--lgym-text)]">
+                          {{ entry.label }}
+                        </p>
+                      </div>
+
+                      <div class="bg-[var(--lgym-surface-card)] px-5 py-4">
+                        <p class="whitespace-pre-wrap break-words text-sm leading-7 text-[var(--lgym-text-muted)]">
+                          {{ entry.answer }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </v-card-text>
+
+            <v-card-actions class="justify-end px-6 pb-6">
+              <v-btn variant="outlined" color="primary" @click="closeSubmissionPreview">
+                {{ t("trainerMemberDetails.actions.cancel") }}
+              </v-btn>
+            </v-card-actions>
+          </template>
+        </v-card>
+      </v-dialog>
     </section>
   </div>
 </template>
@@ -324,6 +437,8 @@ const hasTemplatesError = ref(false);
 const hasSubmissionsError = ref(false);
 const isCreatingRequest = ref(false);
 const isRequestDialogOpen = ref(false);
+const isPreviewDialogOpen = ref(false);
+const selectedSubmission = ref<ReportSubmissionDto | null>(null);
 
 const reportRequest = ref<CreateReportRequestRequest>({
   templateId: null,
@@ -349,7 +464,7 @@ const selectedTemplateFieldCount = computed(
 
 const headers = computed(() => [
   { title: t("trainerMemberDetails.reports.form.template"), key: "template", sortable: false },
-  { title: t("trainerMemberDetails.reports.fallback.noStatus"), key: "status", sortable: false },
+  { title: t("trainerMemberDetails.reports.meta.status"), key: "status", sortable: false },
   { title: t("trainerMemberDetails.reports.meta.submittedAt"), key: "submittedAt", sortable: false },
 ]);
 
@@ -366,10 +481,38 @@ type OrderedFieldLike = {
   order?: number;
 };
 
+type SubmissionAnswerEntry = {
+  key: string;
+  label: string;
+  answer: string;
+};
+
 const orderedFields = (fields: OrderedFieldLike[] | null | undefined) =>
   [...(fields ?? [])].sort((left, right) => (left.order ?? 0) - (right.order ?? 0));
 
 const toSubmission = (item: unknown) => item as ReportSubmissionDto;
+
+const selectedSubmissionAnswerEntries = computed<SubmissionAnswerEntry[]>(() => {
+  const submission = selectedSubmission.value;
+  if (!submission) {
+    return [];
+  }
+
+  const fields = orderedFields(submission.request?.template?.fields);
+  if (fields.length > 0) {
+    return fields.map((field) => ({
+      key: field.key || field.label || "field-answer",
+      label: field.label || field.key || t("trainerMemberDetails.reports.fallback.noTemplateName"),
+      answer: formatFieldAnswer(field, submission.answers?.[field.key || ""]),
+    }));
+  }
+
+  return Object.entries(submission.answers ?? {}).map(([key, value]) => ({
+    key,
+    label: key,
+    answer: formatAnswer(value),
+  }));
+});
 
 const submissionAnswerSummary = (submission: ReportSubmissionDto) => {
   const answers = Object.values(submission.answers ?? {});
@@ -392,6 +535,16 @@ const openRequestDialog = () => {
 
 const closeRequestDialog = () => {
   isRequestDialogOpen.value = false;
+};
+
+const openSubmissionPreview = (item: unknown) => {
+  selectedSubmission.value = toSubmission(item);
+  isPreviewDialogOpen.value = true;
+};
+
+const closeSubmissionPreview = () => {
+  isPreviewDialogOpen.value = false;
+  selectedSubmission.value = null;
 };
 
 const loadTemplates = async () => {
@@ -575,11 +728,24 @@ const formatAnswer = (value: unknown) => {
   }
 };
 
+const formatFieldAnswer = (field: OrderedFieldLike, value: unknown) => {
+  if (value === null || value === undefined || value === "") {
+    return formatAnswer(value);
+  }
+
+  if (field.type === "Date" && typeof value === "string") {
+    return props.formatDateTime(value);
+  }
+
+  return formatAnswer(value);
+};
+
 watch(
   () => props.traineeId,
   () => {
     templates.value = [];
     submissions.value = [];
+    closeSubmissionPreview();
     void Promise.all([loadTemplates(), loadSubmissions()]);
   },
   { immediate: true },

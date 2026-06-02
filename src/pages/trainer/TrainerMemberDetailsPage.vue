@@ -23,7 +23,7 @@
     <section
       class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
     >
-  <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto px-6 py-6 lg:px-8 lg:py-8">
+      <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto px-6 py-6 lg:px-8 lg:py-8">
         <TrainerMemberTrainingsTab
           v-if="activeTab === 'trainings'"
           class="min-h-0 flex-1"

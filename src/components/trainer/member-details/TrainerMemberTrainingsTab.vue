@@ -81,31 +81,31 @@
           </v-btn>
         </div>
 
-        <div v-else-if="selectedTrainings.length === 0 && !isLoadingDetails" class="rounded-2xl border border-dashed border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
+        <div v-else-if="!selectedTraining && !isLoadingDetails" class="rounded-2xl border border-dashed border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
           {{ t("trainerMemberDetails.trainings.empty.details") }}
         </div>
 
         <article
-          v-for="(training, trainingIndex) in selectedTrainings"
-          :key="getTrainingKey(training, trainingIndex)"
+          v-else-if="selectedTraining"
+          :key="getTrainingKey(selectedTraining, 0)"
           class="overflow-hidden rounded-2xl bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
         >
       <div class="space-y-6 px-5 py-5 sm:px-6 sm:py-6">
-            <div v-if="training.planDay?.name" class="flex flex-wrap items-start justify-between gap-3">
+            <div v-if="selectedTraining.planDay?.name" class="flex flex-wrap items-start justify-between gap-3">
               <div
                 class="inline-flex items-center rounded-full bg-[var(--lgym-note-bg)] px-3 py-1 text-xs font-medium text-[var(--lgym-text-muted)]"
               >
-                {{ training.planDay.name }}
+                {{ selectedTraining.planDay.name }}
               </div>
             </div>
 
             <dl class="mt-5 grid gap-3 md:grid-cols-3">
             <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
-              <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
                   {{ t("trainerMemberDetails.trainings.summary.startTime") }}
                 </dt>
                 <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
-                  {{ formatTime(training.createdAt) }}
+                  {{ formatTime(selectedTraining.createdAt) }}
                 </dd>
               </div>
 
@@ -114,7 +114,7 @@
                   {{ t("trainerMemberDetails.trainings.summary.gym") }}
                 </dt>
                 <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
-                  {{ training.gym || t("trainerMemberDetails.trainings.fallback.noGym") }}
+                  {{ selectedTraining.gym || t("trainerMemberDetails.trainings.fallback.noGym") }}
                 </dd>
               </div>
 
@@ -123,7 +123,7 @@
                   {{ t("trainerMemberDetails.trainings.summary.exercisesCount") }}
                 </dt>
                 <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
-                  {{ training.exercises?.length ?? 0 }}
+                  {{ selectedTraining.exercises?.length ?? 0 }}
                 </dd>
               </div>
             </dl>
@@ -133,10 +133,10 @@
                 {{ t("trainerMemberDetails.trainings.exerciseList") }}
               </h3>
 
-              <div v-if="training.exercises?.length" class="mt-5 grid gap-6">
+              <div v-if="selectedTraining.exercises?.length" class="mt-5 grid gap-6">
                 <article
-                  v-for="(exercise, exerciseIndex) in training.exercises"
-                  :key="getExerciseKey(exercise, exerciseIndex, training, trainingIndex)"
+                  v-for="(exercise, exerciseIndex) in selectedTraining.exercises"
+                  :key="getExerciseKey(exercise, exerciseIndex, selectedTraining, 0)"
           class="rounded-xl bg-[var(--lgym-note-bg)] px-5 py-5"
                 >
                   <p class="text-lg font-semibold text-[var(--lgym-text)]">
@@ -182,7 +182,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import {
@@ -242,6 +242,30 @@ const formatTrainingTitle = (value: string | null | undefined) =>
   t("trainerMemberDetails.trainings.summary.trainingDate", {
     date: formatLongDate(value),
   });
+
+const normalizeDateValue = (value: string | null | undefined) => {
+  if (!value) return null;
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? value : parsed.toISOString();
+};
+
+const sortTrainingsDescending = (values: TrainingByDateDetailsDto[]) =>
+  [...values].sort(
+    (left, right) =>
+      new Date(right.createdAt ?? 0).getTime() - new Date(left.createdAt ?? 0).getTime(),
+  );
+
+const selectedTraining = computed(() => {
+  if (selectedTrainings.value.length === 0) return null;
+
+  const selectedDateValue = normalizeDateValue(selectedDate.value);
+  const exactMatch = selectedTrainings.value.find(
+    (training) => normalizeDateValue(training.createdAt) === selectedDateValue,
+  );
+
+  return exactMatch ?? selectedTrainings.value[0] ?? null;
+});
 
 const formatScoreValue = (value: number | null | undefined) => {
   if (value === null || value === undefined) return "0";
@@ -369,7 +393,7 @@ const loadTrainingDetails = async () => {
       return;
     }
 
-    selectedTrainings.value = [...(response.data ?? [])];
+    selectedTrainings.value = sortTrainingsDescending(response.data ?? []);
   } catch (error) {
     if (currentToken !== detailsToken) return;
 
