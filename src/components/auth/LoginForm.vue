@@ -72,33 +72,38 @@
               {{ submitLabel }}
             </v-btn>
 
-            <div class="flex items-center gap-3">
-              <div class="h-0.5 flex-1 bg-[var(--lgym-border)]" />
-              <span class="text-xs text-[var(--lgym-text-muted)]">{{
-                t("auth.login.actions.orContinueWith")
-              }}</span>
-              <div class="h-0.5 flex-1 bg-[var(--lgym-border)]" />
-            </div>
+            <div v-if="!isAdminMode" class="flex flex-col gap-4">
+              <div class="flex items-center gap-3">
+                <div class="h-0.5 flex-1 bg-[var(--lgym-border)]" />
+                <span class="text-xs text-[var(--lgym-text-muted)]">{{
+                  t("auth.login.actions.orContinueWith")
+                }}</span>
+                <div class="h-0.5 flex-1 bg-[var(--lgym-border)]" />
+              </div>
 
-            <div class="flex flex-col gap-2.5">
-              <v-btn
-                block
-                variant="outlined"
-                color="primary"
-                prepend-icon="mdi-apple"
-                size="large"
-              >
-                {{ t("auth.login.actions.loginWithApple") }}
-              </v-btn>
-              <v-btn
-                block
-                variant="outlined"
-                color="primary"
-                prepend-icon="mdi-google"
-                size="large"
-              >
-                {{ t("auth.login.actions.loginWithGoogle") }}
-              </v-btn>
+              <div class="flex flex-col gap-2.5">
+                <v-btn
+                  block
+                  variant="outlined"
+                  color="primary"
+                  prepend-icon="mdi-apple"
+                  size="large"
+                >
+                  {{ t("auth.login.actions.loginWithApple") }}
+                </v-btn>
+                <v-btn
+                  block
+                  variant="outlined"
+                  color="primary"
+                  prepend-icon="mdi-google"
+                  size="large"
+                  :loading="isGoogleAuthLoading"
+                  :disabled="isSubmitting || isGoogleAuthLoading"
+                  @click="submitGoogleLogin"
+                >
+                  {{ t("auth.login.actions.loginWithGoogle") }}
+                </v-btn>
+              </div>
             </div>
           </div>
         </v-form>
@@ -136,10 +141,12 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
+import { getApiErrorMessage, postApiAuthGoogle } from "../../api/auth";
 import { postApiLogin, postApiTrainerLogin } from "../../api/generated/demo";
 import type { LoginRequest, LoginResponseDto } from "../../api/model";
 import logoLgym from "../../assets/logoLGYM.png";
 import { saveAuthSession } from "../../composables/useAuthSession";
+import { useGoogleAuth, type GoogleAuthFailure } from "../../composables/useGoogleAuth";
 import { useToast } from "../../composables/useToast";
 
 import AuthTabs from "./AuthTabs.vue";
@@ -159,6 +166,7 @@ const { t } = useI18n();
 const toast = useToast();
 const router = useRouter();
 const route = useRoute();
+const { signInWithGoogle, isLoading: isGoogleAuthLoading, handleGoogleAuthFailure } = useGoogleAuth();
 
 const formRef = ref<{
   validate: () => Promise<{ valid: boolean }>;
@@ -323,8 +331,48 @@ const submitForm = async () => {
 
     await router.replace(resolvePostLoginRedirect("/athlete/relationship"));
   } catch (error: unknown) {
-    console.error(error);
     toast.error("auth.login.feedback.unexpectedError");
+  } finally {
+    isSubmitting.value = false;
+  }
+};
+
+const submitGoogleLogin = async () => {
+  if (isSubmitting.value || isGoogleAuthLoading.value) return;
+
+  isSubmitting.value = true;
+
+  try {
+    const result = await signInWithGoogle();
+    const response = await postApiAuthGoogle(result.idToken, result.accessToken);
+
+    if (response.status !== 200) {
+      const message = getApiErrorMessage(response.data);
+      if (message) {
+        toast.errorMessage(message);
+      } else {
+        toast.error("auth.google.feedback.failed");
+      }
+      return;
+    }
+
+    performLogin(response.data as LoginResponseDto);
+    toast.success("auth.google.feedback.success");
+    resetFormValidation();
+
+    if (selectedRole.value === "trainer") {
+      await router.replace(resolvePostLoginRedirect("/trainer/invitations"));
+      return;
+    }
+
+    await router.replace(resolvePostLoginRedirect("/athlete/relationship"));
+  } catch (error) {
+    if (error && typeof error === "object" && "reason" in error) {
+      handleGoogleAuthFailure(error as GoogleAuthFailure);
+      return;
+    }
+
+    toast.error("auth.google.feedback.failed");
   } finally {
     isSubmitting.value = false;
   }
