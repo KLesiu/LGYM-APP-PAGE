@@ -998,12 +998,17 @@
         "empty": "After you choose a template, this area will show its description and the number of fields to complete.",
         "fieldsCount": "Fields: {count}",
         "submissionEyebrow": "Report preview",
-        "answersTitle": "Member answers"
+        "answersTitle": "Member answers",
+        "fieldFeedbackLabel": "Comment for this answer",
+        "fieldFeedbackPlaceholder": "Add a comment for this answer",
+        "overallFeedbackTitle": "Overall feedback for the member",
+        "overallFeedbackPlaceholder": "Add a general summary or next steps for this report"
       },
       "actions": {
         "manageTemplates": "Manage templates",
         "goToTemplateLibrary": "Open template library",
-        "sendRequest": "Request report"
+        "sendRequest": "Request report",
+        "saveFeedback": "Save feedback"
       },
       "meta": {
         "status": "Status",
@@ -1033,7 +1038,9 @@
         "loadSubmissionsFailed": "Failed to load report submissions.",
         "templateRequired": "Select a template before sending a request.",
         "createRequestSuccess": "Report request sent successfully.",
-        "createRequestFailed": "Failed to create the report request."
+        "createRequestFailed": "Failed to create the report request.",
+        "saveSuccess": "Trainer feedback saved successfully.",
+        "saveFailed": "Failed to save trainer feedback."
       }
     },
     "trainerReportTemplates": {

@@ -998,12 +998,17 @@
         "empty": "Po wybraniu szablonu pokażemy tutaj jego opis oraz liczbę pól do uzupełnienia.",
         "fieldsCount": "Liczba pól: {count}",
         "submissionEyebrow": "Podgląd raportu",
-        "answersTitle": "Odpowiedzi podopiecznego"
+        "answersTitle": "Odpowiedzi podopiecznego",
+        "fieldFeedbackLabel": "Komentarz do tej odpowiedzi",
+        "fieldFeedbackPlaceholder": "Dodaj komentarz do tej odpowiedzi",
+        "overallFeedbackTitle": "Ogólny komentarz dla podopiecznego",
+        "overallFeedbackPlaceholder": "Dodaj podsumowanie lub kolejne kroki do tego raportu"
       },
       "actions": {
         "manageTemplates": "Zarządzaj szablonami",
         "goToTemplateLibrary": "Otwórz bibliotekę szablonów",
-        "sendRequest": "Poproś o raport"
+        "sendRequest": "Poproś o raport",
+        "saveFeedback": "Zapisz komentarz"
       },
       "meta": {
         "status": "Status",
@@ -1033,7 +1038,9 @@
         "loadSubmissionsFailed": "Nie udało się pobrać wysłanych raportów.",
         "templateRequired": "Wybierz szablon przed wysłaniem prośby.",
         "createRequestSuccess": "Prośba o raport została wysłana.",
-        "createRequestFailed": "Nie udało się utworzyć prośby o raport."
+        "createRequestFailed": "Nie udało się utworzyć prośby o raport.",
+        "saveSuccess": "Komentarz trenera został zapisany.",
+        "saveFailed": "Nie udało się zapisać komentarza trenera."
       }
     },
     "trainerReportTemplates": {

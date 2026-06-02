@@ -381,14 +381,57 @@
                         <p class="whitespace-pre-wrap break-words text-sm leading-7 text-[var(--lgym-text-muted)]">
                           {{ entry.answer }}
                         </p>
+
+                        <div class="mt-4">
+                          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                            {{ t("trainerMemberDetails.reports.preview.fieldFeedbackLabel") }}
+                          </p>
+                          <v-textarea
+                            :model-value="trainerFieldCommentsDraft[entry.key] || ''"
+                            rows="2"
+                            auto-grow
+                            density="comfortable"
+                            variant="outlined"
+                            hide-details
+                            class="mt-2 report-request-control"
+                            :placeholder="t('trainerMemberDetails.reports.preview.fieldFeedbackPlaceholder')"
+                            :disabled="isSavingFeedback"
+                            @update:model-value="updateFieldComment(entry.key, $event)"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                <div>
+                  <h4 class="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                    {{ t("trainerMemberDetails.reports.preview.overallFeedbackTitle") }}
+                  </h4>
+                  <v-textarea
+                    v-model="trainerOverallCommentDraft"
+                    rows="4"
+                    auto-grow
+                    density="comfortable"
+                    variant="outlined"
+                    hide-details
+                    class="mt-4 report-request-control"
+                    :placeholder="t('trainerMemberDetails.reports.preview.overallFeedbackPlaceholder')"
+                    :disabled="isSavingFeedback"
+                  />
+                </div>
               </div>
             </v-card-text>
 
-            <v-card-actions class="justify-end px-6 pb-6">
+            <v-card-actions class="justify-end gap-3 px-6 pb-6">
+              <v-btn
+                color="primary"
+                class="min-h-10 rounded-md px-4"
+                :loading="isSavingFeedback"
+                @click="saveTrainerFeedback"
+              >
+                {{ t("trainerMemberDetails.reports.actions.saveFeedback") }}
+              </v-btn>
               <v-btn variant="outlined" color="primary" @click="closeSubmissionPreview">
                 {{ t("trainerMemberDetails.actions.cancel") }}
               </v-btn>
@@ -407,6 +450,7 @@ import { useRouter } from "vue-router";
 
 import {
   getApiTrainerReportTemplates,
+  postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedback,
   getApiTrainerTraineesTraineeIdReportSubmissions,
   postApiTrainerTraineesTraineeIdReportRequests,
 } from "../../../api/generated/demo";
@@ -414,6 +458,7 @@ import {
   type CreateReportRequestRequest,
   type ReportSubmissionDto,
   type ReportTemplateDto,
+  type UpdateReportSubmissionFeedbackRequest,
 } from "../../../api/model";
 import { getApiErrorMessage } from "../../../api/trainerInvitations";
 import { handleTrainerUnauthorizedResponse } from "../../../composables/useTrainerMembers";
@@ -436,9 +481,12 @@ const isLoadingSubmissions = ref(false);
 const hasTemplatesError = ref(false);
 const hasSubmissionsError = ref(false);
 const isCreatingRequest = ref(false);
+const isSavingFeedback = ref(false);
 const isRequestDialogOpen = ref(false);
 const isPreviewDialogOpen = ref(false);
 const selectedSubmission = ref<ReportSubmissionDto | null>(null);
+const trainerOverallCommentDraft = ref("");
+const trainerFieldCommentsDraft = ref<Record<string, string>>({});
 
 const reportRequest = ref<CreateReportRequestRequest>({
   templateId: null,
@@ -539,12 +587,25 @@ const closeRequestDialog = () => {
 
 const openSubmissionPreview = (item: unknown) => {
   selectedSubmission.value = toSubmission(item);
+  trainerOverallCommentDraft.value = selectedSubmission.value.trainerOverallComment || "";
+  trainerFieldCommentsDraft.value = {
+    ...(selectedSubmission.value.trainerFieldComments ?? {}),
+  };
   isPreviewDialogOpen.value = true;
 };
 
 const closeSubmissionPreview = () => {
   isPreviewDialogOpen.value = false;
   selectedSubmission.value = null;
+  trainerOverallCommentDraft.value = "";
+  trainerFieldCommentsDraft.value = {};
+};
+
+const updateFieldComment = (fieldKey: string, value: string | null) => {
+  trainerFieldCommentsDraft.value = {
+    ...trainerFieldCommentsDraft.value,
+    [fieldKey]: value ?? "",
+  };
 };
 
 const loadTemplates = async () => {
@@ -695,6 +756,61 @@ const createReportRequest = async () => {
 
 const submitReportRequest = async () => {
   await createReportRequest();
+};
+
+const saveTrainerFeedback = async () => {
+  if (!selectedSubmission.value?._id) {
+    return;
+  }
+
+  isSavingFeedback.value = true;
+
+  try {
+    const payload: UpdateReportSubmissionFeedbackRequest = {
+      trainerOverallComment: trainerOverallCommentDraft.value.trim() || null,
+      trainerFieldComments: trainerFieldCommentsDraft.value,
+    };
+
+    const response = await postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedback(
+      props.traineeId,
+      selectedSubmission.value._id,
+      payload,
+    );
+
+    if (
+      await handleTrainerUnauthorizedResponse(
+        response.status,
+        router,
+        toast,
+        `/trainer/members/${props.traineeId}`,
+      )
+    ) {
+      return;
+    }
+
+    if (response.status < 200 || response.status >= 300) {
+      const message = getApiErrorMessage(response.data);
+      if (message) toast.errorMessage(message);
+      else toast.error("trainerMemberDetails.reports.feedback.saveFailed");
+      return;
+    }
+
+    const updatedSubmission = response.data as ReportSubmissionDto;
+    submissions.value = submissions.value.map((submission) =>
+      submission._id === updatedSubmission._id ? updatedSubmission : submission,
+    );
+    selectedSubmission.value = updatedSubmission;
+    trainerOverallCommentDraft.value = updatedSubmission.trainerOverallComment || "";
+    trainerFieldCommentsDraft.value = {
+      ...(updatedSubmission.trainerFieldComments ?? {}),
+    };
+    toast.success("trainerMemberDetails.reports.feedback.saveSuccess");
+  } catch (error) {
+    console.error(error);
+    toast.error("trainerMemberDetails.reports.feedback.saveFailed");
+  } finally {
+    isSavingFeedback.value = false;
+  }
 };
 
 const toUtcIsoString = (value: string | null | undefined) => {
