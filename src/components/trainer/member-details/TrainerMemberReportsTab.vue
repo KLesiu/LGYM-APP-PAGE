@@ -127,7 +127,7 @@
                             {{ field.label || field.key }}
                           </p>
                           <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
-                            {{ formatAnswer(submission.answers?.[field.key || ""]) }}
+                            {{ formatFieldAnswer(field, submission.answers?.[field.key || ""]) }}
                           </p>
                         </div>
                       </div>
@@ -378,7 +378,66 @@
                       </div>
 
                       <div class="bg-[var(--lgym-surface-card)] px-5 py-4">
-                        <p class="whitespace-pre-wrap break-words text-sm leading-7 text-[var(--lgym-text-muted)]">
+                        <template v-if="entry.kind === 'photos'">
+                          <div v-if="entry.photos.length > 0" class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                            <article
+                              v-for="photo in entry.photos"
+                              :key="photo._id || photo.storageKey || photo.viewType || entry.key"
+                              class="overflow-hidden rounded-xl bg-[var(--lgym-note-bg)]"
+                            >
+                              <a
+                                :href="photo.readUrl || photo.thumbnailUrl || '#'
+                                "
+                                target="_blank"
+                                rel="noreferrer"
+                                class="block"
+                              >
+                                <img
+                                  v-if="photo.readUrl || photo.thumbnailUrl"
+                                  :src="photo.thumbnailUrl || photo.readUrl || undefined"
+                                  :alt="photo.viewType || entry.label"
+                                  class="h-48 w-full object-cover"
+                                />
+                                <div v-else class="flex h-48 items-center justify-center bg-[var(--lgym-surface)] text-sm text-[var(--lgym-text-soft)]">
+                                  {{ t("trainerMemberDetails.reports.fallback.noAnswer") }}
+                                </div>
+                              </a>
+                              <div class="space-y-1 px-4 py-3">
+                                <p class="text-sm font-semibold text-[var(--lgym-text)]">
+                                  {{ formatPhotoViewLabel(photo.viewType) }}
+                                </p>
+                                <p class="text-xs text-[var(--lgym-text-soft)]">
+                                  {{ formatDateTime(photo.uploadedAt) }}
+                                </p>
+                              </div>
+                            </article>
+                          </div>
+                          <p v-else class="text-sm leading-7 text-[var(--lgym-text-muted)]">
+                            {{ entry.answer }}
+                          </p>
+                        </template>
+
+                        <template v-else-if="entry.kind === 'measurements'">
+                          <div v-if="entry.measurementRows.length > 0" class="grid gap-3">
+                            <div
+                              v-for="row in entry.measurementRows"
+                              :key="`${entry.key}-${row.label}`"
+                              class="flex items-center justify-between gap-4 rounded-xl bg-[var(--lgym-note-bg)] px-4 py-3"
+                            >
+                              <p class="text-sm text-[var(--lgym-text-muted)]">
+                                {{ row.label }}
+                              </p>
+                              <p class="text-sm font-semibold text-[var(--lgym-text)]">
+                                {{ row.value }}
+                              </p>
+                            </div>
+                          </div>
+                          <p v-else class="text-sm leading-7 text-[var(--lgym-text-muted)]">
+                            {{ entry.answer }}
+                          </p>
+                        </template>
+
+                        <p v-else class="whitespace-pre-wrap break-words text-sm leading-7 text-[var(--lgym-text-muted)]">
                           {{ entry.answer }}
                         </p>
 
@@ -450,12 +509,14 @@ import { useRouter } from "vue-router";
 
 import {
   getApiTrainerReportTemplates,
+  getApiTrainerReportingPhotosHistory,
   postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedback,
   getApiTrainerTraineesTraineeIdReportSubmissions,
   postApiTrainerTraineesTraineeIdReportRequests,
 } from "../../../api/generated/demo";
 import {
   type CreateReportRequestRequest,
+  type PhotoHistoryItemResponse,
   type ReportSubmissionDto,
   type ReportTemplateDto,
   type UpdateReportSubmissionFeedbackRequest,
@@ -487,6 +548,9 @@ const isPreviewDialogOpen = ref(false);
 const selectedSubmission = ref<ReportSubmissionDto | null>(null);
 const trainerOverallCommentDraft = ref("");
 const trainerFieldCommentsDraft = ref<Record<string, string>>({});
+const submissionPhotos = ref<PhotoHistoryItemResponse[]>([]);
+const isLoadingSubmissionPhotos = ref(false);
+let submissionPhotosToken = 0;
 
 const reportRequest = ref<CreateReportRequestRequest>({
   templateId: null,
@@ -527,12 +591,16 @@ type OrderedFieldLike = {
   type?: string | null;
   isRequired?: boolean;
   order?: number;
+  moduleConfig?: unknown | null;
 };
 
 type SubmissionAnswerEntry = {
   key: string;
   label: string;
   answer: string;
+  kind: "text" | "photos" | "measurements";
+  photos: PhotoHistoryItemResponse[];
+  measurementRows: Array<{ label: string; value: string }>;
 };
 
 const orderedFields = (fields: OrderedFieldLike[] | null | undefined) =>
@@ -552,6 +620,12 @@ const selectedSubmissionAnswerEntries = computed<SubmissionAnswerEntry[]>(() => 
       key: field.key || field.label || "field-answer",
       label: field.label || field.key || t("trainerMemberDetails.reports.fallback.noTemplateName"),
       answer: formatFieldAnswer(field, submission.answers?.[field.key || ""]),
+      kind: getFieldDisplayKind(field.type),
+      photos: getFieldDisplayKind(field.type) === "photos" ? getPhotosForField(field) : [],
+      measurementRows:
+        getFieldDisplayKind(field.type) === "measurements"
+          ? getMeasurementRowsForField(field, submission.answers?.[field.key || ""])
+          : [],
     }));
   }
 
@@ -559,13 +633,127 @@ const selectedSubmissionAnswerEntries = computed<SubmissionAnswerEntry[]>(() => 
     key,
     label: key,
     answer: formatAnswer(value),
+    kind: "text" as const,
+    photos: [],
+    measurementRows: [],
   }));
 });
 
 const submissionAnswerSummary = (submission: ReportSubmissionDto) => {
+  const fields = orderedFields(submission.request?.template?.fields);
+  const firstField = fields[0];
+  if (firstField?.key) {
+    return formatFieldAnswer(firstField, submission.answers?.[firstField.key]);
+  }
+
   const answers = Object.values(submission.answers ?? {});
   if (answers.length === 0) return t("trainerMemberDetails.reports.fallback.noAnswer");
   return formatAnswer(answers[0]);
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const getFieldDisplayKind = (type: string | null | undefined): SubmissionAnswerEntry["kind"] => {
+  if (type === "Photos") return "photos";
+  if (type === "Measurements") return "measurements";
+  return "text";
+};
+
+const getHumanizedKey = (value: string) =>
+  value
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/[_-]+/g, " ")
+    .replace(/^./, (char) => char.toUpperCase());
+
+const formatMeasurementKeyLabel = (value: string) => {
+  const bodyPartTranslationKey = `trainerMemberDetails.measurements.bodyParts.${value}`;
+  const translatedBodyPart = t(bodyPartTranslationKey);
+  if (translatedBodyPart !== bodyPartTranslationKey) {
+    return translatedBodyPart;
+  }
+
+  return getHumanizedKey(value);
+};
+
+const formatPhotoViewLabel = (value: string | null | undefined) => {
+  if (!value) {
+    return t("trainerMemberDetails.reports.fallback.noAnswer");
+  }
+
+  const translationKey = `trainerMemberDetails.trainerReportTemplates.modules.photos.views.${value.toLowerCase()}`;
+  const translated = t(translationKey);
+  return translated !== translationKey ? translated : value;
+};
+
+const getRequiredPhotoViews = (field: OrderedFieldLike) => {
+  if (!isRecord(field.moduleConfig) || !Array.isArray(field.moduleConfig.requiredViews)) {
+    return [] as string[];
+  }
+
+  return field.moduleConfig.requiredViews.filter(
+    (item): item is string => typeof item === "string" && item.trim().length > 0,
+  );
+};
+
+const getPhotosForField = (field: OrderedFieldLike) => {
+  const requiredViews = getRequiredPhotoViews(field);
+  if (requiredViews.length === 0) {
+    return submissionPhotos.value;
+  }
+
+  const normalizedViews = new Set(requiredViews.map((item) => item.toLowerCase()));
+  return submissionPhotos.value.filter((photo) =>
+    normalizedViews.has((photo.viewType ?? "").toLowerCase()),
+  );
+};
+
+const getConfiguredMeasurementTypes = (field: OrderedFieldLike) => {
+  if (!isRecord(field.moduleConfig) || !Array.isArray(field.moduleConfig.measurementTypes)) {
+    return [] as string[];
+  }
+
+  return field.moduleConfig.measurementTypes.filter(
+    (item): item is string => typeof item === "string" && item.trim().length > 0,
+  );
+};
+
+const getMeasurementRows = (value: unknown): Array<{ label: string; value: string }> => {
+  return getMeasurementRowsForField(undefined, value);
+};
+
+const getMeasurementRowsForField = (
+  field: OrderedFieldLike | undefined,
+  value: unknown,
+): Array<{ label: string; value: string }> => {
+  if (!isRecord(value)) {
+    return [];
+  }
+
+  const configuredTypes = field ? getConfiguredMeasurementTypes(field) : [];
+  const sourceEntries = Object.entries(value);
+  const orderedEntries = configuredTypes.length > 0
+    ? configuredTypes
+        .map((type) => sourceEntries.find(([key]) => key.toLowerCase() === type.toLowerCase()) ?? null)
+        .filter((entry): entry is [string, unknown] => entry !== null)
+    : sourceEntries;
+
+  return orderedEntries.map(([key, rawValue]) => {
+    if (isRecord(rawValue)) {
+      const numericValue = rawValue.value;
+      const unit = typeof rawValue.unit === "string" ? rawValue.unit : null;
+      const formattedValue = formatAnswer(numericValue);
+      return {
+        label: formatMeasurementKeyLabel(key),
+        value: unit ? `${formattedValue} ${unit}` : formattedValue,
+      };
+    }
+
+    return {
+      label: formatMeasurementKeyLabel(key),
+      value: formatAnswer(rawValue),
+    };
+  });
 };
 
 const resetReportRequest = () => {
@@ -591,7 +779,9 @@ const openSubmissionPreview = (item: unknown) => {
   trainerFieldCommentsDraft.value = {
     ...(selectedSubmission.value.trainerFieldComments ?? {}),
   };
+  submissionPhotos.value = [];
   isPreviewDialogOpen.value = true;
+  void loadSubmissionPhotos(selectedSubmission.value);
 };
 
 const closeSubmissionPreview = () => {
@@ -599,6 +789,53 @@ const closeSubmissionPreview = () => {
   selectedSubmission.value = null;
   trainerOverallCommentDraft.value = "";
   trainerFieldCommentsDraft.value = {};
+  submissionPhotos.value = [];
+};
+
+const loadSubmissionPhotos = async (submission: ReportSubmissionDto | null) => {
+  const requestId = submission?.reportRequestId?.trim();
+  if (!requestId) {
+    submissionPhotos.value = [];
+    return;
+  }
+
+  const currentToken = ++submissionPhotosToken;
+  isLoadingSubmissionPhotos.value = true;
+  try {
+    const response = await getApiTrainerReportingPhotosHistory({ requestId, traineeId: props.traineeId });
+
+    if (currentToken !== submissionPhotosToken || selectedSubmission.value?.reportRequestId?.trim() !== requestId) {
+      return;
+    }
+
+    if (
+      await handleTrainerUnauthorizedResponse(
+        response.status,
+        router,
+        toast,
+        `/trainer/members/${props.traineeId}`,
+      )
+    ) {
+      return;
+    }
+
+    if (response.status !== 200) {
+      submissionPhotos.value = [];
+      return;
+    }
+
+    submissionPhotos.value = response.data?.photos ?? [];
+  } catch (error) {
+    if (currentToken !== submissionPhotosToken) {
+      return;
+    }
+    console.error(error);
+    submissionPhotos.value = [];
+  } finally {
+    if (currentToken === submissionPhotosToken) {
+      isLoadingSubmissionPhotos.value = false;
+    }
+  }
 };
 
 const updateFieldComment = (fieldKey: string, value: string | null) => {
@@ -851,6 +1088,22 @@ const formatFieldAnswer = (field: OrderedFieldLike, value: unknown) => {
 
   if (field.type === "Date" && typeof value === "string") {
     return props.formatDateTime(value);
+  }
+
+  if (field.type === "Photos") {
+    const count = getPhotosForField(field).length;
+    return count > 0
+      ? t("trainerMemberDetails.reports.preview.photosCount", { count })
+      : isLoadingSubmissionPhotos.value
+        ? t("trainerMemberDetails.reports.preview.photosLoading")
+        : t("trainerMemberDetails.reports.preview.photosEmpty");
+  }
+
+  if (field.type === "Measurements") {
+    const rows = getMeasurementRows(value);
+    return rows.length > 0
+      ? t("trainerMemberDetails.reports.preview.measurementsCount", { count: rows.length })
+      : t("trainerMemberDetails.reports.preview.measurementsEmpty");
   }
 
   return formatAnswer(value);

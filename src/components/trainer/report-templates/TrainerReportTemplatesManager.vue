@@ -87,25 +87,21 @@
                     </div>
                   </div>
 
-                  <div class="border-t border-[var(--lgym-border)] pt-4">
-                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                      {{ t("trainerMemberDetails.trainerReportTemplates.preview.fields") }}
-                    </p>
+                      <div class="border-t border-[var(--lgym-border)] pt-4">
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                          {{ t("trainerMemberDetails.trainerReportTemplates.preview.fields") }}
+                        </p>
                     <div class="mt-3 flex flex-wrap gap-2">
-                      <v-chip
-                        v-for="field in orderedFields(template.fields)"
-                        :key="field.key || field.label || 'field'"
-                        size="small"
-                        variant="outlined"
-                      >
-                        {{ field.label || field.key }} ·
-                        {{
-                          field.type ||
-                          t("trainerMemberDetails.trainerReportTemplates.fallback.noFieldType")
-                        }}
-                      </v-chip>
+                        <v-chip
+                          v-for="field in orderedFields(template.fields)"
+                          :key="field.key || field.label || 'field'"
+                          size="small"
+                          variant="outlined"
+                        >
+                          {{ getTemplateFieldPreviewLabel(field) }}
+                        </v-chip>
+                      </div>
                     </div>
-                  </div>
                 </div>
               </article>
             </template>
@@ -145,8 +141,7 @@
                 size="small"
                 variant="outlined"
               >
-                {{ field.label || field.key }} ·
-                {{ field.type || t("trainerMemberDetails.trainerReportTemplates.fallback.noFieldType") }}
+                {{ getTemplateFieldPreviewLabel(field) }}
               </v-chip>
             </div>
           </div>
@@ -343,16 +338,17 @@
                         class="template-field-control template-field-row"
                       />
                        <v-select
-                         v-model="field.type"
-                        :items="fieldTypeOptions"
-                        item-title="label"
-                        item-value="value"
-                        :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldType')"
-                        density="comfortable"
-                        variant="outlined"
-                        hide-details
-                        class="template-field-control template-field-row"
-                      />
+                          v-model="field.type"
+                         :items="fieldTypeOptions"
+                         item-title="label"
+                         item-value="value"
+                         :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldType')"
+                         density="comfortable"
+                         variant="outlined"
+                         hide-details
+                         class="template-field-control template-field-row"
+                         @update:model-value="onFieldTypeChange(field, $event)"
+                       />
                        <div class="template-drag-slot flex min-h-11 items-center xl:justify-center">
                          <button
                            type="button"
@@ -383,9 +379,59 @@
                           color="error"
                           @click="removeField(index)"
                         />
-                      </div>
+                     </div>
+                     <div v-if="isModuleFieldType(field.type)" class="template-module-config-panel">
+                       <div class="flex flex-col gap-2 lg:flex-row lg:items-start lg:justify-between">
+                         <div>
+                           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                             {{ t("trainerMemberDetails.trainerReportTemplates.form.moduleConfigTitle") }}
+                           </p>
+                           <p class="mt-1 text-sm leading-6 text-[var(--lgym-text-muted)]">
+                             {{ getFieldModuleDescription(field.type) }}
+                           </p>
+                         </div>
+
+                         <v-chip size="small" color="primary" variant="tonal">
+                           {{ getFieldTypeLabel(field.type) }}
+                         </v-chip>
+                       </div>
+
+                       <div class="mt-4">
+                         <v-select
+                           v-if="field.type === ReportTemplateFieldRequestType.Photos"
+                           v-model="field.moduleConfig.requiredViews"
+                           :items="photoViewOptions"
+                           item-title="label"
+                           item-value="value"
+                           :label="t('trainerMemberDetails.trainerReportTemplates.form.photoViewsLabel')"
+                           multiple
+                           chips
+                           closable-chips
+                           density="comfortable"
+                           variant="outlined"
+                           hide-details
+                           class="template-field-control"
+                         />
+
+                         <v-select
+                           v-else-if="field.type === ReportTemplateFieldRequestType.Measurements"
+                           v-model="field.moduleConfig.measurementTypes"
+                           :items="measurementModuleOptions"
+                           item-title="label"
+                           item-value="value"
+                           :label="t('trainerMemberDetails.trainerReportTemplates.form.measurementTypesLabel')"
+                           multiple
+                           chips
+                           closable-chips
+                           density="comfortable"
+                           variant="outlined"
+                           hide-details
+                           class="template-field-control"
+                         />
+                       </div>
+                     </div>
                     </div>
-                   </div>
+                  </div>
                  </div>
 
                  <div v-if="templateForm.fields.length === 0" class="template-empty-state">
@@ -429,7 +475,9 @@ import {
 import {
   ReportTemplateFieldRequestType,
   type ReportTemplateDto,
+  type ReportTemplateFieldDto,
   type ReportTemplateFieldRequest,
+  type UpsertReportTemplateRequest,
 } from "../../../api/model";
 import { getApiErrorMessage } from "../../../api/trainerInvitations";
 import { useConfirmDialog } from "../../../composables/useConfirmDialog";
@@ -444,6 +492,34 @@ type EditableTemplateField = {
   type: ReportTemplateFieldRequest["type"];
   isRequired: boolean;
   order: number;
+  moduleConfig: EditableTemplateFieldModuleConfig;
+};
+
+type ReportPhotoView = "Front" | "Side" | "Back";
+
+type ReportMeasurementType =
+  | "BodyWeight"
+  | "BodyFat"
+  | "Chest"
+  | "Back"
+  | "Shoulders"
+  | "Biceps"
+  | "Triceps"
+  | "Forearms"
+  | "Abs"
+  | "Quads"
+  | "Hamstrings"
+  | "Calves"
+  | "Glutes"
+  | "Neck"
+  | "Waist"
+  | "Hips"
+  | "Thigh"
+  | "Bmi";
+
+type EditableTemplateFieldModuleConfig = {
+  requiredViews: ReportPhotoView[];
+  measurementTypes: ReportMeasurementType[];
 };
 
 type TemplateFormState = {
@@ -459,6 +535,7 @@ type OrderedFieldLike = {
   type?: string | null;
   isRequired?: boolean;
   order?: number;
+  moduleConfig?: unknown | null;
 };
 
 const props = defineProps<{
@@ -484,10 +561,66 @@ const templateForm = ref<TemplateFormState>({
 });
 
 const fieldTypeOptions = computed(() => [
-  { label: ReportTemplateFieldRequestType.Text, value: ReportTemplateFieldRequestType.Text },
-  { label: ReportTemplateFieldRequestType.Number, value: ReportTemplateFieldRequestType.Number },
-  { label: ReportTemplateFieldRequestType.Boolean, value: ReportTemplateFieldRequestType.Boolean },
-  { label: ReportTemplateFieldRequestType.Date, value: ReportTemplateFieldRequestType.Date },
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.fieldTypes.text"),
+    value: ReportTemplateFieldRequestType.Text,
+  },
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.fieldTypes.number"),
+    value: ReportTemplateFieldRequestType.Number,
+  },
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.fieldTypes.boolean"),
+    value: ReportTemplateFieldRequestType.Boolean,
+  },
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.fieldTypes.date"),
+    value: ReportTemplateFieldRequestType.Date,
+  },
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.fieldTypes.photos"),
+    value: ReportTemplateFieldRequestType.Photos,
+  },
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.fieldTypes.measurements"),
+    value: ReportTemplateFieldRequestType.Measurements,
+  },
+]);
+
+const photoViewOptions = computed(() => [
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.modules.photos.views.front"),
+    value: "Front" as const,
+  },
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.modules.photos.views.side"),
+    value: "Side" as const,
+  },
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.modules.photos.views.back"),
+    value: "Back" as const,
+  },
+]);
+
+const measurementModuleOptions = computed(() => [
+  { label: t("trainerMemberDetails.measurements.bodyParts.BodyWeight"), value: "BodyWeight" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.BodyFat"), value: "BodyFat" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Chest"), value: "Chest" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Back"), value: "Back" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Shoulders"), value: "Shoulders" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Biceps"), value: "Biceps" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Triceps"), value: "Triceps" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Forearms"), value: "Forearms" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Abs"), value: "Abs" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Quads"), value: "Quads" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Hamstrings"), value: "Hamstrings" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Calves"), value: "Calves" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Glutes"), value: "Glutes" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Neck"), value: "Neck" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Waist"), value: "Waist" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Hips"), value: "Hips" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Thigh"), value: "Thigh" as const },
+  { label: t("trainerMemberDetails.measurements.bodyParts.Bmi"), value: "Bmi" as const },
 ]);
 
 const templateFieldCount = computed(() => templateForm.value.fields.length);
@@ -509,7 +642,7 @@ const headers = computed(() => [
     sortable: false,
   },
   {
-    title: "akcje",
+    title: t("trainerMemberDetails.trainerReportTemplates.actions.header"),
     key: "actions",
     sortable: false,
     align: "end" as const,
@@ -532,6 +665,93 @@ const orderedFields = (fields: OrderedFieldLike[] | null | undefined) =>
 
 const toTemplate = (item: unknown) => item as ReportTemplateDto;
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const getStringArray = (value: unknown) =>
+  Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
+    : [];
+
+const measurementTypeAliases: Record<string, ReportMeasurementType> = {
+  weight: "BodyWeight",
+  bodyweight: "BodyWeight",
+  bodyfat: "BodyFat",
+  chest: "Chest",
+  back: "Back",
+  shoulders: "Shoulders",
+  biceps: "Biceps",
+  triceps: "Triceps",
+  forearms: "Forearms",
+  abs: "Abs",
+  quads: "Quads",
+  hamstrings: "Hamstrings",
+  calves: "Calves",
+  glutes: "Glutes",
+  neck: "Neck",
+  waist: "Waist",
+  hips: "Hips",
+  thighs: "Thigh",
+  thigh: "Thigh",
+  bmi: "Bmi",
+};
+
+const createDefaultModuleConfig = (
+  type: ReportTemplateFieldRequest["type"],
+): EditableTemplateFieldModuleConfig => {
+  if (type === ReportTemplateFieldRequestType.Photos) {
+    return {
+      requiredViews: ["Front", "Side", "Back"],
+      measurementTypes: [],
+    };
+  }
+
+  if (type === ReportTemplateFieldRequestType.Measurements) {
+    return {
+      requiredViews: [],
+      measurementTypes: ["BodyWeight", "BodyFat", "Chest", "Waist"],
+    };
+  }
+
+  return {
+    requiredViews: [],
+    measurementTypes: [],
+  };
+};
+
+const normalizeModuleConfig = (
+  type: ReportTemplateFieldRequest["type"],
+  moduleConfig: unknown,
+): EditableTemplateFieldModuleConfig => {
+  const fallback = createDefaultModuleConfig(type);
+  if (!isRecord(moduleConfig)) {
+    return fallback;
+  }
+
+  return {
+    requiredViews:
+      type === ReportTemplateFieldRequestType.Photos
+        ? (getStringArray(moduleConfig.requiredViews) as ReportPhotoView[])
+        : fallback.requiredViews,
+    measurementTypes:
+      type === ReportTemplateFieldRequestType.Measurements
+        ? getStringArray(moduleConfig.measurementTypes)
+            .map((item) => measurementTypeAliases[item.trim().toLowerCase()] ?? null)
+            .filter((item): item is ReportMeasurementType => item !== null)
+        : fallback.measurementTypes,
+  };
+};
+
+const isModuleFieldType = (type: ReportTemplateFieldRequest["type"]) =>
+  type === ReportTemplateFieldRequestType.Photos ||
+  type === ReportTemplateFieldRequestType.Measurements;
+
+const getPhotoViewLabel = (value: string) =>
+  t(`trainerMemberDetails.trainerReportTemplates.modules.photos.views.${value.toLowerCase()}`);
+
+const getMeasurementTypeLabel = (value: string) =>
+  t(`trainerMemberDetails.measurements.bodyParts.${value}`);
+
 const createEditableField = (
   field?: Partial<Omit<EditableTemplateField, "localId">>,
 ): EditableTemplateField => ({
@@ -541,10 +761,59 @@ const createEditableField = (
   type: field?.type ?? ReportTemplateFieldRequestType.Text,
   isRequired: field?.isRequired ?? false,
   order: field?.order ?? templateForm.value.fields.length + 1,
+  moduleConfig:
+    field?.moduleConfig ?? createDefaultModuleConfig(field?.type ?? ReportTemplateFieldRequestType.Text),
 });
 
 const getFieldTypeLabel = (value: ReportTemplateFieldRequest["type"]) => {
   return fieldTypeOptions.value.find((option) => option.value === value)?.label ?? value;
+};
+
+const getFieldModuleDescription = (value: ReportTemplateFieldRequest["type"]) => {
+  if (value === ReportTemplateFieldRequestType.Photos) {
+    return t("trainerMemberDetails.trainerReportTemplates.modules.photos.description");
+  }
+
+  if (value === ReportTemplateFieldRequestType.Measurements) {
+    return t("trainerMemberDetails.trainerReportTemplates.modules.measurements.description");
+  }
+
+  return "";
+};
+
+const getFieldModuleConfigSummary = (
+  field: Pick<EditableTemplateField, "type" | "moduleConfig"> | OrderedFieldLike,
+) => {
+  const normalized = normalizeModuleConfig(
+    (field.type as ReportTemplateFieldRequest["type"]) ?? ReportTemplateFieldRequestType.Text,
+    field.moduleConfig,
+  );
+
+  if (field.type === ReportTemplateFieldRequestType.Photos) {
+    return normalized.requiredViews.map(getPhotoViewLabel).join(", ");
+  }
+
+  if (field.type === ReportTemplateFieldRequestType.Measurements) {
+    return normalized.measurementTypes.map(getMeasurementTypeLabel).join(", ");
+  }
+
+  return "";
+};
+
+const getTemplateFieldPreviewLabel = (field: OrderedFieldLike | ReportTemplateFieldDto) => {
+  const baseLabel = field.label || field.key || t("trainerMemberDetails.trainerReportTemplates.fallback.noTemplateName");
+  const typeLabel = getFieldTypeLabel(field.type as ReportTemplateFieldRequest["type"]);
+  const moduleSummary = getFieldModuleConfigSummary(field);
+
+  return moduleSummary ? `${baseLabel} · ${typeLabel} · ${moduleSummary}` : `${baseLabel} · ${typeLabel}`;
+};
+
+const onFieldTypeChange = (
+  field: EditableTemplateField,
+  value: ReportTemplateFieldRequest["type"],
+) => {
+  field.type = value;
+  field.moduleConfig = createDefaultModuleConfig(value);
 };
 
 const syncTemplateFieldOrders = () => {
@@ -604,6 +873,10 @@ const openTemplateDialog = async (template?: ReportTemplateDto) => {
                 ReportTemplateFieldRequestType.Text,
               isRequired: Boolean(field.isRequired),
               order: field.order ?? 0,
+              moduleConfig: normalizeModuleConfig(
+                (field.type as ReportTemplateFieldRequest["type"]) ?? ReportTemplateFieldRequestType.Text,
+                field.moduleConfig,
+              ),
             }),
           ),
         };
@@ -679,6 +952,17 @@ const saveTemplate = async () => {
       type: field.type,
       isRequired: field.isRequired,
       order: index + 1,
+      moduleConfig: (() => {
+        if (field.type === ReportTemplateFieldRequestType.Photos) {
+          return { requiredViews: field.moduleConfig.requiredViews };
+        }
+
+        if (field.type === ReportTemplateFieldRequestType.Measurements) {
+          return { measurementTypes: field.moduleConfig.measurementTypes };
+        }
+
+        return null;
+      })(),
     }))
     .filter((field) => field.key && field.label && field.type);
 
@@ -687,10 +971,27 @@ const saveTemplate = async () => {
     return;
   }
 
+  const hasInvalidModuleConfig = fields.some((field) => {
+    if (field.type === ReportTemplateFieldRequestType.Photos) {
+      return !Array.isArray(field.moduleConfig?.requiredViews) || field.moduleConfig.requiredViews.length === 0;
+    }
+
+    if (field.type === ReportTemplateFieldRequestType.Measurements) {
+      return !Array.isArray(field.moduleConfig?.measurementTypes) || field.moduleConfig.measurementTypes.length === 0;
+    }
+
+    return false;
+  });
+
+  if (hasInvalidModuleConfig) {
+    toast.error("trainerMemberDetails.trainerReportTemplates.feedback.moduleConfigRequired");
+    return;
+  }
+
   isSavingTemplate.value = true;
 
   try {
-    const payload = {
+    const payload: UpsertReportTemplateRequest = {
       name: trimmedName,
       description: templateForm.value.description.trim() || null,
       fields,
@@ -965,6 +1266,14 @@ watch(
   border-radius: 0.625rem;
   padding: 1.25rem;
   background: var(--lgym-surface-card);
+}
+
+.template-module-config-panel {
+  margin-top: 0.75rem;
+  grid-column: 1 / -1;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--lgym-surface-card) 78%, transparent);
 }
 
 .template-field-ghost {
