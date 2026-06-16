@@ -3,7 +3,6 @@ import { useRoute, useRouter } from "vue-router";
 
 import {
   getApiInvitationsInvitationId,
-  getApiTraineeInvitations,
   postApiTraineeInvitationsInvitationIdAccept,
   postApiTraineeInvitationsInvitationIdReject,
 } from "../api/generated/demo";
@@ -28,6 +27,18 @@ export type UserRelationshipViewState =
 
 const normalizeInvitationStatus = (value: string | null | undefined) =>
   value?.trim().toLowerCase() ?? "";
+
+const getApiTraineeInvitations = async (options?: RequestInit) => {
+  const res = await fetch("/api/trainee/invitations", {
+    ...options,
+    method: "GET",
+  });
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  const data = body ? (JSON.parse(body) as TrainerInvitationDto[]) : [];
+
+  return { data, status: res.status, headers: res.headers };
+};
 
 export const useUserTrainerRelationship = () => {
   const route = useRoute();
