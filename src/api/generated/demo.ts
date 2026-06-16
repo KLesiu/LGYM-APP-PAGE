@@ -12,6 +12,8 @@ import type {
   AppConfigVersionRequestDto,
   ChangeVisibilityInRankingRequest,
   CheckOffSupplementIntakeRequest,
+  CompletePhotoUploadRequest,
+  CompletePhotoUploadResponse,
   CompleteStepRequest,
   CompleteTutorialRequest,
   CopyPlanDto,
@@ -27,20 +29,29 @@ import type {
   ExerciseScoresChartRequestDto,
   ExerciseTrainingHistoryItemDto,
   ExerciseTranslationDto,
+  ExternalLoginDto,
   ForgotPasswordRequest,
   GetApiIdNotificationsParams,
   GetApiInvitationsInvitationIdParams,
   GetApiMeasurementsIdGetHistoryParams,
   GetApiMeasurementsIdListParams,
   GetApiMeasurementsIdTrendParams,
+  GetApiTraineeReportingPhotosHistoryParams,
   GetApiTraineeSupplementsScheduleParams,
+  GetApiTrainerReportingPhotosHistoryParams,
   GetApiTrainerTraineesParams,
   GetApiTrainerTraineesTraineeIdSupplementsComplianceParams,
+  GetPhotoHistoryResponse,
+  GetSignedReadUrlResponse,
+  GoogleSignInRequest,
   GymChoiceInfoDto,
   GymFormDto,
+  InitiatePhotoUploadRequest,
+  InitiatePhotoUploadResponse,
   LastExerciseScoresRequestDto,
   LastExerciseScoresResponseDto,
   LastTrainingInfoDto,
+  LinkGoogleRequest,
   LoginRequest,
   LoginResponseDto,
   MainRecordResponseDto,
@@ -49,6 +60,8 @@ import type {
   MeasurementFormDto,
   MeasurementResponseDto,
   MeasurementTrendDto,
+  MeasurementTrendsDto,
+  MeasurementsBulkFormDto,
   MeasurementsHistoryDto,
   MeasurementsListDto,
   PagedNotificationsResultDto,
@@ -88,6 +101,7 @@ import type {
   SupplementComplianceSummaryDto,
   SupplementPlanDto,
   SupplementScheduleEntryDto,
+  TraineeTrainerProfileDto,
   TrainerDashboardTraineesResponse,
   TrainerInvitationDto,
   TrainerManagedPlanDto,
@@ -99,8 +113,8 @@ import type {
   TutorialProgressDto,
   UnreadCountDto,
   UpdateAppConfigRequest,
-  UpdateTimeZoneRequest,
   UpdateReportSubmissionFeedbackRequest,
+  UpdateTimeZoneRequest,
   UpdateUserRequest,
   UpdateUserRolesRequest,
   UpsertReportTemplateRequest,
@@ -110,6 +124,122 @@ import type {
   UserEloDto,
   UserInfoDto
 } from '../model';
+
+export type postApiAccountLinkGoogleResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAccountLinkGoogleResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAccountLinkGoogleResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiAccountLinkGoogleResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiAccountLinkGoogleResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiAccountLinkGoogleResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiAccountLinkGoogleResponseSuccess = (postApiAccountLinkGoogleResponse200TextPlain | postApiAccountLinkGoogleResponse200ApplicationJson | postApiAccountLinkGoogleResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiAccountLinkGoogleResponseError = (postApiAccountLinkGoogleResponse400TextPlain | postApiAccountLinkGoogleResponse400ApplicationJson | postApiAccountLinkGoogleResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type postApiAccountLinkGoogleResponse = (postApiAccountLinkGoogleResponseSuccess | postApiAccountLinkGoogleResponseError)
+
+export const getPostApiAccountLinkGoogleUrl = () => {
+
+
+  
+
+  return `/api/account/link-google`
+}
+
+export const postApiAccountLinkGoogle = async (linkGoogleRequest: LinkGoogleRequest, options?: RequestInit): Promise<postApiAccountLinkGoogleResponse> => {
+  
+  const res = await fetch(getPostApiAccountLinkGoogleUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      linkGoogleRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAccountLinkGoogleResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAccountLinkGoogleResponse
+}
+  
+
+
+export type getApiAccountExternalLoginsResponse200TextPlain = {
+  data: ExternalLoginDto[]
+  status: 200
+}
+
+export type getApiAccountExternalLoginsResponse200ApplicationJson = {
+  data: ExternalLoginDto[]
+  status: 200
+}
+
+export type getApiAccountExternalLoginsResponse200TextJson = {
+  data: ExternalLoginDto[]
+  status: 200
+}
+
+export type getApiAccountExternalLoginsResponseSuccess = (getApiAccountExternalLoginsResponse200TextPlain | getApiAccountExternalLoginsResponse200ApplicationJson | getApiAccountExternalLoginsResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type getApiAccountExternalLoginsResponse = (getApiAccountExternalLoginsResponseSuccess)
+
+export const getGetApiAccountExternalLoginsUrl = () => {
+
+
+  
+
+  return `/api/account/external-logins`
+}
+
+export const getApiAccountExternalLogins = async ( options?: RequestInit): Promise<getApiAccountExternalLoginsResponse> => {
+  
+  const res = await fetch(getGetApiAccountExternalLoginsUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiAccountExternalLoginsResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiAccountExternalLoginsResponse
+}
+  
+
 
 export type postApiAdminUsersPaginatedResponse200TextPlain = {
   data: PaginatedAdminUserResult
@@ -964,6 +1094,56 @@ export const postApiAppconfigIdDelete = async (id: string, options?: RequestInit
   
   const data: postApiAppconfigIdDeleteResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as postApiAppconfigIdDeleteResponse
+}
+  
+
+
+export type postApiAuthGoogleResponse200TextPlain = {
+  data: LoginResponseDto
+  status: 200
+}
+
+export type postApiAuthGoogleResponse200ApplicationJson = {
+  data: LoginResponseDto
+  status: 200
+}
+
+export type postApiAuthGoogleResponse200TextJson = {
+  data: LoginResponseDto
+  status: 200
+}
+
+export type postApiAuthGoogleResponseSuccess = (postApiAuthGoogleResponse200TextPlain | postApiAuthGoogleResponse200ApplicationJson | postApiAuthGoogleResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type postApiAuthGoogleResponse = (postApiAuthGoogleResponseSuccess)
+
+export const getPostApiAuthGoogleUrl = () => {
+
+
+  
+
+  return `/api/auth/google`
+}
+
+export const postApiAuthGoogle = async (googleSignInRequest: GoogleSignInRequest, options?: RequestInit): Promise<postApiAuthGoogleResponse> => {
+  
+  const res = await fetch(getPostApiAuthGoogleUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      googleSignInRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiAuthGoogleResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiAuthGoogleResponse
 }
   
 
@@ -3570,6 +3750,73 @@ export const postApiMeasurementsAdd = async (measurementFormDto: MeasurementForm
   
 
 
+export type postApiMeasurementsAddBulkResponse200TextPlain = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiMeasurementsAddBulkResponse200ApplicationJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiMeasurementsAddBulkResponse200TextJson = {
+  data: ResponseMessageDto
+  status: 200
+}
+
+export type postApiMeasurementsAddBulkResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiMeasurementsAddBulkResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiMeasurementsAddBulkResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiMeasurementsAddBulkResponseSuccess = (postApiMeasurementsAddBulkResponse200TextPlain | postApiMeasurementsAddBulkResponse200ApplicationJson | postApiMeasurementsAddBulkResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiMeasurementsAddBulkResponseError = (postApiMeasurementsAddBulkResponse400TextPlain | postApiMeasurementsAddBulkResponse400ApplicationJson | postApiMeasurementsAddBulkResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type postApiMeasurementsAddBulkResponse = (postApiMeasurementsAddBulkResponseSuccess | postApiMeasurementsAddBulkResponseError)
+
+export const getPostApiMeasurementsAddBulkUrl = () => {
+
+
+  
+
+  return `/api/measurements/add-bulk`
+}
+
+export const postApiMeasurementsAddBulk = async (measurementsBulkFormDto: MeasurementsBulkFormDto, options?: RequestInit): Promise<postApiMeasurementsAddBulkResponse> => {
+  
+  const res = await fetch(getPostApiMeasurementsAddBulkUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      measurementsBulkFormDto,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiMeasurementsAddBulkResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiMeasurementsAddBulkResponse
+}
+  
+
+
 export type getApiMeasurementsIdGetMeasurementDetailResponse200TextPlain = {
   data: MeasurementResponseDto
   status: 200
@@ -3962,6 +4209,87 @@ export const getApiMeasurementsIdTrend = async (id: string,
   
   const data: getApiMeasurementsIdTrendResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as getApiMeasurementsIdTrendResponse
+}
+  
+
+
+export type getApiMeasurementsIdTrendsResponse200TextPlain = {
+  data: MeasurementTrendsDto
+  status: 200
+}
+
+export type getApiMeasurementsIdTrendsResponse200ApplicationJson = {
+  data: MeasurementTrendsDto
+  status: 200
+}
+
+export type getApiMeasurementsIdTrendsResponse200TextJson = {
+  data: MeasurementTrendsDto
+  status: 200
+}
+
+export type getApiMeasurementsIdTrendsResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiMeasurementsIdTrendsResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiMeasurementsIdTrendsResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiMeasurementsIdTrendsResponse403TextPlain = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type getApiMeasurementsIdTrendsResponse403ApplicationJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type getApiMeasurementsIdTrendsResponse403TextJson = {
+  data: ResponseMessageDto
+  status: 403
+}
+
+export type getApiMeasurementsIdTrendsResponseSuccess = (getApiMeasurementsIdTrendsResponse200TextPlain | getApiMeasurementsIdTrendsResponse200ApplicationJson | getApiMeasurementsIdTrendsResponse200TextJson) & {
+  headers: Headers;
+};
+export type getApiMeasurementsIdTrendsResponseError = (getApiMeasurementsIdTrendsResponse400TextPlain | getApiMeasurementsIdTrendsResponse400ApplicationJson | getApiMeasurementsIdTrendsResponse400TextJson | getApiMeasurementsIdTrendsResponse403TextPlain | getApiMeasurementsIdTrendsResponse403ApplicationJson | getApiMeasurementsIdTrendsResponse403TextJson) & {
+  headers: Headers;
+};
+
+export type getApiMeasurementsIdTrendsResponse = (getApiMeasurementsIdTrendsResponseSuccess | getApiMeasurementsIdTrendsResponseError)
+
+export const getGetApiMeasurementsIdTrendsUrl = (id: string,) => {
+
+
+  
+
+  return `/api/measurements/${id}/trends`
+}
+
+export const getApiMeasurementsIdTrends = async (id: string, options?: RequestInit): Promise<getApiMeasurementsIdTrendsResponse> => {
+  
+  const res = await fetch(getGetApiMeasurementsIdTrendsUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiMeasurementsIdTrendsResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiMeasurementsIdTrendsResponse
 }
   
 
@@ -5905,55 +6233,6 @@ export const postApiRolesUsersIdRoles = async (id: string,
   
 
 
-export type getApiTraineeInvitationsResponse200TextPlain = {
-  data: TrainerInvitationDto[]
-  status: 200
-}
-
-export type getApiTraineeInvitationsResponse200ApplicationJson = {
-  data: TrainerInvitationDto[]
-  status: 200
-}
-
-export type getApiTraineeInvitationsResponse200TextJson = {
-  data: TrainerInvitationDto[]
-  status: 200
-}
-
-export type getApiTraineeInvitationsResponseSuccess = (getApiTraineeInvitationsResponse200TextPlain | getApiTraineeInvitationsResponse200ApplicationJson | getApiTraineeInvitationsResponse200TextJson) & {
-  headers: Headers;
-};
-;
-
-export type getApiTraineeInvitationsResponse = (getApiTraineeInvitationsResponseSuccess)
-
-export const getGetApiTraineeInvitationsUrl = () => {
-
-
-  
-
-  return `/api/trainee/invitations`
-}
-
-export const getApiTraineeInvitations = async ( options?: RequestInit): Promise<getApiTraineeInvitationsResponse> => {
-  
-  const res = await fetch(getGetApiTraineeInvitationsUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: getApiTraineeInvitationsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as getApiTraineeInvitationsResponse
-}
-  
-
-
 export type postApiTraineeInvitationsInvitationIdAcceptResponse200TextPlain = {
   data: ResponseMessageDto
   status: 200
@@ -6097,6 +6376,55 @@ export const postApiTraineeTrainerDetach = async ( options?: RequestInit): Promi
   
   const data: postApiTraineeTrainerDetachResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as postApiTraineeTrainerDetachResponse
+}
+  
+
+
+export type getApiTraineeTrainerResponse200TextPlain = {
+  data: TraineeTrainerProfileDto
+  status: 200
+}
+
+export type getApiTraineeTrainerResponse200ApplicationJson = {
+  data: TraineeTrainerProfileDto
+  status: 200
+}
+
+export type getApiTraineeTrainerResponse200TextJson = {
+  data: TraineeTrainerProfileDto
+  status: 200
+}
+
+export type getApiTraineeTrainerResponseSuccess = (getApiTraineeTrainerResponse200TextPlain | getApiTraineeTrainerResponse200ApplicationJson | getApiTraineeTrainerResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type getApiTraineeTrainerResponse = (getApiTraineeTrainerResponseSuccess)
+
+export const getGetApiTraineeTrainerUrl = () => {
+
+
+  
+
+  return `/api/trainee/trainer`
+}
+
+export const getApiTraineeTrainer = async ( options?: RequestInit): Promise<getApiTraineeTrainerResponse> => {
+  
+  const res = await fetch(getGetApiTraineeTrainerUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiTraineeTrainerResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiTraineeTrainerResponse
 }
   
 
@@ -6263,6 +6591,262 @@ export const postApiTraineeReportRequestsRequestIdSubmit = async (requestId: str
   
   const data: postApiTraineeReportRequestsRequestIdSubmitResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as postApiTraineeReportRequestsRequestIdSubmitResponse
+}
+  
+
+
+export type getApiTraineeReportSubmissionsResponse200TextPlain = {
+  data: ReportSubmissionDto[]
+  status: 200
+}
+
+export type getApiTraineeReportSubmissionsResponse200ApplicationJson = {
+  data: ReportSubmissionDto[]
+  status: 200
+}
+
+export type getApiTraineeReportSubmissionsResponse200TextJson = {
+  data: ReportSubmissionDto[]
+  status: 200
+}
+
+export type getApiTraineeReportSubmissionsResponseSuccess = (getApiTraineeReportSubmissionsResponse200TextPlain | getApiTraineeReportSubmissionsResponse200ApplicationJson | getApiTraineeReportSubmissionsResponse200TextJson) & {
+  headers: Headers;
+};
+;
+
+export type getApiTraineeReportSubmissionsResponse = (getApiTraineeReportSubmissionsResponseSuccess)
+
+export const getGetApiTraineeReportSubmissionsUrl = () => {
+
+
+  
+
+  return `/api/trainee/report-submissions`
+}
+
+export const getApiTraineeReportSubmissions = async ( options?: RequestInit): Promise<getApiTraineeReportSubmissionsResponse> => {
+  
+  const res = await fetch(getGetApiTraineeReportSubmissionsUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiTraineeReportSubmissionsResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiTraineeReportSubmissionsResponse
+}
+  
+
+
+export type postApiTraineeReportingPhotosUploadInitResponse200TextPlain = {
+  data: InitiatePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTraineeReportingPhotosUploadInitResponse200ApplicationJson = {
+  data: InitiatePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTraineeReportingPhotosUploadInitResponse200TextJson = {
+  data: InitiatePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTraineeReportingPhotosUploadInitResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTraineeReportingPhotosUploadInitResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTraineeReportingPhotosUploadInitResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTraineeReportingPhotosUploadInitResponseSuccess = (postApiTraineeReportingPhotosUploadInitResponse200TextPlain | postApiTraineeReportingPhotosUploadInitResponse200ApplicationJson | postApiTraineeReportingPhotosUploadInitResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiTraineeReportingPhotosUploadInitResponseError = (postApiTraineeReportingPhotosUploadInitResponse400TextPlain | postApiTraineeReportingPhotosUploadInitResponse400ApplicationJson | postApiTraineeReportingPhotosUploadInitResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type postApiTraineeReportingPhotosUploadInitResponse = (postApiTraineeReportingPhotosUploadInitResponseSuccess | postApiTraineeReportingPhotosUploadInitResponseError)
+
+export const getPostApiTraineeReportingPhotosUploadInitUrl = () => {
+
+
+  
+
+  return `/api/trainee/reporting/photos/upload-init`
+}
+
+export const postApiTraineeReportingPhotosUploadInit = async (initiatePhotoUploadRequest: InitiatePhotoUploadRequest, options?: RequestInit): Promise<postApiTraineeReportingPhotosUploadInitResponse> => {
+  
+  const res = await fetch(getPostApiTraineeReportingPhotosUploadInitUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      initiatePhotoUploadRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTraineeReportingPhotosUploadInitResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTraineeReportingPhotosUploadInitResponse
+}
+  
+
+
+export type postApiTraineeReportingPhotosCompleteUploadResponse200TextPlain = {
+  data: CompletePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTraineeReportingPhotosCompleteUploadResponse200ApplicationJson = {
+  data: CompletePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTraineeReportingPhotosCompleteUploadResponse200TextJson = {
+  data: CompletePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTraineeReportingPhotosCompleteUploadResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTraineeReportingPhotosCompleteUploadResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTraineeReportingPhotosCompleteUploadResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTraineeReportingPhotosCompleteUploadResponseSuccess = (postApiTraineeReportingPhotosCompleteUploadResponse200TextPlain | postApiTraineeReportingPhotosCompleteUploadResponse200ApplicationJson | postApiTraineeReportingPhotosCompleteUploadResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiTraineeReportingPhotosCompleteUploadResponseError = (postApiTraineeReportingPhotosCompleteUploadResponse400TextPlain | postApiTraineeReportingPhotosCompleteUploadResponse400ApplicationJson | postApiTraineeReportingPhotosCompleteUploadResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type postApiTraineeReportingPhotosCompleteUploadResponse = (postApiTraineeReportingPhotosCompleteUploadResponseSuccess | postApiTraineeReportingPhotosCompleteUploadResponseError)
+
+export const getPostApiTraineeReportingPhotosCompleteUploadUrl = () => {
+
+
+  
+
+  return `/api/trainee/reporting/photos/complete-upload`
+}
+
+export const postApiTraineeReportingPhotosCompleteUpload = async (completePhotoUploadRequest: CompletePhotoUploadRequest, options?: RequestInit): Promise<postApiTraineeReportingPhotosCompleteUploadResponse> => {
+  
+  const res = await fetch(getPostApiTraineeReportingPhotosCompleteUploadUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      completePhotoUploadRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTraineeReportingPhotosCompleteUploadResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTraineeReportingPhotosCompleteUploadResponse
+}
+  
+
+
+export type getApiTraineeReportingPhotosHistoryResponse200TextPlain = {
+  data: GetPhotoHistoryResponse
+  status: 200
+}
+
+export type getApiTraineeReportingPhotosHistoryResponse200ApplicationJson = {
+  data: GetPhotoHistoryResponse
+  status: 200
+}
+
+export type getApiTraineeReportingPhotosHistoryResponse200TextJson = {
+  data: GetPhotoHistoryResponse
+  status: 200
+}
+
+export type getApiTraineeReportingPhotosHistoryResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiTraineeReportingPhotosHistoryResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiTraineeReportingPhotosHistoryResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiTraineeReportingPhotosHistoryResponseSuccess = (getApiTraineeReportingPhotosHistoryResponse200TextPlain | getApiTraineeReportingPhotosHistoryResponse200ApplicationJson | getApiTraineeReportingPhotosHistoryResponse200TextJson) & {
+  headers: Headers;
+};
+export type getApiTraineeReportingPhotosHistoryResponseError = (getApiTraineeReportingPhotosHistoryResponse400TextPlain | getApiTraineeReportingPhotosHistoryResponse400ApplicationJson | getApiTraineeReportingPhotosHistoryResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type getApiTraineeReportingPhotosHistoryResponse = (getApiTraineeReportingPhotosHistoryResponseSuccess | getApiTraineeReportingPhotosHistoryResponseError)
+
+export const getGetApiTraineeReportingPhotosHistoryUrl = (params?: GetApiTraineeReportingPhotosHistoryParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/trainee/reporting/photos/history?${stringifiedParams}` : `/api/trainee/reporting/photos/history`
+}
+
+export const getApiTraineeReportingPhotosHistory = async (params?: GetApiTraineeReportingPhotosHistoryParams, options?: RequestInit): Promise<getApiTraineeReportingPhotosHistoryResponse> => {
+  
+  const res = await fetch(getGetApiTraineeReportingPhotosHistoryUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiTraineeReportingPhotosHistoryResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiTraineeReportingPhotosHistoryResponse
 }
   
 
@@ -7986,7 +8570,7 @@ export const getApiTrainerTraineesTraineeIdReportSubmissions = async (traineeId:
   const data: getApiTrainerTraineesTraineeIdReportSubmissionsResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as getApiTrainerTraineesTraineeIdReportSubmissionsResponse
 }
-
+  
 
 
 export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse200TextPlain = {
@@ -8028,7 +8612,8 @@ export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedback
 
 export type postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse = (postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponseSuccess | postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponseError)
 
-export const getPostApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackUrl = (traineeId: string, submissionId: string,) => {
+export const getPostApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackUrl = (traineeId: string,
+    submissionId: string,) => {
 
 
   
@@ -8036,10 +8621,11 @@ export const getPostApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeed
   return `/api/trainer/trainees/${traineeId}/report-submissions/${submissionId}/feedback`
 }
 
-export const postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedback = async (traineeId: string, submissionId: string,
+export const postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedback = async (traineeId: string,
+    submissionId: string,
     updateReportSubmissionFeedbackRequest: UpdateReportSubmissionFeedbackRequest, options?: RequestInit): Promise<postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse> => {
   
-  const res = await fetch(getPostApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackUrl(traineeId, submissionId),
+  const res = await fetch(getPostApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackUrl(traineeId,submissionId),
   {      
     ...options,
     method: 'POST',
@@ -8047,14 +8633,287 @@ export const postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbac
     body: JSON.stringify(
       updateReportSubmissionFeedbackRequest,)
   }
-  )
+)
 
   const body = [204, 205, 304].includes(res.status) ? null : await res.text();
   
   const data: postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as postApiTrainerTraineesTraineeIdReportSubmissionsSubmissionIdFeedbackResponse
 }
-   
+  
+
+
+export type postApiTrainerReportingPhotosUploadInitResponse200TextPlain = {
+  data: InitiatePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTrainerReportingPhotosUploadInitResponse200ApplicationJson = {
+  data: InitiatePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTrainerReportingPhotosUploadInitResponse200TextJson = {
+  data: InitiatePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTrainerReportingPhotosUploadInitResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTrainerReportingPhotosUploadInitResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTrainerReportingPhotosUploadInitResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTrainerReportingPhotosUploadInitResponseSuccess = (postApiTrainerReportingPhotosUploadInitResponse200TextPlain | postApiTrainerReportingPhotosUploadInitResponse200ApplicationJson | postApiTrainerReportingPhotosUploadInitResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiTrainerReportingPhotosUploadInitResponseError = (postApiTrainerReportingPhotosUploadInitResponse400TextPlain | postApiTrainerReportingPhotosUploadInitResponse400ApplicationJson | postApiTrainerReportingPhotosUploadInitResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type postApiTrainerReportingPhotosUploadInitResponse = (postApiTrainerReportingPhotosUploadInitResponseSuccess | postApiTrainerReportingPhotosUploadInitResponseError)
+
+export const getPostApiTrainerReportingPhotosUploadInitUrl = () => {
+
+
+  
+
+  return `/api/trainer/reporting/photos/upload-init`
+}
+
+export const postApiTrainerReportingPhotosUploadInit = async (initiatePhotoUploadRequest: InitiatePhotoUploadRequest, options?: RequestInit): Promise<postApiTrainerReportingPhotosUploadInitResponse> => {
+  
+  const res = await fetch(getPostApiTrainerReportingPhotosUploadInitUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      initiatePhotoUploadRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTrainerReportingPhotosUploadInitResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerReportingPhotosUploadInitResponse
+}
+  
+
+
+export type getApiTrainerReportingPhotosPhotoIdSignedUrlResponse200TextPlain = {
+  data: GetSignedReadUrlResponse
+  status: 200
+}
+
+export type getApiTrainerReportingPhotosPhotoIdSignedUrlResponse200ApplicationJson = {
+  data: GetSignedReadUrlResponse
+  status: 200
+}
+
+export type getApiTrainerReportingPhotosPhotoIdSignedUrlResponse200TextJson = {
+  data: GetSignedReadUrlResponse
+  status: 200
+}
+
+export type getApiTrainerReportingPhotosPhotoIdSignedUrlResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiTrainerReportingPhotosPhotoIdSignedUrlResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiTrainerReportingPhotosPhotoIdSignedUrlResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiTrainerReportingPhotosPhotoIdSignedUrlResponseSuccess = (getApiTrainerReportingPhotosPhotoIdSignedUrlResponse200TextPlain | getApiTrainerReportingPhotosPhotoIdSignedUrlResponse200ApplicationJson | getApiTrainerReportingPhotosPhotoIdSignedUrlResponse200TextJson) & {
+  headers: Headers;
+};
+export type getApiTrainerReportingPhotosPhotoIdSignedUrlResponseError = (getApiTrainerReportingPhotosPhotoIdSignedUrlResponse400TextPlain | getApiTrainerReportingPhotosPhotoIdSignedUrlResponse400ApplicationJson | getApiTrainerReportingPhotosPhotoIdSignedUrlResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type getApiTrainerReportingPhotosPhotoIdSignedUrlResponse = (getApiTrainerReportingPhotosPhotoIdSignedUrlResponseSuccess | getApiTrainerReportingPhotosPhotoIdSignedUrlResponseError)
+
+export const getGetApiTrainerReportingPhotosPhotoIdSignedUrlUrl = (photoId: string,) => {
+
+
+  
+
+  return `/api/trainer/reporting/photos/${photoId}/signed-url`
+}
+
+export const getApiTrainerReportingPhotosPhotoIdSignedUrl = async (photoId: string, options?: RequestInit): Promise<getApiTrainerReportingPhotosPhotoIdSignedUrlResponse> => {
+  
+  const res = await fetch(getGetApiTrainerReportingPhotosPhotoIdSignedUrlUrl(photoId),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiTrainerReportingPhotosPhotoIdSignedUrlResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiTrainerReportingPhotosPhotoIdSignedUrlResponse
+}
+  
+
+
+export type postApiTrainerReportingPhotosCompleteUploadResponse200TextPlain = {
+  data: CompletePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTrainerReportingPhotosCompleteUploadResponse200ApplicationJson = {
+  data: CompletePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTrainerReportingPhotosCompleteUploadResponse200TextJson = {
+  data: CompletePhotoUploadResponse
+  status: 200
+}
+
+export type postApiTrainerReportingPhotosCompleteUploadResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTrainerReportingPhotosCompleteUploadResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTrainerReportingPhotosCompleteUploadResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type postApiTrainerReportingPhotosCompleteUploadResponseSuccess = (postApiTrainerReportingPhotosCompleteUploadResponse200TextPlain | postApiTrainerReportingPhotosCompleteUploadResponse200ApplicationJson | postApiTrainerReportingPhotosCompleteUploadResponse200TextJson) & {
+  headers: Headers;
+};
+export type postApiTrainerReportingPhotosCompleteUploadResponseError = (postApiTrainerReportingPhotosCompleteUploadResponse400TextPlain | postApiTrainerReportingPhotosCompleteUploadResponse400ApplicationJson | postApiTrainerReportingPhotosCompleteUploadResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type postApiTrainerReportingPhotosCompleteUploadResponse = (postApiTrainerReportingPhotosCompleteUploadResponseSuccess | postApiTrainerReportingPhotosCompleteUploadResponseError)
+
+export const getPostApiTrainerReportingPhotosCompleteUploadUrl = () => {
+
+
+  
+
+  return `/api/trainer/reporting/photos/complete-upload`
+}
+
+export const postApiTrainerReportingPhotosCompleteUpload = async (completePhotoUploadRequest: CompletePhotoUploadRequest, options?: RequestInit): Promise<postApiTrainerReportingPhotosCompleteUploadResponse> => {
+  
+  const res = await fetch(getPostApiTrainerReportingPhotosCompleteUploadUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      completePhotoUploadRequest,)
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: postApiTrainerReportingPhotosCompleteUploadResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as postApiTrainerReportingPhotosCompleteUploadResponse
+}
+  
+
+
+export type getApiTrainerReportingPhotosHistoryResponse200TextPlain = {
+  data: GetPhotoHistoryResponse
+  status: 200
+}
+
+export type getApiTrainerReportingPhotosHistoryResponse200ApplicationJson = {
+  data: GetPhotoHistoryResponse
+  status: 200
+}
+
+export type getApiTrainerReportingPhotosHistoryResponse200TextJson = {
+  data: GetPhotoHistoryResponse
+  status: 200
+}
+
+export type getApiTrainerReportingPhotosHistoryResponse400TextPlain = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiTrainerReportingPhotosHistoryResponse400ApplicationJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiTrainerReportingPhotosHistoryResponse400TextJson = {
+  data: ResponseMessageDto
+  status: 400
+}
+
+export type getApiTrainerReportingPhotosHistoryResponseSuccess = (getApiTrainerReportingPhotosHistoryResponse200TextPlain | getApiTrainerReportingPhotosHistoryResponse200ApplicationJson | getApiTrainerReportingPhotosHistoryResponse200TextJson) & {
+  headers: Headers;
+};
+export type getApiTrainerReportingPhotosHistoryResponseError = (getApiTrainerReportingPhotosHistoryResponse400TextPlain | getApiTrainerReportingPhotosHistoryResponse400ApplicationJson | getApiTrainerReportingPhotosHistoryResponse400TextJson) & {
+  headers: Headers;
+};
+
+export type getApiTrainerReportingPhotosHistoryResponse = (getApiTrainerReportingPhotosHistoryResponseSuccess | getApiTrainerReportingPhotosHistoryResponseError)
+
+export const getGetApiTrainerReportingPhotosHistoryUrl = (params?: GetApiTrainerReportingPhotosHistoryParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/trainer/reporting/photos/history?${stringifiedParams}` : `/api/trainer/reporting/photos/history`
+}
+
+export const getApiTrainerReportingPhotosHistory = async (params?: GetApiTrainerReportingPhotosHistoryParams, options?: RequestInit): Promise<getApiTrainerReportingPhotosHistoryResponse> => {
+  
+  const res = await fetch(getGetApiTrainerReportingPhotosHistoryUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getApiTrainerReportingPhotosHistoryResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getApiTrainerReportingPhotosHistoryResponse
+}
+  
 
 
 export type getApiTrainerTraineesTraineeIdSupplementPlansResponse200TextPlain = {
