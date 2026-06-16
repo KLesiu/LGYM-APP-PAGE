@@ -999,6 +999,11 @@
         "fieldsCount": "Fields: {count}",
         "submissionEyebrow": "Report preview",
         "answersTitle": "Member answers",
+        "photosCount": "Uploaded photos: {count}",
+        "photosLoading": "Loading report photos...",
+        "photosEmpty": "No photos were uploaded for this report.",
+        "measurementsCount": "Measurements captured: {count}",
+        "measurementsEmpty": "No measurement data was included in this answer.",
         "fieldFeedbackLabel": "Comment for this answer",
         "fieldFeedbackPlaceholder": "Add a comment for this answer",
         "overallFeedbackTitle": "Overall feedback for the member",
@@ -1058,7 +1063,10 @@
         "fieldKey": "Field key",
         "fieldType": "Field type",
         "fieldOrder": "Display order",
-        "fieldRequired": "Required"
+        "fieldRequired": "Required",
+        "moduleConfigTitle": "Module configuration",
+        "photoViewsLabel": "Required photo views",
+        "measurementTypesLabel": "Required measurement types"
       },
       "dialog": {
         "createTemplateTitle": "Create report template",
@@ -1068,6 +1076,7 @@
         "createTemplate": "Create template",
         "editTemplate": "Edit",
         "deleteTemplate": "Delete",
+        "header": "Actions",
         "deleteTemplateConfirm": "Delete report template \"{name}\"?",
         "addField": "Add field",
         "removeField": "Remove field",
@@ -1077,6 +1086,47 @@
       },
       "preview": {
         "fields": "Field preview"
+      },
+      "fieldTypes": {
+        "text": "Text",
+        "number": "Number",
+        "boolean": "Yes / No",
+        "date": "Date",
+        "photos": "Photos",
+        "measurements": "Measurements"
+      },
+      "modules": {
+        "photos": {
+          "description": "Choose the photo views the trainee must upload when submitting the report.",
+          "views": {
+            "front": "Front",
+            "side": "Side",
+            "back": "Back"
+          }
+        },
+        "measurements": {
+          "description": "Select which measurements should be included in the modular report answer.",
+          "types": {
+            "weight": "Body weight",
+            "bodyFat": "Body fat",
+            "chest": "Chest",
+            "back": "Back",
+            "shoulders": "Shoulders",
+            "biceps": "Biceps",
+            "triceps": "Triceps",
+            "forearms": "Forearms",
+            "abs": "Abs",
+            "quads": "Quads",
+            "hamstrings": "Hamstrings",
+            "calves": "Calves",
+            "glutes": "Glutes",
+            "neck": "Neck",
+            "waist": "Waist",
+            "hips": "Hips",
+            "thighs": "Thighs",
+            "bmi": "BMI"
+          }
+        }
       },
       "fallback": {
         "noTemplateName": "Unnamed template",
@@ -1093,6 +1143,7 @@
         "loadTemplatesFailed": "Failed to load report templates.",
         "templateNameRequired": "Template name is required.",
         "templateFieldRequired": "At least one valid template field is required.",
+        "moduleConfigRequired": "Complete the configuration for every modular question.",
         "createTemplateSuccess": "Template created successfully.",
         "createTemplateFailed": "Failed to create the template.",
         "updateTemplateSuccess": "Template updated successfully.",
@@ -1103,12 +1154,18 @@
     },
     "measurements": {
       "eyebrow": "Measurements",
-      "title": "Body-part measurements",
-      "subtitle": "Track trend, history, and recent values using the existing measurement endpoints.",
+      "title": "Trainee measurements",
+      "subtitle": "Compare body weight and circumference entries, then switch between trend, latest values, and full history.",
       "emptyValue": "—",
       "filters": {
-        "bodyPart": "Body part",
-        "unit": "Unit"
+        "bodyPart": "Measurement type",
+        "unit": "Unit",
+        "allBodyParts": "All types"
+      },
+      "tabs": {
+        "trend": "Trend",
+        "latest": "Latest",
+        "history": "History"
       },
       "cards": {
         "currentValue": "Current value",
@@ -1116,11 +1173,78 @@
         "changePercentage": "Change %"
       },
       "sections": {
-        "trend": "History points",
-        "latest": "Latest measurements"
+        "chart": "History chart",
+        "trend": "Trend overview",
+        "latest": "Latest measurements",
+        "history": "Full history"
+      },
+      "summary": {
+        "minimum": "Minimum",
+        "maximum": "Maximum",
+        "latest": "Latest entry",
+        "points": "Points: {count}"
+      },
+      "chart": {
+        "subtitle": "Change over time for: {bodyPart}",
+        "selectSpecificType": "Choose a specific measurement type to display the history chart.",
+        "hoverHint": "Hover over a point to see measurement details."
+      },
+      "history": {
+        "summary": "Results found: {count}",
+        "filters": {
+          "search": "Search history",
+          "sort": "Order"
+        },
+        "placeholders": {
+          "search": "Type a date, measurement name, or value"
+        },
+        "columns": {
+          "recordedAt": "Recorded",
+          "measurement": "Measurement",
+          "result": "Result"
+        },
+        "empty": {
+          "search": "No results match your search. Clear the query or adjust the filters."
+        },
+        "sort": {
+          "newest": "Newest first",
+          "oldest": "Oldest first"
+        }
+      },
+      "bodyParts": {
+        "BodyWeight": "Body weight",
+        "Neck": "Neck",
+        "Chest": "Chest",
+        "Waist": "Waist",
+        "Abs": "Abs",
+        "Hips": "Hips",
+        "Thigh": "Thigh",
+        "Calves": "Calves",
+        "Biceps": "Biceps",
+        "BodyFat": "Body fat",
+        "Bmi": "BMI",
+        "Shoulders": "Shoulders",
+        "Back": "Back",
+        "Triceps": "Triceps",
+        "Forearms": "Forearms",
+        "Quads": "Quads",
+        "Hamstrings": "Hamstrings",
+        "Glutes": "Glutes",
+        "Unknown": "Unknown"
+      },
+      "units": {
+        "Kilograms": "kg",
+        "Pounds": "lb",
+        "Meters": "m",
+        "Centimeters": "cm",
+        "Millimeters": "mm",
+        "Percent": "%",
+        "Bmi": "BMI",
+        "Unknown": "—"
       },
       "empty": {
-        "title": "No measurements found for the selected filters."
+        "title": "No measurements found for the selected filters.",
+        "chart": "Not enough points to draw a history chart for this measurement yet."
       },
       "error": {
         "subtitle": "Failed to load body-part measurements for this member."

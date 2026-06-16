@@ -999,6 +999,11 @@
         "fieldsCount": "Liczba pól: {count}",
         "submissionEyebrow": "Podgląd raportu",
         "answersTitle": "Odpowiedzi podopiecznego",
+        "photosCount": "Dodane zdjęcia: {count}",
+        "photosLoading": "Ładowanie zdjęć z raportu...",
+        "photosEmpty": "Brak zdjęć dodanych do tego raportu.",
+        "measurementsCount": "Liczba pomiarów: {count}",
+        "measurementsEmpty": "Brak danych pomiarowych w tej odpowiedzi.",
         "fieldFeedbackLabel": "Komentarz do tej odpowiedzi",
         "fieldFeedbackPlaceholder": "Dodaj komentarz do tej odpowiedzi",
         "overallFeedbackTitle": "Ogólny komentarz dla podopiecznego",
@@ -1058,7 +1063,10 @@
         "fieldKey": "Klucz pola",
         "fieldType": "Typ pola",
         "fieldOrder": "Kolejność",
-        "fieldRequired": "Wymagane"
+        "fieldRequired": "Wymagane",
+        "moduleConfigTitle": "Konfiguracja modułu",
+        "photoViewsLabel": "Wymagane ujęcia zdjęć",
+        "measurementTypesLabel": "Wymagane typy pomiarów"
       },
       "dialog": {
         "createTemplateTitle": "Utwórz szablon raportu",
@@ -1068,6 +1076,7 @@
         "createTemplate": "Utwórz szablon",
         "editTemplate": "Edytuj",
         "deleteTemplate": "Usuń",
+        "header": "Akcje",
         "deleteTemplateConfirm": "Usunąć szablon raportu \"{name}\"?",
         "addField": "Dodaj pole",
         "removeField": "Usuń pole",
@@ -1077,6 +1086,47 @@
       },
       "preview": {
         "fields": "Podgląd pól"
+      },
+      "fieldTypes": {
+        "text": "Tekst",
+        "number": "Liczba",
+        "boolean": "Tak / Nie",
+        "date": "Data",
+        "photos": "Zdjęcia",
+        "measurements": "Pomiary"
+      },
+      "modules": {
+        "photos": {
+          "description": "Wybierz ujęcia, które podopieczny musi dodać podczas wysyłania raportu.",
+          "views": {
+            "front": "Przód",
+            "side": "Bok",
+            "back": "Tył"
+          }
+        },
+        "measurements": {
+          "description": "Wskaż pomiary, które mają być częścią odpowiedzi modułowej w raporcie.",
+          "types": {
+            "weight": "Waga ciała",
+            "bodyFat": "Tkanka tłuszczowa",
+            "chest": "Klatka piersiowa",
+            "back": "Plecy",
+            "shoulders": "Barki",
+            "biceps": "Biceps",
+            "triceps": "Triceps",
+            "forearms": "Przedramiona",
+            "abs": "Brzuch",
+            "quads": "Czworogłowe",
+            "hamstrings": "Dwugłowe uda",
+            "calves": "Łydki",
+            "glutes": "Pośladki",
+            "neck": "Szyja",
+            "waist": "Talia",
+            "hips": "Biodra",
+            "thighs": "Uda",
+            "bmi": "BMI"
+          }
+        }
       },
       "fallback": {
         "noTemplateName": "Szablon bez nazwy",
@@ -1093,6 +1143,7 @@
         "loadTemplatesFailed": "Nie udało się pobrać szablonów raportów.",
         "templateNameRequired": "Nazwa szablonu jest wymagana.",
         "templateFieldRequired": "Wymagane jest co najmniej jedno poprawne pole szablonu.",
+        "moduleConfigRequired": "Uzupełnij konfigurację dla każdego pytania modułowego.",
         "createTemplateSuccess": "Szablon został utworzony poprawnie.",
         "createTemplateFailed": "Nie udało się utworzyć szablonu.",
         "updateTemplateSuccess": "Szablon został zaktualizowany poprawnie.",
@@ -1103,12 +1154,18 @@
     },
     "measurements": {
       "eyebrow": "Pomiary",
-      "title": "Pomiary partii ciała",
-      "subtitle": "Śledź trend, historię i ostatnie wartości z wykorzystaniem istniejących endpointów pomiarów."
+      "title": "Pomiary podopiecznego",
+      "subtitle": "Porównuj wagę ciała i obwody, przełączaj widoki trendu, ostatnich wpisów oraz pełnej historii."
       ,"emptyValue": "—",
       "filters": {
-        "bodyPart": "Partia ciała",
-        "unit": "Jednostka"
+        "bodyPart": "Typ pomiaru",
+        "unit": "Jednostka",
+        "allBodyParts": "Wszystkie typy"
+      },
+      "tabs": {
+        "trend": "Trend",
+        "latest": "Ostatnie",
+        "history": "Historia"
       },
       "cards": {
         "currentValue": "Aktualna wartość",
@@ -1116,11 +1173,78 @@
         "changePercentage": "Zmiana %"
       },
       "sections": {
-        "trend": "Punkty historii",
-        "latest": "Ostatnie pomiary"
+        "chart": "Wykres historii",
+        "trend": "Trend zmian",
+        "latest": "Ostatnie pomiary",
+        "history": "Pełna historia"
+      },
+      "summary": {
+        "minimum": "Minimum",
+        "maximum": "Maksimum",
+        "latest": "Ostatni wpis",
+        "points": "Punktów: {count}"
+      },
+      "chart": {
+        "subtitle": "Zmiany dla pomiaru: {bodyPart}",
+        "selectSpecificType": "Wybierz konkretny typ pomiaru, aby zobaczyć wykres historii.",
+        "hoverHint": "Najedź na punkt, aby zobaczyć szczegóły pomiaru."
+      },
+      "history": {
+        "summary": "Liczba wyników: {count}",
+        "filters": {
+          "search": "Szukaj w historii",
+          "sort": "Kolejność"
+        },
+        "placeholders": {
+          "search": "Wpisz datę, nazwę pomiaru lub wartość"
+        },
+        "columns": {
+          "recordedAt": "Zapisano",
+          "measurement": "Pomiar",
+          "result": "Wynik"
+        },
+        "empty": {
+          "search": "Brak wyników dla wpisanej frazy. Wyczyść wyszukiwanie albo zmień filtry."
+        },
+        "sort": {
+          "newest": "Najnowsze najpierw",
+          "oldest": "Najstarsze najpierw"
+        }
+      },
+      "bodyParts": {
+        "BodyWeight": "Waga ciała",
+        "Neck": "Szyja",
+        "Chest": "Klatka piersiowa",
+        "Waist": "Talia",
+        "Abs": "Brzuch",
+        "Hips": "Biodra",
+        "Thigh": "Udo",
+        "Calves": "Łydki",
+        "Biceps": "Biceps",
+        "BodyFat": "Tkanka tłuszczowa",
+        "Bmi": "BMI",
+        "Shoulders": "Barki",
+        "Back": "Plecy",
+        "Triceps": "Triceps",
+        "Forearms": "Przedramiona",
+        "Quads": "Czworogłowe",
+        "Hamstrings": "Dwugłowe uda",
+        "Glutes": "Pośladki",
+        "Unknown": "Nieznane"
+      },
+      "units": {
+        "Kilograms": "kg",
+        "Pounds": "lb",
+        "Meters": "m",
+        "Centimeters": "cm",
+        "Millimeters": "mm",
+        "Percent": "%",
+        "Bmi": "BMI",
+        "Unknown": "—"
       },
       "empty": {
-        "title": "Brak pomiarów dla wybranych filtrów."
+        "title": "Brak pomiarów dla wybranych filtrów.",
+        "chart": "Za mało punktów, aby narysować wykres historii dla tego pomiaru."
       },
       "error": {
         "subtitle": "Nie udało się pobrać pomiarów partii ciała dla tego podopiecznego."
