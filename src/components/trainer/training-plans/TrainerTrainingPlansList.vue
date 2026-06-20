@@ -56,16 +56,8 @@
                       <h4 class="truncate text-base font-semibold text-[var(--lgym-text)]">
                         {{ plan.name || t("trainerTrainingPlans.fallback.noName") }}
                       </h4>
-                      <v-chip
-                        :color="plan.isActive ? 'success' : 'secondary'"
-                        size="small"
-                        variant="outlined"
-                      >
-                        {{
-                          plan.isActive
-                            ? t("trainerTrainingPlans.status.active")
-                            : t("trainerTrainingPlans.status.inactive")
-                        }}
+                      <v-chip color="primary" size="small" variant="outlined">
+                        {{ t("trainerTrainingPlans.status.assignable") }}
                       </v-chip>
                     </div>
                   </div>
@@ -112,18 +104,10 @@
           </div>
         </template>
 
-        <template #item.status="{ item }">
+        <template #item.status>
       <div class="px-4 py-4 lg:px-5">
-            <v-chip
-              :color="toPlan(item).isActive ? 'success' : 'secondary'"
-              size="small"
-              variant="outlined"
-            >
-              {{
-                toPlan(item).isActive
-                  ? t("trainerTrainingPlans.status.active")
-                  : t("trainerTrainingPlans.status.inactive")
-              }}
+            <v-chip color="primary" size="small" variant="outlined">
+              {{ t("trainerTrainingPlans.status.assignable") }}
             </v-chip>
           </div>
         </template>
@@ -223,10 +207,10 @@ const editingPlanIsActive = ref<boolean | null>(false);
 const planName = ref("");
 
 const headers = computed(() => [
-  { title: "nazwa planu", key: "name", sortable: false },
-  { title: "status", key: "status", sortable: false },
+  { title: t("trainerTrainingPlans.form.name"), key: "name", sortable: false },
+  { title: t("trainerTrainingPlans.columns.status"), key: "status", sortable: false },
   {
-    title: "akcje",
+    title: t("common.actions"),
     key: "actions",
     sortable: false,
     align: "end" as const,

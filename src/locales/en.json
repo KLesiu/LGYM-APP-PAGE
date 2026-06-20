@@ -297,11 +297,13 @@
     "list": {
       "eyebrow": "Plan list",
       "title": "All global plans",
-      "subtitle": "Manage your own training plans, modify, add, and assign them to your trainees"
+      "subtitle": "Manage the trainer template library that can later be copied and assigned to trainees."
+    },
+    "columns": {
+      "status": "Readiness"
     },
     "status": {
-      "active": "Active",
-      "inactive": "Inactive"
+      "assignable": "Ready to assign"
     },
     "fallback": {
       "noName": "Untitled plan"
@@ -942,7 +944,7 @@
         "createTitle": "Create plan",
         "renameTitle": "Rename plan",
         "assignExistingTitle": "Assign an existing plan",
-        "assignExistingSubtitle": "Choose one of your trainer-wide plans and assign it to this member."
+        "assignExistingSubtitle": "Choose one of your trainer-wide plans. During assignment the system should create a dedicated copy for this member."
       },
       "form": {
         "name": "Plan name",
@@ -969,8 +971,8 @@
         "createFailed": "Failed to create the plan.",
         "renameSuccess": "Plan renamed successfully.",
         "renameFailed": "Failed to rename the plan.",
-        "assignSuccess": "Plan assigned successfully.",
-        "assignFailed": "Failed to assign the plan.",
+        "assignSuccess": "Plan copied and assigned successfully.",
+        "assignFailed": "Failed to copy and assign the plan.",
         "unassignSuccess": "Active plan unassigned successfully.",
         "unassignFailed": "Failed to unassign the active plan.",
         "deleteSuccess": "Plan deleted successfully.",

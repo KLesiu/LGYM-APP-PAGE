@@ -297,11 +297,13 @@
     "list": {
       "eyebrow": "Lista planów",
       "title": "Wszystkie globalne plany",
-      "subtitle": "Zarządzaj swoimi własnymi planami treningowymi, modyfikuj, dodawaj oraz przypisuj dla podopiecznych"
+      "subtitle": "Zarządzaj biblioteką szablonów treningowych, które trener może później kopiować i przypisywać podopiecznym."
+    },
+    "columns": {
+      "status": "Gotowość"
     },
     "status": {
-      "active": "Aktywny",
-      "inactive": "Nieaktywny"
+      "assignable": "Gotowy do przypisania"
     },
     "fallback": {
       "noName": "Plan bez nazwy"
@@ -942,7 +944,7 @@
         "createTitle": "Utwórz plan",
         "renameTitle": "Zmień nazwę planu",
         "assignExistingTitle": "Przypisz istniejący plan",
-        "assignExistingSubtitle": "Wybierz jeden z globalnych planów trenera i przypisz go temu podopiecznemu."
+        "assignExistingSubtitle": "Wybierz jeden z globalnych planów trenera. Podczas przypisania system powinien utworzyć kopię planu dla tego podopiecznego."
       },
       "form": {
         "name": "Nazwa planu",
@@ -969,8 +971,8 @@
         "createFailed": "Nie udało się utworzyć planu.",
         "renameSuccess": "Nazwa planu została zmieniona.",
         "renameFailed": "Nie udało się zmienić nazwy planu.",
-        "assignSuccess": "Plan został przypisany poprawnie.",
-        "assignFailed": "Nie udało się przypisać planu.",
+        "assignSuccess": "Plan został skopiowany i przypisany poprawnie.",
+        "assignFailed": "Nie udało się skopiować i przypisać planu.",
         "unassignSuccess": "Aktywny plan został odpięty.",
         "unassignFailed": "Nie udało się odpiąć aktywnego planu.",
         "deleteSuccess": "Plan został usunięty poprawnie.",

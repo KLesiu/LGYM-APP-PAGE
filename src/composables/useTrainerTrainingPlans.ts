@@ -99,11 +99,9 @@ export const useTrainerTrainingPlans = () => {
         return;
       }
 
-      plans.value = [...(response.data ?? [])].sort((left, right) => {
-        if (left.isActive && !right.isActive) return -1;
-        if (!left.isActive && right.isActive) return 1;
-        return normalizeName(left.name).localeCompare(normalizeName(right.name));
-      });
+      plans.value = [...(response.data ?? [])].sort((left, right) =>
+        normalizeName(left.name).localeCompare(normalizeName(right.name)),
+      );
     } catch (error) {
       if (currentToken !== requestToken) return;
 

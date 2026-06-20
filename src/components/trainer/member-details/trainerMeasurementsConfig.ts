@@ -56,12 +56,6 @@ export const measurementTypeOptions: MeasurementTypeOption[] = [
   { value: "BodyFat", labelKey: "trainerMemberDetails.measurements.bodyParts.BodyFat" },
   { value: "Bmi", labelKey: "trainerMemberDetails.measurements.bodyParts.Bmi" },
   { value: "Shoulders", labelKey: "trainerMemberDetails.measurements.bodyParts.Shoulders" },
-  { value: "Back", labelKey: "trainerMemberDetails.measurements.bodyParts.Back" },
-  { value: "Triceps", labelKey: "trainerMemberDetails.measurements.bodyParts.Triceps" },
-  { value: "Forearms", labelKey: "trainerMemberDetails.measurements.bodyParts.Forearms" },
-  { value: "Quads", labelKey: "trainerMemberDetails.measurements.bodyParts.Quads" },
-  { value: "Hamstrings", labelKey: "trainerMemberDetails.measurements.bodyParts.Hamstrings" },
-  { value: "Glutes", labelKey: "trainerMemberDetails.measurements.bodyParts.Glutes" },
 ];
 
 const lengthUnits: MeasurementUnitOption[] = [
