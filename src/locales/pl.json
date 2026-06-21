@@ -983,6 +983,15 @@
       "submissionsEyebrow": "Raporty podopiecznego",
       "submissionsTitle": "Prośby o raport i wysłane odpowiedzi",
       "submissionsSubtitle": "",
+      "filters": {
+        "all": "Wszystkie",
+        "answered": "Odpowiedziane",
+        "unanswered": "Bez odpowiedzi"
+      },
+      "feedbackStatus": {
+        "answered": "Odpowiedziano",
+        "unanswered": "Brak odpowiedzi"
+      },
       "requestEyebrow": "Nowa prośba",
       "requestTitle": "Poproś o raport tego podopiecznego",
       "requestSubtitle": "Wybierz jeden z globalnych szablonów raportu, ustaw termin i wyślij prośbę do tego podopiecznego.",
@@ -1018,7 +1027,8 @@
         "saveFeedback": "Zapisz komentarz"
       },
       "meta": {
-        "status": "Status",
+        "status": "Status zgłoszenia",
+        "feedbackStatus": "Status odpowiedzi",
         "submittedAt": "Wysłano"
       },
       "fallback": {
@@ -1034,7 +1044,9 @@
       },
       "empty": {
         "templates": "Brak dostępnych szablonów raportów. Najpierw utwórz je w globalnej bibliotece.",
-        "submissions": "Brak wysłanych raportów dla tego podopiecznego."
+        "submissions": "Brak wysłanych raportów dla tego podopiecznego.",
+        "answered": "Brak raportów z odpowiedzią trenera.",
+        "unanswered": "Brak raportów oczekujących na odpowiedź trenera."
       },
       "error": {
         "templates": "Nie udało się pobrać szablonów raportów.",

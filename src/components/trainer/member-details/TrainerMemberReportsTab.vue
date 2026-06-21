@@ -62,6 +62,19 @@
         </section>
 
         <section>
+          <div class="mb-4 flex flex-wrap gap-2">
+            <v-btn
+              v-for="filterOption in feedbackFilterOptions"
+              :key="filterOption.value"
+              :color="feedbackFilter === filterOption.value ? 'primary' : undefined"
+              :variant="feedbackFilter === filterOption.value ? 'flat' : 'outlined'"
+              class="min-h-10 rounded-md px-4 font-semibold normal-case"
+              @click="feedbackFilter = filterOption.value"
+            >
+              {{ filterOption.label }}
+            </v-btn>
+          </div>
+
           <v-progress-linear v-if="isLoadingSubmissions" indeterminate color="primary" />
 
           <div
@@ -76,11 +89,11 @@
             </v-btn>
           </div>
 
-          <AppDataTable
-            v-else
-            :headers="headers"
-            :items="submissions"
-            :loading="isLoadingSubmissions"
+            <AppDataTable
+              v-else
+              :headers="headers"
+              :items="filteredSubmissions"
+              :loading="isLoadingSubmissions"
             item-value="_id"
             hide-default-footer
             hover
@@ -89,9 +102,9 @@
           >
             <template #mobile>
               <div class="border-y border-[var(--lgym-border)]">
-                <template v-if="submissions.length > 0">
+                <template v-if="filteredSubmissions.length > 0">
                   <article
-                    v-for="submission in submissions"
+                    v-for="submission in filteredSubmissions"
                     :key="submission._id || submission.reportRequestId || 'submission'"
                     class="cursor-pointer border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
                     role="button"
@@ -112,8 +125,13 @@
                           </p>
                         </div>
 
-                        <v-chip color="primary" size="small" variant="outlined">
-                          {{ submission.request?.status || t("trainerMemberDetails.reports.fallback.noStatus") }}
+                        <v-chip
+                          :color="getFeedbackStatusColor(submission)"
+                          size="small"
+                          :variant="hasTrainerFeedback(submission) ? 'flat' : 'outlined'"
+                          class="font-semibold"
+                        >
+                          {{ getFeedbackStatusLabel(submission) }}
                         </v-chip>
                       </div>
 
@@ -139,7 +157,7 @@
                   v-else
                   class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8"
                 >
-                  {{ t("trainerMemberDetails.reports.empty.submissions") }}
+                  {{ noSubmissionsMessage }}
                 </div>
               </div>
             </template>
@@ -157,8 +175,13 @@
 
             <template #item.status="{ item }">
       <div class="px-4 py-4 lg:px-5">
-                <v-chip color="primary" size="small" variant="outlined">
-                  {{ toSubmission(item).request?.status || t("trainerMemberDetails.reports.fallback.noStatus") }}
+                <v-chip
+                  :color="getFeedbackStatusColor(toSubmission(item))"
+                  size="small"
+                  :variant="hasTrainerFeedback(toSubmission(item)) ? 'flat' : 'outlined'"
+                  class="font-semibold"
+                >
+                  {{ getFeedbackStatusLabel(toSubmission(item)) }}
                 </v-chip>
               </div>
             </template>
@@ -171,7 +194,7 @@
 
             <template #no-data>
               <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8">
-                {{ t("trainerMemberDetails.reports.empty.submissions") }}
+                {{ noSubmissionsMessage }}
               </div>
             </template>
           </AppDataTable>
@@ -323,6 +346,20 @@
             <v-card-text class="px-6 py-6">
               <div class="grid gap-6">
                 <div class="grid gap-4 rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]/45 px-4 py-4 sm:grid-cols-2 sm:px-5">
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.reports.meta.feedbackStatus") }}
+                    </p>
+                    <v-chip
+                      :color="getFeedbackStatusColor(selectedSubmission)"
+                      size="small"
+                      :variant="hasTrainerFeedback(selectedSubmission) ? 'flat' : 'outlined'"
+                      class="mt-2 font-semibold"
+                    >
+                      {{ getFeedbackStatusLabel(selectedSubmission) }}
+                    </v-chip>
+                  </div>
+
                   <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
                       {{ t("trainerMemberDetails.reports.meta.status") }}
@@ -546,6 +583,7 @@ const isSavingFeedback = ref(false);
 const isRequestDialogOpen = ref(false);
 const isPreviewDialogOpen = ref(false);
 const selectedSubmission = ref<ReportSubmissionDto | null>(null);
+const feedbackFilter = ref<"all" | "answered" | "unanswered">("all");
 const trainerOverallCommentDraft = ref("");
 const trainerFieldCommentsDraft = ref<Record<string, string>>({});
 const submissionPhotos = ref<PhotoHistoryItemResponse[]>([]);
@@ -574,9 +612,90 @@ const selectedTemplateFieldCount = computed(
   () => orderedFields(selectedTemplate.value?.fields).length,
 );
 
+const feedbackFilterOptions = computed(() => [
+  {
+    value: "all" as const,
+    label: t("trainerMemberDetails.reports.filters.all"),
+  },
+  {
+    value: "answered" as const,
+    label: t("trainerMemberDetails.reports.filters.answered"),
+  },
+  {
+    value: "unanswered" as const,
+    label: t("trainerMemberDetails.reports.filters.unanswered"),
+  },
+]);
+
+const hasNonEmptyComment = (value: unknown) =>
+  typeof value === "string" && value.trim().length > 0;
+
+const hasTrainerFeedback = (submission: ReportSubmissionDto | null | undefined) => {
+  if (!submission) {
+    return false;
+  }
+
+  if (hasNonEmptyComment(submission.trainerOverallComment)) {
+    return true;
+  }
+
+  return Object.values(submission.trainerFieldComments ?? {}).some((comment) =>
+    hasNonEmptyComment(comment),
+  );
+};
+
+const getSubmissionSortTimestamp = (submission: ReportSubmissionDto) => {
+  const rawDate =
+    submission.submittedAt ??
+    submission.request?.submittedAt ??
+    submission.request?.createdAt ??
+    null;
+
+  if (!rawDate) {
+    return 0;
+  }
+
+  const parsed = new Date(rawDate).getTime();
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
+
+const sortedSubmissions = computed(() =>
+  [...submissions.value].sort(
+    (left, right) => getSubmissionSortTimestamp(right) - getSubmissionSortTimestamp(left),
+  ),
+);
+
+const filteredSubmissions = computed(() => {
+  if (feedbackFilter.value === "answered") {
+    return sortedSubmissions.value.filter((submission) => hasTrainerFeedback(submission));
+  }
+
+  if (feedbackFilter.value === "unanswered") {
+    return sortedSubmissions.value.filter((submission) => !hasTrainerFeedback(submission));
+  }
+
+  return sortedSubmissions.value;
+});
+
+const noSubmissionsMessage = computed(() => {
+  if (submissions.value.length === 0) {
+    return t("trainerMemberDetails.reports.empty.submissions");
+  }
+
+  if (feedbackFilter.value === "answered") {
+    return t("trainerMemberDetails.reports.empty.answered");
+  }
+
+  if (feedbackFilter.value === "unanswered") {
+    return t("trainerMemberDetails.reports.empty.unanswered");
+  }
+
+  return t("trainerMemberDetails.reports.empty.submissions");
+});
+
 const headers = computed(() => [
   { title: t("trainerMemberDetails.reports.form.template"), key: "template", sortable: false },
-  { title: t("trainerMemberDetails.reports.meta.status"), key: "status", sortable: false },
+  { title: t("trainerMemberDetails.reports.meta.feedbackStatus"), key: "status", sortable: false },
   { title: t("trainerMemberDetails.reports.meta.submittedAt"), key: "submittedAt", sortable: false },
 ]);
 
@@ -755,6 +874,14 @@ const getMeasurementRowsForField = (
     };
   });
 };
+
+const getFeedbackStatusLabel = (submission: ReportSubmissionDto | null | undefined) =>
+  hasTrainerFeedback(submission)
+    ? t("trainerMemberDetails.reports.feedbackStatus.answered")
+    : t("trainerMemberDetails.reports.feedbackStatus.unanswered");
+
+const getFeedbackStatusColor = (submission: ReportSubmissionDto | null | undefined) =>
+  hasTrainerFeedback(submission) ? "success" : "warning";
 
 const resetReportRequest = () => {
   reportRequest.value = {
@@ -1041,6 +1168,10 @@ const saveTrainerFeedback = async () => {
     trainerFieldCommentsDraft.value = {
       ...(updatedSubmission.trainerFieldComments ?? {}),
     };
+    await loadSubmissions();
+    selectedSubmission.value =
+      submissions.value.find((submission) => submission._id === updatedSubmission._id) ??
+      updatedSubmission;
     toast.success("trainerMemberDetails.reports.feedback.saveSuccess");
   } catch (error) {
     console.error(error);

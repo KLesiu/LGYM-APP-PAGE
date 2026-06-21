@@ -983,6 +983,15 @@
       "submissionsEyebrow": "Member reports",
       "submissionsTitle": "Report requests and submissions",
       "submissionsSubtitle": "",
+      "filters": {
+        "all": "All",
+        "answered": "Answered",
+        "unanswered": "Unanswered"
+      },
+      "feedbackStatus": {
+        "answered": "Answered",
+        "unanswered": "No response"
+      },
       "requestEyebrow": "New request",
       "requestTitle": "Request report from this member",
       "requestSubtitle": "Choose one of your global report templates, set the due date, and send the request to this member.",
@@ -1018,7 +1027,8 @@
         "saveFeedback": "Save feedback"
       },
       "meta": {
-        "status": "Status",
+        "status": "Submission status",
+        "feedbackStatus": "Feedback status",
         "submittedAt": "Submitted"
       },
       "fallback": {
@@ -1034,7 +1044,9 @@
       },
       "empty": {
         "templates": "No report templates are available yet. Create them in the global template library first.",
-        "submissions": "No report submissions found for this member."
+        "submissions": "No report submissions found for this member.",
+        "answered": "No reports with trainer feedback yet.",
+        "unanswered": "No reports waiting for trainer feedback."
       },
       "error": {
         "templates": "Failed to load report templates.",
