@@ -1011,7 +1011,11 @@
       "filters": {
         "all": "All",
         "answered": "Answered",
-        "unanswered": "Unanswered"
+        "unanswered": "Unanswered",
+        "requestSent": "Request sent",
+        "noResponse": "No response",
+        "responded": "Responded",
+        "feedbackRead": "Feedback read"
       },
       "feedbackStatus": {
         "answered": "Answered",
@@ -1116,14 +1120,23 @@
       "meta": {
         "status": "Submission status",
         "feedbackStatus": "Feedback status",
-        "submittedAt": "Submitted"
+        "submittedAt": "Submitted",
+        "sentAt": "Sent",
+        "lastUpdatedAt": "Last update"
       },
       "fallback": {
         "noTemplateName": "Unnamed template",
         "noDescription": "No description provided.",
         "noFieldType": "Unknown type",
         "noStatus": "Unknown status",
-        "noAnswer": "No answer"
+        "noAnswer": "No answer",
+        "awaitingResponse": "Waiting for the trainee response"
+      },
+      "statuses": {
+        "requestSent": "Request sent",
+        "noResponse": "No response",
+        "responded": "Responded",
+        "feedbackRead": "Feedback read"
       },
       "boolean": {
         "true": "Yes",
@@ -1133,7 +1146,11 @@
         "templates": "No report templates are available yet. Create them in the global template library first.",
         "submissions": "No report submissions found for this member.",
         "answered": "No reports with trainer feedback yet.",
-        "unanswered": "No reports waiting for trainer feedback."
+        "unanswered": "No reports waiting for trainer feedback.",
+        "requestSent": "No reports with the “Request sent” status.",
+        "noResponse": "No reports with the “No response” status.",
+        "responded": "No reports with the “Responded” status.",
+        "feedbackRead": "No reports with the “Feedback read” status."
       },
       "error": {
         "templates": "Failed to load report templates.",
@@ -1167,6 +1184,8 @@
         "fieldRequired": "Required",
         "moduleConfigTitle": "Module configuration",
         "photoViewsLabel": "Required photo views",
+        "photoViewsPlaceholder": "Choose presets or type your own position name",
+        "photoViewsHint": "You can add multiple custom positions. Type a name and confirm with Enter.",
         "measurementTypesLabel": "Required measurement types"
       },
       "dialog": {
@@ -1202,6 +1221,8 @@
           "views": {
             "front": "Front",
             "side": "Side",
+            "sideleft": "Side left",
+            "sideright": "Side right",
             "back": "Back"
           }
         },

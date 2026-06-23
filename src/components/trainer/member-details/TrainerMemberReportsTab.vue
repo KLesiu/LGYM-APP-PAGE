@@ -87,15 +87,15 @@
         <section>
           <div class="mb-4 flex flex-wrap gap-2">
             <v-btn
-              v-for="filterOption in feedbackFilterOptions"
-              :key="filterOption.value"
-              :color="feedbackFilter === filterOption.value ? 'primary' : undefined"
-              :variant="feedbackFilter === filterOption.value ? 'flat' : 'outlined'"
-              class="min-h-10 rounded-md px-4 font-semibold normal-case"
-              @click="feedbackFilter = filterOption.value"
-            >
-              {{ filterOption.label }}
-            </v-btn>
+                v-for="filterOption in statusFilterOptions"
+                :key="filterOption.value"
+                :color="statusFilter === filterOption.value ? 'primary' : undefined"
+                :variant="statusFilter === filterOption.value ? 'flat' : 'outlined'"
+                class="min-h-10 rounded-md px-4 font-semibold normal-case"
+                @click="statusFilter = filterOption.value"
+             >
+               {{ filterOption.label }}
+             </v-btn>
           </div>
 
           <v-progress-linear v-if="isLoadingSubmissions" indeterminate color="primary" />
@@ -115,52 +115,62 @@
             <AppDataTable
               v-else
               :headers="headers"
-              :items="filteredSubmissions"
-              :loading="isLoadingSubmissions"
-            item-value="_id"
-            hide-default-footer
-            hover
-            row-clickable
-            @row-click="openSubmissionPreview"
-          >
-            <template #mobile>
-              <div class="border-y border-[var(--lgym-border)]">
-                <template v-if="filteredSubmissions.length > 0">
+               :items="filteredReportRows"
+               :loading="isLoadingSubmissions"
+            item-value="key"
+             hide-default-footer
+             hover
+             row-clickable
+             @row-click="openReportRow"
+           >
+             <template #mobile>
+               <div class="border-y border-[var(--lgym-border)]">
+                <template v-if="filteredReportRows.length > 0">
                   <article
-                    v-for="submission in filteredSubmissions"
-                    :key="submission._id || submission.reportRequestId || 'submission'"
-                    class="cursor-pointer border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0"
-                    role="button"
-                    tabindex="0"
-                    @click="openSubmissionPreview(submission)"
-                    @keydown.enter.prevent="openSubmissionPreview(submission)"
-                    @keydown.space.prevent="openSubmissionPreview(submission)"
+                    v-for="row in filteredReportRows"
+                    :key="row.key"
+                    :class="[
+                      'border-b border-[var(--lgym-border)] px-4 py-4 last:border-b-0',
+                      row.submission ? 'cursor-pointer' : 'cursor-default',
+                    ]"
+                    :role="row.submission ? 'button' : undefined"
+                    :tabindex="row.submission ? 0 : undefined"
+                    @click="openReportRow(row)"
+                    @keydown.enter.prevent="openReportRow(row)"
+                    @keydown.space.prevent="openReportRow(row)"
                   >
-                    <div class="flex flex-col gap-4">
-                      <div class="flex flex-wrap items-start justify-between gap-3">
-                        <div class="min-w-0 flex-1">
-                          <h3 class="text-base font-semibold text-[var(--lgym-text)]">
-                            {{ submission.request?.template?.name || t("trainerMemberDetails.reports.fallback.noTemplateName") }}
-                          </h3>
-                          <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
-                            {{ t("trainerMemberDetails.reports.meta.submittedAt") }}:
-                            {{ formatDateTime(submission.submittedAt) }}
-                          </p>
-                        </div>
+                     <div class="flex flex-col gap-4">
+                       <div class="flex flex-wrap items-start justify-between gap-3">
+                         <div class="min-w-0 flex-1">
+                           <h3 class="text-base font-semibold text-[var(--lgym-text)]">
+                             {{ getReportRowTemplateName(row) }}
+                           </h3>
+                            <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+                              {{ t("trainerMemberDetails.reports.meta.sentAt") }}:
+                             {{ formatDateTime(getReportRowSentAt(row)) }}
+                           </p>
+                           <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+                             {{ t("trainerMemberDetails.reports.meta.lastUpdatedAt") }}:
+                             {{ formatDateTime(getReportRowLastUpdatedAt(row)) }}
+                           </p>
+                           <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+                             {{ getReportRowSummary(row) }}
+                            </p>
+                         </div>
 
-                        <v-chip
-                          :color="getFeedbackStatusColor(submission)"
-                          size="small"
-                          :variant="hasTrainerFeedback(submission) ? 'flat' : 'outlined'"
-                          class="font-semibold"
-                        >
-                          {{ getFeedbackStatusLabel(submission) }}
-                        </v-chip>
-                      </div>
+                         <v-chip
+                           :color="getReportStatusColor(row.statusKey)"
+                           size="small"
+                           :variant="getReportStatusVariant(row.statusKey)"
+                           class="font-semibold"
+                         >
+                           {{ getReportStatusLabel(row.statusKey) }}
+                         </v-chip>
+                       </div>
 
-                      <div class="grid gap-3">
+                      <div v-if="row.submission" class="grid gap-3">
                         <div
-                          v-for="field in orderedFields(submission.request?.template?.fields)"
+                          v-for="field in orderedFields(row.submission.request?.template?.fields)"
                           :key="field.key || field.label || 'field-answer'"
                           class="border-l-2 border-[var(--lgym-border)] pl-4"
                         >
@@ -168,7 +178,7 @@
                             {{ field.label || field.key }}
                           </p>
                           <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
-                            {{ formatFieldAnswer(field, submission.answers?.[field.key || ""]) }}
+                            {{ formatFieldAnswer(field, row.submission.answers?.[field.key || ""]) }}
                           </p>
                         </div>
                       </div>
@@ -183,15 +193,15 @@
                   {{ noSubmissionsMessage }}
                 </div>
               </div>
-            </template>
+             </template>
 
-            <template #item.template="{ item }">
+             <template #item.template="{ item }">
       <div class="px-4 py-4 lg:px-5">
                 <p class="font-semibold text-[var(--lgym-text)]">
-                  {{ toSubmission(item).request?.template?.name || t("trainerMemberDetails.reports.fallback.noTemplateName") }}
+                  {{ getReportRowTemplateName(toReportRow(item)) }}
                 </p>
                 <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
-                  {{ submissionAnswerSummary(toSubmission(item)) }}
+                  {{ getReportRowSummary(toReportRow(item)) }}
                 </p>
               </div>
             </template>
@@ -199,21 +209,27 @@
             <template #item.status="{ item }">
       <div class="px-4 py-4 lg:px-5">
                 <v-chip
-                  :color="getFeedbackStatusColor(toSubmission(item))"
+                  :color="getReportStatusColor(toReportRow(item).statusKey)"
                   size="small"
-                  :variant="hasTrainerFeedback(toSubmission(item)) ? 'flat' : 'outlined'"
+                  :variant="getReportStatusVariant(toReportRow(item).statusKey)"
                   class="font-semibold"
                 >
-                  {{ getFeedbackStatusLabel(toSubmission(item)) }}
+                  {{ getReportStatusLabel(toReportRow(item).statusKey) }}
                 </v-chip>
               </div>
             </template>
 
-            <template #item.submittedAt="{ item }">
+            <template #item.sentAt="{ item }">
       <div class="px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
-                {{ formatDateTime(toSubmission(item).submittedAt) }}
-              </div>
-            </template>
+                {{ formatDateTime(getReportRowSentAt(toReportRow(item))) }}
+               </div>
+             </template>
+
+            <template #item.lastUpdatedAt="{ item }">
+      <div class="px-4 py-4 text-sm text-[var(--lgym-text)] lg:px-5">
+                {{ formatDateTime(getReportRowLastUpdatedAt(toReportRow(item))) }}
+                </div>
+              </template>
 
             <template #no-data>
               <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)] lg:px-8">
@@ -582,6 +598,8 @@ import {
 import {
   type CreateReportRequestRequest,
   type PhotoHistoryItemResponse,
+  type ReportRequestDto,
+  ReportRequestDtoStatus,
   type ReportSubmissionDto,
   type ReportTemplateDto,
   type UpdateReportSubmissionFeedbackRequest,
@@ -603,7 +621,23 @@ const router = useRouter();
 const toast = useToast();
 
 const templates = ref<ReportTemplateDto[]>([]);
-const submissions = ref<ReportSubmissionDto[]>([]);
+type TrainerReportSubmission = ReportSubmissionDto & {
+  trainerFeedbackAddedAt?: string | null;
+  trainerFeedbackReadAt?: string | null;
+};
+
+type ReportStatusFilter = "all" | "requestSent" | "noResponse" | "responded" | "feedbackRead";
+type ReportStatusKey = Exclude<ReportStatusFilter, "all">;
+
+type ReportHistoryRow = {
+  key: string;
+  statusKey: ReportStatusKey;
+  request: ReportRequestDto | null;
+  submission: TrainerReportSubmission | null;
+};
+
+const submissions = ref<TrainerReportSubmission[]>([]);
+const createdRequests = ref<ReportRequestDto[]>([]);
 const isLoadingTemplates = ref(false);
 const isLoadingSubmissions = ref(false);
 const hasTemplatesError = ref(false);
@@ -612,8 +646,8 @@ const isCreatingRequest = ref(false);
 const isSavingFeedback = ref(false);
 const isRequestDialogOpen = ref(false);
 const isPreviewDialogOpen = ref(false);
-const selectedSubmission = ref<ReportSubmissionDto | null>(null);
-const feedbackFilter = ref<"all" | "answered" | "unanswered">("all");
+const selectedSubmission = ref<TrainerReportSubmission | null>(null);
+const statusFilter = ref<ReportStatusFilter>("all");
 const activeReportView = ref<"recurring" | "history">("history");
 const trainerOverallCommentDraft = ref("");
 const trainerFieldCommentsDraft = ref<Record<string, string>>({});
@@ -643,18 +677,26 @@ const selectedTemplateFieldCount = computed(
   () => orderedFields(selectedTemplate.value?.fields).length,
 );
 
-const feedbackFilterOptions = computed(() => [
+const statusFilterOptions = computed(() => [
   {
     value: "all" as const,
     label: t("trainerMemberDetails.reports.filters.all"),
   },
   {
-    value: "answered" as const,
-    label: t("trainerMemberDetails.reports.filters.answered"),
+    value: "requestSent" as const,
+    label: t("trainerMemberDetails.reports.filters.requestSent"),
   },
   {
-    value: "unanswered" as const,
-    label: t("trainerMemberDetails.reports.filters.unanswered"),
+    value: "noResponse" as const,
+    label: t("trainerMemberDetails.reports.filters.noResponse"),
+  },
+  {
+    value: "responded" as const,
+    label: t("trainerMemberDetails.reports.filters.responded"),
+  },
+  {
+    value: "feedbackRead" as const,
+    label: t("trainerMemberDetails.reports.filters.feedbackRead"),
   },
 ]);
 
@@ -674,7 +716,10 @@ const reportViewTabs = computed(() => [
 const hasNonEmptyComment = (value: unknown) =>
   typeof value === "string" && value.trim().length > 0;
 
-const hasTrainerFeedback = (submission: ReportSubmissionDto | null | undefined) => {
+const isStandaloneRequestStatus = (status: ReportRequestDto["status"] | undefined) =>
+  status === ReportRequestDtoStatus.Pending || status === ReportRequestDtoStatus.Expired;
+
+const hasTrainerFeedback = (submission: TrainerReportSubmission | null | undefined) => {
   if (!submission) {
     return false;
   }
@@ -688,7 +733,7 @@ const hasTrainerFeedback = (submission: ReportSubmissionDto | null | undefined) 
   );
 };
 
-const getSubmissionSortTimestamp = (submission: ReportSubmissionDto) => {
+const getSubmissionSortTimestamp = (submission: TrainerReportSubmission) => {
   const rawDate =
     submission.submittedAt ??
     submission.request?.submittedAt ??
@@ -709,29 +754,108 @@ const sortedSubmissions = computed(() =>
   ),
 );
 
-const filteredSubmissions = computed(() => {
-  if (feedbackFilter.value === "answered") {
-    return sortedSubmissions.value.filter((submission) => hasTrainerFeedback(submission));
+const submittedRequestIds = computed(
+  () =>
+    new Set(
+      submissions.value
+        .map((submission) => submission.reportRequestId?.trim() || "")
+        .filter((value) => value.length > 0),
+    ),
+);
+
+const getSubmissionStatusKey = (submission: TrainerReportSubmission): ReportStatusKey => {
+  if (hasTrainerFeedback(submission)) {
+    return submission.trainerFeedbackReadAt ? "feedbackRead" : "responded";
   }
 
-  if (feedbackFilter.value === "unanswered") {
-    return sortedSubmissions.value.filter((submission) => !hasTrainerFeedback(submission));
+  return "noResponse";
+};
+
+const getRequestStatusKey = (request: ReportRequestDto): ReportStatusKey =>
+  request.status === ReportRequestDtoStatus.Expired ? "noResponse" : "requestSent";
+
+const getReportRowSentAt = (row: ReportHistoryRow) => row.request?.createdAt ?? null;
+
+const getReportRowLastUpdatedAt = (row: ReportHistoryRow) => {
+  if (row.submission?.trainerFeedbackReadAt && hasTrainerFeedback(row.submission)) {
+    return row.submission.trainerFeedbackReadAt;
   }
 
-  return sortedSubmissions.value;
+  if (row.submission?.trainerFeedbackAddedAt && hasTrainerFeedback(row.submission)) {
+    return row.submission.trainerFeedbackAddedAt;
+  }
+
+  if (row.submission?.submittedAt) {
+    return row.submission.submittedAt;
+  }
+
+  if (row.request?.status === ReportRequestDtoStatus.Expired) {
+    return row.request?.dueAt ?? row.request?.createdAt ?? null;
+  }
+
+  return row.request?.createdAt ?? null;
+};
+
+const getReportRowSortTimestamp = (row: ReportHistoryRow) => {
+  const rawValue = getReportRowLastUpdatedAt(row);
+  if (!rawValue) return 0;
+
+  const parsed = new Date(rawValue).getTime();
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
+
+const reportRows = computed<ReportHistoryRow[]>(() => {
+  const requestRows = createdRequests.value
+    .filter((request) => {
+      const requestId = request._id?.trim() || "";
+      return requestId.length > 0 && isStandaloneRequestStatus(request.status) && !submittedRequestIds.value.has(requestId);
+    })
+    .map((request) => ({
+      key: `request:${request._id}`,
+      statusKey: getRequestStatusKey(request),
+      request,
+      submission: null,
+    } satisfies ReportHistoryRow));
+
+  const submissionRows = sortedSubmissions.value.map((submission) => ({
+    key: `submission:${submission._id || submission.reportRequestId || getSubmissionSortTimestamp(submission)}`,
+    statusKey: getSubmissionStatusKey(submission),
+    request: submission.request ?? null,
+    submission,
+  } satisfies ReportHistoryRow));
+
+  return [...requestRows, ...submissionRows].sort(
+    (left, right) => getReportRowSortTimestamp(right) - getReportRowSortTimestamp(left),
+  );
+});
+
+const filteredReportRows = computed(() => {
+  if (statusFilter.value === "all") {
+    return reportRows.value;
+  }
+
+  return reportRows.value.filter((row) => row.statusKey === statusFilter.value);
 });
 
 const noSubmissionsMessage = computed(() => {
-  if (submissions.value.length === 0) {
+  if (reportRows.value.length === 0) {
     return t("trainerMemberDetails.reports.empty.submissions");
   }
 
-  if (feedbackFilter.value === "answered") {
-    return t("trainerMemberDetails.reports.empty.answered");
+  if (statusFilter.value === "requestSent") {
+    return t("trainerMemberDetails.reports.empty.requestSent");
   }
 
-  if (feedbackFilter.value === "unanswered") {
-    return t("trainerMemberDetails.reports.empty.unanswered");
+  if (statusFilter.value === "noResponse") {
+    return t("trainerMemberDetails.reports.empty.noResponse");
+  }
+
+  if (statusFilter.value === "responded") {
+    return t("trainerMemberDetails.reports.empty.responded");
+  }
+
+  if (statusFilter.value === "feedbackRead") {
+    return t("trainerMemberDetails.reports.empty.feedbackRead");
   }
 
   return t("trainerMemberDetails.reports.empty.submissions");
@@ -739,8 +863,9 @@ const noSubmissionsMessage = computed(() => {
 
 const headers = computed(() => [
   { title: t("trainerMemberDetails.reports.form.template"), key: "template", sortable: false },
-  { title: t("trainerMemberDetails.reports.meta.feedbackStatus"), key: "status", sortable: false },
-  { title: t("trainerMemberDetails.reports.meta.submittedAt"), key: "submittedAt", sortable: false },
+  { title: t("trainerMemberDetails.reports.meta.status"), key: "status", sortable: false },
+  { title: t("trainerMemberDetails.reports.meta.sentAt"), key: "sentAt", sortable: false },
+  { title: t("trainerMemberDetails.reports.meta.lastUpdatedAt"), key: "lastUpdatedAt", sortable: false },
 ]);
 
 let templateToken = 0;
@@ -769,7 +894,8 @@ type SubmissionAnswerEntry = {
 const orderedFields = (fields: OrderedFieldLike[] | null | undefined) =>
   [...(fields ?? [])].sort((left, right) => (left.order ?? 0) - (right.order ?? 0));
 
-const toSubmission = (item: unknown) => item as ReportSubmissionDto;
+const toSubmission = (item: unknown) => item as TrainerReportSubmission;
+const toReportRow = (item: unknown) => item as ReportHistoryRow;
 
 const selectedSubmissionAnswerEntries = computed<SubmissionAnswerEntry[]>(() => {
   const submission = selectedSubmission.value;
@@ -802,7 +928,7 @@ const selectedSubmissionAnswerEntries = computed<SubmissionAnswerEntry[]>(() => 
   }));
 });
 
-const submissionAnswerSummary = (submission: ReportSubmissionDto) => {
+const submissionAnswerSummary = (submission: TrainerReportSubmission) => {
   const fields = orderedFields(submission.request?.template?.fields);
   const firstField = fields[0];
   if (firstField?.key) {
@@ -927,6 +1053,37 @@ const getFeedbackStatusLabel = (submission: ReportSubmissionDto | null | undefin
 const getFeedbackStatusColor = (submission: ReportSubmissionDto | null | undefined) =>
   hasTrainerFeedback(submission) ? "success" : "warning";
 
+const getReportStatusLabel = (statusKey: ReportStatusKey) =>
+  t(`trainerMemberDetails.reports.statuses.${statusKey}`);
+
+const getReportStatusColor = (statusKey: ReportStatusKey) => {
+  switch (statusKey) {
+    case "requestSent":
+      return "info";
+    case "noResponse":
+      return "warning";
+    case "responded":
+      return "primary";
+    case "feedbackRead":
+      return "success";
+  }
+};
+
+const getReportStatusVariant = (statusKey: ReportStatusKey) =>
+  statusKey === "requestSent" || statusKey === "noResponse" ? "outlined" : "flat";
+
+const getReportRowTemplateName = (row: ReportHistoryRow) =>
+  row.request?.template?.name || t("trainerMemberDetails.reports.fallback.noTemplateName");
+
+const getReportRowSummary = (row: ReportHistoryRow) => {
+  if (row.submission) {
+    return submissionAnswerSummary(row.submission);
+  }
+
+  const requestNote = row.request?.note?.trim();
+  return requestNote || t("trainerMemberDetails.reports.fallback.awaitingResponse");
+};
+
 const resetReportRequest = () => {
   reportRequest.value = {
     templateId: null,
@@ -953,6 +1110,15 @@ const openSubmissionPreview = (item: unknown) => {
   submissionPhotos.value = [];
   isPreviewDialogOpen.value = true;
   void loadSubmissionPhotos(selectedSubmission.value);
+};
+
+const openReportRow = (item: unknown) => {
+  const row = toReportRow(item);
+  if (!row.submission) {
+    return;
+  }
+
+  openSubmissionPreview(row.submission);
 };
 
 const clearSubmissionQuery = async () => {
@@ -1112,7 +1278,7 @@ const loadSubmissions = async () => {
       return;
     }
 
-    submissions.value = response.data ?? [];
+    submissions.value = (response.data ?? []) as TrainerReportSubmission[];
   } catch (error) {
     if (currentToken !== submissionToken) return;
     console.error(error);
@@ -1193,9 +1359,15 @@ const createReportRequest = async () => {
       return;
     }
 
-     toast.success("trainerMemberDetails.reports.feedback.createRequestSuccess");
+      const createdRequest = response.data as ReportRequestDto;
+      createdRequests.value = [
+        createdRequest,
+        ...createdRequests.value.filter((request) => request._id !== createdRequest._id),
+      ];
+      toast.success("trainerMemberDetails.reports.feedback.createRequestSuccess");
       closeRequestDialog();
       resetReportRequest();
+      statusFilter.value = "all";
       await loadSubmissions();
   } catch (error) {
     console.error(error);
@@ -1246,7 +1418,7 @@ const saveTrainerFeedback = async () => {
       return;
     }
 
-    const updatedSubmission = response.data as ReportSubmissionDto;
+    const updatedSubmission = response.data as TrainerReportSubmission;
     submissions.value = submissions.value.map((submission) =>
       submission._id === updatedSubmission._id ? updatedSubmission : submission,
     );
@@ -1332,6 +1504,7 @@ watch(
   () => {
     templates.value = [];
     submissions.value = [];
+    createdRequests.value = [];
     closeSubmissionPreview();
     void Promise.all([loadTemplates(), loadSubmissions()]);
   },

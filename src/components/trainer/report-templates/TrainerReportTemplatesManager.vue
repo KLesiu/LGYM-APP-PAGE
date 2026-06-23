@@ -397,21 +397,29 @@
                        </div>
 
                        <div class="mt-4">
-                         <v-select
-                           v-if="field.type === ReportTemplateFieldRequestType.Photos"
-                           v-model="field.moduleConfig.requiredViews"
-                           :items="photoViewOptions"
-                           item-title="label"
-                           item-value="value"
-                           :label="t('trainerMemberDetails.trainerReportTemplates.form.photoViewsLabel')"
-                           multiple
-                           chips
-                           closable-chips
-                           density="comfortable"
-                           variant="outlined"
-                           hide-details
-                           class="template-field-control"
-                         />
+                          <v-combobox
+                            v-if="field.type === ReportTemplateFieldRequestType.Photos"
+                            v-model="field.moduleConfig.requiredViews"
+                            :items="photoViewOptions"
+                            item-title="label"
+                            item-value="value"
+                            :label="t('trainerMemberDetails.trainerReportTemplates.form.photoViewsLabel')"
+                            :placeholder="t('trainerMemberDetails.trainerReportTemplates.form.photoViewsPlaceholder')"
+                            multiple
+                            chips
+                            closable-chips
+                            density="comfortable"
+                            variant="outlined"
+                            hide-details
+                            class="template-field-control"
+                            :return-object="false"
+                          />
+                          <p
+                            v-if="field.type === ReportTemplateFieldRequestType.Photos"
+                            class="mt-2 text-xs leading-5 text-[var(--lgym-text-muted)]"
+                          >
+                            {{ t("trainerMemberDetails.trainerReportTemplates.form.photoViewsHint") }}
+                          </p>
 
                          <v-select
                            v-else-if="field.type === ReportTemplateFieldRequestType.Measurements"
@@ -495,7 +503,7 @@ type EditableTemplateField = {
   moduleConfig: EditableTemplateFieldModuleConfig;
 };
 
-type ReportPhotoView = "Front" | "Side" | "Back";
+type ReportPhotoView = string;
 
 type ReportMeasurementType =
   | "BodyWeight"
@@ -593,6 +601,14 @@ const photoViewOptions = computed(() => [
     value: "Front" as const,
   },
   {
+    label: t("trainerMemberDetails.trainerReportTemplates.modules.photos.views.sideleft"),
+    value: "SideLeft" as const,
+  },
+  {
+    label: t("trainerMemberDetails.trainerReportTemplates.modules.photos.views.sideright"),
+    value: "SideRight" as const,
+  },
+  {
     label: t("trainerMemberDetails.trainerReportTemplates.modules.photos.views.side"),
     value: "Side" as const,
   },
@@ -604,7 +620,6 @@ const photoViewOptions = computed(() => [
 
 const measurementModuleOptions = computed(() => [
   { label: t("trainerMemberDetails.measurements.bodyParts.BodyWeight"), value: "BodyWeight" as const },
-  { label: t("trainerMemberDetails.measurements.bodyParts.BodyFat"), value: "BodyFat" as const },
   { label: t("trainerMemberDetails.measurements.bodyParts.Chest"), value: "Chest" as const },
   { label: t("trainerMemberDetails.measurements.bodyParts.Shoulders"), value: "Shoulders" as const },
   { label: t("trainerMemberDetails.measurements.bodyParts.Biceps"), value: "Biceps" as const },
@@ -615,7 +630,6 @@ const measurementModuleOptions = computed(() => [
   { label: t("trainerMemberDetails.measurements.bodyParts.Waist"), value: "Waist" as const },
   { label: t("trainerMemberDetails.measurements.bodyParts.Hips"), value: "Hips" as const },
   { label: t("trainerMemberDetails.measurements.bodyParts.Thigh"), value: "Thigh" as const },
-  { label: t("trainerMemberDetails.measurements.bodyParts.Bmi"), value: "Bmi" as const },
 ]);
 
 const templateFieldCount = computed(() => templateForm.value.fields.length);
@@ -668,6 +682,23 @@ const getStringArray = (value: unknown) =>
     ? value.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
     : [];
 
+const normalizePhotoViews = (values: string[]) => {
+  const seen = new Set<string>();
+
+  return values
+    .map((value) => value.trim())
+    .filter((value) => value.length > 0)
+    .filter((value) => {
+      const normalizedKey = value.toLowerCase();
+      if (seen.has(normalizedKey)) {
+        return false;
+      }
+
+      seen.add(normalizedKey);
+      return true;
+    });
+};
+
 const measurementTypeAliases: Record<string, ReportMeasurementType> = {
   weight: "BodyWeight",
   bodyweight: "BodyWeight",
@@ -688,23 +719,22 @@ const measurementTypeAliases: Record<string, ReportMeasurementType> = {
   hips: "Hips",
   thighs: "Thigh",
   thigh: "Thigh",
-  bmi: "Bmi",
 };
 
 const createDefaultModuleConfig = (
   type: ReportTemplateFieldRequest["type"],
 ): EditableTemplateFieldModuleConfig => {
-  if (type === ReportTemplateFieldRequestType.Photos) {
-    return {
-      requiredViews: ["Front", "Side", "Back"],
-      measurementTypes: [],
-    };
-  }
+    if (type === ReportTemplateFieldRequestType.Photos) {
+      return {
+        requiredViews: ["Front", "SideLeft", "SideRight", "Back"],
+        measurementTypes: [],
+      };
+    }
 
   if (type === ReportTemplateFieldRequestType.Measurements) {
     return {
       requiredViews: [],
-      measurementTypes: ["BodyWeight", "BodyFat", "Chest", "Waist"],
+      measurementTypes: ["BodyWeight", "Chest", "Waist"],
     };
   }
 
@@ -726,7 +756,7 @@ const normalizeModuleConfig = (
   return {
     requiredViews:
       type === ReportTemplateFieldRequestType.Photos
-        ? (getStringArray(moduleConfig.requiredViews) as ReportPhotoView[])
+        ? normalizePhotoViews(getStringArray(moduleConfig.requiredViews))
         : fallback.requiredViews,
     measurementTypes:
       type === ReportTemplateFieldRequestType.Measurements
@@ -741,8 +771,11 @@ const isModuleFieldType = (type: ReportTemplateFieldRequest["type"]) =>
   type === ReportTemplateFieldRequestType.Photos ||
   type === ReportTemplateFieldRequestType.Measurements;
 
-const getPhotoViewLabel = (value: string) =>
-  t(`trainerMemberDetails.trainerReportTemplates.modules.photos.views.${value.toLowerCase()}`);
+const getPhotoViewLabel = (value: string) => {
+  const translationKey = `trainerMemberDetails.trainerReportTemplates.modules.photos.views.${value.toLowerCase()}`;
+  const translated = t(translationKey);
+  return translated !== translationKey ? translated : value;
+};
 
 const getMeasurementTypeLabel = (value: string) =>
   t(`trainerMemberDetails.measurements.bodyParts.${value}`);
@@ -949,7 +982,7 @@ const saveTemplate = async () => {
       order: index + 1,
       moduleConfig: (() => {
         if (field.type === ReportTemplateFieldRequestType.Photos) {
-          return { requiredViews: field.moduleConfig.requiredViews };
+          return { requiredViews: normalizePhotoViews(field.moduleConfig.requiredViews) };
         }
 
         if (field.type === ReportTemplateFieldRequestType.Measurements) {

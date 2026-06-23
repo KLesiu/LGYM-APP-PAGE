@@ -1011,7 +1011,11 @@
       "filters": {
         "all": "Wszystkie",
         "answered": "Odpowiedziane",
-        "unanswered": "Bez odpowiedzi"
+        "unanswered": "Bez odpowiedzi",
+        "requestSent": "Wysłana prośba",
+        "noResponse": "Bez odpowiedzi",
+        "responded": "Odpowiedziano",
+        "feedbackRead": "Feedback odczytany"
       },
       "feedbackStatus": {
         "answered": "Odpowiedziano",
@@ -1116,14 +1120,23 @@
       "meta": {
         "status": "Status zgłoszenia",
         "feedbackStatus": "Status odpowiedzi",
-        "submittedAt": "Wysłano"
+        "submittedAt": "Wysłano",
+        "sentAt": "Wysłano",
+        "lastUpdatedAt": "Ostatni update"
       },
       "fallback": {
         "noTemplateName": "Szablon bez nazwy",
         "noDescription": "Brak opisu.",
         "noFieldType": "Nieznany typ",
         "noStatus": "Nieznany status",
-        "noAnswer": "Brak odpowiedzi"
+        "noAnswer": "Brak odpowiedzi",
+        "awaitingResponse": "Oczekuje na odpowiedź podopiecznego"
+      },
+      "statuses": {
+        "requestSent": "Wysłana prośba",
+        "noResponse": "Bez odpowiedzi",
+        "responded": "Odpowiedziano",
+        "feedbackRead": "Feedback odczytany"
       },
       "boolean": {
         "true": "Tak",
@@ -1133,7 +1146,11 @@
         "templates": "Brak dostępnych szablonów raportów. Najpierw utwórz je w globalnej bibliotece.",
         "submissions": "Brak wysłanych raportów dla tego podopiecznego.",
         "answered": "Brak raportów z odpowiedzią trenera.",
-        "unanswered": "Brak raportów oczekujących na odpowiedź trenera."
+        "unanswered": "Brak raportów oczekujących na odpowiedź trenera.",
+        "requestSent": "Brak raportów ze statusem „Wysłana prośba”.",
+        "noResponse": "Brak raportów ze statusem „Bez odpowiedzi”.",
+        "responded": "Brak raportów ze statusem „Odpowiedziano”.",
+        "feedbackRead": "Brak raportów ze statusem „Feedback odczytany”."
       },
       "error": {
         "templates": "Nie udało się pobrać szablonów raportów.",
@@ -1167,6 +1184,8 @@
         "fieldRequired": "Wymagane",
         "moduleConfigTitle": "Konfiguracja modułu",
         "photoViewsLabel": "Wymagane ujęcia zdjęć",
+        "photoViewsPlaceholder": "Wybierz gotowe pozycje albo wpisz własną nazwę",
+        "photoViewsHint": "Możesz dodać kilka własnych pozycji. Wpisz nazwę i zatwierdź Enterem.",
         "measurementTypesLabel": "Wymagane typy pomiarów"
       },
       "dialog": {
@@ -1202,6 +1221,8 @@
           "views": {
             "front": "Przód",
             "side": "Bok",
+            "sideleft": "Bok lewy",
+            "sideright": "Bok prawy",
             "back": "Tył"
           }
         },
