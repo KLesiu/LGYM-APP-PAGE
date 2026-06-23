@@ -223,11 +223,7 @@ export function useTrainerNotifications(userId: string) {
       .configureLogging(LogLevel.Warning)
       .build();
 
-    connection.on("ReceiveNotification", (payload: InAppNotificationResultDto) => {
-      if (!isTrainerNotificationType(payload?.type)) {
-        return;
-      }
-
+    connection.on("ReceiveNotification", () => {
       void fetchNotifications();
     });
 
