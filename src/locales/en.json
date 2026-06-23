@@ -204,6 +204,31 @@
       "accountMenu": "User account menu",
       "logout": "Log out"
     },
+    "notifications": {
+      "openMenu": "Open notifications",
+      "title": "Notifications",
+      "subtitle": "Important athlete events in one place",
+      "markAllRead": "Mark all read",
+      "error": "Failed to load notifications.",
+      "empty": "No trainer notifications yet.",
+      "fallbackMessage": "Notification",
+      "unknownType": "System notification",
+      "tabs": {
+        "new": "New",
+        "read": "Read",
+        "all": "All"
+      },
+      "types": {
+        "invitationAccepted": "Collaboration accepted",
+        "invitationRejected": "Invitation rejected",
+        "reportSubmissionReceived": "New athlete report",
+        "trainerRelationshipEnded": "Collaboration ended"
+      },
+      "feedback": {
+        "markReadFailed": "Failed to mark the notification as read.",
+        "markAllReadFailed": "Failed to mark all notifications as read."
+      }
+    },
     "breadcrumbs": {
       "invitationDetails": "Invitation details",
       "memberPlanDetails": "Member plan",
@@ -1025,6 +1050,68 @@
         "goToTemplateLibrary": "Open template library",
         "sendRequest": "Request report",
         "saveFeedback": "Save feedback"
+      },
+      "recurring": {
+        "eyebrow": "Recurring reports",
+        "title": "Recurring report cycles",
+        "subtitle": "Set the template, cadence, and schedule. The next report starts only after the trainee reads the trainer feedback on the previous report.",
+        "empty": "No recurring reports configured for this member yet.",
+        "status": {
+          "active": "Active",
+          "paused": "Paused"
+        },
+        "units": {
+          "day": "Day",
+          "week": "Week",
+          "month": "Month"
+        },
+        "interval": {
+          "day": "Every {count} day | Every {count} days",
+          "week": "Every {count} week | Every {count} weeks",
+          "month": "Every {count} month | Every {count} months"
+        },
+        "dialog": {
+          "eyebrow": "Configure cycle",
+          "createTitle": "Add recurring report",
+          "editTitle": "Edit recurring report"
+        },
+        "form": {
+          "intervalValue": "Repeat every",
+          "intervalUnit": "Interval unit",
+          "startsAt": "Cycle starts at",
+          "endsAt": "Cycle ends at"
+        },
+        "meta": {
+          "startsAt": "Starts at",
+          "lastRequest": "Last created report",
+          "nextEligibleAt": "Next eligible date",
+          "currentRequest": "Current report"
+        },
+        "fallback": {
+          "awaitingFeedback": "Waiting for feedback and read confirmation",
+          "noCurrentRequest": "No active report",
+          "noDate": "Not created yet"
+        },
+        "actions": {
+          "create": "Add recurring report",
+          "edit": "Edit",
+          "pause": "Pause",
+          "resume": "Resume",
+          "delete": "Delete",
+          "save": "Save"
+        },
+        "error": {
+          "load": "Failed to load recurring reports."
+        },
+        "feedback": {
+          "invalidForm": "Fill out the recurring report form correctly.",
+          "createSuccess": "Recurring report created successfully.",
+          "updateSuccess": "Recurring report updated successfully.",
+          "pauseSuccess": "Recurring report paused successfully.",
+          "resumeSuccess": "Recurring report resumed successfully.",
+          "deleteSuccess": "Recurring report deleted successfully.",
+          "saveFailed": "Failed to save recurring report changes."
+        }
       },
       "meta": {
         "status": "Submission status",

@@ -9,6 +9,10 @@
     :user="currentUser"
     @logout="logout"
   >
+    <template #header-actions>
+      <TrainerNotificationsMenu v-if="currentUser" />
+    </template>
+
     <router-view v-slot="{ Component }">
       <div class="h-full min-h-0 min-w-0 w-full">
         <component :is="Component" />
@@ -25,6 +29,7 @@ import { useRoute, useRouter } from "vue-router";
 import logoLgym from "../assets/logoLGYM.png";
 import type { AppBreadcrumbItem } from "../components/layout/appBreadcrumbs";
 import AppShell from "../components/layout/AppShell.vue";
+import TrainerNotificationsMenu from "../components/layout/TrainerNotificationsMenu.vue";
 import type { SidebarItem } from "../components/layout/AppSidebar.vue";
 import { clearAuthSession } from "../composables/useAuthSession";
 import { getCurrentUser } from "../composables/useCurrentUser";

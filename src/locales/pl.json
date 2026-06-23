@@ -204,6 +204,31 @@
       "accountMenu": "Menu konta użytkownika",
       "logout": "Wyloguj"
     },
+    "notifications": {
+      "openMenu": "Otwórz powiadomienia",
+      "title": "Powiadomienia",
+      "subtitle": "Najważniejsze zdarzenia od podopiecznych",
+      "markAllRead": "Odczytaj wszystkie",
+      "error": "Nie udało się pobrać powiadomień.",
+      "empty": "Brak powiadomień dla trenera.",
+      "fallbackMessage": "Powiadomienie",
+      "unknownType": "Powiadomienie systemowe",
+      "tabs": {
+        "new": "Nowe",
+        "read": "Odczytane",
+        "all": "Wszystkie"
+      },
+      "types": {
+        "invitationAccepted": "Współpraca zaakceptowana",
+        "invitationRejected": "Zaproszenie odrzucone",
+        "reportSubmissionReceived": "Nowy raport od podopiecznego",
+        "trainerRelationshipEnded": "Współpraca zakończona"
+      },
+      "feedback": {
+        "markReadFailed": "Nie udało się oznaczyć powiadomienia jako przeczytanego.",
+        "markAllReadFailed": "Nie udało się oznaczyć wszystkich powiadomień jako przeczytanych."
+      }
+    },
     "breadcrumbs": {
       "invitationDetails": "Szczegóły zaproszenia",
       "memberPlanDetails": "Plan podopiecznego",
@@ -1025,6 +1050,68 @@
         "goToTemplateLibrary": "Otwórz bibliotekę szablonów",
         "sendRequest": "Poproś o raport",
         "saveFeedback": "Zapisz komentarz"
+      },
+      "recurring": {
+        "eyebrow": "Raporty cykliczne",
+        "title": "Cykle raportowe",
+        "subtitle": "Ustaw szablon, częstotliwość i harmonogram. Kolejny raport pojawi się dopiero po odczytaniu komentarza trenera do poprzedniego raportu.",
+        "empty": "Brak skonfigurowanych raportów cyklicznych dla tego podopiecznego.",
+        "status": {
+          "active": "Aktywny",
+          "paused": "Wstrzymany"
+        },
+        "units": {
+          "day": "Dzień",
+          "week": "Tydzień",
+          "month": "Miesiąc"
+        },
+        "interval": {
+          "day": "Co {count} dzień | Co {count} dni",
+          "week": "Co {count} tydzień | Co {count} tygodnie | Co {count} tygodni",
+          "month": "Co {count} miesiąc | Co {count} miesiące | Co {count} miesięcy"
+        },
+        "dialog": {
+          "eyebrow": "Ustaw cykl",
+          "createTitle": "Dodaj cykliczny raport",
+          "editTitle": "Edytuj cykliczny raport"
+        },
+        "form": {
+          "intervalValue": "Co ile",
+          "intervalUnit": "Jednostka interwału",
+          "startsAt": "Start cyklu",
+          "endsAt": "Koniec cyklu"
+        },
+        "meta": {
+          "startsAt": "Start",
+          "lastRequest": "Ostatnio utworzony raport",
+          "nextEligibleAt": "Następny możliwy termin",
+          "currentRequest": "Aktualny raport"
+        },
+        "fallback": {
+          "awaitingFeedback": "Oczekuje na feedback i odczyt",
+          "noCurrentRequest": "Brak aktywnego raportu",
+          "noDate": "Jeszcze nie utworzono"
+        },
+        "actions": {
+          "create": "Dodaj cykliczny raport",
+          "edit": "Edytuj",
+          "pause": "Pauzuj",
+          "resume": "Wznów",
+          "delete": "Usuń",
+          "save": "Zapisz"
+        },
+        "error": {
+          "load": "Nie udało się pobrać raportów cyklicznych."
+        },
+        "feedback": {
+          "invalidForm": "Uzupełnij poprawnie formularz cyklicznego raportu.",
+          "createSuccess": "Raport cykliczny został dodany.",
+          "updateSuccess": "Raport cykliczny został zaktualizowany.",
+          "pauseSuccess": "Raport cykliczny został wstrzymany.",
+          "resumeSuccess": "Raport cykliczny został wznowiony.",
+          "deleteSuccess": "Raport cykliczny został usunięty.",
+          "saveFailed": "Nie udało się zapisać zmian raportu cyklicznego."
+        }
       },
       "meta": {
         "status": "Status zgłoszenia",
