@@ -209,6 +209,13 @@
       "title": "Notifications",
       "subtitle": "Important athlete events in one place",
       "markAllRead": "Mark all read",
+      "warning": {
+        "eyebrow": "Unread notification",
+        "title": "You have an unread notification older than 24 hours",
+        "age": "Waiting for: {age}",
+        "goToNotification": "Go to notification",
+        "markAsRead": "Mark as read"
+      },
       "error": "Failed to load notifications.",
       "empty": "No trainer notifications yet.",
       "fallbackMessage": "Notification",

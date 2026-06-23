@@ -209,6 +209,13 @@
       "title": "Powiadomienia",
       "subtitle": "Najważniejsze zdarzenia od podopiecznych",
       "markAllRead": "Odczytaj wszystkie",
+      "warning": {
+        "eyebrow": "Nieodczytane powiadomienie",
+        "title": "Masz nieodczytane powiadomienie starsze niż 24 godziny",
+        "age": "Czeka od: {age}",
+        "goToNotification": "Przejdź do powiadomienia",
+        "markAsRead": "Oznacz jako przeczytane"
+      },
       "error": "Nie udało się pobrać powiadomień.",
       "empty": "Brak powiadomień dla trenera.",
       "fallbackMessage": "Powiadomienie",
