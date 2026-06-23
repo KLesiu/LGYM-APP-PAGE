@@ -1,18 +1,41 @@
 <template>
-  <div class="grid gap-4">
-    <section>
+  <div class="flex min-h-0 min-w-0 flex-col gap-4">
+     <div class="bg-[var(--lgym-note-bg)]/55 px-2 py-2 sm:px-3">
+        <v-tabs v-model="activeReportView" color="primary" grow align-tabs="start" class="min-h-[60px]">
+          <v-tab
+            v-for="tab in reportViewTabs"
+            :key="tab.value"
+            :value="tab.value"
+            class="min-h-[60px] px-4 normal-case font-semibold tracking-normal"
+          >
+            <div class="flex items-center gap-2">
+              <v-icon :icon="tab.icon" size="18" />
+              <span>{{ tab.label }}</span>
+            </div>
+          </v-tab>
+        </v-tabs>
+      </div>
+
+    <section v-if="activeReportView === 'recurring'" class="min-h-0 min-w-0">
+      <TrainerMemberRecurringReportsSection
+        :trainee-id="traineeId"
+        :format-date-time="formatDateTime"
+      />
+    </section>
+
+    <section v-else class="min-h-0 min-w-0 border-t border-[var(--lgym-border)] pt-4">
       <div>
         <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
           {{ t("trainerMemberDetails.reports.submissionsEyebrow") }}
         </p>
-        <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+        <h2 class="mt-1 text-lg font-semibold text-[var(--lgym-text)] sm:text-xl">
           {{ t("trainerMemberDetails.reports.submissionsTitle") }}
         </h2>
       </div>
 
-      <div class="grid gap-4 pt-4">
+      <div class="grid gap-4 pt-3">
         <section>
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
             <div class="flex flex-wrap gap-2">
               <v-btn
                 variant="outlined"
@@ -314,7 +337,7 @@
         </v-card>
       </v-dialog>
 
-      <v-dialog v-model="isPreviewDialogOpen" max-width="860">
+        <v-dialog v-model="isPreviewDialogOpen" max-width="860" @update:model-value="(value) => { if (!value) void closeSubmissionPreview(); }">
         <v-card rounded="lg" class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
           <template v-if="selectedSubmission">
             <div class="border-b border-[var(--lgym-border)] px-6 py-5">
@@ -542,8 +565,13 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import {
+  useRoute,
+  useRouter,
+  type LocationQueryRaw,
+} from "vue-router";
 
+import TrainerMemberRecurringReportsSection from "./TrainerMemberRecurringReportsSection.vue";
 import {
   getApiTrainerReportTemplates,
   getApiTrainerReportingPhotosHistory,
@@ -565,10 +593,12 @@ import AppDataTable from "../../ui/AppDataTable.vue";
 
 const props = defineProps<{
   traineeId: string;
+  initialSubmissionId?: string | null;
   formatDateTime: (value: string | null | undefined) => string;
 }>();
 
 const { t } = useI18n();
+const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 
@@ -584,6 +614,7 @@ const isRequestDialogOpen = ref(false);
 const isPreviewDialogOpen = ref(false);
 const selectedSubmission = ref<ReportSubmissionDto | null>(null);
 const feedbackFilter = ref<"all" | "answered" | "unanswered">("all");
+const activeReportView = ref<"recurring" | "history">("history");
 const trainerOverallCommentDraft = ref("");
 const trainerFieldCommentsDraft = ref<Record<string, string>>({});
 const submissionPhotos = ref<PhotoHistoryItemResponse[]>([]);
@@ -624,6 +655,19 @@ const feedbackFilterOptions = computed(() => [
   {
     value: "unanswered" as const,
     label: t("trainerMemberDetails.reports.filters.unanswered"),
+  },
+]);
+
+const reportViewTabs = computed(() => [
+  {
+    value: "recurring" as const,
+    label: t("trainerMemberDetails.reports.recurring.title"),
+    icon: "mdi-autorenew",
+  },
+  {
+    value: "history" as const,
+    label: t("trainerMemberDetails.reports.submissionsTitle"),
+    icon: "mdi-history",
   },
 ]);
 
@@ -911,12 +955,23 @@ const openSubmissionPreview = (item: unknown) => {
   void loadSubmissionPhotos(selectedSubmission.value);
 };
 
-const closeSubmissionPreview = () => {
+const clearSubmissionQuery = async () => {
+  if (!route.query.submissionId) {
+    return;
+  }
+
+  const nextQuery: LocationQueryRaw = { ...route.query };
+  delete nextQuery.submissionId;
+  await router.replace({ query: nextQuery });
+};
+
+const closeSubmissionPreview = async () => {
   isPreviewDialogOpen.value = false;
   selectedSubmission.value = null;
   trainerOverallCommentDraft.value = "";
   trainerFieldCommentsDraft.value = {};
   submissionPhotos.value = [];
+  await clearSubmissionQuery();
 };
 
 const loadSubmissionPhotos = async (submission: ReportSubmissionDto | null) => {
@@ -1069,6 +1124,38 @@ const loadSubmissions = async () => {
     }
   }
 };
+
+watch(
+  () => props.initialSubmissionId,
+  (initialSubmissionId) => {
+    if (initialSubmissionId) {
+      activeReportView.value = "history";
+    }
+  },
+  { immediate: true },
+);
+
+watch(
+  [() => props.initialSubmissionId, submissions, isLoadingSubmissions],
+  ([initialSubmissionId, currentSubmissions, loading]) => {
+    if (!initialSubmissionId || loading || activeReportView.value !== "history") {
+      return;
+    }
+
+    if (selectedSubmission.value?._id === initialSubmissionId) {
+      return;
+    }
+
+    const matchedSubmission = currentSubmissions.find(
+      (submission) => submission._id === initialSubmissionId,
+    );
+
+    if (matchedSubmission) {
+      openSubmissionPreview(matchedSubmission);
+    }
+  },
+  { immediate: true },
+);
 
 const createReportRequest = async () => {
   if (!reportRequest.value.templateId) {

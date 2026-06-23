@@ -43,6 +43,7 @@
           v-else-if="activeTab === 'reports'"
           class="min-h-0 flex-1"
           :trainee-id="traineeId"
+          :initial-submission-id="requestedSubmissionId"
           :format-date-time="formatDateTime"
         />
 
@@ -59,9 +60,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter, type LocationQueryRaw } from "vue-router";
 
 import TrainerMemberMeasurementsTab from "../../components/trainer/member-details/TrainerMemberMeasurementsTab.vue";
 import TrainerMemberPlansTab from "../../components/trainer/member-details/TrainerMemberPlansTab.vue";
@@ -74,9 +75,19 @@ import {
 
 const { locale, t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 
 const traineeId = computed(() => String(route.params.traineeId ?? ""));
 const activeTab = ref<MemberDetailsTab>("trainings");
+const requestedTab = computed<MemberDetailsTab | null>(() => {
+  const tab = String(route.query.tab ?? "").trim();
+  return ["trainings", "plans", "reports", "measurements"].includes(tab)
+    ? (tab as MemberDetailsTab)
+    : null;
+});
+const requestedSubmissionId = computed(
+  () => String(route.query.submissionId ?? "").trim() || null,
+);
 const tabs = computed(() => [
   {
     value: "trainings" as const,
@@ -104,4 +115,28 @@ const {
   formatDate,
   formatDateTime,
 } = useTrainerMemberDetails(traineeId, locale);
+
+watch(
+  requestedTab,
+  (tab) => {
+    if (tab && activeTab.value !== tab) {
+      activeTab.value = tab;
+    }
+  },
+  { immediate: true },
+);
+
+watch(activeTab, async (tab) => {
+  const currentQueryTab = String(route.query.tab ?? "").trim() || null;
+  if (currentQueryTab === tab) {
+    return;
+  }
+
+  const nextQuery: LocationQueryRaw = { ...route.query, tab };
+  if (tab !== "reports") {
+    delete nextQuery.submissionId;
+  }
+
+  await router.replace({ query: nextQuery });
+});
 </script>
