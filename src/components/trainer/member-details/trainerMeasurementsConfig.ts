@@ -30,6 +30,8 @@ export type TrainerMeasurementUnit =
   | "Percent"
   | "Bmi";
 
+// TODO: BMI should return as an automatically calculated value, not a manual input option.
+
 export type TrainerMeasurementsTabKey = "trend" | "latest" | "history";
 
 export type MeasurementTypeOption = {
@@ -53,8 +55,6 @@ export const measurementTypeOptions: MeasurementTypeOption[] = [
   { value: "Thigh", labelKey: "trainerMemberDetails.measurements.bodyParts.Thigh" },
   { value: "Calves", labelKey: "trainerMemberDetails.measurements.bodyParts.Calves" },
   { value: "Biceps", labelKey: "trainerMemberDetails.measurements.bodyParts.Biceps" },
-  { value: "BodyFat", labelKey: "trainerMemberDetails.measurements.bodyParts.BodyFat" },
-  { value: "Bmi", labelKey: "trainerMemberDetails.measurements.bodyParts.Bmi" },
   { value: "Shoulders", labelKey: "trainerMemberDetails.measurements.bodyParts.Shoulders" },
 ];
 

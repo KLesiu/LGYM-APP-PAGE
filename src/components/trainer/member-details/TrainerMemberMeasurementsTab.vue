@@ -46,10 +46,10 @@
           v-for="tab in tabs"
           :key="tab.value"
           type="button"
-          class="rounded-full border px-4 py-2 text-sm font-semibold transition"
+          class="rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-200"
           :class="
             activeTab === tab.value
-              ? 'border-[var(--lgym-primary)] bg-[var(--lgym-primary)] text-white'
+              ? 'border-[var(--lgym-primary)] bg-[var(--lgym-primary)] text-white shadow-sm'
               : 'border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] text-[var(--lgym-text-muted)] hover:border-[var(--lgym-primary)] hover:text-[var(--lgym-primary)]'
           "
           @click="activeTab = tab.value"
@@ -110,15 +110,6 @@
               :values="chartSeries"
               :format-value="formatChartValue"
             />
-
-            <div class="rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-4">
-              <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
-                {{ t("trainerMemberDetails.measurements.sections.trend") }}
-              </h3>
-              <p class="mt-4 text-sm leading-6 text-[var(--lgym-text-muted)]">
-                {{ chartSubtitle }}
-              </p>
-            </div>
           </template>
 
           <div
