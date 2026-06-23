@@ -125,6 +125,7 @@ export function useTrainerNotifications(userId: string) {
       notifications.value = Array.from(
         new Map(
           allItems
+            .filter((notification) => !!notification._id)
             .filter((notification) => isTrainerNotificationType(notification.type))
             .map((notification) => [
               getNotificationDeduplicationKey(notification),
@@ -192,8 +193,11 @@ export function useTrainerNotifications(userId: string) {
       if (onNavigate) {
         await onNavigate(notification);
       }
+
+      return true;
     } catch {
       toast.error("ui.notifications.feedback.markReadFailed");
+      return false;
     } finally {
       activeNotificationId.value = null;
     }
@@ -284,6 +288,7 @@ export function useTrainerNotifications(userId: string) {
     isLoaded,
     isLoading,
     isMarkingAllRead,
+    markAsRead,
     markAllAsRead,
     notifications,
     unreadCount,

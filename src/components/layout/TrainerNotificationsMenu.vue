@@ -95,21 +95,34 @@
       </v-list>
     </v-card>
   </v-menu>
+
+  <UnreadNotificationWarningModal
+    :notification="warningNotification"
+    :is-submitting="isWarningActionPending"
+    :format-timestamp="formatTimestamp"
+    @navigate="handleWarningNavigate"
+    @mark-read="handleWarningMarkAsRead"
+  />
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter, type RouteLocationRaw } from "vue-router";
 import { getCurrentUser } from "../../composables/useCurrentUser";
+import { useToast } from "../../composables/useToast";
 import {
   useTrainerNotifications,
   type TrainerNotificationItem,
 } from "../../composables/useTrainerNotifications";
+import UnreadNotificationWarningModal from "./UnreadNotificationWarningModal.vue";
+
+const OLD_NOTIFICATION_AGE_MS = 24 * 60 * 60 * 1000;
 
 const { t } = useI18n();
 const router = useRouter();
 const currentUser = getCurrentUser();
+const toast = useToast();
 
 const {
   activeNotificationId,
@@ -122,10 +135,70 @@ const {
   isLoaded,
   isLoading,
   isMarkingAllRead,
+  markAsRead,
   markAllAsRead,
   notifications,
   unreadCount,
 } = useTrainerNotifications(currentUser?.id ?? "");
+
+const hasInitializedWarning = ref(false);
+const isWarningActionPending = ref(false);
+const warningNotificationId = ref<string | null>(null);
+
+const isOlderThan24Hours = (createdAt?: string | null) => {
+  if (!createdAt) return false;
+
+  const createdAtTimestamp = new Date(createdAt).getTime();
+
+  if (Number.isNaN(createdAtTimestamp)) {
+    return false;
+  }
+
+  return Date.now() - createdAtTimestamp >= OLD_NOTIFICATION_AGE_MS;
+};
+
+const findOldestUnreadNotification = (
+  items: TrainerNotificationItem[],
+): TrainerNotificationItem | null => {
+  let oldestNotification: TrainerNotificationItem | null = null;
+
+  for (const notification of items) {
+    if (notification.isRead || !isOlderThan24Hours(notification.createdAt)) {
+      continue;
+    }
+
+    if (!oldestNotification) {
+      oldestNotification = notification;
+      continue;
+    }
+
+    const oldestTimestamp = new Date(oldestNotification.createdAt ?? "").getTime();
+    const candidateTimestamp = new Date(notification.createdAt ?? "").getTime();
+
+    if (!Number.isNaN(candidateTimestamp) && candidateTimestamp < oldestTimestamp) {
+      oldestNotification = notification;
+    }
+  }
+
+  return oldestNotification;
+};
+
+const warningNotification = computed(() =>
+  notifications.value.find((notification) => notification._id === warningNotificationId.value) ?? null,
+);
+
+watch(
+  [isLoaded, notifications],
+  ([loaded, items]) => {
+    if (!loaded || hasInitializedWarning.value) {
+      return;
+    }
+
+    hasInitializedWarning.value = true;
+    warningNotificationId.value = findOldestUnreadNotification(items)?._id ?? null;
+  },
+  { immediate: true },
+);
 
 const tabs = computed(() => [
   { value: "new" as const, label: t("ui.notifications.tabs.new") },
@@ -210,6 +283,50 @@ const handleClick = async (notification: TrainerNotificationItem) => {
       await router.push(target);
     }
   });
+};
+
+const handleWarningMarkAsRead = async () => {
+  if (!warningNotification.value || isWarningActionPending.value) {
+    return;
+  }
+
+  isWarningActionPending.value = true;
+
+  try {
+    await markAsRead(warningNotification.value._id);
+    await fetchNotifications();
+    warningNotificationId.value = null;
+  } catch {
+    toast.error("ui.notifications.feedback.markReadFailed");
+  } finally {
+    isWarningActionPending.value = false;
+  }
+};
+
+const handleWarningNavigate = async () => {
+  if (!warningNotification.value || isWarningActionPending.value) {
+    return;
+  }
+
+  isWarningActionPending.value = true;
+
+  try {
+    const success = await handleNotificationClick(
+      warningNotification.value,
+      async (clickedNotification) => {
+        const target = resolveNotificationTarget(clickedNotification);
+        if (target) {
+          await router.push(target);
+        }
+      },
+    );
+
+    if (success) {
+      warningNotificationId.value = null;
+    }
+  } finally {
+    isWarningActionPending.value = false;
+  }
 };
 
 const handleMenuToggle = (isOpen: boolean) => {
