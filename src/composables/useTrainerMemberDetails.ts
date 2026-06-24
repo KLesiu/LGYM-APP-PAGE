@@ -24,6 +24,7 @@ import {
 export type MemberDetailsTab =
   | "trainings"
   | "plans"
+  | "diet"
   | "reports"
   | "measurements";
 

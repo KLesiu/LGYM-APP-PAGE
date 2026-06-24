@@ -39,6 +39,13 @@
           :format-date-time="formatDateTime"
         />
 
+        <TrainerMemberDietTab
+          v-else-if="activeTab === 'diet'"
+          class="min-h-0 flex-1"
+          :trainee-id="traineeId"
+          :format-date-time="formatDateTime"
+        />
+
         <TrainerMemberReportsTab
           v-else-if="activeTab === 'reports'"
           class="min-h-0 flex-1"
@@ -64,6 +71,7 @@ import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter, type LocationQueryRaw } from "vue-router";
 
+import TrainerMemberDietTab from "../../components/trainer/member-details/TrainerMemberDietTab.vue";
 import TrainerMemberMeasurementsTab from "../../components/trainer/member-details/TrainerMemberMeasurementsTab.vue";
 import TrainerMemberPlansTab from "../../components/trainer/member-details/TrainerMemberPlansTab.vue";
 import TrainerMemberReportsTab from "../../components/trainer/member-details/TrainerMemberReportsTab.vue";
@@ -81,7 +89,7 @@ const traineeId = computed(() => String(route.params.traineeId ?? ""));
 const activeTab = ref<MemberDetailsTab>("trainings");
 const requestedTab = computed<MemberDetailsTab | null>(() => {
   const tab = String(route.query.tab ?? "").trim();
-  return ["trainings", "plans", "reports", "measurements"].includes(tab)
+  return ["trainings", "plans", "diet", "reports", "measurements"].includes(tab)
     ? (tab as MemberDetailsTab)
     : null;
 });
@@ -98,6 +106,11 @@ const tabs = computed(() => [
     value: "plans" as const,
     label: t("trainerMemberDetails.tabs.plans"),
     icon: "mdi-clipboard-list-outline",
+  },
+  {
+    value: "diet" as const,
+    label: t("trainerMemberDetails.tabs.diet"),
+    icon: "mdi-food-apple-outline",
   },
   {
     value: "reports" as const,

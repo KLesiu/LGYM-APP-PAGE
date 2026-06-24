@@ -883,6 +883,7 @@
       "overview": "Overview",
       "trainings": "Trainings",
       "plans": "Plans",
+      "diet": "Diet",
       "reports": "Reports",
       "measurements": "Measurements"
     },
@@ -890,7 +891,8 @@
       "back": "Back to members",
       "retry": "Retry",
       "cancel": "Cancel",
-      "save": "Save"
+      "save": "Save",
+      "close": "Close"
     },
     "overview": {
       "eyebrow": "Overview",
@@ -1009,6 +1011,117 @@
         "unassignFailed": "Failed to unassign the active plan.",
         "deleteSuccess": "Plan deleted successfully.",
         "deleteFailed": "Failed to delete the plan."
+      }
+    },
+    "diet": {
+      "eyebrow": "Diet",
+      "title": "Member diet plans",
+      "subtitle": "Create and update the active diet, meals, and macro targets with change history.",
+      "error": "Failed to load diet plans.",
+      "fallback": {
+        "noName": "Untitled diet plan"
+      },
+      "badges": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "summary": {
+        "activeCount": "Active diets: {count}"
+      },
+      "meta": {
+        "dateRange": "From {start} to {end}",
+        "noEndDate": "no end date",
+        "mealCount": "Meals: {count}"
+      },
+      "macros": {
+        "calories": "Calories",
+        "protein": "Protein",
+        "carbs": "Carbs",
+        "fat": "Fat"
+      },
+      "meals": {
+        "title": "Meals",
+        "fallback": "Untitled meal",
+        "item": "Meal {index}"
+      },
+      "empty": {
+        "title": "No diet plans created for this member yet.",
+        "subtitle": "Add the first plan so the trainee can see active guidance in the mobile app."
+      },
+      "dialog": {
+        "createTitle": "Create diet plan",
+        "editTitle": "Edit diet plan",
+        "historyTitle": "Diet plan change history"
+      },
+      "form": {
+        "name": "Plan name",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "modeTitle": "Diet planning mode",
+        "modeMeals": "Build the diet from meals",
+        "modeGlobal": "Set only a global calorie and macro target",
+        "modeMealsHint": "Plan-level calories and macros will be calculated automatically from the meals below.",
+        "modeGlobalHint": "Set target values for the whole plan without breaking it down into individual meals.",
+        "autoCalculatedHint": "In meal mode calories are calculated automatically: 1 g protein = 4 kcal, 1 g carbs = 4 kcal, 1 g fat = 9 kcal.",
+        "globalTargetHint": "In global mode provide at least one target: calories or macros.",
+        "isActive": "Set as active plan",
+        "notes": "Trainer notes",
+        "mealName": "Meal name",
+        "mealOrder": "Order",
+        "mealDescription": "Meal description"
+      },
+      "actions": {
+        "create": "Create diet",
+        "edit": "Edit",
+        "editActive": "Edit active",
+        "activate": "Activate",
+        "history": "History",
+        "delete": "Delete",
+        "addMeal": "Add meal",
+        "removeMeal": "Remove meal"
+      },
+      "feedback": {
+        "saved": "Diet plan saved successfully.",
+        "saveFailed": "Failed to save the diet plan.",
+        "activated": "Diet plan marked as active.",
+        "activateFailed": "Failed to activate the diet plan.",
+        "deleted": "Diet plan deleted successfully.",
+        "deleteFailed": "Failed to delete the diet plan.",
+        "historyFailed": "Failed to load diet plan history."
+      },
+      "history": {
+        "empty": "No changes recorded for this diet plan yet.",
+        "unknown": "Change",
+        "noVisibleChanges": "No readable changes were detected for this history entry.",
+        "createdSummary": "The plan was created with its initial values.",
+        "activatedSummary": "The plan was marked as active.",
+        "deletedSummary": "The plan was deleted.",
+        "fieldName": "Plan name",
+        "fieldStartDate": "Start date",
+        "fieldEndDate": "End date",
+        "fieldCalories": "Calories",
+        "fieldProtein": "Protein",
+        "fieldCarbs": "Carbs",
+        "fieldFat": "Fat",
+        "fieldNotes": "Trainer notes",
+        "fieldIsActive": "Active status",
+        "fieldMealCount": "Meal count",
+        "mealAdded": "Added {meal}",
+        "mealRemoved": "Removed {meal}",
+        "mealFieldPrefix": "{meal} / {field}",
+        "emptyValue": "—",
+        "boolTrue": "active",
+        "boolFalse": "inactive"
+      },
+      "validation": {
+        "nameRequired": "Plan name is required.",
+        "startDateRequired": "Start date is required.",
+        "mealNameRequired": "Meal name is required.",
+        "globalTargetRequired": "In global mode provide calories or at least one macro target."
+      },
+      "confirm": {
+        "deleteTitle": "Delete diet plan?",
+        "deleteMessage": "Are you sure you want to delete “{name}”?"
       }
     },
     "reports": {

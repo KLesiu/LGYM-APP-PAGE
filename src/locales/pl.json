@@ -883,6 +883,7 @@
       "overview": "Przegląd",
       "trainings": "Treningi",
       "plans": "Plany",
+      "diet": "Dieta",
       "reports": "Raporty",
       "measurements": "Pomiary"
     },
@@ -890,7 +891,8 @@
       "back": "Wróć do listy",
       "retry": "Spróbuj ponownie",
       "cancel": "Anuluj",
-      "save": "Zapisz"
+      "save": "Zapisz",
+      "close": "Zamknij"
     },
     "overview": {
       "eyebrow": "Przegląd",
@@ -1009,6 +1011,117 @@
         "unassignFailed": "Nie udało się odpiąć aktywnego planu.",
         "deleteSuccess": "Plan został usunięty poprawnie.",
         "deleteFailed": "Nie udało się usunąć planu."
+      }
+    },
+    "diet": {
+      "eyebrow": "Dieta",
+      "title": "Plany diety podopiecznego",
+      "subtitle": "Twórz i aktualizuj aktywną dietę, posiłki oraz makroskładniki z historią zmian.",
+      "error": "Nie udało się pobrać planów diety.",
+      "fallback": {
+        "noName": "Plan diety bez nazwy"
+      },
+      "badges": {
+        "active": "Aktywny",
+        "inactive": "Nieaktywny"
+      },
+      "summary": {
+        "activeCount": "Aktywne diety: {count}"
+      },
+      "meta": {
+        "dateRange": "Od {start} do {end}",
+        "noEndDate": "bez końca",
+        "mealCount": "Posiłki: {count}"
+      },
+      "macros": {
+        "calories": "Kalorie",
+        "protein": "Białko",
+        "carbs": "Węglowodany",
+        "fat": "Tłuszcze"
+      },
+      "meals": {
+        "title": "Posiłki",
+        "fallback": "Posiłek bez nazwy",
+        "item": "Posiłek {index}"
+      },
+      "empty": {
+        "title": "Brak planów diety dla tego podopiecznego.",
+        "subtitle": "Dodaj pierwszy plan, aby podopieczny mógł zobaczyć aktywne zalecenia w aplikacji mobilnej."
+      },
+      "dialog": {
+        "createTitle": "Utwórz plan diety",
+        "editTitle": "Edytuj plan diety",
+        "historyTitle": "Historia zmian planu diety"
+      },
+      "form": {
+        "name": "Nazwa planu",
+        "startDate": "Data startu",
+        "endDate": "Data końca",
+        "modeTitle": "Sposób rozpisania diety",
+        "modeMeals": "Rozpisuję dietę na posiłki",
+        "modeGlobal": "Ustawiam tylko globalną pulę kalorii i makr",
+        "modeMealsHint": "Makra i kalorie całego planu wyliczą się automatycznie na podstawie posiłków.",
+        "modeGlobalHint": "Ustaw docelowe wartości dla całego planu bez rozpisywania poszczególnych posiłków.",
+        "autoCalculatedHint": "W trybie posiłków kalorie są liczone automatycznie: 1 g białka = 4 kcal, 1 g węglowodanów = 4 kcal, 1 g tłuszczu = 9 kcal.",
+        "globalTargetHint": "W trybie globalnym podaj przynajmniej jeden cel: kalorie albo makroskładniki.",
+        "isActive": "Ustaw jako aktywny plan",
+        "notes": "Notatki trenera",
+        "mealName": "Nazwa posiłku",
+        "mealOrder": "Kolejność",
+        "mealDescription": "Opis posiłku"
+      },
+      "actions": {
+        "create": "Utwórz dietę",
+        "edit": "Edytuj",
+        "editActive": "Edytuj aktywną",
+        "activate": "Aktywuj",
+        "history": "Historia",
+        "delete": "Usuń",
+        "addMeal": "Dodaj posiłek",
+        "removeMeal": "Usuń posiłek"
+      },
+      "feedback": {
+        "saved": "Plan diety został zapisany.",
+        "saveFailed": "Nie udało się zapisać planu diety.",
+        "activated": "Plan diety został oznaczony jako aktywny.",
+        "activateFailed": "Nie udało się aktywować planu diety.",
+        "deleted": "Plan diety został usunięty.",
+        "deleteFailed": "Nie udało się usunąć planu diety.",
+        "historyFailed": "Nie udało się pobrać historii planu diety."
+      },
+      "history": {
+        "empty": "Brak zapisanych zmian dla tego planu diety.",
+        "unknown": "Zmiana",
+        "noVisibleChanges": "Brak czytelnych zmian do pokazania dla tego wpisu.",
+        "createdSummary": "Utworzono plan z początkowymi wartościami.",
+        "activatedSummary": "Plan został oznaczony jako aktywny.",
+        "deletedSummary": "Plan został usunięty.",
+        "fieldName": "Nazwa planu",
+        "fieldStartDate": "Data startu",
+        "fieldEndDate": "Data końca",
+        "fieldCalories": "Kalorie",
+        "fieldProtein": "Białko",
+        "fieldCarbs": "Węglowodany",
+        "fieldFat": "Tłuszcze",
+        "fieldNotes": "Notatki trenera",
+        "fieldIsActive": "Status aktywności",
+        "fieldMealCount": "Liczba posiłków",
+        "mealAdded": "Dodano {meal}",
+        "mealRemoved": "Usunięto {meal}",
+        "mealFieldPrefix": "{meal} / {field}",
+        "emptyValue": "—",
+        "boolTrue": "aktywny",
+        "boolFalse": "nieaktywny"
+      },
+      "validation": {
+        "nameRequired": "Nazwa planu jest wymagana.",
+        "startDateRequired": "Data startu jest wymagana.",
+        "mealNameRequired": "Nazwa posiłku jest wymagana.",
+        "globalTargetRequired": "W trybie globalnym podaj kalorie lub co najmniej jeden makroskładnik."
+      },
+      "confirm": {
+        "deleteTitle": "Usunąć plan diety?",
+        "deleteMessage": "Czy na pewno usunąć plan „{name}”?"
       }
     },
     "reports": {
