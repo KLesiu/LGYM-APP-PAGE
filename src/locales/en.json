@@ -884,6 +884,7 @@
       "trainings": "Trainings",
       "plans": "Plans",
       "diet": "Diet",
+      "notes": "Notes",
       "reports": "Reports",
       "measurements": "Measurements"
     },
@@ -1122,6 +1123,67 @@
       "confirm": {
         "deleteTitle": "Delete diet plan?",
         "deleteMessage": "Are you sure you want to delete “{name}”?"
+      }
+    },
+    "notes": {
+      "eyebrow": "Notes",
+      "title": "Trainer notes for this member",
+      "subtitle": "Store coaching notes, control trainee visibility, and review the edit history in one place.",
+      "error": {
+        "load": "Failed to load trainee notes."
+      },
+      "empty": {
+        "title": "No notes created for this member yet.",
+        "subtitle": "Add the first note to keep important coaching context close to the member profile."
+      },
+      "fallback": {
+        "noTitle": "Untitled note",
+        "noContent": "No content provided."
+      },
+      "badges": {
+        "visible": "Visible to trainee",
+        "pinned": "Pinned"
+      },
+      "meta": {
+        "updatedAt": "Updated"
+      },
+      "dialog": {
+        "createTitle": "Create trainee note",
+        "editTitle": "Edit trainee note",
+        "historyTitle": "Trainee note history"
+      },
+      "form": {
+        "title": "Title",
+        "content": "Note content",
+        "visibleToTrainee": "Visible to trainee",
+        "isPinned": "Pin note"
+      },
+      "actions": {
+        "create": "Add note",
+        "edit": "Edit",
+        "history": "History",
+        "delete": "Delete"
+      },
+      "feedback": {
+        "saved": "Trainee note saved successfully.",
+        "saveFailed": "Failed to save the trainee note.",
+        "deleted": "Trainee note deleted successfully.",
+        "deleteFailed": "Failed to delete the trainee note.",
+        "historyFailed": "Failed to load trainee note history."
+      },
+      "history": {
+        "empty": "No changes recorded for this note yet.",
+        "unknown": "Change",
+        "previous": "Previous content",
+        "current": "New content",
+        "emptyValue": "—"
+      },
+      "confirm": {
+        "deleteTitle": "Delete trainee note?",
+        "deleteMessage": "Are you sure you want to delete “{name}”?"
+      },
+      "validation": {
+        "contentRequired": "Note content is required."
       }
     },
     "reports": {

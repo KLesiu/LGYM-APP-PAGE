@@ -884,6 +884,7 @@
       "trainings": "Treningi",
       "plans": "Plany",
       "diet": "Dieta",
+      "notes": "Notatka",
       "reports": "Raporty",
       "measurements": "Pomiary"
     },
@@ -1122,6 +1123,67 @@
       "confirm": {
         "deleteTitle": "Usunąć plan diety?",
         "deleteMessage": "Czy na pewno usunąć plan „{name}”?"
+      }
+    },
+    "notes": {
+      "eyebrow": "Notatka",
+      "title": "Notatki trenera o podopiecznym",
+      "subtitle": "Zapisuj kontekst trenerski, ustawiaj widoczność dla podopiecznego i sprawdzaj historię zmian w jednym miejscu.",
+      "error": {
+        "load": "Nie udało się pobrać notatek podopiecznego."
+      },
+      "empty": {
+        "title": "Brak notatek dla tego podopiecznego.",
+        "subtitle": "Dodaj pierwszą notatkę, aby ważny kontekst trenerski był zawsze pod ręką."
+      },
+      "fallback": {
+        "noTitle": "Notatka bez tytułu",
+        "noContent": "Brak treści notatki."
+      },
+      "badges": {
+        "visible": "Widoczna dla podopiecznego",
+        "pinned": "Przypięta"
+      },
+      "meta": {
+        "updatedAt": "Aktualizacja"
+      },
+      "dialog": {
+        "createTitle": "Utwórz notatkę",
+        "editTitle": "Edytuj notatkę",
+        "historyTitle": "Historia zmian notatki"
+      },
+      "form": {
+        "title": "Tytuł",
+        "content": "Treść notatki",
+        "visibleToTrainee": "Widoczna dla podopiecznego",
+        "isPinned": "Przypnij notatkę"
+      },
+      "actions": {
+        "create": "Dodaj notatkę",
+        "edit": "Edytuj",
+        "history": "Historia",
+        "delete": "Usuń"
+      },
+      "feedback": {
+        "saved": "Notatka została zapisana.",
+        "saveFailed": "Nie udało się zapisać notatki.",
+        "deleted": "Notatka została usunięta.",
+        "deleteFailed": "Nie udało się usunąć notatki.",
+        "historyFailed": "Nie udało się pobrać historii notatki."
+      },
+      "history": {
+        "empty": "Brak zapisanych zmian dla tej notatki.",
+        "unknown": "Zmiana",
+        "previous": "Poprzednia treść",
+        "current": "Nowa treść",
+        "emptyValue": "—"
+      },
+      "confirm": {
+        "deleteTitle": "Usunąć notatkę?",
+        "deleteMessage": "Czy na pewno usunąć „{name}”?"
+      },
+      "validation": {
+        "contentRequired": "Treść notatki jest wymagana."
       }
     },
     "reports": {
