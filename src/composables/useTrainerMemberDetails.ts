@@ -25,6 +25,7 @@ export type MemberDetailsTab =
   | "trainings"
   | "plans"
   | "diet"
+  | "notes"
   | "reports"
   | "measurements";
 

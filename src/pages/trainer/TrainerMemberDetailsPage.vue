@@ -46,6 +46,13 @@
           :format-date-time="formatDateTime"
         />
 
+        <TrainerMemberNotesTab
+          v-else-if="activeTab === 'notes'"
+          class="min-h-0 flex-1"
+          :trainee-id="traineeId"
+          :format-date-time="formatDateTime"
+        />
+
         <TrainerMemberReportsTab
           v-else-if="activeTab === 'reports'"
           class="min-h-0 flex-1"
@@ -73,6 +80,7 @@ import { useRoute, useRouter, type LocationQueryRaw } from "vue-router";
 
 import TrainerMemberDietTab from "../../components/trainer/member-details/TrainerMemberDietTab.vue";
 import TrainerMemberMeasurementsTab from "../../components/trainer/member-details/TrainerMemberMeasurementsTab.vue";
+import TrainerMemberNotesTab from "../../components/trainer/member-details/TrainerMemberNotesTab.vue";
 import TrainerMemberPlansTab from "../../components/trainer/member-details/TrainerMemberPlansTab.vue";
 import TrainerMemberReportsTab from "../../components/trainer/member-details/TrainerMemberReportsTab.vue";
 import TrainerMemberTrainingsTab from "../../components/trainer/member-details/TrainerMemberTrainingsTab.vue";
@@ -89,7 +97,7 @@ const traineeId = computed(() => String(route.params.traineeId ?? ""));
 const activeTab = ref<MemberDetailsTab>("trainings");
 const requestedTab = computed<MemberDetailsTab | null>(() => {
   const tab = String(route.query.tab ?? "").trim();
-  return ["trainings", "plans", "diet", "reports", "measurements"].includes(tab)
+  return ["trainings", "plans", "diet", "notes", "reports", "measurements"].includes(tab)
     ? (tab as MemberDetailsTab)
     : null;
 });
@@ -111,6 +119,11 @@ const tabs = computed(() => [
     value: "diet" as const,
     label: t("trainerMemberDetails.tabs.diet"),
     icon: "mdi-food-apple-outline",
+  },
+  {
+    value: "notes" as const,
+    label: t("trainerMemberDetails.tabs.notes"),
+    icon: "mdi-note-text-outline",
   },
   {
     value: "reports" as const,
