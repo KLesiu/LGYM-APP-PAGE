@@ -7,47 +7,67 @@
 ## Spis treści / Table of contents
 
 - [PL — README](#pl--readme)
-  - [1. Czym jest projekt](#1-czym-jest-projekt)
-  - [2. Cele biznesowe](#2-cele-biznesowe)
-  - [3. Role użytkowników](#3-role-użytkowników)
-  - [4. Najważniejsze funkcje aplikacji](#4-najważniejsze-funkcje-aplikacji)
-  - [5. Założenia produktowe i techniczne](#5-założenia-produktowe-i-techniczne)
-  - [6. Tech stack](#6-tech-stack)
-  - [7. Architektura techniczna](#7-architektura-techniczna)
-  - [8. Routing i obszary aplikacji](#8-routing-i-obszary-aplikacji)
-  - [9. API i integracje](#9-api-i-integracje)
-  - [10. Uwierzytelnianie i autoryzacja](#10-uwierzytelnianie-i-autoryzacja)
-  - [11. Internacjonalizacja](#11-internacjonalizacja)
-  - [12. Uruchomienie projektu lokalnie](#12-uruchomienie-projektu-lokalnie)
-  - [13. Skrypty npm](#13-skrypty-npm)
-  - [14. Zmienne środowiskowe](#14-zmienne-środowiskowe)
-  - [15. Struktura projektu](#15-struktura-projektu)
-  - [16. Jakość i walidacja](#16-jakość-i-walidacja)
-  - [17. Ograniczenia i uwagi](#17-ograniczenia-i-uwagi)
+  - [1. Executive summary](#1-executive-summary)
+  - [2. Czym jest projekt](#2-czym-jest-projekt)
+  - [3. Cele biznesowe](#3-cele-biznesowe)
+  - [4. Dlaczego ten produkt ma znaczenie](#4-dlaczego-ten-produkt-ma-znaczenie)
+  - [5. Role użytkowników](#5-role-użytkowników)
+  - [6. Najważniejsze funkcje aplikacji](#6-najważniejsze-funkcje-aplikacji)
+  - [7. Kluczowe przepływy biznesowe](#7-kluczowe-przepływy-biznesowe)
+  - [8. Założenia produktowe i techniczne](#8-założenia-produktowe-i-techniczne)
+  - [9. Tech stack](#9-tech-stack)
+  - [10. Architektura techniczna](#10-architektura-techniczna)
+  - [11. Routing i obszary aplikacji](#11-routing-i-obszary-aplikacji)
+  - [12. API i integracje](#12-api-i-integracje)
+  - [13. Uwierzytelnianie i autoryzacja](#13-uwierzytelnianie-i-autoryzacja)
+  - [14. Internacjonalizacja](#14-internacjonalizacja)
+  - [15. Model wdrożenia i uruchamiania](#15-model-wdrożenia-i-uruchamiania)
+  - [16. Uruchomienie projektu lokalnie](#16-uruchomienie-projektu-lokalnie)
+  - [17. Skrypty npm](#17-skrypty-npm)
+  - [18. Zmienne środowiskowe](#18-zmienne-środowiskowe)
+  - [19. Struktura projektu](#19-struktura-projektu)
+  - [20. Jakość i walidacja](#20-jakość-i-walidacja)
+  - [21. Ograniczenia i uwagi](#21-ograniczenia-i-uwagi)
 - [EN — README](#en--readme)
-  - [1. What this project is](#1-what-this-project-is)
-  - [2. Business goals](#2-business-goals)
-  - [3. User roles](#3-user-roles)
-  - [4. Core application features](#4-core-application-features)
-  - [5. Product and technical assumptions](#5-product-and-technical-assumptions)
-  - [6. Tech stack](#6-tech-stack-1)
-  - [7. Technical architecture](#7-technical-architecture)
-  - [8. Routing and application areas](#8-routing-and-application-areas)
-  - [9. API and integrations](#9-api-and-integrations)
-  - [10. Authentication and authorization](#10-authentication-and-authorization)
-  - [11. Internationalization](#11-internationalization)
-  - [12. Running the project locally](#12-running-the-project-locally)
-  - [13. npm scripts](#13-npm-scripts)
-  - [14. Environment variables](#14-environment-variables)
-  - [15. Project structure](#15-project-structure)
-  - [16. Quality and validation](#16-quality-and-validation)
-  - [17. Limitations and notes](#17-limitations-and-notes)
+  - [1. Executive summary](#1-executive-summary-1)
+  - [2. What this project is](#2-what-this-project-is)
+  - [3. Business goals](#3-business-goals)
+  - [4. Why this product matters](#4-why-this-product-matters)
+  - [5. User roles](#5-user-roles)
+  - [6. Core application features](#6-core-application-features)
+  - [7. Key business workflows](#7-key-business-workflows)
+  - [8. Product and technical assumptions](#8-product-and-technical-assumptions)
+  - [9. Tech stack](#9-tech-stack-1)
+  - [10. Technical architecture](#10-technical-architecture)
+  - [11. Routing and application areas](#11-routing-and-application-areas)
+  - [12. API and integrations](#12-api-and-integrations)
+  - [13. Authentication and authorization](#13-authentication-and-authorization)
+  - [14. Internationalization](#14-internationalization)
+  - [15. Delivery and deployment model](#15-delivery-and-deployment-model)
+  - [16. Running the project locally](#16-running-the-project-locally)
+  - [17. npm scripts](#17-npm-scripts)
+  - [18. Environment variables](#18-environment-variables)
+  - [19. Project structure](#19-project-structure)
+  - [20. Quality and validation](#20-quality-and-validation)
+  - [21. Limitations and notes](#21-limitations-and-notes)
 
 ---
 
 # PL — README
 
-## 1. Czym jest projekt
+## 1. Executive summary
+
+LGYM APP PAGE to webowy frontend platformy LGYM, który spina trzy krytyczne perspektywy produktu w jednym interfejsie:
+
+- **athlete** — codzienna praca użytkownika końcowego,
+- **trainer** — operacyjna praca trenera z podopiecznymi,
+- **admin** — kontrola platformy, użytkowników i konfiguracji wersji.
+
+Biznesowo projekt jest centrum operacyjnym produktu: to tutaj dzieje się zarządzanie relacją trener–podopieczny, planami treningowymi, raportami i biblioteką ćwiczeń. Technicznie jest to SPA zbudowane w **Vue 3 + TypeScript + Vite**, z routingiem po stronie klienta, wygenerowanym klientem API z OpenAPI oraz z warstwą autoryzacji opartą o role i claimy.
+
+Jeżeli ktoś ma w 5 minut zrozumieć, czym jest `./page`, odpowiedź brzmi: to panel operacyjny LGYM dla wszystkich ról biznesowych, zaprojektowany tak, aby jedna aplikacja webowa mogła obsłużyć onboarding, codzienną pracę i administrację produktem.
+
+## 2. Czym jest projekt
 
 LGYM APP PAGE to frontend aplikacji webowej do obsługi procesów związanych z treningiem, relacją trener–podopieczny oraz administracją platformą.
 
@@ -59,7 +79,7 @@ Projekt dostarcza trzy główne przestrzenie robocze:
 
 Jest to aplikacja typu SPA oparta o Vue 3, TypeScript i Vite, z routingiem po stronie klienta, integracją z backend API i wielojęzycznym interfejsem.
 
-## 2. Cele biznesowe
+## 3. Cele biznesowe
 
 Projekt realizuje kilka celów biznesowych:
 
@@ -71,7 +91,19 @@ Projekt realizuje kilka celów biznesowych:
 - zapewnienie panelu administracyjnego do kontroli użytkowników i konfiguracji platformy,
 - wsparcie dla różnych ról biznesowych w jednej aplikacji.
 
-## 3. Role użytkowników
+## 4. Dlaczego ten produkt ma znaczenie
+
+W praktyce `page` nie jest „tylko frontendem”. To warstwa, która:
+
+- redukuje chaos operacyjny po stronie trenerów,
+- skraca ścieżkę od stworzenia planu do przekazania go zawodnikowi,
+- daje administratorom kontrolę nad użytkownikami i wersjami aplikacji,
+- utrzymuje spójny model dostępu dla wielu ról w jednym produkcie,
+- pozwala zespołowi produktowemu rozwijać web i mobile wokół wspólnego kontraktu API.
+
+To ważne także z perspektywy zespołu: frontend webowy jest naturalnym miejscem do szybszej obsługi procesów administracyjnych i trenerskich niż mobile, dlatego `page` pełni rolę zaplecza operacyjnego całego ekosystemu LGYM.
+
+## 5. Role użytkowników
 
 ### Athlete / użytkownik końcowy
 
@@ -98,7 +130,7 @@ Projekt realizuje kilka celów biznesowych:
 - zarządza konfiguracją wersji aplikacji mobilnych,
 - korzysta z odseparowanego panelu administracyjnego.
 
-## 4. Najważniejsze funkcje aplikacji
+## 6. Najważniejsze funkcje aplikacji
 
 ### Uwierzytelnianie i wejście do systemu
 
@@ -177,7 +209,38 @@ W obrębie szczegółów podopiecznego aplikacja obsługuje m.in.:
 - konfiguracja wersji aplikacji,
 - zarządzanie administracyjną biblioteką ćwiczeń.
 
-## 5. Założenia produktowe i techniczne
+## 7. Kluczowe przepływy biznesowe
+
+### 1. Trener pozyskuje i aktywuje podopiecznego
+
+1. Trener wysyła zaproszenie.
+2. Zawodnik akceptuje lub odrzuca relację.
+3. System utrzymuje status współpracy.
+4. Trener może przejść do szczegółów podopiecznego i rozpocząć pracę.
+
+### 2. Trener buduje i udostępnia plan treningowy
+
+1. Tworzy plan.
+2. Dodaje dni planu.
+3. Składa dzień z ćwiczeń, serii i parametrów.
+4. Ustawia aktywny plan lub udostępnia go przez share code.
+
+### 3. Podopieczny raportuje, trener daje feedback
+
+1. Podopieczny wysyła raport.
+2. Trener przegląda pytania i odpowiedzi.
+3. Zapisuje komentarze do odpowiedzi lub cały komentarz zbiorczy.
+4. Feedback wraca do obiegu współpracy trener–podopieczny.
+
+### 4. Administrator utrzymuje porządek platformy
+
+1. Zarządza użytkownikami i rolami.
+2. Kontroluje bibliotekę ćwiczeń.
+3. Utrzymuje konfigurację wersji aplikacji mobilnych.
+
+To właśnie te przepływy sprawiają, że `page` jest projektem nie tylko prezentacyjnym, ale realnie operacyjnym.
+
+## 8. Założenia produktowe i techniczne
 
 Na podstawie kodu repozytorium można przyjąć następujące założenia:
 
@@ -190,7 +253,7 @@ Na podstawie kodu repozytorium można przyjąć następujące założenia:
 - aplikacja jest przygotowana do obsługi działań idempotentnych po stronie API,
 - frontend działa jako SPA i zakłada nowoczesne środowisko przeglądarkowe.
 
-## 6. Tech stack
+## 9. Tech stack
 
 ### Frontend
 
@@ -216,7 +279,7 @@ Na podstawie kodu repozytorium można przyjąć następujące założenia:
 - własne tokeny i zmienne CSS,
 - ikony **MDI / Material Design Icons**.
 
-## 7. Architektura techniczna
+## 10. Architektura techniczna
 
 ### Ogólny model aplikacji
 
@@ -249,7 +312,16 @@ W `src/main.ts` aplikacja podmienia `window.fetch`, aby automatycznie:
 
 To oznacza, że zarówno ręczne wrappery API, jak i wygenerowany klient korzystają ze wspólnych zasad komunikacji.
 
-## 8. Routing i obszary aplikacji
+### Pozycja `page` w całym ekosystemie LGYM
+
+Z perspektywy architektury produktu `page` pełni rolę:
+
+- panelu operacyjnego dla trenerów,
+- panelu kontrolnego dla administratorów,
+- webowego punktu wejścia dla części flow użytkownika końcowego,
+- partnera dla aplikacji `mobile`, współdzielącego backend i kontrakt API.
+
+## 11. Routing i obszary aplikacji
 
 Routing opiera się o `createWebHistory()` i rozdziela aplikację na trzy główne obszary:
 
@@ -269,7 +341,9 @@ Router obsługuje m.in.:
 - wymuszenie odpowiedniej roli,
 - przekazanie docelowego `redirect` po ponownym logowaniu.
 
-## 9. API i integracje
+Taki model routingu jest istotny biznesowo: zamiast utrzymywać trzy osobne aplikacje, produkt utrzymuje jedną warstwę frontendową z odseparowanym dostępem.
+
+## 12. API i integracje
 
 ### Orval / OpenAPI
 
@@ -295,7 +369,7 @@ To podejście jest używane głównie tam, gdzie potrzebna jest lekka, ręcznie 
 - backend API przez `fetch`
 - Swagger / OpenAPI jako źródło kontraktu API.
 
-## 10. Uwierzytelnianie i autoryzacja
+## 13. Uwierzytelnianie i autoryzacja
 
 Sesja użytkownika przechowuje m.in.:
 
@@ -318,7 +392,9 @@ System dostępu opiera się na połączeniu:
 - roli użytkownika,
 - claimów uprawnień.
 
-## 11. Internacjonalizacja
+To ważne, bo produkt nie rozdziela autoryzacji wyłącznie po roli — korzysta także z claimów, co daje lepszą kontrolę granulacji dostępu w panelu administracyjnym i trenerkim.
+
+## 14. Internacjonalizacja
 
 Aplikacja wspiera dwa języki:
 
@@ -332,7 +408,22 @@ Tłumaczenia znajdują się w:
 
 Lokalizacja wpływa nie tylko na UI, ale również na nagłówek `Accept-Language` wysyłany do API.
 
-## 12. Uruchomienie projektu lokalnie
+## 15. Model wdrożenia i uruchamiania
+
+Projekt jest przygotowany do działania jako statyczne SPA serwowane przez Nginx.
+
+Najważniejsze cechy modelu wdrożenia:
+
+- build frontendowy powstaje w Dockerze,
+- runtime jest oparty o obraz `cgr.dev/chainguard/nginx`,
+- build-time przyjmuje m.in. `VITE_API_BASE_URL` oraz `VITE_GOOGLE_CLIENT_ID`,
+- aplikacja jest serwowana na porcie `8080`,
+- routing SPA wymaga fallbacku do `index.html`,
+- `public/google-callback.html` musi pozostać dostępny jako fizyczny plik.
+
+To oznacza, że `page` można łatwo osadzić w standardowym pipeline deploymentowym bez dodatkowego serwera Node po stronie runtime.
+
+## 16. Uruchomienie projektu lokalnie
 
 ### Wymagania
 
@@ -376,7 +467,30 @@ npm run preview
 npm run orval
 ```
 
-## 13. Skrypty npm
+### Uruchomienie frontendu w Dockerze
+
+Build obrazu z ustawieniem docelowego API i Google Client ID:
+
+```bash
+docker build \
+  --build-arg VITE_API_BASE_URL=https://api.example.com \
+  --build-arg VITE_GOOGLE_CLIENT_ID=your-google-client-id \
+  -t lgym-page .
+```
+
+Start kontenera:
+
+```bash
+docker run -p 8080:8080 lgym-page
+```
+
+Alternatywnie przez Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+## 17. Skrypty npm
 
 W projekcie zdefiniowano:
 
@@ -390,7 +504,7 @@ W projekcie zdefiniowano:
 }
 ```
 
-## 14. Zmienne środowiskowe
+## 18. Zmienne środowiskowe
 
 Najważniejsze zmienne wynikające z kodu:
 
@@ -411,7 +525,7 @@ VITE_GOOGLE_CLIENT_ID=your-google-client-id
 ORVAL_SWAGGER_URL=https://localhost:7025/swagger/v1/swagger.json
 ```
 
-## 15. Struktura projektu
+## 19. Struktura projektu
 
 ```text
 src/
@@ -429,7 +543,7 @@ src/
 └─ styles/              # Tailwind + tokeny CSS
 ```
 
-## 16. Jakość i walidacja
+## 20. Jakość i walidacja
 
 Minimalny standard walidacji zmian w projekcie:
 
@@ -442,7 +556,7 @@ W praktyce oznacza to:
 - weryfikację spójności komponentów Vue,
 - sprawdzenie, czy aplikacja buduje się produkcyjnie.
 
-## 17. Ograniczenia i uwagi
+## 21. Ograniczenia i uwagi
 
 - część klienta API jest generowana, a część utrzymywana ręcznie,
 - pełny zakres funkcjonalny zależy od zgodności kontraktu backend API,
@@ -454,7 +568,19 @@ W praktyce oznacza to:
 
 # EN — README
 
-## 1. What this project is
+## 1. Executive summary
+
+LGYM APP PAGE is the web frontend of the LGYM product ecosystem. It brings together three critical business perspectives in one interface:
+
+- **athlete** — daily end-user workflows,
+- **trainer** — operational coaching workflows,
+- **admin** — platform governance, user management, and version control.
+
+From a business perspective, this project is the operational hub of the product. From a technical perspective, it is a **Vue 3 + TypeScript + Vite** SPA with client-side routing, OpenAPI-generated API clients, and access control based on roles plus permission claims.
+
+If someone needs the short version: `./page` is the LGYM web control center for coaches, athletes, and administrators.
+
+## 2. What this project is
 
 LGYM APP PAGE is the frontend of a web platform used to manage training-related workflows, trainer–athlete relationships, and platform administration.
 
@@ -466,7 +592,7 @@ The product exposes three main workspaces:
 
 It is a Vue 3 + TypeScript single-page application that communicates with a backend API and supports bilingual UI content.
 
-## 2. Business goals
+## 3. Business goals
 
 The application supports several business goals:
 
@@ -478,7 +604,19 @@ The application supports several business goals:
 - expose an administration panel for platform control,
 - support multiple business roles inside one product.
 
-## 3. User roles
+## 4. Why this product matters
+
+In practice, `page` is not “just a frontend”. It:
+
+- reduces operational friction for trainers,
+- shortens the path from plan creation to athlete delivery,
+- gives admins direct control over users and app versions,
+- keeps a unified multi-role access model inside one product,
+- allows both web and mobile to evolve around a shared backend contract.
+
+This makes `page` the operational backbone of LGYM, not only its web presentation layer.
+
+## 5. User roles
 
 ### Athlete
 
@@ -505,7 +643,7 @@ The application supports several business goals:
 - manages mobile app version configuration,
 - operates inside a separate admin panel.
 
-## 4. Core application features
+## 6. Core application features
 
 ### Authentication and access
 
@@ -584,7 +722,36 @@ The trainee details area includes workflows such as:
 - application version configuration,
 - admin-level exercise library management.
 
-## 5. Product and technical assumptions
+## 7. Key business workflows
+
+### 1. Coach acquires and activates a trainee
+
+1. The trainer sends an invitation.
+2. The athlete accepts or rejects it.
+3. The relationship state becomes actionable.
+4. The trainer continues into the trainee detail workspace.
+
+### 2. Coach builds and shares a training plan
+
+1. A plan is created.
+2. Plan days are defined.
+3. Exercises, sets, and execution parameters are assigned.
+4. The plan is activated or shared with a share code.
+
+### 3. Athlete reports, trainer responds
+
+1. The athlete submits a report.
+2. The trainer reviews answers.
+3. Feedback is stored per answer or for the full submission.
+4. The collaboration loop stays inside the product.
+
+### 4. Admin keeps the platform consistent
+
+1. Users and roles are managed.
+2. Exercise catalog quality is maintained.
+3. Mobile app version configuration is controlled.
+
+## 8. Product and technical assumptions
 
 Based on the repository code, the following assumptions are valid:
 
@@ -597,7 +764,7 @@ Based on the repository code, the following assumptions are valid:
 - API requests are designed with idempotency support in mind,
 - the frontend is built as a modern SPA.
 
-## 6. Tech stack
+## 9. Tech stack
 
 ### Frontend
 
@@ -623,7 +790,7 @@ Based on the repository code, the following assumptions are valid:
 - custom CSS tokens and variables,
 - **MDI / Material Design Icons**.
 
-## 7. Technical architecture
+## 10. Technical architecture
 
 ### General application model
 
@@ -656,7 +823,16 @@ In `src/main.ts`, the app overrides `window.fetch` to automatically:
 
 This creates a consistent network layer for both hand-written and generated API clients.
 
-## 8. Routing and application areas
+### Role of `page` in the wider LGYM ecosystem
+
+Architecturally, `page` acts as:
+
+- the operational dashboard for trainers,
+- the control panel for admins,
+- a web entry point for selected end-user flows,
+- the web counterpart to `mobile`, sharing one backend and one API contract.
+
+## 11. Routing and application areas
 
 Routing uses `createWebHistory()` and separates the app into three primary areas:
 
@@ -676,7 +852,9 @@ The router also supports:
 - role enforcement,
 - redirect preservation through the `redirect` query parameter.
 
-## 9. API and integrations
+This routing model matters because the product keeps one multi-role frontend instead of splitting the experience into separate applications.
+
+## 12. API and integrations
 
 ### Orval / OpenAPI
 
@@ -702,7 +880,7 @@ This is useful when a simpler or more explicit integration layer is preferred.
 - backend API through native `fetch`
 - Swagger / OpenAPI as the contract source.
 
-## 10. Authentication and authorization
+## 13. Authentication and authorization
 
 The client-side session stores information such as:
 
@@ -725,7 +903,9 @@ Access control is based on a combination of:
 - role membership,
 - permission claims.
 
-## 11. Internationalization
+That distinction matters because role-only access would not be granular enough for the admin and trainer workflows represented in the UI.
+
+## 14. Internationalization
 
 The app supports two languages:
 
@@ -739,7 +919,22 @@ Translation files live in:
 
 Locale selection affects both the UI and the `Accept-Language` header sent to the API.
 
-## 12. Running the project locally
+## 15. Delivery and deployment model
+
+The project is prepared to run as a static SPA served by Nginx.
+
+Important characteristics:
+
+- frontend build is produced in Docker,
+- runtime is based on `cgr.dev/chainguard/nginx`,
+- build-time configuration includes `VITE_API_BASE_URL` and `VITE_GOOGLE_CLIENT_ID`,
+- the app listens on port `8080`,
+- SPA routing requires an `index.html` fallback,
+- `public/google-callback.html` must remain reachable as a physical file.
+
+This makes the deployment model simple and infrastructure-friendly: no Node server is required for runtime delivery.
+
+## 16. Running the project locally
 
 ### Requirements
 
@@ -783,7 +978,30 @@ npm run preview
 npm run orval
 ```
 
-## 13. npm scripts
+### Run the frontend in Docker
+
+Build image with target API and Google Client ID:
+
+```bash
+docker build \
+  --build-arg VITE_API_BASE_URL=https://api.example.com \
+  --build-arg VITE_GOOGLE_CLIENT_ID=your-google-client-id \
+  -t lgym-page .
+```
+
+Run container:
+
+```bash
+docker run -p 8080:8080 lgym-page
+```
+
+Or via Docker Compose:
+
+```bash
+docker compose up --build
+```
+
+## 17. npm scripts
 
 Defined scripts:
 
@@ -797,7 +1015,7 @@ Defined scripts:
 }
 ```
 
-## 14. Environment variables
+## 18. Environment variables
 
 Key environment variables visible in the repository:
 
@@ -818,7 +1036,7 @@ VITE_GOOGLE_CLIENT_ID=your-google-client-id
 ORVAL_SWAGGER_URL=https://localhost:7025/swagger/v1/swagger.json
 ```
 
-## 15. Project structure
+## 19. Project structure
 
 ```text
 src/
@@ -836,7 +1054,7 @@ src/
 └─ styles/              # Tailwind + CSS tokens
 ```
 
-## 16. Quality and validation
+## 20. Quality and validation
 
 The minimum validation standard for changes is:
 
@@ -849,7 +1067,7 @@ In practice, this verifies:
 - Vue component consistency,
 - successful production build output.
 
-## 17. Limitations and notes
+## 21. Limitations and notes
 
 - part of the API client is generated, while some integrations are maintained manually,
 - the full business behavior depends on backend API contract compatibility,
