@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run typecheck && vite build",
+    "build:app": "vite build",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit",
     "orval": "orval --config orval.config.ts"
