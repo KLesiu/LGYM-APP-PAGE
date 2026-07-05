@@ -21,7 +21,11 @@
           class="flex flex-col gap-5 text-left"
           @submit.prevent="submitForm"
         >
-          <AuthTabs v-if="!isAdminMode" v-model="selectedUserRole" />
+          <AuthTabs
+            v-if="!isAdminMode"
+            v-model="selectedUserRole"
+            :show-athlete-tab="false"
+          />
 
           <div class="grid gap-4">
             <v-text-field
@@ -34,17 +38,8 @@
               autocomplete="username"
             />
 
-            <div class="flex flex-col gap-1.5">
-              <div class="flex items-center justify-end">
-                <router-link
-                  to="/forgot-password"
-                  class="text-xs text-[var(--lgym-text-muted)] underline underline-offset-2 hover:text-[var(--lgym-text)]"
-                >
-                  {{ t("auth.login.actions.forgotPassword") }}
-                </router-link>
-              </div>
-
-              <v-text-field
+              <div class="flex flex-col gap-1.5">
+                <v-text-field
                 id="password"
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
@@ -82,15 +77,6 @@
               </div>
 
               <div class="flex flex-col gap-2.5">
-                <v-btn
-                  block
-                  variant="outlined"
-                  color="primary"
-                  prepend-icon="mdi-apple"
-                  size="large"
-                >
-                  {{ t("auth.login.actions.loginWithApple") }}
-                </v-btn>
                 <v-btn
                   block
                   variant="outlined"
@@ -162,6 +148,8 @@ const props = withDefaults(
   },
 );
 
+const showAthleteTab = false;
+
 const { t } = useI18n();
 const toast = useToast();
 const router = useRouter();
@@ -183,7 +171,7 @@ const resolveInitialRole = (): AuthRole => {
 
   if (redirect.startsWith("/trainer")) return "trainer";
 
-  return "athlete";
+  return showAthleteTab ? "athlete" : "trainer";
 };
 
 const username = ref("");
