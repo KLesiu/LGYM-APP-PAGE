@@ -181,7 +181,7 @@
       },
       "placeholders": {
         "username": "your_username",
-        "email": "me.example.com",
+        "email": "your-email",
         "password": "Password",
         "confirmPassword": "Confirm Password"
       },
