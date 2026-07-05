@@ -1,0 +1,1942 @@
+{
+  "login": {
+    "title": "Logowanie",
+    "subtitle": "Zaloguj się do panelu trenera",
+    "heading": {
+      "title": "Witaj ponownie",
+      "subtitle": "Wpisz swoje dane, aby się zalogować."
+    },
+    "branding": {
+      "quote": "Prowadź podopiecznych skutecznie. Każdy trening i każdy klient w jednym miejscu.",
+      "description": "LGYM Trainer pomaga zarządzać planami, postępami i komunikacją w jednej przestrzeni."
+    },
+    "fields": {
+      "email": "Adres e-mail",
+      "password": "Hasło",
+      "emailLabel": "Adres e-mail",
+      "emailPlaceholder": "Wpisz adres e-mail",
+      "passwordLabel": "Hasło",
+      "passwordPlaceholder": "Wpisz hasło"
+    },
+    "options": {
+      "rememberMe": "Zapamiętaj mnie",
+      "forgotPassword": "Nie pamiętasz hasła?"
+    },
+    "actions": {
+      "signIn": "Zaloguj się",
+      "or": "Lub",
+      "signInGoogle": "Zaloguj się przez Google"
+    },
+    "footer": {
+      "noAccount": "Nie masz konta?",
+      "signUp": "Zarejestruj się"
+    },
+    "hint": "Tryb demo: kliknij przycisk, aby otworzyć panel trenera."
+  },
+  "trainerDashboard": {
+    "appName": "LGYM Trainer",
+    "appSubtitle": "Panel trenera",
+    "navigation": {
+      "dashboard": "Panel główny",
+          "exercises": "Ćwiczenia",
+      "trainingPlans": "Plany treningowe",
+      "members": "Podopieczni",
+      "myClients": "Moi klienci",
+      "invitations": "Zaproszenia",
+      "reportTemplates": "Szablony raportów",
+      "settings": "Ustawienia"
+    },
+    "sidebar": {
+      "noteLabel": "Przegląd",
+      "noteText": "Zarządzaj planami podopiecznych, monitoruj postępy i trzymaj pod ręką codzienne zadania."
+    },
+    "header": {
+      "sectionEyebrow": "Panel główny trenera",
+      "dateLabel": "Dzisiaj"
+    },
+    "content": {
+      "title": "Twoje plany",
+      "subtitle": "Przeglądaj aktywne programy i przechodź od razu do kolejnego etapu pracy nad treningiem."
+    },
+    "plans": {
+      "days": "{count} dni",
+      "cardTag": "Aktywny",
+      "items": {
+        "fullBody": {
+          "title": "Trening całego ciała"
+        },
+        "strength": {
+          "title": "Budowanie Siły"
+        },
+        "recomposition": {
+          "title": "Rekompozycja Sylwetki"
+        },
+        "mobility": {
+          "title": "Reset Mobilności"
+        }
+      }
+    }
+  },
+  "userArea": {
+    "appName": "LGYM",
+    "appSubtitle": "Strefa zawodnika",
+    "navigation": {
+      "relationship": "Relacja z trenerem",
+        "exercises": "Ćwiczenia"
+    },
+    "layout": {
+      "exercises": {
+        "title": "Ćwiczenia",
+        "subtitle": "Przeglądaj bibliotekę globalnych i własnych ćwiczeń, filtruj po źródle i szybko wyszukuj po nazwie albo partii ciała."
+      },
+      "relationship": {
+        "title": "Relacja z trenerem",
+        "subtitle": "Sprawdź aktualny status relacji z trenerem i reaguj na zaproszenia wspierane przez obecny kontrakt API."
+      }
+    }
+  },
+  "auth": {
+    "tabs": {
+      "athlete": "Panel zawodnika",
+      "trainer": "Strefa trenera"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "trainer": "Trener",
+      "athlete": "Zawodnik",
+      "user": "Użytkownik"
+    },
+    "validation": {
+      "usernameRequired": "Nazwa użytkownika jest wymagana",
+      "usernameMin": "Nazwa użytkownika musi mieć co najmniej 3 znaki",
+      "emailRequired": "Adres e-mail jest wymagany",
+      "emailInvalid": "Adres e-mail musi być poprawny",
+      "passwordRequired": "Hasło jest wymagane",
+      "passwordMin": "Hasło musi mieć co najmniej 6 znaków",
+      "confirmPasswordRequired": "Potwierdzenie hasła jest wymagane",
+      "passwordsMustMatch": "Hasła muszą być takie same"
+    },
+    "login": {
+      "title": "Zaloguj się do konta",
+      "subtitle": "Wpisz nazwę użytkownika poniżej, aby się zalogować",
+      "fields": {
+        "username": "Nazwa użytkownika",
+        "password": "Hasło"
+      },
+      "placeholders": {
+        "username": "twoja_nazwa",
+        "password": "Hasło"
+      },
+      "actions": {
+        "forgotPassword": "Nie pamiętasz hasła?",
+        "submit": "Zaloguj się",
+        "orContinueWith": "Lub kontynuuj przez",
+        "loginWithApple": "Zaloguj się przez Apple",
+        "loginWithGoogle": "Zaloguj się przez Google"
+      },
+      "footer": {
+        "noAccount": "Nie masz konta?",
+        "signUp": "Zarejestruj się"
+      },
+      "feedback": {
+        "failed": "Logowanie nie powiodło się. Sprawdź dane i spróbuj ponownie.",
+        "success": "Logowanie zakończone sukcesem.",
+        "unexpectedError": "Wystąpił nieoczekiwany błąd logowania. Spróbuj ponownie."
+      }
+    },
+    "google": {
+      "feedback": {
+        "success": "Logowanie przez Google zakończone sukcesem.",
+        "failed": "Logowanie przez Google nie powiodło się. Spróbuj ponownie.",
+        "missingClientId": "Logowanie przez Google nie jest skonfigurowane w tym środowisku.",
+        "popupBlocked": "Okno logowania Google zostało zablokowane. Zezwól na popupy i spróbuj ponownie.",
+        "popupClosed": "Logowanie przez Google zostało anulowane.",
+        "timeout": "Przekroczono czas logowania przez Google. Spróbuj ponownie.",
+        "accessDenied": "Logowanie przez Google zostało anulowane przed zakończeniem.",
+        "invalidResponse": "Logowanie przez Google zwróciło nieprawidłową odpowiedź."
+      }
+    },
+    "loginAdmin": {
+      "title": "Logowanie administratora",
+      "subtitle": "Zaloguj się na konto z uprawnieniami do zarządzania użytkownikami i rolami",
+      "actions": {
+        "submit": "Wejdź do panelu admina"
+      },
+      "feedback": {
+        "accessDenied": "To konto nie ma uprawnień administratora."
+      },
+      "footer": {
+        "backToUserLoginLabel": "Chcesz wrócić do zwykłego logowania?",
+        "backToUserLogin": "Przejdź do /login"
+      }
+    },
+    "register": {
+      "title": "Utwórz konto",
+      "subtitle": "Wypełnij dane poniżej, aby się zarejestrować",
+      "fields": {
+        "username": "Nazwa użytkownika",
+        "email": "Adres e-mail",
+        "password": "Hasło",
+        "confirmPassword": "Potwierdź hasło"
+      },
+      "placeholders": {
+        "username": "twoja_nazwa",
+        "email": "ja@example.com",
+        "password": "Hasło",
+        "confirmPassword": "Potwierdź hasło"
+      },
+      "actions": {
+        "submit": "Zarejestruj się"
+      },
+      "footer": {
+        "haveAccount": "Masz już konto?",
+        "login": "Zaloguj się"
+      },
+      "feedback": {
+        "failed": "Rejestracja nie powiodła się. Spróbuj ponownie.",
+        "success": "Rejestracja zakończona sukcesem. Możesz się teraz zalogować.",
+        "unexpectedError": "Wystąpił nieoczekiwany błąd rejestracji. Spróbuj ponownie."
+      }
+    }
+  },
+  "ui": {
+    "header": {
+      "accountMenu": "Menu konta użytkownika",
+      "logout": "Wyloguj"
+    },
+    "notifications": {
+      "openMenu": "Otwórz powiadomienia",
+      "title": "Powiadomienia",
+      "subtitle": "Najważniejsze zdarzenia od podopiecznych",
+      "markAllRead": "Odczytaj wszystkie",
+      "warning": {
+        "eyebrow": "Nieodczytane powiadomienie",
+        "title": "Masz nieodczytane powiadomienie starsze niż 24 godziny",
+        "age": "Czeka od: {age}",
+        "goToNotification": "Przejdź do powiadomienia",
+        "markAsRead": "Oznacz jako przeczytane"
+      },
+      "error": "Nie udało się pobrać powiadomień.",
+      "empty": "Brak powiadomień dla trenera.",
+      "fallbackMessage": "Powiadomienie",
+      "unknownType": "Powiadomienie systemowe",
+      "tabs": {
+        "new": "Nowe",
+        "read": "Odczytane",
+        "all": "Wszystkie"
+      },
+      "types": {
+        "invitationAccepted": "Współpraca zaakceptowana",
+        "invitationRejected": "Zaproszenie odrzucone",
+        "reportSubmissionReceived": "Nowy raport od podopiecznego",
+        "trainerRelationshipEnded": "Współpraca zakończona"
+      },
+      "feedback": {
+        "markReadFailed": "Nie udało się oznaczyć powiadomienia jako przeczytanego.",
+        "markAllReadFailed": "Nie udało się oznaczyć wszystkich powiadomień jako przeczytanych."
+      }
+    },
+    "breadcrumbs": {
+      "invitationDetails": "Szczegóły zaproszenia",
+      "memberPlanDetails": "Plan podopiecznego",
+      "trainingPlanDetails": "Szczegóły planu",
+      "planDayCreate": "Nowy dzień planu",
+      "planDayEdit": "Edycja dnia planu"
+    },
+    "theme": {
+      "switchToLight": "Przełącz na jasny motyw",
+      "switchToDark": "Przełącz na ciemny motyw"
+    },
+    "language": {
+      "current": "Aktualny język: {code}",
+      "polish": "Polski",
+      "english": "Angielski"
+    }
+  },
+  "common": {
+    "actions": {
+      "dismiss": "Zamknij komunikat"
+    },
+    "toastTitles": {
+      "success": "Sukces",
+      "error": "Błąd",
+      "warning": "Uwaga",
+      "info": "Informacja"
+    }
+  },
+  "trainerArea": {
+    "layout": {
+      "members": {
+        "title": "Podopieczni",
+        "subtitle": "Przeglądaj listę podopiecznych, otwieraj szczegóły i zarządzaj relacją trenerską z jednego miejsca."
+      },
+      "invitations": {
+        "title": "Zaproszenia",
+        "subtitle": "Zapraszaj nowych podopiecznych mailowo, monitoruj status i cofaj oczekujące zaproszenia."
+      },
+      "trainingPlans": {
+        "title": "Plany treningowe",
+        "subtitle": "Buduj i zarządzaj globalnymi planami treningowymi, dniami planu oraz kodami udostępniania z jednego miejsca."
+      },
+      "reportTemplates": {
+        "title": "Szablony raportów",
+        "subtitle": "Zarządzaj globalną biblioteką szablonów raportów dla całej strefy trenera."
+      },
+      "settings": {
+        "title": "Ustawienia",
+        "subtitle": "Zarządzaj preferencjami konta i podłączonymi metodami logowania w strefie trenera."
+      },
+      "exercises": {
+        "title": "Ćwiczenia",
+        "subtitle": "Korzystaj z biblioteki ćwiczeń, przełączaj między globalnymi i prywatnymi pozycjami oraz szybko znajduj ruchy potrzebne do pracy z podopiecznymi."
+      }
+    }
+  },
+  "trainerSettings": {
+    "page": {
+      "eyebrow": "Ustawienia konta",
+      "title": "Podłączone metody logowania",
+      "subtitle": "Połącz Google z istniejącym kontem trenera i sprawdź zewnętrzne logowania przypisane do profilu."
+    },
+    "google": {
+      "title": "Logowanie Google",
+      "subtitle": "Używaj konta Google do szybszego logowania i wygodnego dostępu na różnych urządzeniach.",
+      "provider": "Google",
+      "loading": "Trwa ładowanie podłączonych kont...",
+      "emptyState": "Do tego konta nie podłączono jeszcze żadnych zewnętrznych metod logowania.",
+      "notLinked": "Brak podłączonego konta Google.",
+      "statusLinked": "Podłączone",
+      "statusNotLinked": "Niepodłączone",
+      "linkAction": "Połącz Google",
+      "alreadyLinked": "Google połączone",
+      "unknownProvider": "Zewnętrzny dostawca",
+      "noProviderEmail": "Brak adresu e-mail od dostawcy"
+    },
+    "feedback": {
+      "loadFailed": "Nie udało się pobrać podłączonych metod logowania.",
+      "linkFailed": "Nie udało się połączyć konta Google.",
+      "linkSuccess": "Konto Google zostało połączone.",
+      "unauthorized": "Sesja wygasła. Zaloguj się ponownie."
+    }
+  },
+  "trainerTrainingPlans": {
+    "page": {
+      "eyebrow": "Globalny kreator",
+      "title": "Strefa planów treningowych",
+      "subtitle": "Twórz powtarzalne globalne plany, utrzymuj nazwy w porządku i otwieraj pełny kreator do edycji dzień po dniu.",
+      "summary": "Globalna biblioteka planów trenera"
+    },
+    "list": {
+      "eyebrow": "Lista planów",
+      "title": "Wszystkie globalne plany",
+      "subtitle": "Zarządzaj biblioteką szablonów treningowych, które trener może później kopiować i przypisywać podopiecznym."
+    },
+    "columns": {
+      "status": "Gotowość"
+    },
+    "status": {
+      "assignable": "Gotowy do przypisania"
+    },
+    "fallback": {
+      "noName": "Plan bez nazwy"
+    },
+    "dialog": {
+      "createTitle": "Utwórz plan treningowy",
+      "renameTitle": "Zmień nazwę planu treningowego"
+    },
+    "form": {
+      "name": "Nazwa planu",
+      "namePlaceholder": "Wpisz nazwę planu treningowego"
+    },
+    "actions": {
+      "create": "Utwórz plan",
+      "open": "Otwórz szczegóły",
+      "rename": "Zmień nazwę",
+      "delete": "Usuń",
+      "share": "Udostępnij",
+      "setActive": "Ustaw jako aktywny",
+      "save": "Zapisz",
+      "cancel": "Anuluj",
+      "retry": "Spróbuj ponownie",
+      "deleteConfirm": "Usunąć plan \"{name}\"?"
+    },
+    "empty": {
+      "title": "Brak utworzonych globalnych planów."
+    },
+    "error": {
+      "load": "Nie udało się pobrać globalnych planów treningowych."
+    },
+    "share": {
+      "codeLabel": "Kod udostępniania",
+      "copy": "Kopiuj kod"
+    },
+    "feedback": {
+      "loadPlansFailed": "Nie udało się pobrać planów treningowych.",
+      "nameRequired": "Nazwa planu jest wymagana.",
+      "createPlanSuccess": "Plan treningowy został utworzony.",
+      "createPlanFailed": "Nie udało się utworzyć planu treningowego.",
+      "updatePlanSuccess": "Plan treningowy został zaktualizowany.",
+      "updatePlanFailed": "Nie udało się zaktualizować planu treningowego.",
+      "deletePlanSuccess": "Plan treningowy został usunięty.",
+      "deletePlanFailed": "Nie udało się usunąć planu treningowego.",
+      "setActiveSuccess": "Aktywny plan został zaktualizowany.",
+      "setActiveFailed": "Nie udało się ustawić aktywnego planu.",
+      "sharePlanSuccess": "Kod udostępniania został wygenerowany.",
+      "sharePlanFailed": "Nie udało się wygenerować kodu udostępniania.",
+      "copyShareCodeSuccess": "Kod udostępniania skopiowano do schowka.",
+      "copyShareCodeFailed": "Nie udało się skopiować kodu udostępniania."
+    }
+  },
+  "trainerTrainingPlanDetails": {
+    "page": {
+      "eyebrow": "Kreator planu",
+      "title": "Szczegóły planu treningowego",
+      "subtitle": "Zarządzaj dniami planu na jednej planszy, otwieraj szybki podgląd i generuj kod udostępniania dla tego globalnego planu.",
+      "badge": "Globalny plan",
+      "planIdLabel": "ID planu: {id}"
+    },
+    "actions": {
+      "back": "Wróć do planów",
+      "close": "Zamknij",
+      "retry": "Spróbuj ponownie"
+    },
+    "error": {
+      "plan": "Nie udało się pobrać wybranego planu treningowego."
+    },
+    "share": {
+      "eyebrow": "Udostępnianie",
+      "title": "Udostępnij ten plan kodem",
+      "subtitle": "Dzięki temu kodowi dowolny użytkownik będzie mógł zaimportować cały Twój plan.",
+      "codeLabel": "Aktualny kod udostępniania",
+      "empty": "",
+      "actions": {
+        "generate": "Generuj kod",
+        "regenerate": "Generuj ponownie",
+        "copy": "Kopiuj kod"
+      }
+    },
+    "planDays": {
+      "eyebrow": "Dni planu",
+      "title": "Lista dni planu",
+      "subtitle": "Przeglądaj dni planu w kafelkach, uruchamiaj szybki podgląd i przechodź do pełnej edycji tylko wtedy, gdy tego potrzebujesz.",
+      "empty": "Nie dodano jeszcze żadnych dni planu.",
+      "columns": {
+        "actions": "Akcje"
+      },
+      "badges": {
+        "selected": "Podgląd aktywny",
+        "available": "Gotowy do podglądu"
+      },
+      "fallback": {
+        "noName": "Dzień bez nazwy"
+      },
+      "stats": {
+        "exercises": "Ćwiczenia",
+        "series": "Serie",
+        "lastTraining": "Ostatni trening"
+      },
+      "meta": {
+        "exercises": "Ćwiczenia: {count}",
+        "series": "Serie: {count}",
+        "lastTraining": "Ostatni trening: {value}"
+      },
+      "actions": {
+        "create": "Nowy dzień planu",
+        "preview": "Podgląd",
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "deleteConfirm": "Usunąć dzień planu \"{name}\"?"
+      },
+      "error": {
+        "load": "Nie udało się pobrać listy dni planu."
+      }
+    },
+    "workspace": {
+      "eyebrow": "Przestrzeń robocza dnia planu",
+      "subtitle": "Proces znany z wersji mobilnej działa najlepiej wtedy, gdy edycja dnia planu ma osobną przestrzeń roboczą. Otwórz dzień i edytuj go w szerokim kreatorze zamiast w ciasnym formularzu wbudowanym w stronę.",
+      "empty": {
+        "title": "Wybierz dzień do podglądu",
+        "subtitle": "Kliknij podgląd na dowolnym kafelku, aby zobaczyć ćwiczenia, serie i ostatnią aktywność bez wychodzenia z tej strony.",
+        "helper": "Użyj akcji Podgląd na wybranym kafelku, aby zobaczyć szczegóły dnia planu, a Edytuj, gdy chcesz przejść do pełnej przestrzeni roboczej."
+      },
+      "preview": {
+        "eyebrow": "Podgląd dnia planu",
+        "subtitle": "Szybki podgląd szczegółów dnia planu przed przejściem do pełnej edycji.",
+        "error": "Nie udało się pobrać podglądu wybranego dnia planu.",
+        "emptyExercises": "Ten dzień planu nie ma jeszcze przypisanych ćwiczeń.",
+        "stats": {
+      "exercises": "Ćwiczenia",
+          "series": "Serie",
+          "lastTraining": "Ostatni trening"
+        },
+        "exerciseMeta": {
+          "reps": "Powtórzenia: {value}",
+          "series": "Serie: {value}"
+        }
+      },
+      "summary": {
+        "eyebrow": "Przegląd planu",
+        "title": "Szybkie liczby",
+        "subtitle": "W jednym miejscu widzisz skalę planu i łatwiej oceniasz, czy rozkład dni jest już kompletny.",
+        "stats": {
+          "totalDays": "Liczba dni",
+          "totalExercises": "Suma ćwiczeń",
+          "totalSeries": "Suma serii"
+        }
+      },
+      "sections": {
+        "create": {
+          "eyebrow": "Tworzenie",
+          "title": "Rozpocznij nowy dzień planu",
+          "subtitle": "Otwórz dedykowaną trasę z miejscem na nazwę dnia, bibliotekę ćwiczeń, kolejność i podsumowanie."
+        },
+        "edit": {
+          "eyebrow": "Edycja",
+          "title": "Edytuj w pełnej przestrzeni roboczej",
+          "subtitle": "Każdy istniejący dzień otwiera się w szerszym edytorze inspirowanym wersją mobilną.",
+          "helper": "Użyj listy po lewej, aby otworzyć dzień planu. Widok edytora daje więcej miejsca na wybieranie ćwiczeń i zarządzanie listą."
+        }
+      }
+    },
+    "editor": {
+      "eyebrow": "Edytor dnia",
+      "title": "Edytuj wybrany dzień planu",
+      "createTitle": "Utwórz nowy dzień planu",
+      "subtitle": "Ten edytor korzysta tylko z pól dostępnych aktualnie w DTO dnia planu: nazwa, ćwiczenie, powtórzenia i serie.",
+      "exerciseRowsTitle": "Ćwiczenia",
+      "fields": {
+        "name": "Nazwa dnia planu",
+        "namePlaceholder": "Wpisz nazwę dnia planu"
+      },
+      "columns": {
+        "exercise": "Ćwiczenie",
+        "reps": "Powtórzenia",
+        "series": "Serie"
+      },
+      "meta": {
+        "rows": "Wiersze: {count}"
+      },
+      "actions": {
+        "save": "Zapisz dzień planu",
+        "reset": "Resetuj",
+        "addExercise": "Dodaj ćwiczenie"
+      },
+      "error": {
+        "load": "Nie udało się pobrać wybranego dnia planu.",
+        "exercises": "Nie udało się pobrać globalnej listy ćwiczeń."
+      }
+    },
+    "exercises": {
+      "fallback": {
+        "noName": "Ćwiczenie bez nazwy"
+      }
+    },
+    "feedback": {
+      "loadPlanFailed": "Nie udało się pobrać planu treningowego.",
+      "loadPlanDaysFailed": "Nie udało się pobrać dni planu.",
+      "loadPlanDayFailed": "Nie udało się pobrać szczegółów dnia planu.",
+      "loadExercisesFailed": "Nie udało się pobrać globalnych ćwiczeń.",
+      "planDayNameRequired": "Nazwa dnia planu jest wymagana.",
+      "createPlanDaySuccess": "Dzień planu został utworzony.",
+      "createPlanDayFailed": "Nie udało się utworzyć dnia planu.",
+      "updatePlanDaySuccess": "Dzień planu został zaktualizowany.",
+      "updatePlanDayFailed": "Nie udało się zaktualizować dnia planu.",
+      "deletePlanDaySuccess": "Dzień planu został usunięty.",
+      "deletePlanDayFailed": "Nie udało się usunąć dnia planu.",
+      "sharePlanSuccess": "Kod udostępniania został wygenerowany.",
+      "sharePlanFailed": "Nie udało się wygenerować kodu udostępniania.",
+      "copyShareCodeSuccess": "Kod udostępniania skopiowano do schowka.",
+      "copyShareCodeFailed": "Nie udało się skopiować kodu udostępniania."
+    }
+  },
+  "trainerTrainingPlanDayEditor": {
+    "page": {
+      "eyebrow": "Przestrzeń robocza dnia planu",
+      "title": "Tworzenie i edycja dnia planu",
+      "subtitle": "Ta szeroka przestrzeń robocza odtwarza proces z wersji mobilnej: najpierw nazwa, potem wybór ćwiczeń, a na końcu ułożenie listy i zapis.",
+      "badges": {
+        "create": "Nowy dzień",
+        "edit": "Edycja dnia"
+      }
+    },
+    "header": {
+      "eyebrow": "Skupiony edytor",
+      "editTitle": "Edytuj dzień planu w pełnej przestrzeni roboczej",
+      "createTitle": "Utwórz dzień planu w pełnej przestrzeni roboczej",
+      "subtitle": "Formularz jest rozdzielony na przejrzystą bibliotekę ćwiczeń i osobny obszar wybranych elementów, dzięki czemu trener pracuje szybciej."
+    },
+    "plan": {
+      "eyebrow": "Plan",
+      "subtitle": "Ten edytor pracuje wewnątrz aktualnie wybranego globalnego planu treningowego."
+    },
+    "basics": {
+      "eyebrow": "Krok 1",
+      "title": "Podstawy dnia planu",
+      "fields": {
+        "name": "Nazwa dnia planu",
+        "namePlaceholder": "Wpisz nazwę dnia"
+      }
+    },
+    "library": {
+      "eyebrow": "Krok 2",
+      "title": "Biblioteka ćwiczeń",
+      "subtitle": "Wybór korzysta jednocześnie z pełnej listy ćwiczeń użytkownika i z dedykowanej listy globalnej, dzięki czemu nic nie jest zaszyte na sztywno.",
+      "filters": {
+        "all": "Wszystkie",
+        "user": "Moje ćwiczenia",
+        "global": "Globalne",
+        "allBodyParts": "Wszystkie partie"
+      },
+      "fields": {
+        "search": "Szukaj ćwiczeń",
+        "searchPlaceholder": "Wpisz nazwę ćwiczenia lub partię mięśniową",
+        "bodyPart": "Partia mięśniowa"
+      },
+      "source": {
+        "user": "Użytkownik",
+        "global": "Globalne"
+      },
+      "actions": {
+        "add": "Dodaj",
+        "added": "Dodane",
+        "drag": "Przeciągnij do wybranych ćwiczeń",
+        "dragShort": "Przeciągnij"
+      },
+      "empty": "Brak ćwiczeń pasujących do aktualnych filtrów.",
+      "error": {
+        "load": "Nie udało się pobrać biblioteki ćwiczeń."
+      }
+    },
+    "selection": {
+      "eyebrow": "Krok 3",
+      "title": "Wybrane ćwiczenia",
+        "subtitle": "Dostosuj liczbę powtórzeń i serii, a potem ustaw kolejność tak, aby gotowy dzień odzwierciedlał prawidłowy przebieg treningu.",
+      "summary": "Wybrane wiersze: {count}",
+      "empty": "Dodaj ćwiczenia z biblioteki po lewej, aby zacząć budować dzień planu.",
+      "fields": {
+        "reps": "Powtórzenia",
+        "series": "Serie",
+        "order": "Kolejność"
+      },
+      "actions": {
+        "drag": "Przeciągnij, aby zmienić kolejność",
+        "dragShort": "Przesuń"
+      },
+      "meta": {
+        "unknownExercise": "Brak szczegółów ćwiczenia"
+      }
+    },
+    "actions": {
+      "backToPlan": "Wróć do planu",
+      "cancel": "Anuluj",
+      "save": "Zapisz dzień planu",
+      "retry": "Spróbuj ponownie"
+    },
+    "error": {
+      "plan": "Nie udało się pobrać planu nadrzędnego dla tego edytora.",
+      "planDay": "Nie udało się pobrać wybranego dnia planu do edycji."
+    },
+    "feedback": {
+      "loadPlanFailed": "Nie udało się pobrać planu treningowego.",
+      "loadPlanDayFailed": "Nie udało się pobrać wybranego dnia planu.",
+      "loadExercisesFailed": "Nie udało się pobrać ćwiczeń do edytora.",
+      "nameRequired": "Nazwa dnia planu jest wymagana.",
+      "exerciseRequired": "Dodaj przynajmniej jedno ćwiczenie przed zapisem.",
+      "createSuccess": "Dzień planu został utworzony.",
+      "createFailed": "Nie udało się utworzyć dnia planu.",
+      "updateSuccess": "Dzień planu został zaktualizowany.",
+      "updateFailed": "Nie udało się zaktualizować dnia planu."
+    }
+  },
+  "trainerMembers": {
+    "page": {
+      "eyebrow": "Strefa podopiecznych",
+      "title": "Zarządzaj podopiecznymi",
+      "subtitle": "Przeglądaj status relacji, otwieraj szczegóły i trzymaj listę filtrowaną po stronie serwera dla szybszej pracy trenera.",
+      "summary": "Łącznie podopiecznych: {totalCount}"
+    },
+    "list": {
+      "eyebrow": "Lista podopiecznych",
+      "title": "Twoje relacje z podopiecznymi",
+      "subtitle": "Szukaj po imieniu lub adresie e-mail, filtruj po statusie oraz zarządzaj relacją ze swoim podopiecznym",
+      "filters": {
+        "search": "Szukaj podopiecznych",
+        "sortBy": "Sortuj po",
+          "pageSize": "Na stronę"
+      },
+      "placeholders": {
+          "search": "Wpisz imię lub adres e-mail podopiecznego"
+      },
+      "columns": {
+        "member": "Podopieczny",
+        "status": "Status",
+        "relationship": "Relacja",
+        "lastUpdate": "Ostatnia zmiana",
+        "actions": "Akcje"
+      },
+      "sortOptions": {
+        "name": "Imię",
+        "createdAt": "Data utworzenia",
+        "status": "Status",
+        "linkedAt": "Data połączenia",
+        "lastInvitationExpiresAt": "Wygaśnięcie zaproszenia",
+        "lastInvitationRespondedAt": "Odpowiedź na zaproszenie"
+      },
+      "sortDirection": {
+        "ascending": "Rosnąco",
+        "descending": "Malejąco"
+      },
+      "fallback": {
+        "noName": "Nieznany podopieczny",
+        "noEmail": "Brak adresu e-mail"
+      },
+      "empty": {
+        "title": "Brak podopiecznych do wyświetlenia",
+        "subtitle": "Spróbuj zmienić filtry albo poczekaj, aż relacje trener–podopieczny pojawią się na liście."
+      },
+      "error": {
+        "title": "Nie udało się pobrać listy podopiecznych",
+        "subtitle": "Nie udało się załadować listy dla aktualnych filtrów. Spróbuj ponownie za chwilę."
+      },
+      "pagination": {
+        "summary": "Strona {page} z {totalPages} · wszystkich podopiecznych: {totalCount}"
+      }
+    },
+    "filters": {
+      "all": "Wszyscy"
+    },
+    "relationship": {
+      "linked": "Połączony z trenerem",
+      "pendingInvitation": "Zaproszenie oczekujące",
+      "expiredInvitation": "Zaproszenie wygasło",
+      "noActiveLink": "Brak aktywnej relacji"
+    },
+    "status": {
+      "linked": "Połączony",
+      "invitationPending": "Zaproszenie oczekujące",
+      "invitationExpired": "Zaproszenie wygasło",
+      "invitationRejected": "Zaproszenie odrzucone",
+      "invitationAccepted": "Zaproszenie zaakceptowane",
+      "noRelationship": "Brak relacji",
+      "unknown": "Nieznany"
+    },
+    "actions": {
+      "openDetails": "Otwórz szczegóły",
+      "unlink": "Odepnij",
+      "unlinkConfirm": "Czy na pewno chcesz odpiąć {name}?",
+      "previous": "Poprzednia",
+      "next": "Następna",
+      "retry": "Spróbuj ponownie"
+    },
+    "feedback": {
+      "loadFailed": "Nie udało się pobrać listy podopiecznych.",
+      "unlinkSuccess": "Podopieczny został odpięty poprawnie.",
+      "unlinkFailed": "Nie udało się odpiąć podopiecznego.",
+      "unauthorized": "Sesja trenera wygasła albo nie masz dostępu do tego widoku."
+    }
+  },
+  "userRelationship": {
+    "page": {
+      "eyebrow": "Strefa zawodnika",
+      "title": "Relacja z trenerem",
+      "subtitle": "Ten ekran opiera się wyłącznie na realnym kontrakcie zaproszeń. Pokazuje status publicznego zaproszenia i pozwala odpowiedzieć tylko wtedy, gdy API naprawdę to wspiera.",
+      "invitationMode": "Aktywny kontekst zaproszenia",
+      "guidanceTitle": "Jak czytać ten ekran",
+      "guidance": [
+        "Jeśli link zaproszenia zawiera poprawny identyfikator i kod, ekran pobiera publiczny status zaproszenia z Orvala.",
+        "Akceptacja i odrzucenie są dostępne wyłącznie dla statusu oczekującego obsługiwanego przez endpointy accept/reject.",
+        "Brak kontekstu zaproszenia nie oznacza automatycznie braku relacji — oznacza tylko, że obecny kontrakt API nie daje widokowi danych do potwierdzenia jej stanu."
+      ]
+    },
+    "actions": {
+      "accept": "Akceptuj relację",
+      "reject": "Odrzuć zaproszenie",
+      "retry": "Spróbuj ponownie",
+      "dismissInvitationContext": "Otwórz widok domyślny"
+    },
+    "invitations": {
+      "eyebrow": "Oczekujące zaproszenia",
+      "title": "Zaproszenia przypisane do Twojego konta",
+        "subtitle": "Masz {count} oczekujących zaproszeń od trenera. Możesz zaakceptować relację albo odrzucić zaproszenie bez korzystania z linku w wiadomości e-mail.",
+      "itemTitle": "Zaproszenie od trenera",
+      "itemDescription": "To zaproszenie zostało wysłane na adres przypisany do Twojego konta albo bezpośrednio do Twojego profilu zawodnika.",
+      "expiresAt": "Ważne do",
+      "sentTo": "Wysłane na",
+      "emptyTitle": "Brak oczekujących zaproszeń",
+      "emptySubtitle": "Jeśli trener wysłał nowe zaproszenie, odśwież widok. Lista korzysta z endpointu /api/trainee/invitations dla zalogowanego zawodnika."
+    },
+    "common": {
+      "yes": "Tak",
+      "no": "Nie",
+      "notAvailable": "Brak danych"
+    },
+    "summary": {
+      "accountLabel": "Twoje konto",
+      "accountMeta": "Tożsamość pochodzi z aktywnej sesji użytkownika.",
+      "contractLabel": "Zakres kontraktu",
+      "contractWithContext": "Status zaproszenia dostępny",
+      "contractWithoutContext": "Brak kontekstu zaproszenia",
+      "contractMeta": "Widok korzysta tylko z endpointów invitation / accept / reject.",
+      "stateLabel": "Stan ekranu",
+      "stateMeta": "Stan wynika wyłącznie z odpowiedzi API dla zaproszenia."
+    },
+    "cards": {
+      "status": {
+        "label": "Status relacji"
+      },
+      "actions": {
+        "label": "Dostępne akcje",
+        "available": "Możesz odpowiedzieć na zaproszenie",
+        "unavailable": "Brak akcji do wykonania",
+        "pendingDescription": "API potwierdza status oczekujący, więc możesz teraz zaakceptować lub odrzucić relację.",
+        "defaultDescription": "Poza statusem oczekującym ekran pozostaje tylko informacyjny i nie zgaduje dalszych możliwości."
+      },
+      "identity": {
+        "label": "Konto zawodnika",
+          "description": "Sekcja używa wyłącznie danych dostępnych w bieżącej sesji, bez wpisywania danych trenera na sztywno."
+      },
+      "scope": {
+        "label": "Źródło prawdy",
+          "value": "Publiczny status zaproszenia",
+        "description": "Widok nie korzysta z endpointów planów treningowych ani z pośrednich proxy relacji."
+      }
+    },
+    "contract": {
+      "title": "Kontrakt API",
+      "primaryLine": "Używane są tylko endpointy sprawdzające status zaproszenia oraz accept / reject.",
+      "secondaryLine": "Jeśli backend nie udostępnia osobnego endpointu bieżącej relacji zalogowanego zawodnika, ekran nie zgaduje tego stanu na podstawie planu treningowego ani innych modułów."
+    },
+    "sidePanels": {
+      "invitation": {
+        "eyebrow": "Szczegóły zaproszenia",
+        "title": "Dane zwrócone przez kontrakt",
+        "items": {
+          "status": "Status API",
+          "statusMeta": "Pole status pochodzi bezpośrednio z PublicInvitationStatusDto.",
+          "accountExists": "Czy konto istnieje",
+          "invitationId": "Id zaproszenia"
+        }
+      },
+      "context": {
+        "eyebrow": "Kontekst trasy",
+        "title": "Parametry wejściowe",
+        "items": {
+          "code": "Kod zaproszenia",
+          "codeMeta": "Kod jest używany wyłącznie do pobrania publicznego statusu zaproszenia.",
+          "route": "Tryb widoku",
+          "routeValue": "Strona otwarta z linku zaproszenia"
+        }
+      }
+    },
+    "states": {
+      "loading": {
+        "badge": "Ładowanie",
+        "title": "Sprawdzamy status relacji",
+        "subtitle": "Widok pobiera tylko dane zaproszenia udostępnione przez aktualny kontrakt API."
+      },
+      "error": {
+        "badge": "Błąd",
+        "title": "Nie udało się odczytać statusu zaproszenia",
+        "subtitle": "Spróbuj ponownie. Jeśli problem wraca, API nie zwróciło danych potrzebnych do pokazania relacji."
+      },
+      "pending": {
+        "badge": "Oczekujące",
+        "title": "Masz oczekujące zaproszenie od trenera",
+        "subtitle": "Możesz teraz zaakceptować lub odrzucić tę relację. Ekran nie pokazuje danych trenera, bo obecny DTO nie zwraca takich pól."
+      },
+      "accepted": {
+        "badge": "Zaakceptowane",
+        "title": "Zaproszenie zostało zaakceptowane",
+        "subtitle": "Publiczny status zaproszenia zwraca stan zaakceptowany. Ekran nie dopowiada niczego ponad to, co naprawdę potwierdza API."
+      },
+      "rejected": {
+        "badge": "Odrzucone",
+        "title": "To zaproszenie zostało już odrzucone",
+        "subtitle": "Zaproszenie nie jest już aktywne i nie możesz na nie ponownie odpowiedzieć z tego widoku."
+      },
+      "expired": {
+        "badge": "Niedostępne",
+        "title": "To zaproszenie nie jest już aktywne",
+        "subtitle": "Status zaproszenia wskazuje, że link wygasł albo został cofnięty i nie ma już akcji do wykonania."
+      },
+      "empty": {
+        "badge": "Ograniczony kontrakt",
+        "title": "Brak danych zaproszenia do wyświetlenia",
+        "subtitle": "Ten widok nie ma aktywnego kontekstu zaproszenia albo API nie zwróciło statusu, więc nie można potwierdzić relacji trener–podopieczny bez zgadywania backendu."
+      }
+    },
+    "feedback": {
+      "loadFailed": "Nie udało się pobrać danych zaproszenia lub relacji z trenerem.",
+      "invitationsEndpointMissing": "Backend nie udostępnia jeszcze endpointu /api/trainee/invitations. Wdróż najnowszą gałąź API, aby panel zawodnika mógł pobierać zaproszenia bez linku z maila.",
+      "acceptSuccess": "Zaproszenie zostało zaakceptowane.",
+      "acceptFailed": "Nie udało się zaakceptować relacji z trenerem.",
+      "rejectSuccess": "Zaproszenie zostało odrzucone.",
+      "rejectFailed": "Nie udało się odrzucić zaproszenia od trenera."
+    }
+  },
+  "trainerMemberDetails": {
+    "header": {
+      "fallbackName": "Szczegóły podopiecznego",
+      "fallbackSubtitle": "Dane nagłówka pojawią się po załadowaniu podopiecznego z listy trenera."
+    },
+    "tabs": {
+      "overview": "Przegląd",
+      "trainings": "Treningi",
+      "plans": "Plany",
+      "diet": "Dieta",
+      "notes": "Notatka",
+      "reports": "Raporty",
+      "measurements": "Pomiary"
+    },
+    "actions": {
+      "back": "Wróć do listy",
+      "retry": "Spróbuj ponownie",
+      "cancel": "Anuluj",
+      "save": "Zapisz",
+      "close": "Zamknij"
+    },
+    "overview": {
+      "eyebrow": "Przegląd",
+      "title": "Podsumowanie podopiecznego oparte na realnych danych trenera",
+      "subtitle": "Ta sekcja agreguje tylko dane, które są już dostępne w aktualnym kontrakcie API.",
+      "emptyValue": "—",
+      "cards": {
+        "relationship": "Relacja",
+        "lastTraining": "Ostatni trening",
+        "activePlan": "Aktywny plan",
+        "latestReport": "Ostatni wysłany raport",
+        "elo": "Ostatni punkt ELO",
+        "mainRecord": "Ostatni rekord główny"
+      },
+      "meta": {
+        "trainingDates": "Na podstawie endpointu z zarejestrowanymi datami treningów.",
+        "noActivePlan": "Brak przypisanego aktywnego planu.",
+        "noReports": "Brak wysłanych raportów.",
+        "noMainRecords": "Brak rekordów głównych.",
+        "noExercise": "Brak nazwy ćwiczenia",
+        "noSnapshot": "Brak zapisanej migawki dla tej trasy."
+      },
+      "error": {
+        "title": "Nie udało się zbudować przeglądu",
+        "subtitle": "Co najmniej jedno źródło danych przeglądu nie mogło zostać pobrane."
+      }
+    },
+    "trainings": {
+      "eyebrow": "Historia",
+      "title": "Historia treningów",
+      "detailsEyebrow": "Szczegóły treningu",
+      "selectDate": "Wybierz trening z historii",
+      "columns": {
+        "gym": "Siłownia",
+      "exercises": "Ćwiczenia"
+      },
+      "exerciseList": "Lista ćwiczeń",
+      "seriesLabel": "Seria {series}",
+      "seriesValue": "{weight} {unit} × {reps} powt.",
+      "summary": {
+        "subtitle": "Najważniejsze informacje o wybranym treningu znajdziesz w skrócie poniżej.",
+        "trainingDate": "Trening: {date}",
+        "startTime": "Godzina rozpoczęcia",
+        "gym": "Siłownia",
+        "exercisesCount": "Ilość ćwiczeń"
+      },
+      "fallback": {
+        "noType": "Brak typu treningu",
+        "noPlanDay": "Brak dnia planu",
+        "noGym": "Brak danych o siłowni",
+        "noExercise": "Brak nazwy ćwiczenia",
+        "noBodyPart": "Brak partii mięśniowej"
+      },
+      "empty": {
+        "title": "Brak zapisanych dat treningów.",
+        "details": "Wybierz datę z lewej strony, aby pobrać szczegóły treningu.",
+        "exercises": "Brak zapisanych ćwiczeń dla tego treningu.",
+        "series": "Brak zapisanych serii dla tego ćwiczenia."
+      },
+      "error": {
+        "subtitle": "Nie udało się pobrać dat treningów.",
+        "details": "Nie udało się pobrać szczegółów treningu dla wybranej daty."
+      }
+    },
+    "plans": {
+      "eyebrow": "Plany",
+      "title": "Plany zarządzane przez trenera",
+      "subtitle": "Twórz, zmieniaj nazwy, usuwaj, przypisuj i odpinaj plany wspierane przez obecny kontrakt trenerski.",
+      "badges": {
+        "active": "Aktywny"
+      },
+      "meta": {
+        "createdAt": "Utworzono"
+      },
+      "fallback": {
+        "noName": "Plan bez nazwy"
+      },
+      "empty": {
+        "title": "Brak planów utworzonych dla tego podopiecznego.",
+        "assignable": "Brak globalnych planów trenera, które można przypisać temu podopiecznemu."
+      },
+      "dialog": {
+        "createTitle": "Utwórz plan",
+        "renameTitle": "Zmień nazwę planu",
+        "assignExistingTitle": "Przypisz istniejący plan",
+        "assignExistingSubtitle": "Wybierz jeden z globalnych planów trenera. Podczas przypisania system powinien utworzyć kopię planu dla tego podopiecznego."
+      },
+      "form": {
+        "name": "Nazwa planu",
+        "namePlaceholder": "Wpisz nazwę planu",
+        "assignExisting": "Plan do przypisania"
+      },
+      "actions": {
+        "create": "Utwórz plan",
+        "assignExisting": "Przypisz plan",
+        "assign": "Przypisz",
+        "managePlanDays": "Dni planu",
+        "rename": "Zmień nazwę",
+        "delete": "Usuń",
+        "unassign": "Odepnij aktywny plan",
+        "deleteConfirm": "Usunąć plan \"{name}\"?"
+      },
+      "error": {
+        "subtitle": "Nie udało się pobrać planów zarządzanych przez trenera."
+      },
+      "feedback": {
+        "loadFailed": "Nie udało się pobrać planów.",
+        "nameRequired": "Nazwa planu jest wymagana.",
+        "createSuccess": "Plan został utworzony poprawnie.",
+        "createFailed": "Nie udało się utworzyć planu.",
+        "renameSuccess": "Nazwa planu została zmieniona.",
+        "renameFailed": "Nie udało się zmienić nazwy planu.",
+        "assignSuccess": "Plan został skopiowany i przypisany poprawnie.",
+        "assignFailed": "Nie udało się skopiować i przypisać planu.",
+        "unassignSuccess": "Aktywny plan został odpięty.",
+        "unassignFailed": "Nie udało się odpiąć aktywnego planu.",
+        "deleteSuccess": "Plan został usunięty poprawnie.",
+        "deleteFailed": "Nie udało się usunąć planu."
+      }
+    },
+    "diet": {
+      "eyebrow": "Dieta",
+      "title": "Plany diety podopiecznego",
+      "subtitle": "Twórz i aktualizuj aktywną dietę, posiłki oraz makroskładniki z historią zmian.",
+      "error": "Nie udało się pobrać planów diety.",
+      "fallback": {
+        "noName": "Plan diety bez nazwy"
+      },
+      "badges": {
+        "active": "Aktywny",
+        "inactive": "Nieaktywny"
+      },
+      "summary": {
+        "activeCount": "Aktywne diety: {count}"
+      },
+      "meta": {
+        "dateRange": "Od {start} do {end}",
+        "noEndDate": "bez końca",
+        "mealCount": "Posiłki: {count}"
+      },
+      "macros": {
+        "calories": "Kalorie",
+        "protein": "Białko",
+        "carbs": "Węglowodany",
+        "fat": "Tłuszcze"
+      },
+      "meals": {
+        "title": "Posiłki",
+        "fallback": "Posiłek bez nazwy",
+        "item": "Posiłek {index}"
+      },
+      "empty": {
+        "title": "Brak planów diety dla tego podopiecznego.",
+        "subtitle": "Dodaj pierwszy plan, aby podopieczny mógł zobaczyć aktywne zalecenia w aplikacji mobilnej."
+      },
+      "dialog": {
+        "createTitle": "Utwórz plan diety",
+        "editTitle": "Edytuj plan diety",
+        "historyTitle": "Historia zmian planu diety"
+      },
+      "form": {
+        "name": "Nazwa planu",
+        "startDate": "Data startu",
+        "endDate": "Data końca",
+        "modeTitle": "Sposób rozpisania diety",
+        "modeMeals": "Rozpisuję dietę na posiłki",
+        "modeGlobal": "Ustawiam tylko globalną pulę kalorii i makr",
+        "modeMealsHint": "Makra i kalorie całego planu wyliczą się automatycznie na podstawie posiłków.",
+        "modeGlobalHint": "Ustaw docelowe wartości dla całego planu bez rozpisywania poszczególnych posiłków.",
+        "autoCalculatedHint": "W trybie posiłków kalorie są liczone automatycznie: 1 g białka = 4 kcal, 1 g węglowodanów = 4 kcal, 1 g tłuszczu = 9 kcal.",
+        "globalTargetHint": "W trybie globalnym podaj przynajmniej jeden cel: kalorie albo makroskładniki.",
+        "isActive": "Ustaw jako aktywny plan",
+        "notes": "Notatki trenera",
+        "mealName": "Nazwa posiłku",
+        "mealOrder": "Kolejność",
+        "mealDescription": "Opis posiłku"
+      },
+      "actions": {
+        "create": "Utwórz dietę",
+        "edit": "Edytuj",
+        "editActive": "Edytuj aktywną",
+        "activate": "Aktywuj",
+        "history": "Historia",
+        "delete": "Usuń",
+        "addMeal": "Dodaj posiłek",
+        "removeMeal": "Usuń posiłek"
+      },
+      "feedback": {
+        "saved": "Plan diety został zapisany.",
+        "saveFailed": "Nie udało się zapisać planu diety.",
+        "activated": "Plan diety został oznaczony jako aktywny.",
+        "activateFailed": "Nie udało się aktywować planu diety.",
+        "deleted": "Plan diety został usunięty.",
+        "deleteFailed": "Nie udało się usunąć planu diety.",
+        "historyFailed": "Nie udało się pobrać historii planu diety."
+      },
+      "history": {
+        "empty": "Brak zapisanych zmian dla tego planu diety.",
+        "unknown": "Zmiana",
+        "noVisibleChanges": "Brak czytelnych zmian do pokazania dla tego wpisu.",
+        "createdSummary": "Utworzono plan z początkowymi wartościami.",
+        "activatedSummary": "Plan został oznaczony jako aktywny.",
+        "deletedSummary": "Plan został usunięty.",
+        "fieldName": "Nazwa planu",
+        "fieldStartDate": "Data startu",
+        "fieldEndDate": "Data końca",
+        "fieldCalories": "Kalorie",
+        "fieldProtein": "Białko",
+        "fieldCarbs": "Węglowodany",
+        "fieldFat": "Tłuszcze",
+        "fieldNotes": "Notatki trenera",
+        "fieldIsActive": "Status aktywności",
+        "fieldMealCount": "Liczba posiłków",
+        "mealAdded": "Dodano {meal}",
+        "mealRemoved": "Usunięto {meal}",
+        "mealFieldPrefix": "{meal} / {field}",
+        "emptyValue": "—",
+        "boolTrue": "aktywny",
+        "boolFalse": "nieaktywny"
+      },
+      "validation": {
+        "nameRequired": "Nazwa planu jest wymagana.",
+        "startDateRequired": "Data startu jest wymagana.",
+        "mealNameRequired": "Nazwa posiłku jest wymagana.",
+        "globalTargetRequired": "W trybie globalnym podaj kalorie lub co najmniej jeden makroskładnik."
+      },
+      "confirm": {
+        "deleteTitle": "Usunąć plan diety?",
+        "deleteMessage": "Czy na pewno usunąć plan „{name}”?"
+      }
+    },
+    "notes": {
+      "eyebrow": "Notatka",
+      "title": "Notatki trenera o podopiecznym",
+      "subtitle": "Zapisuj kontekst trenerski, ustawiaj widoczność dla podopiecznego i sprawdzaj historię zmian w jednym miejscu.",
+      "error": {
+        "load": "Nie udało się pobrać notatek podopiecznego."
+      },
+      "empty": {
+        "title": "Brak notatek dla tego podopiecznego.",
+        "subtitle": "Dodaj pierwszą notatkę, aby ważny kontekst trenerski był zawsze pod ręką."
+      },
+      "fallback": {
+        "noTitle": "Notatka bez tytułu",
+        "noContent": "Brak treści notatki."
+      },
+      "badges": {
+        "visible": "Widoczna dla podopiecznego",
+        "pinned": "Przypięta"
+      },
+      "meta": {
+        "updatedAt": "Aktualizacja"
+      },
+      "dialog": {
+        "createTitle": "Utwórz notatkę",
+        "editTitle": "Edytuj notatkę",
+        "historyTitle": "Historia zmian notatki"
+      },
+      "form": {
+        "title": "Tytuł",
+        "content": "Treść notatki",
+        "visibleToTrainee": "Widoczna dla podopiecznego",
+        "isPinned": "Przypnij notatkę"
+      },
+      "actions": {
+        "create": "Dodaj notatkę",
+        "edit": "Edytuj",
+        "history": "Historia",
+        "delete": "Usuń"
+      },
+      "feedback": {
+        "saved": "Notatka została zapisana.",
+        "saveFailed": "Nie udało się zapisać notatki.",
+        "deleted": "Notatka została usunięta.",
+        "deleteFailed": "Nie udało się usunąć notatki.",
+        "historyFailed": "Nie udało się pobrać historii notatki."
+      },
+      "history": {
+        "empty": "Brak zapisanych zmian dla tej notatki.",
+        "unknown": "Zmiana",
+        "previous": "Poprzednia treść",
+        "current": "Nowa treść",
+        "emptyValue": "—"
+      },
+      "confirm": {
+        "deleteTitle": "Usunąć notatkę?",
+        "deleteMessage": "Czy na pewno usunąć „{name}”?"
+      },
+      "validation": {
+        "contentRequired": "Treść notatki jest wymagana."
+      }
+    },
+    "reports": {
+      "submissionsEyebrow": "Raporty podopiecznego",
+      "submissionsTitle": "Prośby o raport i wysłane odpowiedzi",
+      "submissionsSubtitle": "",
+      "filters": {
+        "all": "Wszystkie",
+        "answered": "Odpowiedziane",
+        "unanswered": "Bez odpowiedzi",
+        "requestSent": "Wysłana prośba",
+        "noResponse": "Bez odpowiedzi",
+        "responded": "Odpowiedziano",
+        "feedbackRead": "Feedback odczytany"
+      },
+      "feedbackStatus": {
+        "answered": "Odpowiedziano",
+        "unanswered": "Brak odpowiedzi"
+      },
+      "requestEyebrow": "Nowa prośba",
+      "requestTitle": "Poproś o raport tego podopiecznego",
+      "requestSubtitle": "Wybierz jeden z globalnych szablonów raportu, ustaw termin i wyślij prośbę do tego podopiecznego.",
+      "form": {
+        "template": "Szablon",
+        "dueAt": "Termin",
+        "note": "Notatka trenera",
+        "templatePlaceholder": "Wybierz szablon, który chcesz wysłać",
+        "dueAtHint": "Termin jest opcjonalny, ale pomaga podopiecznemu wiedzieć, do kiedy ma odpowiedzieć.",
+        "notePlaceholder": "Dodaj krótką instrukcję lub kontekst do raportu",
+        "noteHint": "Krótka notatka zwiększa szansę, że podopieczny wyśle dokładnie to, czego potrzebujesz."
+      },
+      "preview": {
+        "title": "Szybki podgląd",
+        "empty": "Po wybraniu szablonu pokażemy tutaj jego opis oraz liczbę pól do uzupełnienia.",
+        "fieldsCount": "Liczba pól: {count}",
+        "submissionEyebrow": "Podgląd raportu",
+        "answersTitle": "Odpowiedzi podopiecznego",
+        "photosCount": "Dodane zdjęcia: {count}",
+        "photosLoading": "Ładowanie zdjęć z raportu...",
+        "photosEmpty": "Brak zdjęć dodanych do tego raportu.",
+        "measurementsCount": "Liczba pomiarów: {count}",
+        "measurementsEmpty": "Brak danych pomiarowych w tej odpowiedzi.",
+        "fieldFeedbackLabel": "Komentarz do tej odpowiedzi",
+        "fieldFeedbackPlaceholder": "Dodaj komentarz do tej odpowiedzi",
+        "overallFeedbackTitle": "Ogólny komentarz dla podopiecznego",
+        "overallFeedbackPlaceholder": "Dodaj podsumowanie lub kolejne kroki do tego raportu"
+      },
+      "actions": {
+        "manageTemplates": "Zarządzaj szablonami",
+        "goToTemplateLibrary": "Otwórz bibliotekę szablonów",
+        "sendRequest": "Poproś o raport",
+        "saveFeedback": "Zapisz komentarz"
+      },
+      "recurring": {
+        "eyebrow": "Raporty cykliczne",
+        "title": "Cykle raportowe",
+        "subtitle": "Ustaw szablon, częstotliwość i harmonogram. Kolejny raport pojawi się dopiero po odczytaniu komentarza trenera do poprzedniego raportu.",
+        "empty": "Brak skonfigurowanych raportów cyklicznych dla tego podopiecznego.",
+        "status": {
+          "active": "Aktywny",
+          "paused": "Wstrzymany"
+        },
+        "units": {
+          "day": "Dzień",
+          "week": "Tydzień",
+          "month": "Miesiąc"
+        },
+        "interval": {
+          "day": "Co {count} dzień | Co {count} dni",
+          "week": "Co {count} tydzień | Co {count} tygodnie | Co {count} tygodni",
+          "month": "Co {count} miesiąc | Co {count} miesiące | Co {count} miesięcy"
+        },
+        "dialog": {
+          "eyebrow": "Ustaw cykl",
+          "createTitle": "Dodaj cykliczny raport",
+          "editTitle": "Edytuj cykliczny raport"
+        },
+        "form": {
+          "intervalValue": "Co ile",
+          "intervalUnit": "Jednostka interwału",
+          "startsAt": "Start cyklu",
+          "endsAt": "Koniec cyklu"
+        },
+        "meta": {
+          "startsAt": "Start",
+          "lastRequest": "Ostatnio utworzony raport",
+          "nextEligibleAt": "Następny możliwy termin",
+          "currentRequest": "Aktualny raport"
+        },
+        "fallback": {
+          "awaitingFeedback": "Oczekuje na feedback i odczyt",
+          "noCurrentRequest": "Brak aktywnego raportu",
+          "noDate": "Jeszcze nie utworzono"
+        },
+        "actions": {
+          "create": "Dodaj cykliczny raport",
+          "edit": "Edytuj",
+          "pause": "Pauzuj",
+          "resume": "Wznów",
+          "delete": "Usuń",
+          "save": "Zapisz"
+        },
+        "error": {
+          "load": "Nie udało się pobrać raportów cyklicznych."
+        },
+        "feedback": {
+          "invalidForm": "Uzupełnij poprawnie formularz cyklicznego raportu.",
+          "createSuccess": "Raport cykliczny został dodany.",
+          "updateSuccess": "Raport cykliczny został zaktualizowany.",
+          "pauseSuccess": "Raport cykliczny został wstrzymany.",
+          "resumeSuccess": "Raport cykliczny został wznowiony.",
+          "deleteSuccess": "Raport cykliczny został usunięty.",
+          "saveFailed": "Nie udało się zapisać zmian raportu cyklicznego."
+        }
+      },
+      "meta": {
+        "status": "Status zgłoszenia",
+        "feedbackStatus": "Status odpowiedzi",
+        "submittedAt": "Wysłano",
+        "sentAt": "Wysłano",
+        "lastUpdatedAt": "Ostatni update"
+      },
+      "fallback": {
+        "noTemplateName": "Szablon bez nazwy",
+        "noDescription": "Brak opisu.",
+        "noFieldType": "Nieznany typ",
+        "noStatus": "Nieznany status",
+        "noAnswer": "Brak odpowiedzi",
+        "awaitingResponse": "Oczekuje na odpowiedź podopiecznego"
+      },
+      "statuses": {
+        "requestSent": "Wysłana prośba",
+        "noResponse": "Bez odpowiedzi",
+        "responded": "Odpowiedziano",
+        "feedbackRead": "Feedback odczytany"
+      },
+      "boolean": {
+        "true": "Tak",
+        "false": "Nie"
+      },
+      "empty": {
+        "templates": "Brak dostępnych szablonów raportów. Najpierw utwórz je w globalnej bibliotece.",
+        "submissions": "Brak wysłanych raportów dla tego podopiecznego.",
+        "answered": "Brak raportów z odpowiedzią trenera.",
+        "unanswered": "Brak raportów oczekujących na odpowiedź trenera.",
+        "requestSent": "Brak raportów ze statusem „Wysłana prośba”.",
+        "noResponse": "Brak raportów ze statusem „Bez odpowiedzi”.",
+        "responded": "Brak raportów ze statusem „Odpowiedziano”.",
+        "feedbackRead": "Brak raportów ze statusem „Feedback odczytany”."
+      },
+      "error": {
+        "templates": "Nie udało się pobrać szablonów raportów.",
+        "submissions": "Nie udało się pobrać odpowiedzi raportowych."
+      },
+      "feedback": {
+        "loadTemplatesFailed": "Nie udało się pobrać szablonów raportów.",
+        "loadSubmissionsFailed": "Nie udało się pobrać wysłanych raportów.",
+        "templateRequired": "Wybierz szablon przed wysłaniem prośby.",
+        "createRequestSuccess": "Prośba o raport została wysłana.",
+        "createRequestFailed": "Nie udało się utworzyć prośby o raport.",
+        "saveSuccess": "Komentarz trenera został zapisany.",
+        "saveFailed": "Nie udało się zapisać komentarza trenera."
+      }
+    },
+    "trainerReportTemplates": {
+      "page": {
+        "eyebrow": "Globalna biblioteka raportów",
+        "title": "Szablony raportów",
+        "subtitle": "Twórz, edytuj, podglądaj i usuwaj wielokrotnego użytku szablony raportów w osobnym module trenera.",
+        "summary": "Szablony są zarządzane globalnie i wykorzystywane potem przy prośbach o raport dla podopiecznych."
+      },
+      "form": {
+        "templateName": "Nazwa szablonu",
+        "templateDescription": "Opis szablonu",
+        "fieldsTitle": "Pola szablonu",
+        "fieldLabel": "Etykieta pola",
+        "fieldKey": "Klucz pola",
+        "fieldType": "Typ pola",
+        "fieldOrder": "Kolejność",
+        "fieldRequired": "Wymagane",
+        "moduleConfigTitle": "Konfiguracja modułu",
+        "photoViewsLabel": "Wymagane ujęcia zdjęć",
+        "photoViewsPlaceholder": "Wybierz gotowe pozycje albo wpisz własną nazwę",
+        "photoViewsHint": "Możesz dodać kilka własnych pozycji. Wpisz nazwę i zatwierdź Enterem.",
+        "measurementTypesLabel": "Wymagane typy pomiarów"
+      },
+      "dialog": {
+        "createTemplateTitle": "Utwórz szablon raportu",
+        "editTemplateTitle": "Edytuj szablon raportu"
+      },
+      "actions": {
+        "createTemplate": "Utwórz szablon",
+        "editTemplate": "Edytuj",
+        "deleteTemplate": "Usuń",
+        "header": "Akcje",
+        "deleteTemplateConfirm": "Usunąć szablon raportu \"{name}\"?",
+        "addField": "Dodaj pole",
+        "removeField": "Usuń pole",
+        "retry": "Spróbuj ponownie",
+        "cancel": "Anuluj",
+        "save": "Zapisz"
+      },
+      "preview": {
+        "fields": "Podgląd pól"
+      },
+      "fieldTypes": {
+        "text": "Tekst",
+        "number": "Liczba",
+        "boolean": "Tak / Nie",
+        "date": "Data",
+        "photos": "Zdjęcia",
+        "measurements": "Pomiary"
+      },
+      "modules": {
+        "photos": {
+          "description": "Wybierz ujęcia, które podopieczny musi dodać podczas wysyłania raportu.",
+          "views": {
+            "front": "Przód",
+            "side": "Bok",
+            "sideleft": "Bok lewy",
+            "sideright": "Bok prawy",
+            "back": "Tył"
+          }
+        },
+        "measurements": {
+          "description": "Wskaż pomiary, które mają być częścią odpowiedzi modułowej w raporcie.",
+          "types": {
+            "weight": "Waga ciała",
+            "bodyFat": "Tkanka tłuszczowa",
+            "chest": "Klatka piersiowa",
+            "back": "Plecy",
+            "shoulders": "Barki",
+            "biceps": "Biceps",
+            "triceps": "Triceps",
+            "forearms": "Przedramiona",
+            "abs": "Brzuch",
+            "quads": "Czworogłowe",
+            "hamstrings": "Dwugłowe uda",
+            "calves": "Łydki",
+            "glutes": "Pośladki",
+            "neck": "Szyja",
+            "waist": "Talia",
+            "hips": "Biodra",
+            "thighs": "Uda",
+            "bmi": "BMI"
+          }
+        }
+      },
+      "fallback": {
+        "noTemplateName": "Szablon bez nazwy",
+        "noDescription": "Brak opisu.",
+        "noFieldType": "Nieznany typ"
+      },
+      "empty": {
+        "templates": "Brak utworzonych szablonów raportów."
+      },
+      "error": {
+        "templates": "Nie udało się pobrać szablonów raportów."
+      },
+      "feedback": {
+        "loadTemplatesFailed": "Nie udało się pobrać szablonów raportów.",
+        "templateNameRequired": "Nazwa szablonu jest wymagana.",
+        "templateFieldRequired": "Wymagane jest co najmniej jedno poprawne pole szablonu.",
+        "moduleConfigRequired": "Uzupełnij konfigurację dla każdego pytania modułowego.",
+        "createTemplateSuccess": "Szablon został utworzony poprawnie.",
+        "createTemplateFailed": "Nie udało się utworzyć szablonu.",
+        "updateTemplateSuccess": "Szablon został zaktualizowany poprawnie.",
+        "updateTemplateFailed": "Nie udało się zaktualizować szablonu.",
+        "deleteTemplateSuccess": "Szablon został usunięty poprawnie.",
+        "deleteTemplateFailed": "Nie udało się usunąć szablonu."
+      }
+    },
+    "measurements": {
+      "eyebrow": "Pomiary",
+      "title": "Pomiary podopiecznego",
+      "subtitle": "Porównuj wagę ciała i obwody, przełączaj widoki trendu, ostatnich wpisów oraz pełnej historii."
+      ,"emptyValue": "—",
+      "filters": {
+        "bodyPart": "Typ pomiaru",
+        "unit": "Jednostka",
+        "allBodyParts": "Wszystkie typy"
+      },
+      "tabs": {
+        "trend": "Trend",
+        "latest": "Ostatnie",
+        "history": "Historia"
+      },
+      "cards": {
+        "currentValue": "Aktualna wartość",
+        "change": "Zmiana",
+        "changePercentage": "Zmiana %"
+      },
+      "sections": {
+        "chart": "Wykres historii",
+        "trend": "Trend zmian",
+        "latest": "Ostatnie pomiary",
+        "history": "Pełna historia"
+      },
+      "summary": {
+        "minimum": "Minimum",
+        "maximum": "Maksimum",
+        "latest": "Ostatni wpis",
+        "points": "Punktów: {count}"
+      },
+      "chart": {
+        "subtitle": "Zmiany dla pomiaru: {bodyPart}",
+        "selectSpecificType": "Wybierz konkretny typ pomiaru, aby zobaczyć wykres historii.",
+        "hoverHint": "Najedź na punkt, aby zobaczyć szczegóły pomiaru."
+      },
+      "history": {
+        "summary": "Liczba wyników: {count}",
+        "filters": {
+          "search": "Szukaj w historii",
+          "sort": "Kolejność"
+        },
+        "placeholders": {
+          "search": "Wpisz datę, nazwę pomiaru lub wartość"
+        },
+        "columns": {
+          "recordedAt": "Zapisano",
+          "measurement": "Pomiar",
+          "result": "Wynik"
+        },
+        "empty": {
+          "search": "Brak wyników dla wpisanej frazy. Wyczyść wyszukiwanie albo zmień filtry."
+        },
+        "sort": {
+          "newest": "Najnowsze najpierw",
+          "oldest": "Najstarsze najpierw"
+        }
+      },
+      "bodyParts": {
+        "BodyWeight": "Waga ciała",
+        "Neck": "Szyja",
+        "Chest": "Klatka piersiowa",
+        "Waist": "Talia",
+        "Abs": "Brzuch",
+        "Hips": "Biodra",
+        "Thigh": "Udo",
+        "Calves": "Łydki",
+        "Biceps": "Biceps",
+        "BodyFat": "Tkanka tłuszczowa",
+        "Bmi": "BMI",
+        "Shoulders": "Barki",
+        "Back": "Plecy",
+        "Triceps": "Triceps",
+        "Forearms": "Przedramiona",
+        "Quads": "Czworogłowe",
+        "Hamstrings": "Dwugłowe uda",
+        "Glutes": "Pośladki",
+        "Unknown": "Nieznane"
+      },
+      "units": {
+        "Kilograms": "kg",
+        "Pounds": "lb",
+        "Meters": "m",
+        "Centimeters": "cm",
+        "Millimeters": "mm",
+        "Percent": "%",
+        "Bmi": "BMI",
+        "Unknown": "—"
+      },
+      "empty": {
+        "title": "Brak pomiarów dla wybranych filtrów.",
+        "chart": "Za mało punktów, aby narysować wykres historii dla tego pomiaru."
+      },
+      "error": {
+        "subtitle": "Nie udało się pobrać pomiarów partii ciała dla tego podopiecznego."
+      },
+      "feedback": {
+        "loadFailed": "Nie udało się pobrać pomiarów."
+      }
+    }
+  },
+  "trainerInvitations": {
+    "layout": {
+      "invitations": {
+        "title": "Zaproszenia",
+        "subtitle": "Zapraszaj nowych podopiecznych mailowo, monitoruj status i cofaj oczekujące zaproszenia."
+      }
+    },
+    "page": {
+      "eyebrow": "Proces zaproszeń",
+      "title": "Zarządzaj zaproszeniami do współpracy",
+      "subtitle": "Wysyłaj nowe zaproszenia bez wychodzenia z panelu trenera, a poniżej od razu sprawdzaj ich status, historię i kolejne akcje.",
+      "summary": "Łącznie zaproszeń: {totalCount}"
+    },
+    "form": {
+      "eyebrow": "Nowe zaproszenie",
+      "title": "Zaproś nowego klienta",
+      "subtitle": "Podaj adres e-mail klienta oraz preferowany język i strefę czasową",
+      "note": "Po sukcesie formularz wyczyści się automatycznie, a historia zaproszeń po prawej zostanie odświeżona bez przeładowania strony.",
+      "fields": {
+        "email": "Adres e-mail klienta",
+        "preferredLanguage": "Preferowany język",
+        "preferredTimeZone": "Preferowana strefa czasowa"
+      },
+      "placeholders": {
+        "email": "klient{'@'}example.com"
+      },
+      "validation": {
+        "languageRequired": "Wybierz preferowany język",
+        "timeZoneRequired": "Wybierz preferowaną strefę czasową"
+      },
+      "actions": {
+        "submit": "Wyślij zaproszenie"
+      }
+    },
+    "history": {
+      "eyebrow": "Historia zaproszeń",
+      "title": "Twoje ostatnie zaproszenia",
+        "subtitle": "Filtruj listę po statusie, wyszukuj po adresie e-mail i kontroluj, które zaproszenia wciąż czekają na reakcję.",
+      "filters": {
+          "search": "Szukaj po adresie e-mail",
+          "pageSize": "Na stronę"
+      },
+      "placeholders": {
+          "search": "Wpisz adres e-mail zaproszonej osoby"
+      },
+      "columns": {
+        "inviteeEmail": "Adres e-mail zaproszonej osoby",
+        "trainee": "Podopieczny",
+        "status": "Status",
+        "sentAt": "Data wysłania",
+        "actions": "Akcje"
+      },
+      "fallback": {
+        "noTraineeName": "Brak przypisanego podopiecznego",
+          "noTraineeEmail": "Brak adresu e-mail podopiecznego"
+      },
+      "meta": {
+        "expiresAt": "Wygasa"
+      },
+      "empty": {
+        "title": "Brak zaproszeń do wyświetlenia",
+        "subtitle": "Spróbuj zmienić filtry albo wyślij pierwsze zaproszenie z formularza po lewej stronie."
+      },
+      "pagination": {
+        "summary": "Strona {page} z {totalPages} · wszystkich zaproszeń: {totalCount}"
+      },
+      "sort": {
+        "newest": "Najnowsze najpierw",
+        "oldest": "Najstarsze najpierw"
+      }
+    },
+    "filters": {
+      "all": "Wszystkie",
+      "pending": "Oczekujące",
+      "accepted": "Zaakceptowane",
+      "rejected": "Odrzucone",
+      "revoked": "Cofnięte",
+      "expired": "Wygasłe"
+    },
+    "status": {
+      "pending": "Oczekujące",
+      "accepted": "Zaakceptowane",
+      "rejected": "Odrzucone",
+      "revoked": "Cofnięte",
+      "expired": "Wygasłe",
+      "unknown": "Nieznany"
+    },
+    "actions": {
+      "revoke": "Cofnij",
+      "revokeConfirm": "Czy na pewno chcesz cofnąć zaproszenie dla {email}?",
+      "previous": "Poprzednia",
+      "next": "Następna"
+    },
+    "feedback": {
+      "createSuccess": "Zaproszenie zostało wysłane poprawnie.",
+      "createFailed": "Nie udało się wysłać zaproszenia.",
+      "loadFailed": "Nie udało się pobrać historii zaproszeń.",
+      "unauthorized": "Sesja trenera wygasła albo nie masz dostępu do tego widoku.",
+      "revokeSuccess": "Zaproszenie zostało cofnięte.",
+      "revokeFailed": "Nie udało się cofnąć zaproszenia."
+    }
+  },
+  "admin": {
+    "panel": {
+      "eyebrow": "Panel administratora",
+      "brandTitle": "LGYM Control Room",
+      "title": "Zarządzanie aplikacją",
+      "subtitle": "Przeglądaj wszystkich użytkowników, kontroluj ich status i nadaj role bezpośrednio z nowego panelu administracyjnego.",
+      "badges": {
+        "secureWorkspace": "Bezpieczna przestrzeń robocza",
+        "userAccess": "Użytkownicy · Role · Dostęp",
+        "workspaceSuite": "Pakiet administracyjny LGYM"
+      },
+      "side": {
+        "eyebrow": "LGYM Admin Suite",
+        "title": "Trzymaj użytkowników, uprawnienia i dostęp do przestrzeni roboczej w jednym, dopracowanym miejscu."
+      }
+    },
+    "tabs": {
+      "eyebrow": "Sekcje administracyjne",
+      "items": {
+        "users": {
+          "label": "Użytkownicy i role",
+          "title": "Konta i uprawnienia",
+          "description": "Dodawaj nowych użytkowników, aktualizuj role i zarządzaj dostępem z jednego widoku.",
+          "menuHint": "Rejestracja, role i statusy"
+        },
+        "versions": {
+          "label": "Wersje aplikacji",
+          "title": "Publikacje Android i iOS",
+          "description": "Zarządzaj aktualnymi wersjami mobilnymi, minimalnymi wymaganiami oraz linkami do aktualizacji dla Androida i iOS.",
+          "menuHint": "Android, iOS i publikacja"
+        },
+        "exercises": {
+          "label": "Ćwiczenia",
+          "title": "Biblioteka ćwiczeń",
+          "description": "Przeglądaj globalne i prywatne ćwiczenia administratora oraz dodawaj nowe pozycje do obu bibliotek.",
+          "menuHint": "Globalne i prywatne ćwiczenia"
+        }
+      }
+    },
+    "stats": {
+      "totalUsers": "Wszyscy użytkownicy",
+      "blockedUsers": "Zablokowani na tej stronie",
+      "blockedUsersPage": "Zablokowani na tej stronie",
+      "availableRoles": "Dostępne role"
+    },
+    "register": {
+      "eyebrow": "Rejestracja",
+      "title": "Dodaj nowego użytkownika",
+      "subtitle": "Utwórz konto zawodnika albo trenera bez wychodzenia z panelu administratora.",
+      "scope": "Tworzenie kont: zawodnik lub trener",
+      "note": "Po utworzeniu konta możesz od razu przypisać dodatkowe role z listy użytkowników poniżej.",
+      "actions": {
+        "submit": "Zarejestruj użytkownika"
+      },
+      "feedback": {
+        "failed": "Nie udało się zarejestrować użytkownika.",
+        "success": "Użytkownik został zarejestrowany poprawnie.",
+        "unexpectedError": "Wystąpił nieoczekiwany błąd podczas rejestracji.",
+        "userAddedToList": "Użytkownik został dodany i lista została odświeżona."
+      }
+    },
+    "table": {
+      "sectionEyebrow": "Rejestr użytkowników LGYM",
+      "sectionSubtitle": "Sprawdzaj status kont, analizuj przypisane role i zarządzaj dostępem bez wychodzenia z dashboardu.",
+      "user": "Użytkownik",
+        "email": "Adres e-mail",
+      "status": "Status",
+      "roles": "Role",
+      "actions": "Akcje",
+      "empty": "Brak użytkowników do wyświetlenia.",
+      "unknownName": "Brak nazwy"
+    },
+    "status": {
+      "active": "Aktywny",
+      "blocked": "Zablokowany",
+      "deleted": "Usunięty"
+    },
+    "actions": {
+      "refresh": "Odśwież dane",
+      "logout": "Wyloguj",
+      "saveRoles": "Zapisz role",
+      "previous": "Poprzednia",
+      "next": "Następna"
+    },
+    "feedback": {
+      "usersLoadFailed": "Nie udało się pobrać listy użytkowników.",
+      "rolesLoadFailed": "Nie udało się pobrać listy ról.",
+      "rolesUpdateFailed": "Nie udało się zapisać ról dla użytkownika.",
+      "rolesUpdateSuccess": "Role zostały zapisane poprawnie.",
+      "unauthorized": "Sesja administratora wygasła albo nie masz już wymaganych uprawnień. Zaloguj się ponownie."
+    },
+    "versions": {
+      "eyebrow": "Wersje aplikacji",
+      "title": "Konfiguracja aktualizacji mobilnych",
+      "subtitle": "Dodawaj i odświeżaj konfiguracje wersji dla Androida i iOS z wykorzystaniem endpointów wygenerowanych przez Orval.",
+      "platforms": {
+        "android": "Android",
+        "ios": "iOS"
+      },
+      "current": {
+        "eyebrow": "Aktualna konfiguracja",
+        "forceRequired": "Aktualizacja wymagana",
+        "optional": "Aktualizacja opcjonalna"
+      },
+      "fields": {
+        "latestVersion": "Najnowsza wersja",
+        "minRequiredVersion": "Minimalna wymagana wersja",
+        "updateUrl": "Link do aktualizacji",
+        "releaseNotes": "Informacje o wydaniu",
+        "forceUpdate": "Wymuś aktualizację",
+        "forceUpdateHint": "Włącz, jeżeli aplikacja ma zablokować dalsze korzystanie do czasu instalacji nowej wersji."
+      },
+      "placeholders": {
+        "version": "np. 1.2.3",
+        "androidUrl": "https://play.google.com/store/apps/details?id=...",
+        "iosUrl": "https://apps.apple.com/app/id...",
+          "releaseNotes": "Opisz najważniejsze zmiany dla tej wersji"
+      },
+      "actions": {
+        "refresh": "Odśwież konfigurację",
+        "loadCurrent": "Wczytaj bieżącą",
+          "submit": "Zapisz wersję"
+      },
+      "feedback": {
+        "noConfig": "Brak zapisanej konfiguracji dla wybranej platformy.",
+        "loadFailed": "Nie udało się pobrać konfiguracji wersji.",
+        "latestVersionRequired": "Najnowsza wersja jest wymagana.",
+        "minVersionRequired": "Minimalna wymagana wersja jest wymagana.",
+        "submitFailed": "Nie udało się zapisać wersji aplikacji.",
+        "submitSuccess": "Konfiguracja wersji została zapisana poprawnie."
+      },
+      "notes": {
+        "title": "Jak tego używać",
+        "description": "Każda platforma korzysta z tego samego endpointu API i rozróżnia się polem platform. Możesz najpierw wczytać aktualną konfigurację, a potem nadpisać ją nową wersją dla Androida lub iOS."
+      }
+    },
+    "pagination": {
+      "summary": "Strona {page} z {totalPages} • łącznie {totalCount} użytkowników"
+    }
+  },
+  "exerciseLibrary": {
+    "page": {
+      "title": "Biblioteka ćwiczeń",
+      "summary": "Widoczne ćwiczenia: {totalCount}"
+    },
+    "pagination": {
+      "summary": "Strona {page} z {totalPages} · wszystkich ćwiczeń: {totalCount}"
+    },
+    "roles": {
+      "admin": {
+        "eyebrow": "Panel administratora",
+        "subtitle": "Zarządzaj biblioteką ćwiczeń i dodawaj nowe ruchy jako globalne albo prywatne dla swojego konta administratora."
+      },
+      "trainer": {
+        "eyebrow": "Strefa trenera",
+        "subtitle": "Przeglądaj ćwiczenia globalne oraz swoje prywatne pozycje i filtruj bibliotekę pod aktualne potrzeby planowania."
+      },
+      "user": {
+        "eyebrow": "Strefa zawodnika",
+        "subtitle": "Zobacz wszystkie dostępne ćwiczenia, rozdziel bibliotekę na globalne i prywatne oraz szybko znajduj interesujące pozycje."
+      }
+    },
+    "filters": {
+      "search": "Szukaj",
+      "searchPlaceholder": "Wpisz nazwę lub opis ćwiczenia",
+      "bodyPart": "Partia ciała",
+      "allBodyParts": "Wszystkie partie",
+      "all": "Wszystkie",
+      "global": "Globalne",
+      "user": "Prywatne"
+    },
+    "source": {
+      "global": "Globalne",
+      "user": "Prywatne"
+    },
+    "bodyParts": {
+      "unknown": "Nieznana partia",
+      "chest": "Klatka piersiowa",
+      "back": "Plecy",
+      "shoulders": "Barki",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "forearms": "Przedramiona",
+      "abs": "Brzuch",
+      "quads": "Czworogłowe uda",
+      "hamstrings": "Dwugłowe uda",
+      "calves": "Łydki",
+      "glutes": "Pośladki"
+    },
+    "meta": {
+      "imageAttached": "Dodany link do grafiki",
+      "noImage": "Brak grafiki"
+    },
+    "fallback": {
+      "name": "Ćwiczenie bez nazwy",
+      "description": "Brak opisu dla tego ćwiczenia.",
+      "bodyPart": "Nieznana partia"
+    },
+    "dialog": {
+      "eyebrow": "Nowe ćwiczenie",
+      "editEyebrow": "Edycja ćwiczenia",
+      "title": "Dodaj ćwiczenie",
+      "editTitle": "Edytuj ćwiczenie",
+      "subtitle": "Administrator może utworzyć ćwiczenie globalne albo prywatne, a właściciel prywatnego ćwiczenia może je później edytować lub usunąć.",
+      "fields": {
+        "visibility": "Widoczność",
+        "name": "Nazwa",
+        "bodyPart": "Partia ciała",
+        "description": "Opis",
+        "image": "Link do grafiki"
+      },
+      "placeholders": {
+        "name": "Np. Wyciskanie sztangi leżąc",
+        "description": "Dodaj wskazówki techniczne albo krótki opis ćwiczenia",
+        "image": "https://..."
+      },
+      "visibilityOptions": {
+        "global": "Globalne",
+        "user": "Prywatne"
+      }
+    },
+    "translationDialog": {
+      "eyebrow": "Nowe tłumaczenie",
+      "title": "Dodaj tłumaczenie",
+      "subtitle": "Dodajesz nowe tłumaczenie dla ćwiczenia: {name}.",
+      "fields": {
+        "culture": "Kod języka",
+        "name": "Przetłumaczona nazwa"
+      },
+      "placeholders": {
+        "culture": "Np. en, pl, de",
+        "name": "Wpisz nazwę w wybranym języku"
+      }
+    },
+    "deleteDialog": {
+      "eyebrow": "Usuwanie ćwiczenia",
+      "title": "Potwierdź usunięcie",
+      "description": "Czy na pewno chcesz usunąć ćwiczenie \"{name}\"? Tej operacji nie da się cofnąć."
+    },
+    "columns": {
+      "name": "Nazwa",
+      "bodyPart": "Partia ciała",
+      "source": "Źródło",
+      "description": "Opis",
+      "image": "Grafika",
+      "actions": "Akcje"
+    },
+    "actions": {
+      "add": "Dodaj ćwiczenie",
+      "save": "Zapisz",
+      "saveTranslation": "Zapisz tłumaczenie",
+      "cancel": "Anuluj",
+      "confirmDelete": "Usuń ćwiczenie",
+      "retry": "Spróbuj ponownie",
+      "openImage": "Otwórz grafikę",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "addTranslation": "Dodaj tłumaczenie"
+    },
+    "feedback": {
+      "loadFailed": "Nie udało się pobrać biblioteki ćwiczeń.",
+      "saveFailed": "Nie udało się zapisać ćwiczenia.",
+      "saveSuccess": "Ćwiczenie zostało zapisane poprawnie.",
+      "updateFailed": "Nie udało się zaktualizować ćwiczenia.",
+      "updateSuccess": "Ćwiczenie zostało zaktualizowane poprawnie.",
+      "deleteFailed": "Nie udało się usunąć ćwiczenia.",
+      "deleteSuccess": "Ćwiczenie zostało usunięte poprawnie.",
+      "translationFailed": "Nie udało się zapisać tłumaczenia.",
+      "translationSuccess": "Tłumaczenie zostało zapisane poprawnie.",
+      "nameRequired": "Nazwa ćwiczenia jest wymagana.",
+      "bodyPartRequired": "Wybierz partię ciała dla ćwiczenia.",
+      "translationCultureRequired": "Kod języka jest wymagany.",
+      "translationNameRequired": "Przetłumaczona nazwa jest wymagana.",
+      "userTargetUnavailable": "Nie można utworzyć prywatnego ćwiczenia bez identyfikatora użytkownika.",
+      "deleteContextMissing": "Brakuje identyfikatora użytkownika potrzebnego do usunięcia ćwiczenia.",
+      "unauthorized": "Sesja wygasła albo nie masz już dostępu do biblioteki ćwiczeń. Zaloguj się ponownie."
+    },
+    "empty": "Brak ćwiczeń pasujących do aktualnych filtrów."
+  }
+}

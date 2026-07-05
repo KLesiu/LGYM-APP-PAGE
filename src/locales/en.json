@@ -1,0 +1,1942 @@
+{
+  "login": {
+    "title": "Sign in",
+    "subtitle": "Access your trainer workspace",
+    "heading": {
+      "title": "Welcome back",
+      "subtitle": "Please enter your details to sign in."
+    },
+    "branding": {
+      "quote": "Coach with confidence. Every workout, every client, one focused workspace.",
+      "description": "LGYM Trainer helps you track plans, progress, and communication in one place."
+    },
+    "fields": {
+      "email": "Email",
+      "password": "Password",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password"
+    },
+    "options": {
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?"
+    },
+    "actions": {
+      "signIn": "Sign in",
+      "or": "Or",
+      "signInGoogle": "Sign in with Google"
+    },
+    "footer": {
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "hint": "Demo mode: click the button to open trainer dashboard."
+  },
+  "trainerDashboard": {
+    "appName": "LGYM Trainer",
+    "appSubtitle": "Coach workspace",
+    "navigation": {
+      "dashboard": "Dashboard",
+      "exercises": "Exercises",
+      "trainingPlans": "Training Plans",
+      "members": "Members",
+      "myClients": "My Clients",
+      "invitations": "Invitations",
+      "reportTemplates": "Report Templates",
+      "settings": "Settings"
+    },
+    "sidebar": {
+      "noteLabel": "Overview",
+      "noteText": "Manage your athlete plans, monitor progress, and keep daily coaching tasks visible."
+    },
+    "header": {
+      "sectionEyebrow": "Trainer dashboard",
+      "dateLabel": "Today"
+    },
+    "content": {
+      "title": "Your plans",
+      "subtitle": "Browse active programs and jump into the next training workflow."
+    },
+    "plans": {
+      "days": "{count} days",
+      "cardTag": "Active",
+      "items": {
+        "fullBody": {
+          "title": "Full Body Workout"
+        },
+        "strength": {
+          "title": "Strength Builder"
+        },
+        "recomposition": {
+          "title": "Body Recomposition"
+        },
+        "mobility": {
+          "title": "Mobility Reset"
+        }
+      }
+    }
+  },
+  "userArea": {
+    "appName": "LGYM",
+    "appSubtitle": "Athlete workspace",
+    "navigation": {
+      "relationship": "Trainer Relationship",
+      "exercises": "Exercises"
+    },
+    "layout": {
+      "exercises": {
+        "title": "Exercises",
+        "subtitle": "Browse the global and personal exercise library, filter by source, and quickly search by name or body part."
+      },
+      "relationship": {
+        "title": "Trainer relationship",
+        "subtitle": "See your current trainer relationship status and respond to invitations supported by the current API contract."
+      }
+    }
+  },
+  "auth": {
+    "tabs": {
+      "athlete": "Athlete Panel",
+      "trainer": "Trainer Zone"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "trainer": "Trainer",
+      "athlete": "Athlete",
+      "user": "User"
+    },
+    "validation": {
+      "usernameRequired": "Username is required",
+      "usernameMin": "Username must be at least 3 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email must be valid",
+      "passwordRequired": "Password is required",
+      "passwordMin": "Password must be at least 6 characters",
+      "confirmPasswordRequired": "Confirm password is required",
+      "passwordsMustMatch": "Passwords must match"
+    },
+    "login": {
+      "title": "Login to your account",
+      "subtitle": "Enter your username below to login to your account",
+      "fields": {
+        "username": "Username",
+        "password": "Password"
+      },
+      "placeholders": {
+        "username": "your_username",
+        "password": "Password"
+      },
+      "actions": {
+        "forgotPassword": "Forgot your password?",
+        "submit": "Login",
+        "orContinueWith": "Or continue with",
+        "loginWithApple": "Login with Apple",
+        "loginWithGoogle": "Login with Google"
+      },
+      "footer": {
+        "noAccount": "Don't have an account?",
+        "signUp": "Sign up"
+      },
+      "feedback": {
+        "failed": "Login failed. Please check your credentials and try again.",
+        "success": "Login successful.",
+        "unexpectedError": "Unexpected login error. Please try again."
+      }
+    },
+    "google": {
+      "feedback": {
+        "success": "Signed in with Google successfully.",
+        "failed": "Google sign-in failed. Please try again.",
+        "missingClientId": "Google sign-in is not configured for this environment.",
+        "popupBlocked": "The Google sign-in popup was blocked. Please allow popups and try again.",
+        "popupClosed": "Google sign-in was cancelled.",
+        "timeout": "Google sign-in timed out. Please try again.",
+        "accessDenied": "Google sign-in was cancelled before completion.",
+        "invalidResponse": "Google sign-in returned an invalid response."
+      }
+    },
+    "loginAdmin": {
+      "title": "Administrator login",
+      "subtitle": "Sign in with an account that can manage users, roles, and application access",
+      "actions": {
+        "submit": "Open admin panel"
+      },
+      "feedback": {
+        "accessDenied": "This account does not have administrator access."
+      },
+      "footer": {
+        "backToUserLoginLabel": "Want to go back to the regular sign in?",
+        "backToUserLogin": "Go to /login"
+      }
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Fill in your details below to register",
+      "fields": {
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password"
+      },
+      "placeholders": {
+        "username": "your_username",
+        "email": "me.example.com",
+        "password": "Password",
+        "confirmPassword": "Confirm Password"
+      },
+      "actions": {
+        "submit": "Register"
+      },
+      "footer": {
+        "haveAccount": "Already have an account?",
+        "login": "Login"
+      },
+      "feedback": {
+        "failed": "Registration failed. Please try again.",
+        "success": "Registration successful. You can log in now.",
+        "unexpectedError": "Unexpected registration error. Please try again."
+      }
+    }
+  },
+  "ui": {
+    "header": {
+      "accountMenu": "User account menu",
+      "logout": "Log out"
+    },
+    "notifications": {
+      "openMenu": "Open notifications",
+      "title": "Notifications",
+      "subtitle": "Important athlete events in one place",
+      "markAllRead": "Mark all read",
+      "warning": {
+        "eyebrow": "Unread notification",
+        "title": "You have an unread notification older than 24 hours",
+        "age": "Waiting for: {age}",
+        "goToNotification": "Go to notification",
+        "markAsRead": "Mark as read"
+      },
+      "error": "Failed to load notifications.",
+      "empty": "No trainer notifications yet.",
+      "fallbackMessage": "Notification",
+      "unknownType": "System notification",
+      "tabs": {
+        "new": "New",
+        "read": "Read",
+        "all": "All"
+      },
+      "types": {
+        "invitationAccepted": "Collaboration accepted",
+        "invitationRejected": "Invitation rejected",
+        "reportSubmissionReceived": "New athlete report",
+        "trainerRelationshipEnded": "Collaboration ended"
+      },
+      "feedback": {
+        "markReadFailed": "Failed to mark the notification as read.",
+        "markAllReadFailed": "Failed to mark all notifications as read."
+      }
+    },
+    "breadcrumbs": {
+      "invitationDetails": "Invitation details",
+      "memberPlanDetails": "Member plan",
+      "trainingPlanDetails": "Plan details",
+      "planDayCreate": "New plan day",
+      "planDayEdit": "Edit plan day"
+    },
+    "theme": {
+      "switchToLight": "Switch to light mode",
+      "switchToDark": "Switch to dark mode"
+    },
+    "language": {
+      "current": "Current language: {code}",
+      "polish": "Polski",
+      "english": "English"
+    }
+  },
+  "common": {
+    "actions": {
+      "dismiss": "Dismiss notification"
+    },
+    "toastTitles": {
+      "success": "Success",
+      "error": "Error",
+      "warning": "Warning",
+      "info": "Information"
+    }
+  },
+  "trainerArea": {
+    "layout": {
+      "members": {
+        "title": "Members",
+        "subtitle": "Browse trainees, open details, and manage the active coaching relationship from one trainer workspace."
+      },
+      "invitations": {
+        "title": "Invitations",
+        "subtitle": "Invite new customers by email, track every status, and revoke pending invitations from one trainer view."
+      },
+      "trainingPlans": {
+        "title": "Training Plans",
+        "subtitle": "Build and manage reusable global training plans, plan days, and share codes from one trainer workspace."
+      },
+      "reportTemplates": {
+        "title": "Report Templates",
+        "subtitle": "Manage reusable report templates globally for your trainer workspace."
+      },
+      "settings": {
+        "title": "Settings",
+        "subtitle": "Manage account preferences and connected sign-in providers for your trainer workspace."
+      },
+      "exercises": {
+        "title": "Exercises",
+        "subtitle": "Work with the exercise library, switch between global and private items, and quickly find movements needed for athlete programming."
+      }
+    }
+  },
+  "trainerSettings": {
+    "page": {
+      "eyebrow": "Account settings",
+      "title": "Connected sign-in providers",
+      "subtitle": "Link Google to your existing trainer account and review external logins already connected to your profile."
+    },
+    "google": {
+      "title": "Google sign-in",
+      "subtitle": "Use a Google account to sign in faster and keep your trainer account connected across devices.",
+      "provider": "Google",
+      "loading": "Loading connected accounts...",
+      "emptyState": "No external sign-in providers are currently linked to this account.",
+      "notLinked": "No Google account linked yet.",
+      "statusLinked": "Linked",
+      "statusNotLinked": "Not linked",
+      "linkAction": "Link Google",
+      "alreadyLinked": "Google linked",
+      "unknownProvider": "External provider",
+      "noProviderEmail": "No provider email returned"
+    },
+    "feedback": {
+      "loadFailed": "Failed to load connected sign-in providers.",
+      "linkFailed": "Failed to link the Google account.",
+      "linkSuccess": "Google account linked successfully.",
+      "unauthorized": "Your session expired. Please sign in again."
+    }
+  },
+  "trainerTrainingPlans": {
+    "page": {
+      "eyebrow": "Global builder",
+      "title": "Training plans workspace",
+      "subtitle": "Create reusable global plans, keep plan names organized, and open the full builder for day-by-day editing.",
+      "summary": "Global trainer plan library"
+    },
+    "list": {
+      "eyebrow": "Plan list",
+      "title": "All global plans",
+      "subtitle": "Manage the trainer template library that can later be copied and assigned to trainees."
+    },
+    "columns": {
+      "status": "Readiness"
+    },
+    "status": {
+      "assignable": "Ready to assign"
+    },
+    "fallback": {
+      "noName": "Untitled plan"
+    },
+    "dialog": {
+      "createTitle": "Create training plan",
+      "renameTitle": "Rename training plan"
+    },
+    "form": {
+      "name": "Plan name",
+      "namePlaceholder": "Enter training plan name"
+    },
+    "actions": {
+      "create": "Create plan",
+      "open": "Open details",
+      "rename": "Rename",
+      "delete": "Delete",
+      "share": "Share",
+      "setActive": "Set active",
+      "save": "Save",
+      "cancel": "Cancel",
+      "retry": "Retry",
+      "deleteConfirm": "Delete plan \"{name}\"?"
+    },
+    "empty": {
+      "title": "No global plans created yet."
+    },
+    "error": {
+      "load": "Failed to load the global training plans."
+    },
+    "share": {
+      "codeLabel": "Share code",
+      "copy": "Copy code"
+    },
+    "feedback": {
+      "loadPlansFailed": "Failed to load the training plans.",
+      "nameRequired": "Plan name is required.",
+      "createPlanSuccess": "Training plan created successfully.",
+      "createPlanFailed": "Failed to create the training plan.",
+      "updatePlanSuccess": "Training plan updated successfully.",
+      "updatePlanFailed": "Failed to update the training plan.",
+      "deletePlanSuccess": "Training plan deleted successfully.",
+      "deletePlanFailed": "Failed to delete the training plan.",
+      "setActiveSuccess": "Active plan updated successfully.",
+      "setActiveFailed": "Failed to update the active plan.",
+      "sharePlanSuccess": "Share code generated successfully.",
+      "sharePlanFailed": "Failed to generate the share code.",
+      "copyShareCodeSuccess": "Share code copied to clipboard.",
+      "copyShareCodeFailed": "Failed to copy the share code."
+    }
+  },
+  "trainerTrainingPlanDetails": {
+    "page": {
+      "eyebrow": "Plan builder",
+      "title": "Training plan details",
+      "subtitle": "Manage plan days on one board, open quick previews, and generate a reusable share code for this global plan.",
+      "badge": "Global plan",
+      "planIdLabel": "Plan ID: {id}"
+    },
+    "actions": {
+      "back": "Back to plans",
+      "close": "Close",
+      "retry": "Retry"
+    },
+    "error": {
+      "plan": "Failed to load the selected training plan."
+    },
+    "share": {
+      "eyebrow": "Share",
+      "title": "Share this plan by code",
+      "subtitle": "With this code, any user will be able to import your entire plan.",
+      "codeLabel": "Current share code",
+      "empty": "",
+      "actions": {
+        "generate": "Generate code",
+        "regenerate": "Regenerate code",
+        "copy": "Copy code"
+      }
+    },
+    "planDays": {
+      "eyebrow": "Plan days",
+      "title": "Plan day list",
+      "subtitle": "Browse plan days as tiles, open a quick preview, and jump into full editing only when you need it.",
+      "empty": "No plan days added yet.",
+      "columns": {
+        "actions": "Actions"
+      },
+      "badges": {
+        "selected": "Preview active",
+        "available": "Ready to preview"
+      },
+      "fallback": {
+        "noName": "Unnamed day"
+      },
+      "stats": {
+        "exercises": "Exercises",
+        "series": "Series",
+        "lastTraining": "Last training"
+      },
+      "meta": {
+        "exercises": "Exercises: {count}",
+        "series": "Series: {count}",
+        "lastTraining": "Last training: {value}"
+      },
+      "actions": {
+        "create": "New plan day",
+        "preview": "Preview",
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleteConfirm": "Delete plan day \"{name}\"?"
+      },
+      "error": {
+        "load": "Failed to load the plan day list."
+      }
+    },
+    "workspace": {
+      "eyebrow": "Plan day workspace",
+      "subtitle": "The mobile flow works best when plan-day editing has its own dedicated space. Open a day to edit it in a wider builder instead of a cramped inline form.",
+      "empty": {
+        "title": "Pick a day to preview",
+        "subtitle": "Click preview on any tile to inspect exercises, series, and recent activity without leaving this page.",
+        "helper": "Use the Preview action on any tile to inspect the day, and Edit when you want to switch into the full workspace."
+      },
+      "preview": {
+        "eyebrow": "Plan day preview",
+        "subtitle": "A fast read-only preview of the selected day before jumping into full editing.",
+        "error": "Failed to load the selected day preview.",
+        "emptyExercises": "This plan day has no exercises assigned yet.",
+        "stats": {
+          "exercises": "Exercises",
+          "series": "Series",
+          "lastTraining": "Last training"
+        },
+        "exerciseMeta": {
+          "reps": "Reps: {value}",
+          "series": "Series: {value}"
+        }
+      },
+      "summary": {
+        "eyebrow": "Plan overview",
+        "title": "Quick numbers",
+        "subtitle": "This island gives you the scale of the plan at a glance so you can judge whether the split is already complete.",
+        "stats": {
+          "totalDays": "Total days",
+          "totalExercises": "Total exercises",
+          "totalSeries": "Total series"
+        }
+      },
+      "sections": {
+        "create": {
+          "eyebrow": "Create",
+          "title": "Start a new plan day",
+          "subtitle": "Open a dedicated route with enough space for the day name, exercise library, ordering, and summary."
+        },
+        "edit": {
+          "eyebrow": "Edit",
+          "title": "Edit in a full workspace",
+          "subtitle": "Each existing day opens in a wider editor inspired by the mobile flow.",
+          "helper": "Use the list on the left to open a plan day. The editor route gives more room for exercise picking and list management."
+        }
+      }
+    },
+    "editor": {
+      "eyebrow": "Day editor",
+      "title": "Edit selected plan day",
+      "createTitle": "Create a new plan day",
+      "subtitle": "This editor only uses fields currently exposed by the plan day DTO: name, exercise, reps, and series.",
+      "exerciseRowsTitle": "Exercises",
+      "fields": {
+        "name": "Plan day name",
+        "namePlaceholder": "Enter plan day name"
+      },
+      "columns": {
+        "exercise": "Exercise",
+        "reps": "Reps",
+        "series": "Series"
+      },
+      "meta": {
+        "rows": "Rows: {count}"
+      },
+      "actions": {
+        "save": "Save plan day",
+        "reset": "Reset",
+        "addExercise": "Add exercise"
+      },
+      "error": {
+        "load": "Failed to load the selected plan day.",
+        "exercises": "Global exercise options could not be loaded."
+      }
+    },
+    "exercises": {
+      "fallback": {
+        "noName": "Unnamed exercise"
+      }
+    },
+    "feedback": {
+      "loadPlanFailed": "Failed to load the training plan.",
+      "loadPlanDaysFailed": "Failed to load plan days.",
+      "loadPlanDayFailed": "Failed to load the plan day details.",
+      "loadExercisesFailed": "Failed to load global exercises.",
+      "planDayNameRequired": "Plan day name is required.",
+      "createPlanDaySuccess": "Plan day created successfully.",
+      "createPlanDayFailed": "Failed to create the plan day.",
+      "updatePlanDaySuccess": "Plan day updated successfully.",
+      "updatePlanDayFailed": "Failed to update the plan day.",
+      "deletePlanDaySuccess": "Plan day deleted successfully.",
+      "deletePlanDayFailed": "Failed to delete the plan day.",
+      "sharePlanSuccess": "Share code generated successfully.",
+      "sharePlanFailed": "Failed to generate the share code.",
+      "copyShareCodeSuccess": "Share code copied to clipboard.",
+      "copyShareCodeFailed": "Failed to copy the share code."
+    }
+  },
+  "trainerTrainingPlanDayEditor": {
+    "page": {
+      "eyebrow": "Plan day workspace",
+      "title": "Create or edit a plan day",
+      "subtitle": "This wider workspace follows the mobile flow: name first, then exercise selection, then final arrangement and save.",
+      "badges": {
+        "create": "New day",
+        "edit": "Edit day"
+      }
+    },
+    "header": {
+      "eyebrow": "Focused editor",
+      "editTitle": "Edit plan day in full workspace",
+      "createTitle": "Create plan day in full workspace",
+      "subtitle": "The form is split into a clear exercise library and a separate selected-exercises area so the trainer can work faster."
+    },
+    "plan": {
+      "eyebrow": "Plan",
+      "subtitle": "This editor works inside the currently selected global training plan."
+    },
+    "basics": {
+      "eyebrow": "Step 1",
+      "title": "Plan day basics",
+      "fields": {
+        "name": "Plan day name",
+        "namePlaceholder": "Enter the day name"
+      }
+    },
+    "library": {
+      "eyebrow": "Step 2",
+      "title": "Exercise library",
+      "subtitle": "The picker uses both the full user exercise list and the dedicated global list, so you can browse everything without hardcoded options.",
+      "filters": {
+        "all": "All",
+        "user": "My exercises",
+        "global": "Global",
+        "allBodyParts": "All body parts"
+      },
+      "fields": {
+        "search": "Search exercises",
+        "searchPlaceholder": "Type exercise name or body part",
+        "bodyPart": "Body part"
+      },
+      "source": {
+        "user": "User",
+        "global": "Global"
+      },
+      "actions": {
+        "add": "Add",
+        "added": "Added",
+        "drag": "Drag into selected exercises",
+        "dragShort": "Drag"
+      },
+      "empty": "No exercises match the current filters.",
+      "error": {
+        "load": "Failed to load the exercise library."
+      }
+    },
+    "selection": {
+      "eyebrow": "Step 3",
+      "title": "Selected exercises",
+      "subtitle": "Adjust reps and series, then reorder the list so the final day reflects the intended workout flow.",
+      "summary": "Selected rows: {count}",
+      "empty": "Add exercises from the library on the left to start building this plan day.",
+      "fields": {
+        "reps": "Reps",
+        "series": "Series",
+        "order": "Order"
+      },
+      "actions": {
+        "drag": "Drag to reorder",
+        "dragShort": "Move"
+      },
+      "meta": {
+        "unknownExercise": "Exercise details unavailable"
+      }
+    },
+    "actions": {
+      "backToPlan": "Back to plan",
+      "cancel": "Cancel",
+      "save": "Save plan day",
+      "retry": "Retry"
+    },
+    "error": {
+      "plan": "Failed to load the parent plan for this editor.",
+      "planDay": "Failed to load the selected plan day for editing."
+    },
+    "feedback": {
+      "loadPlanFailed": "Failed to load the training plan.",
+      "loadPlanDayFailed": "Failed to load the selected plan day.",
+      "loadExercisesFailed": "Failed to load exercises for the editor.",
+      "nameRequired": "Plan day name is required.",
+      "exerciseRequired": "Add at least one exercise before saving.",
+      "createSuccess": "Plan day created successfully.",
+      "createFailed": "Failed to create the plan day.",
+      "updateSuccess": "Plan day updated successfully.",
+      "updateFailed": "Failed to update the plan day."
+    }
+  },
+  "trainerMembers": {
+    "page": {
+      "eyebrow": "Members workspace",
+      "title": "Manage your trainees",
+      "subtitle": "Review relationship status, open member details, and keep the list filtered on the server for faster trainer workflows.",
+      "summary": "Total members: {totalCount}"
+    },
+    "list": {
+      "eyebrow": "Members list",
+      "title": "Your trainee relationships",
+      "subtitle": "Search by name or email, filter by status, and manage your relationship with your trainee",
+      "filters": {
+        "search": "Search members",
+        "sortBy": "Sort by",
+        "pageSize": "Per page"
+      },
+      "placeholders": {
+        "search": "Type member name or email"
+      },
+      "columns": {
+        "member": "Member",
+        "status": "Status",
+        "relationship": "Relationship",
+        "lastUpdate": "Last update",
+        "actions": "Actions"
+      },
+      "sortOptions": {
+        "name": "Name",
+        "createdAt": "Created at",
+        "status": "Status",
+        "linkedAt": "Linked at",
+        "lastInvitationExpiresAt": "Invitation expires",
+        "lastInvitationRespondedAt": "Invitation answered"
+      },
+      "sortDirection": {
+        "ascending": "Ascending",
+        "descending": "Descending"
+      },
+      "fallback": {
+        "noName": "Unknown member",
+        "noEmail": "No email available"
+      },
+      "empty": {
+        "title": "No members to display",
+        "subtitle": "Try adjusting the filters or wait until the trainer-member relationships appear in the list."
+      },
+      "error": {
+        "title": "Failed to load members",
+        "subtitle": "The current filters could not be loaded. Try again in a moment."
+      },
+      "pagination": {
+        "summary": "Page {page} of {totalPages} · total members: {totalCount}"
+      }
+    },
+    "filters": {
+      "all": "All"
+    },
+    "relationship": {
+      "linked": "Linked with trainer",
+      "pendingInvitation": "Invitation pending",
+      "expiredInvitation": "Invitation expired",
+      "noActiveLink": "No active relationship"
+    },
+    "status": {
+      "linked": "Linked",
+      "invitationPending": "Invitation pending",
+      "invitationExpired": "Invitation expired",
+      "invitationRejected": "Invitation rejected",
+      "invitationAccepted": "Invitation accepted",
+      "noRelationship": "No relationship",
+      "unknown": "Unknown"
+    },
+    "actions": {
+      "openDetails": "Open details",
+      "unlink": "Unlink",
+      "unlinkConfirm": "Are you sure you want to unlink {name}?",
+      "previous": "Previous",
+      "next": "Next",
+      "retry": "Retry"
+    },
+    "feedback": {
+      "loadFailed": "Failed to load the members list.",
+      "unlinkSuccess": "Member unlinked successfully.",
+      "unlinkFailed": "Failed to unlink the member.",
+      "unauthorized": "Your trainer session expired or you no longer have access to this view."
+    }
+  },
+  "userRelationship": {
+    "page": {
+      "eyebrow": "Athlete workspace",
+      "title": "Trainer relationship",
+      "subtitle": "This screen relies only on the real invitation contract. It shows the public invitation status and lets you respond only when the API actually supports it.",
+      "invitationMode": "Invitation context active",
+      "guidanceTitle": "How to read this view",
+      "guidance": [
+        "If the invitation link contains a valid identifier and code, the screen loads the public invitation status generated by Orval.",
+        "Accept and reject actions are available only for the pending state supported by the accept/reject endpoints.",
+        "No invitation context does not automatically mean no relationship exists — it only means the current API contract does not give this view enough data to confirm it."
+      ]
+    },
+    "actions": {
+      "accept": "Accept relationship",
+      "reject": "Reject invitation",
+      "retry": "Retry",
+      "dismissInvitationContext": "Open default view"
+    },
+    "invitations": {
+      "eyebrow": "Pending invitations",
+      "title": "Invitations assigned to your account",
+      "subtitle": "You have {count} pending trainer invitation. You can accept the relationship or reject the invitation without using the email link.",
+      "itemTitle": "Trainer invitation",
+      "itemDescription": "This invitation was sent to the email assigned to your account or directly to your athlete profile.",
+      "expiresAt": "Expires at",
+      "sentTo": "Sent to",
+      "emptyTitle": "No pending invitations",
+      "emptySubtitle": "If a trainer has just sent an invitation, refresh this view. The list uses /api/trainee/invitations for the signed-in athlete."
+    },
+    "common": {
+      "yes": "Yes",
+      "no": "No",
+      "notAvailable": "No data"
+    },
+    "summary": {
+      "accountLabel": "Your account",
+      "accountMeta": "Identity comes from the active user session.",
+      "contractLabel": "Contract scope",
+      "contractWithContext": "Invitation status available",
+      "contractWithoutContext": "No invitation context",
+      "contractMeta": "This view only uses invitation / accept / reject endpoints.",
+      "stateLabel": "Screen state",
+      "stateMeta": "The state is derived only from the invitation API response."
+    },
+    "cards": {
+      "status": {
+        "label": "Relationship status"
+      },
+      "actions": {
+        "label": "Available actions",
+        "available": "You can respond to the invitation",
+        "unavailable": "No action available",
+        "pendingDescription": "The API confirms a pending state, so you can accept or reject the relationship now.",
+        "defaultDescription": "Outside the pending state, this view stays informational and does not guess any extra capabilities."
+      },
+      "identity": {
+        "label": "Athlete account",
+        "description": "This section uses only data available in the current session, without hardcoding trainer details."
+      },
+      "scope": {
+        "label": "Source of truth",
+        "value": "Public invitation status",
+        "description": "The view does not use training-plan endpoints or any indirect relationship proxy."
+      }
+    },
+    "contract": {
+      "title": "API contract",
+      "primaryLine": "Only invitation status and accept / reject endpoints are used.",
+      "secondaryLine": "If the backend does not expose a separate endpoint for the signed-in athlete's current relationship, this screen does not infer it from training plans or other modules."
+    },
+    "sidePanels": {
+      "invitation": {
+        "eyebrow": "Invitation details",
+        "title": "Data returned by the contract",
+        "items": {
+          "status": "API status",
+          "statusMeta": "The status field comes directly from PublicInvitationStatusDto.",
+          "accountExists": "Account exists",
+          "invitationId": "Invitation ID"
+        }
+      },
+      "context": {
+        "eyebrow": "Route context",
+        "title": "Input parameters",
+        "items": {
+          "code": "Invitation code",
+          "codeMeta": "The code is used only to fetch the public invitation status.",
+          "route": "View mode",
+          "routeValue": "Page opened from an invitation link"
+        }
+      }
+    },
+    "states": {
+      "loading": {
+        "badge": "Loading",
+        "title": "Checking relationship status",
+        "subtitle": "This view is loading only invitation data exposed by the current API contract."
+      },
+      "error": {
+        "badge": "Error",
+        "title": "Failed to read invitation status",
+        "subtitle": "Try again. If the problem keeps happening, the API did not return enough data to show the relationship state."
+      },
+      "pending": {
+        "badge": "Pending",
+        "title": "You have a trainer invitation waiting",
+        "subtitle": "You can accept or reject this relationship now. This screen does not show trainer identity fields because the current DTO does not return them."
+      },
+      "accepted": {
+        "badge": "Accepted",
+        "title": "The invitation has been accepted",
+        "subtitle": "The public invitation status returns an accepted state. The screen does not claim anything beyond what the API actually confirms."
+      },
+      "rejected": {
+        "badge": "Rejected",
+        "title": "This invitation was already rejected",
+        "subtitle": "The invitation is no longer actionable and cannot be handled again from this view."
+      },
+      "expired": {
+        "badge": "Unavailable",
+        "title": "This invitation is no longer active",
+        "subtitle": "The invitation status indicates that the link expired or was revoked, so there is no action left to take."
+      },
+      "empty": {
+        "badge": "Limited contract",
+        "title": "No invitation data to display",
+        "subtitle": "This view has no active invitation context or the API did not return a status, so it cannot confirm a trainer-athlete relationship without guessing backend behavior."
+      }
+    },
+    "feedback": {
+      "loadFailed": "Failed to load invitation or trainer relationship data.",
+      "invitationsEndpointMissing": "The backend does not expose /api/trainee/invitations yet. Deploy the latest API branch so the athlete panel can load invitations without the email link.",
+      "acceptSuccess": "Invitation accepted successfully.",
+      "acceptFailed": "Failed to accept the trainer relationship.",
+      "rejectSuccess": "Invitation rejected successfully.",
+      "rejectFailed": "Failed to reject the trainer invitation."
+    }
+  },
+  "trainerMemberDetails": {
+    "header": {
+      "fallbackName": "Member details",
+      "fallbackSubtitle": "Header data appears after loading this member from the trainer list."
+    },
+    "tabs": {
+      "overview": "Overview",
+      "trainings": "Trainings",
+      "plans": "Plans",
+      "diet": "Diet",
+      "notes": "Notes",
+      "reports": "Reports",
+      "measurements": "Measurements"
+    },
+    "actions": {
+      "back": "Back to members",
+      "retry": "Retry",
+      "cancel": "Cancel",
+      "save": "Save",
+      "close": "Close"
+    },
+    "overview": {
+      "eyebrow": "Overview",
+      "title": "Member summary based on live trainer data",
+      "subtitle": "This section aggregates only data that already exists in the current API contract.",
+      "emptyValue": "—",
+      "cards": {
+        "relationship": "Relationship",
+        "lastTraining": "Last training date",
+        "activePlan": "Active plan",
+        "latestReport": "Latest report submission",
+        "elo": "Latest ELO point",
+        "mainRecord": "Latest main record"
+      },
+      "meta": {
+        "trainingDates": "Taken from the recorded training dates endpoint.",
+        "noActivePlan": "No active plan assigned.",
+        "noReports": "No submitted reports found.",
+        "noMainRecords": "No main records found.",
+        "noExercise": "Exercise not provided",
+        "noSnapshot": "No cached snapshot available for this route yet."
+      },
+      "error": {
+        "title": "Failed to build the overview",
+        "subtitle": "At least one overview data source could not be loaded."
+      }
+    },
+    "trainings": {
+      "eyebrow": "History",
+      "title": "Training history",
+      "detailsEyebrow": "Training details",
+      "selectDate": "Select a training from history",
+      "columns": {
+        "gym": "Gym",
+        "exercises": "Exercises"
+      },
+      "exerciseList": "Exercises",
+      "seriesLabel": "Set {series}",
+      "seriesValue": "{weight} {unit} × {reps} reps",
+      "summary": {
+        "subtitle": "The key information for the selected training is grouped in a quick summary below.",
+        "trainingDate": "Training: {date}",
+        "startTime": "Start time",
+        "gym": "Gym",
+        "exercisesCount": "Exercise count"
+      },
+      "fallback": {
+        "noType": "Training type unavailable",
+        "noPlanDay": "No plan day",
+        "noGym": "Gym not provided",
+        "noExercise": "Exercise unavailable",
+        "noBodyPart": "Body part unavailable"
+      },
+      "empty": {
+        "title": "No recorded training dates found.",
+        "details": "Select a date from the left to load training details.",
+        "exercises": "No exercises recorded for this training.",
+        "series": "No sets recorded for this exercise."
+      },
+      "error": {
+        "subtitle": "Failed to load recorded training dates.",
+        "details": "Failed to load the training details for the selected date."
+      }
+    },
+    "plans": {
+      "eyebrow": "Plans",
+      "title": "Trainer-managed plans",
+      "subtitle": "Create, rename, delete, assign, and unassign plans supported by the current trainer contract.",
+      "badges": {
+        "active": "Active"
+      },
+      "meta": {
+        "createdAt": "Created"
+      },
+      "fallback": {
+        "noName": "Untitled plan"
+      },
+      "empty": {
+        "title": "No plans created for this member yet.",
+        "assignable": "There are no trainer-wide plans available to assign to this member."
+      },
+      "dialog": {
+        "createTitle": "Create plan",
+        "renameTitle": "Rename plan",
+        "assignExistingTitle": "Assign an existing plan",
+        "assignExistingSubtitle": "Choose one of your trainer-wide plans. During assignment the system should create a dedicated copy for this member."
+      },
+      "form": {
+        "name": "Plan name",
+        "namePlaceholder": "Enter plan name",
+        "assignExisting": "Plan to assign"
+      },
+      "actions": {
+        "create": "Create plan",
+        "assignExisting": "Assign plan",
+        "assign": "Assign",
+        "managePlanDays": "Plan days",
+        "rename": "Rename",
+        "delete": "Delete",
+        "unassign": "Unassign active plan",
+        "deleteConfirm": "Delete plan \"{name}\"?"
+      },
+      "error": {
+        "subtitle": "Failed to load the trainer-managed plans."
+      },
+      "feedback": {
+        "loadFailed": "Failed to load plans.",
+        "nameRequired": "Plan name is required.",
+        "createSuccess": "Plan created successfully.",
+        "createFailed": "Failed to create the plan.",
+        "renameSuccess": "Plan renamed successfully.",
+        "renameFailed": "Failed to rename the plan.",
+        "assignSuccess": "Plan copied and assigned successfully.",
+        "assignFailed": "Failed to copy and assign the plan.",
+        "unassignSuccess": "Active plan unassigned successfully.",
+        "unassignFailed": "Failed to unassign the active plan.",
+        "deleteSuccess": "Plan deleted successfully.",
+        "deleteFailed": "Failed to delete the plan."
+      }
+    },
+    "diet": {
+      "eyebrow": "Diet",
+      "title": "Member diet plans",
+      "subtitle": "Create and update the active diet, meals, and macro targets with change history.",
+      "error": "Failed to load diet plans.",
+      "fallback": {
+        "noName": "Untitled diet plan"
+      },
+      "badges": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "summary": {
+        "activeCount": "Active diets: {count}"
+      },
+      "meta": {
+        "dateRange": "From {start} to {end}",
+        "noEndDate": "no end date",
+        "mealCount": "Meals: {count}"
+      },
+      "macros": {
+        "calories": "Calories",
+        "protein": "Protein",
+        "carbs": "Carbs",
+        "fat": "Fat"
+      },
+      "meals": {
+        "title": "Meals",
+        "fallback": "Untitled meal",
+        "item": "Meal {index}"
+      },
+      "empty": {
+        "title": "No diet plans created for this member yet.",
+        "subtitle": "Add the first plan so the trainee can see active guidance in the mobile app."
+      },
+      "dialog": {
+        "createTitle": "Create diet plan",
+        "editTitle": "Edit diet plan",
+        "historyTitle": "Diet plan change history"
+      },
+      "form": {
+        "name": "Plan name",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "modeTitle": "Diet planning mode",
+        "modeMeals": "Build the diet from meals",
+        "modeGlobal": "Set only a global calorie and macro target",
+        "modeMealsHint": "Plan-level calories and macros will be calculated automatically from the meals below.",
+        "modeGlobalHint": "Set target values for the whole plan without breaking it down into individual meals.",
+        "autoCalculatedHint": "In meal mode calories are calculated automatically: 1 g protein = 4 kcal, 1 g carbs = 4 kcal, 1 g fat = 9 kcal.",
+        "globalTargetHint": "In global mode provide at least one target: calories or macros.",
+        "isActive": "Set as active plan",
+        "notes": "Trainer notes",
+        "mealName": "Meal name",
+        "mealOrder": "Order",
+        "mealDescription": "Meal description"
+      },
+      "actions": {
+        "create": "Create diet",
+        "edit": "Edit",
+        "editActive": "Edit active",
+        "activate": "Activate",
+        "history": "History",
+        "delete": "Delete",
+        "addMeal": "Add meal",
+        "removeMeal": "Remove meal"
+      },
+      "feedback": {
+        "saved": "Diet plan saved successfully.",
+        "saveFailed": "Failed to save the diet plan.",
+        "activated": "Diet plan marked as active.",
+        "activateFailed": "Failed to activate the diet plan.",
+        "deleted": "Diet plan deleted successfully.",
+        "deleteFailed": "Failed to delete the diet plan.",
+        "historyFailed": "Failed to load diet plan history."
+      },
+      "history": {
+        "empty": "No changes recorded for this diet plan yet.",
+        "unknown": "Change",
+        "noVisibleChanges": "No readable changes were detected for this history entry.",
+        "createdSummary": "The plan was created with its initial values.",
+        "activatedSummary": "The plan was marked as active.",
+        "deletedSummary": "The plan was deleted.",
+        "fieldName": "Plan name",
+        "fieldStartDate": "Start date",
+        "fieldEndDate": "End date",
+        "fieldCalories": "Calories",
+        "fieldProtein": "Protein",
+        "fieldCarbs": "Carbs",
+        "fieldFat": "Fat",
+        "fieldNotes": "Trainer notes",
+        "fieldIsActive": "Active status",
+        "fieldMealCount": "Meal count",
+        "mealAdded": "Added {meal}",
+        "mealRemoved": "Removed {meal}",
+        "mealFieldPrefix": "{meal} / {field}",
+        "emptyValue": "—",
+        "boolTrue": "active",
+        "boolFalse": "inactive"
+      },
+      "validation": {
+        "nameRequired": "Plan name is required.",
+        "startDateRequired": "Start date is required.",
+        "mealNameRequired": "Meal name is required.",
+        "globalTargetRequired": "In global mode provide calories or at least one macro target."
+      },
+      "confirm": {
+        "deleteTitle": "Delete diet plan?",
+        "deleteMessage": "Are you sure you want to delete “{name}”?"
+      }
+    },
+    "notes": {
+      "eyebrow": "Notes",
+      "title": "Trainer notes for this member",
+      "subtitle": "Store coaching notes, control trainee visibility, and review the edit history in one place.",
+      "error": {
+        "load": "Failed to load trainee notes."
+      },
+      "empty": {
+        "title": "No notes created for this member yet.",
+        "subtitle": "Add the first note to keep important coaching context close to the member profile."
+      },
+      "fallback": {
+        "noTitle": "Untitled note",
+        "noContent": "No content provided."
+      },
+      "badges": {
+        "visible": "Visible to trainee",
+        "pinned": "Pinned"
+      },
+      "meta": {
+        "updatedAt": "Updated"
+      },
+      "dialog": {
+        "createTitle": "Create trainee note",
+        "editTitle": "Edit trainee note",
+        "historyTitle": "Trainee note history"
+      },
+      "form": {
+        "title": "Title",
+        "content": "Note content",
+        "visibleToTrainee": "Visible to trainee",
+        "isPinned": "Pin note"
+      },
+      "actions": {
+        "create": "Add note",
+        "edit": "Edit",
+        "history": "History",
+        "delete": "Delete"
+      },
+      "feedback": {
+        "saved": "Trainee note saved successfully.",
+        "saveFailed": "Failed to save the trainee note.",
+        "deleted": "Trainee note deleted successfully.",
+        "deleteFailed": "Failed to delete the trainee note.",
+        "historyFailed": "Failed to load trainee note history."
+      },
+      "history": {
+        "empty": "No changes recorded for this note yet.",
+        "unknown": "Change",
+        "previous": "Previous content",
+        "current": "New content",
+        "emptyValue": "—"
+      },
+      "confirm": {
+        "deleteTitle": "Delete trainee note?",
+        "deleteMessage": "Are you sure you want to delete “{name}”?"
+      },
+      "validation": {
+        "contentRequired": "Note content is required."
+      }
+    },
+    "reports": {
+      "submissionsEyebrow": "Member reports",
+      "submissionsTitle": "Report requests and submissions",
+      "submissionsSubtitle": "",
+      "filters": {
+        "all": "All",
+        "answered": "Answered",
+        "unanswered": "Unanswered",
+        "requestSent": "Request sent",
+        "noResponse": "No response",
+        "responded": "Responded",
+        "feedbackRead": "Feedback read"
+      },
+      "feedbackStatus": {
+        "answered": "Answered",
+        "unanswered": "No response"
+      },
+      "requestEyebrow": "New request",
+      "requestTitle": "Request report from this member",
+      "requestSubtitle": "Choose one of your global report templates, set the due date, and send the request to this member.",
+      "form": {
+        "template": "Template",
+        "dueAt": "Due at",
+        "note": "Trainer note",
+        "templatePlaceholder": "Choose the template you want to send",
+        "dueAtHint": "The due date is optional, but it helps the member know when you expect the answer.",
+        "notePlaceholder": "Add a short instruction or context for this report",
+        "noteHint": "A short note makes it easier for the member to send exactly the update you need."
+      },
+      "preview": {
+        "title": "Quick preview",
+        "empty": "After you choose a template, this area will show its description and the number of fields to complete.",
+        "fieldsCount": "Fields: {count}",
+        "submissionEyebrow": "Report preview",
+        "answersTitle": "Member answers",
+        "photosCount": "Uploaded photos: {count}",
+        "photosLoading": "Loading report photos...",
+        "photosEmpty": "No photos were uploaded for this report.",
+        "measurementsCount": "Measurements captured: {count}",
+        "measurementsEmpty": "No measurement data was included in this answer.",
+        "fieldFeedbackLabel": "Comment for this answer",
+        "fieldFeedbackPlaceholder": "Add a comment for this answer",
+        "overallFeedbackTitle": "Overall feedback for the member",
+        "overallFeedbackPlaceholder": "Add a general summary or next steps for this report"
+      },
+      "actions": {
+        "manageTemplates": "Manage templates",
+        "goToTemplateLibrary": "Open template library",
+        "sendRequest": "Request report",
+        "saveFeedback": "Save feedback"
+      },
+      "recurring": {
+        "eyebrow": "Recurring reports",
+        "title": "Recurring report cycles",
+        "subtitle": "Set the template, cadence, and schedule. The next report starts only after the trainee reads the trainer feedback on the previous report.",
+        "empty": "No recurring reports configured for this member yet.",
+        "status": {
+          "active": "Active",
+          "paused": "Paused"
+        },
+        "units": {
+          "day": "Day",
+          "week": "Week",
+          "month": "Month"
+        },
+        "interval": {
+          "day": "Every {count} day | Every {count} days",
+          "week": "Every {count} week | Every {count} weeks",
+          "month": "Every {count} month | Every {count} months"
+        },
+        "dialog": {
+          "eyebrow": "Configure cycle",
+          "createTitle": "Add recurring report",
+          "editTitle": "Edit recurring report"
+        },
+        "form": {
+          "intervalValue": "Repeat every",
+          "intervalUnit": "Interval unit",
+          "startsAt": "Cycle starts at",
+          "endsAt": "Cycle ends at"
+        },
+        "meta": {
+          "startsAt": "Starts at",
+          "lastRequest": "Last created report",
+          "nextEligibleAt": "Next eligible date",
+          "currentRequest": "Current report"
+        },
+        "fallback": {
+          "awaitingFeedback": "Waiting for feedback and read confirmation",
+          "noCurrentRequest": "No active report",
+          "noDate": "Not created yet"
+        },
+        "actions": {
+          "create": "Add recurring report",
+          "edit": "Edit",
+          "pause": "Pause",
+          "resume": "Resume",
+          "delete": "Delete",
+          "save": "Save"
+        },
+        "error": {
+          "load": "Failed to load recurring reports."
+        },
+        "feedback": {
+          "invalidForm": "Fill out the recurring report form correctly.",
+          "createSuccess": "Recurring report created successfully.",
+          "updateSuccess": "Recurring report updated successfully.",
+          "pauseSuccess": "Recurring report paused successfully.",
+          "resumeSuccess": "Recurring report resumed successfully.",
+          "deleteSuccess": "Recurring report deleted successfully.",
+          "saveFailed": "Failed to save recurring report changes."
+        }
+      },
+      "meta": {
+        "status": "Submission status",
+        "feedbackStatus": "Feedback status",
+        "submittedAt": "Submitted",
+        "sentAt": "Sent",
+        "lastUpdatedAt": "Last update"
+      },
+      "fallback": {
+        "noTemplateName": "Unnamed template",
+        "noDescription": "No description provided.",
+        "noFieldType": "Unknown type",
+        "noStatus": "Unknown status",
+        "noAnswer": "No answer",
+        "awaitingResponse": "Waiting for the trainee response"
+      },
+      "statuses": {
+        "requestSent": "Request sent",
+        "noResponse": "No response",
+        "responded": "Responded",
+        "feedbackRead": "Feedback read"
+      },
+      "boolean": {
+        "true": "Yes",
+        "false": "No"
+      },
+      "empty": {
+        "templates": "No report templates are available yet. Create them in the global template library first.",
+        "submissions": "No report submissions found for this member.",
+        "answered": "No reports with trainer feedback yet.",
+        "unanswered": "No reports waiting for trainer feedback.",
+        "requestSent": "No reports with the “Request sent” status.",
+        "noResponse": "No reports with the “No response” status.",
+        "responded": "No reports with the “Responded” status.",
+        "feedbackRead": "No reports with the “Feedback read” status."
+      },
+      "error": {
+        "templates": "Failed to load report templates.",
+        "submissions": "Failed to load report submissions."
+      },
+      "feedback": {
+        "loadTemplatesFailed": "Failed to load report templates.",
+        "loadSubmissionsFailed": "Failed to load report submissions.",
+        "templateRequired": "Select a template before sending a request.",
+        "createRequestSuccess": "Report request sent successfully.",
+        "createRequestFailed": "Failed to create the report request.",
+        "saveSuccess": "Trainer feedback saved successfully.",
+        "saveFailed": "Failed to save trainer feedback."
+      }
+    },
+    "trainerReportTemplates": {
+      "page": {
+        "eyebrow": "Global report library",
+        "title": "Report Templates",
+        "subtitle": "Create, edit, preview, and delete reusable report templates for all your members from one trainer-level module.",
+        "summary": "Templates are managed globally and reused when requesting reports from members."
+      },
+      "form": {
+        "templateName": "Template name",
+        "templateDescription": "Template description",
+        "fieldsTitle": "Template fields",
+        "fieldLabel": "Field label",
+        "fieldKey": "Field key",
+        "fieldType": "Field type",
+        "fieldOrder": "Display order",
+        "fieldRequired": "Required",
+        "moduleConfigTitle": "Module configuration",
+        "photoViewsLabel": "Required photo views",
+        "photoViewsPlaceholder": "Choose presets or type your own position name",
+        "photoViewsHint": "You can add multiple custom positions. Type a name and confirm with Enter.",
+        "measurementTypesLabel": "Required measurement types"
+      },
+      "dialog": {
+        "createTemplateTitle": "Create report template",
+        "editTemplateTitle": "Edit report template"
+      },
+      "actions": {
+        "createTemplate": "Create template",
+        "editTemplate": "Edit",
+        "deleteTemplate": "Delete",
+        "header": "Actions",
+        "deleteTemplateConfirm": "Delete report template \"{name}\"?",
+        "addField": "Add field",
+        "removeField": "Remove field",
+        "retry": "Retry",
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "preview": {
+        "fields": "Field preview"
+      },
+      "fieldTypes": {
+        "text": "Text",
+        "number": "Number",
+        "boolean": "Yes / No",
+        "date": "Date",
+        "photos": "Photos",
+        "measurements": "Measurements"
+      },
+      "modules": {
+        "photos": {
+          "description": "Choose the photo views the trainee must upload when submitting the report.",
+          "views": {
+            "front": "Front",
+            "side": "Side",
+            "sideleft": "Side left",
+            "sideright": "Side right",
+            "back": "Back"
+          }
+        },
+        "measurements": {
+          "description": "Select which measurements should be included in the modular report answer.",
+          "types": {
+            "weight": "Body weight",
+            "bodyFat": "Body fat",
+            "chest": "Chest",
+            "back": "Back",
+            "shoulders": "Shoulders",
+            "biceps": "Biceps",
+            "triceps": "Triceps",
+            "forearms": "Forearms",
+            "abs": "Abs",
+            "quads": "Quads",
+            "hamstrings": "Hamstrings",
+            "calves": "Calves",
+            "glutes": "Glutes",
+            "neck": "Neck",
+            "waist": "Waist",
+            "hips": "Hips",
+            "thighs": "Thighs",
+            "bmi": "BMI"
+          }
+        }
+      },
+      "fallback": {
+        "noTemplateName": "Unnamed template",
+        "noDescription": "No description provided.",
+        "noFieldType": "Unknown type"
+      },
+      "empty": {
+        "templates": "No report templates created yet."
+      },
+      "error": {
+        "templates": "Failed to load report templates."
+      },
+      "feedback": {
+        "loadTemplatesFailed": "Failed to load report templates.",
+        "templateNameRequired": "Template name is required.",
+        "templateFieldRequired": "At least one valid template field is required.",
+        "moduleConfigRequired": "Complete the configuration for every modular question.",
+        "createTemplateSuccess": "Template created successfully.",
+        "createTemplateFailed": "Failed to create the template.",
+        "updateTemplateSuccess": "Template updated successfully.",
+        "updateTemplateFailed": "Failed to update the template.",
+        "deleteTemplateSuccess": "Template deleted successfully.",
+        "deleteTemplateFailed": "Failed to delete the template."
+      }
+    },
+    "measurements": {
+      "eyebrow": "Measurements",
+      "title": "Trainee measurements",
+      "subtitle": "Compare body weight and circumference entries, then switch between trend, latest values, and full history.",
+      "emptyValue": "—",
+      "filters": {
+        "bodyPart": "Measurement type",
+        "unit": "Unit",
+        "allBodyParts": "All types"
+      },
+      "tabs": {
+        "trend": "Trend",
+        "latest": "Latest",
+        "history": "History"
+      },
+      "cards": {
+        "currentValue": "Current value",
+        "change": "Change",
+        "changePercentage": "Change %"
+      },
+      "sections": {
+        "chart": "History chart",
+        "trend": "Trend overview",
+        "latest": "Latest measurements",
+        "history": "Full history"
+      },
+      "summary": {
+        "minimum": "Minimum",
+        "maximum": "Maximum",
+        "latest": "Latest entry",
+        "points": "Points: {count}"
+      },
+      "chart": {
+        "subtitle": "Change over time for: {bodyPart}",
+        "selectSpecificType": "Choose a specific measurement type to display the history chart.",
+        "hoverHint": "Hover over a point to see measurement details."
+      },
+      "history": {
+        "summary": "Results found: {count}",
+        "filters": {
+          "search": "Search history",
+          "sort": "Order"
+        },
+        "placeholders": {
+          "search": "Type a date, measurement name, or value"
+        },
+        "columns": {
+          "recordedAt": "Recorded",
+          "measurement": "Measurement",
+          "result": "Result"
+        },
+        "empty": {
+          "search": "No results match your search. Clear the query or adjust the filters."
+        },
+        "sort": {
+          "newest": "Newest first",
+          "oldest": "Oldest first"
+        }
+      },
+      "bodyParts": {
+        "BodyWeight": "Body weight",
+        "Neck": "Neck",
+        "Chest": "Chest",
+        "Waist": "Waist",
+        "Abs": "Abs",
+        "Hips": "Hips",
+        "Thigh": "Thigh",
+        "Calves": "Calves",
+        "Biceps": "Biceps",
+        "BodyFat": "Body fat",
+        "Bmi": "BMI",
+        "Shoulders": "Shoulders",
+        "Back": "Back",
+        "Triceps": "Triceps",
+        "Forearms": "Forearms",
+        "Quads": "Quads",
+        "Hamstrings": "Hamstrings",
+        "Glutes": "Glutes",
+        "Unknown": "Unknown"
+      },
+      "units": {
+        "Kilograms": "kg",
+        "Pounds": "lb",
+        "Meters": "m",
+        "Centimeters": "cm",
+        "Millimeters": "mm",
+        "Percent": "%",
+        "Bmi": "BMI",
+        "Unknown": "—"
+      },
+      "empty": {
+        "title": "No measurements found for the selected filters.",
+        "chart": "Not enough points to draw a history chart for this measurement yet."
+      },
+      "error": {
+        "subtitle": "Failed to load body-part measurements for this member."
+      },
+      "feedback": {
+        "loadFailed": "Failed to load measurements."
+      }
+    }
+  },
+  "trainerInvitations": {
+    "layout": {
+      "invitations": {
+        "title": "Invitations",
+        "subtitle": "Invite new customers by email, track every status, and revoke pending invitations from one trainer view."
+      }
+    },
+    "page": {
+      "eyebrow": "Invitation workflow",
+      "title": "Manage collaboration invitations",
+      "subtitle": "Send new invitations without leaving the trainer panel, then immediately review their status, history, and the next actions below.",
+      "summary": "Total invitations: {totalCount}"
+    },
+    "form": {
+      "eyebrow": "New invitation",
+      "title": "Invite a new customer",
+      "subtitle": "Provide the customer email together with the preferred language and time zone",
+      "note": "After a successful submit the form resets automatically and the invitation history on the right refreshes without a full page reload.",
+      "fields": {
+        "email": "Customer email",
+        "preferredLanguage": "Preferred language",
+        "preferredTimeZone": "Preferred time zone"
+      },
+      "placeholders": {
+        "email": "customer{'@'}example.com"
+      },
+      "validation": {
+        "languageRequired": "Select a preferred language",
+        "timeZoneRequired": "Select a preferred time zone"
+      },
+      "actions": {
+        "submit": "Send invitation"
+      }
+    },
+    "history": {
+      "eyebrow": "Invitation history",
+      "title": "Your recent invitations",
+      "subtitle": "Filter the list by status, search by email, and keep control over which invitations are still awaiting a response.",
+      "filters": {
+        "search": "Search by email",
+        "pageSize": "Per page"
+      },
+      "placeholders": {
+        "search": "Type the invited email"
+      },
+      "columns": {
+        "inviteeEmail": "Invitee email",
+        "trainee": "Trainee",
+        "status": "Status",
+        "sentAt": "Sent date",
+        "actions": "Actions"
+      },
+      "fallback": {
+        "noTraineeName": "No trainee assigned yet",
+        "noTraineeEmail": "No trainee email available"
+      },
+      "meta": {
+        "expiresAt": "Expires"
+      },
+      "empty": {
+        "title": "No invitations to display",
+        "subtitle": "Try adjusting the filters or send the first invitation from the form on the left."
+      },
+      "pagination": {
+        "summary": "Page {page} of {totalPages} · total invitations: {totalCount}"
+      },
+      "sort": {
+        "newest": "Newest first",
+        "oldest": "Oldest first"
+      }
+    },
+    "filters": {
+      "all": "All",
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "revoked": "Revoked",
+      "expired": "Expired"
+    },
+    "status": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "revoked": "Revoked",
+      "expired": "Expired",
+      "unknown": "Unknown"
+    },
+    "actions": {
+      "revoke": "Revoke",
+      "revokeConfirm": "Are you sure you want to revoke the invitation for {email}?",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "feedback": {
+      "createSuccess": "Invitation sent successfully.",
+      "createFailed": "Failed to send the invitation.",
+      "loadFailed": "Failed to load invitation history.",
+      "unauthorized": "Your trainer session expired or you no longer have access to this view.",
+      "revokeSuccess": "Invitation revoked successfully.",
+      "revokeFailed": "Failed to revoke the invitation."
+    }
+  },
+  "admin": {
+    "panel": {
+      "eyebrow": "Administrator panel",
+      "brandTitle": "LGYM Control Room",
+      "title": "Application management",
+      "subtitle": "Review all users, inspect their status, and assign roles directly from the new admin workspace.",
+      "badges": {
+        "secureWorkspace": "Secure workspace",
+        "userAccess": "Users · Roles · Access",
+        "workspaceSuite": "LGYM administration suite"
+      },
+      "side": {
+        "eyebrow": "LGYM Admin Suite",
+        "title": "Keep users, permissions, and workspace access under one sharp control surface."
+      }
+    },
+    "tabs": {
+      "eyebrow": "Administrative sections",
+      "items": {
+        "users": {
+          "label": "Users & roles",
+          "title": "Accounts and permissions",
+          "description": "Add new users, update roles, and manage access from a single focused workspace.",
+          "menuHint": "Registration, roles, and status"
+        },
+        "versions": {
+          "label": "App versions",
+          "title": "Android and iOS releases",
+          "description": "Manage current mobile builds, minimum required versions, and update URLs for both Android and iOS.",
+          "menuHint": "Android, iOS, and rollout"
+        },
+        "exercises": {
+          "label": "Exercises",
+          "title": "Exercise library",
+          "description": "Browse the administrator's global and private exercises and add new entries to either library.",
+          "menuHint": "Global and private exercises"
+        }
+      }
+    },
+    "stats": {
+      "totalUsers": "Total users",
+      "blockedUsers": "Blocked on this page",
+      "blockedUsersPage": "Blocked on this page",
+      "availableRoles": "Available roles"
+    },
+    "register": {
+      "eyebrow": "Registration",
+      "title": "Add a new user",
+      "subtitle": "Create an athlete or trainer account directly from the administrator panel.",
+      "scope": "Account creation: athlete or trainer",
+      "note": "After creating the account, you can immediately assign extra roles from the user list below.",
+      "actions": {
+        "submit": "Register user"
+      },
+      "feedback": {
+        "failed": "Failed to register the user.",
+        "success": "User registered successfully.",
+        "unexpectedError": "Unexpected registration error.",
+        "userAddedToList": "User created and the list has been refreshed."
+      }
+    },
+    "table": {
+      "sectionEyebrow": "LGYM User Registry",
+      "sectionSubtitle": "Review account status, inspect assigned roles, and make access changes without leaving the dashboard.",
+      "user": "User",
+      "email": "Email",
+      "status": "Status",
+      "roles": "Roles",
+      "actions": "Actions",
+      "empty": "No users to display.",
+      "unknownName": "Unknown name"
+    },
+    "status": {
+      "active": "Active",
+      "blocked": "Blocked",
+      "deleted": "Deleted"
+    },
+    "actions": {
+      "refresh": "Refresh data",
+      "logout": "Log out",
+      "saveRoles": "Save roles",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "feedback": {
+      "usersLoadFailed": "Failed to load users.",
+      "rolesLoadFailed": "Failed to load roles.",
+      "rolesUpdateFailed": "Failed to save user roles.",
+      "rolesUpdateSuccess": "Roles saved successfully.",
+      "unauthorized": "Your administrator session expired or no longer has the required permissions. Please sign in again."
+    },
+    "versions": {
+      "eyebrow": "Application versions",
+      "title": "Mobile update configuration",
+      "subtitle": "Create and refresh Android and iOS version settings using the Orval-generated app config endpoints.",
+      "platforms": {
+        "android": "Android",
+        "ios": "iOS"
+      },
+      "current": {
+        "eyebrow": "Current configuration",
+        "forceRequired": "Force update required",
+        "optional": "Optional update"
+      },
+      "fields": {
+        "latestVersion": "Latest version",
+        "minRequiredVersion": "Minimum required version",
+        "updateUrl": "Update URL",
+        "releaseNotes": "Release notes",
+        "forceUpdate": "Force update",
+        "forceUpdateHint": "Enable this when the app should block usage until the new version is installed."
+      },
+      "placeholders": {
+        "version": "e.g. 1.2.3",
+        "androidUrl": "https://play.google.com/store/apps/details?id=...",
+        "iosUrl": "https://apps.apple.com/app/id...",
+        "releaseNotes": "Describe the main changes in this release"
+      },
+      "actions": {
+        "refresh": "Refresh configuration",
+        "loadCurrent": "Load current",
+        "submit": "Save version"
+      },
+      "feedback": {
+        "noConfig": "No configuration has been saved for this platform yet.",
+        "loadFailed": "Failed to load the app version configuration.",
+        "latestVersionRequired": "Latest version is required.",
+        "minVersionRequired": "Minimum required version is required.",
+        "submitFailed": "Failed to save the app version configuration.",
+        "submitSuccess": "App version configuration saved successfully."
+      },
+      "notes": {
+        "title": "How to use it",
+        "description": "Both mobile platforms use the same API endpoint and are distinguished by the platform field in the payload. Load the current config first or overwrite it directly with a new Android or iOS release."
+      }
+    },
+    "pagination": {
+      "summary": "Page {page} of {totalPages} • {totalCount} users total"
+    }
+  },
+  "exerciseLibrary": {
+    "page": {
+      "title": "Exercise library",
+      "summary": "Visible exercises: {totalCount}"
+    },
+    "pagination": {
+      "summary": "Page {page} of {totalPages} · total exercises: {totalCount}"
+    },
+    "roles": {
+      "admin": {
+        "eyebrow": "Administrator workspace",
+        "subtitle": "Manage the exercise library and add new movements either globally or privately for your administrator account."
+      },
+      "trainer": {
+        "eyebrow": "Trainer workspace",
+        "subtitle": "Browse global exercises and your own private items, then filter the library for the exercises you need right now."
+      },
+      "user": {
+        "eyebrow": "Athlete workspace",
+        "subtitle": "See all available exercises, split the library into global and private items, and quickly find the movements you care about."
+      }
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Type an exercise name or description",
+      "bodyPart": "Body part",
+      "allBodyParts": "All body parts",
+      "all": "All",
+      "global": "Global",
+      "user": "Private"
+    },
+    "source": {
+      "global": "Global",
+      "user": "Private"
+    },
+    "bodyParts": {
+      "unknown": "Unknown",
+      "chest": "Chest",
+      "back": "Back",
+      "shoulders": "Shoulders",
+      "biceps": "Biceps",
+      "triceps": "Triceps",
+      "forearms": "Forearms",
+      "abs": "Abs",
+      "quads": "Quads",
+      "hamstrings": "Hamstrings",
+      "calves": "Calves",
+      "glutes": "Glutes"
+    },
+    "meta": {
+      "imageAttached": "Image link attached",
+      "noImage": "No image"
+    },
+    "fallback": {
+      "name": "Untitled exercise",
+      "description": "No description provided for this exercise.",
+      "bodyPart": "Unknown body part"
+    },
+    "dialog": {
+      "eyebrow": "New exercise",
+      "editEyebrow": "Edit exercise",
+      "title": "Add exercise",
+      "editTitle": "Edit exercise",
+      "subtitle": "Administrators can create exercises as global or private, and the owner of a private exercise can later edit or delete it.",
+      "fields": {
+        "visibility": "Visibility",
+        "name": "Name",
+        "bodyPart": "Body part",
+        "description": "Description",
+        "image": "Image URL"
+      },
+      "placeholders": {
+        "name": "E.g. Barbell bench press",
+        "description": "Add coaching notes or a short description of the movement",
+        "image": "https://..."
+      },
+      "visibilityOptions": {
+        "global": "Global",
+        "user": "Private"
+      }
+    },
+    "translationDialog": {
+      "eyebrow": "New translation",
+      "title": "Add translation",
+      "subtitle": "You are adding a translation for: {name}.",
+      "fields": {
+        "culture": "Language code",
+        "name": "Translated name"
+      },
+      "placeholders": {
+        "culture": "E.g. en, pl, de",
+        "name": "Enter the name in the selected language"
+      }
+    },
+    "deleteDialog": {
+      "eyebrow": "Delete exercise",
+      "title": "Confirm deletion",
+      "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone."
+    },
+    "columns": {
+      "name": "Name",
+      "bodyPart": "Body part",
+      "source": "Source",
+      "description": "Description",
+      "image": "Image",
+      "actions": "Actions"
+    },
+    "actions": {
+      "add": "Add exercise",
+      "save": "Save",
+      "saveTranslation": "Save translation",
+      "cancel": "Cancel",
+      "confirmDelete": "Delete exercise",
+      "retry": "Try again",
+      "openImage": "Open image",
+      "edit": "Edit",
+      "delete": "Delete",
+      "addTranslation": "Add translation"
+    },
+    "feedback": {
+      "loadFailed": "Failed to load the exercise library.",
+      "saveFailed": "Failed to save the exercise.",
+      "saveSuccess": "Exercise saved successfully.",
+      "updateFailed": "Failed to update the exercise.",
+      "updateSuccess": "Exercise updated successfully.",
+      "deleteFailed": "Failed to delete the exercise.",
+      "deleteSuccess": "Exercise deleted successfully.",
+      "translationFailed": "Failed to save the translation.",
+      "translationSuccess": "Translation saved successfully.",
+      "nameRequired": "Exercise name is required.",
+      "bodyPartRequired": "Select a body part for the exercise.",
+      "translationCultureRequired": "Language code is required.",
+      "translationNameRequired": "Translated name is required.",
+      "userTargetUnavailable": "A private exercise cannot be created without a user identifier.",
+      "deleteContextMissing": "The user identifier required to delete this exercise is missing.",
+      "unauthorized": "Your session expired or you no longer have access to the exercise library. Please sign in again."
+    },
+    "empty": "No exercises match the current filters."
+  }
+}

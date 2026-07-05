@@ -1,29 +1,9 @@
 <template>
-  <RouterView />
-  <footer>Jakub Leśkiewicz</footer>
+  <AppProvider>
+    <router-view />
+  </AppProvider>
 </template>
 
-
 <script setup lang="ts">
+import AppProvider from './components/providers/AppProvider.vue'
 </script>
-
-<style lang="scss">
-#app {
-  background: url('./assets/logoLGYMShadow.png');
-  background-size: contain;
-  background-position-x: 1290px;
-}
-footer{
-  height: 50px;
-  bottom: 0;
-  background-color: #4CD964;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: end;
-  padding: 1rem
-}
-
-</style>
-
-
