@@ -24,7 +24,7 @@
           <AuthTabs
             v-if="!isAdminMode"
             v-model="selectedUserRole"
-            :show-athlete-tab="false"
+            :show-athlete-tab="showAthleteTab"
           />
 
           <div class="grid gap-4">
@@ -52,6 +52,15 @@
                 "
                 @click:append-inner="togglePassword"
               />
+
+              <div v-if="!isAdminMode" class="flex justify-end">
+                <router-link
+                  to="/forgot-password"
+                  class="text-sm text-[var(--lgym-primary)] underline underline-offset-2 hover:text-[var(--lgym-text)]"
+                >
+                  {{ t("auth.login.actions.forgotPassword") }}
+                </router-link>
+              </div>
             </div>
           </div>
 
@@ -148,8 +157,6 @@ const props = withDefaults(
   },
 );
 
-const showAthleteTab = false;
-
 const { t } = useI18n();
 const toast = useToast();
 const router = useRouter();
@@ -169,9 +176,13 @@ const resolveInitialRole = (): AuthRole => {
   const redirect =
     typeof route.query.redirect === "string" ? route.query.redirect : "";
 
+  if (redirect.startsWith("/athlete") || redirect.startsWith("/invitations")) {
+    return "athlete";
+  }
+
   if (redirect.startsWith("/trainer")) return "trainer";
 
-  return showAthleteTab ? "athlete" : "trainer";
+  return "trainer";
 };
 
 const username = ref("");
@@ -181,6 +192,16 @@ const showPassword = ref(false);
 const isSubmitting = ref(false);
 
 const isAdminMode = computed(() => props.mode === "admin");
+const showAthleteTab = computed(() => {
+  if (isAdminMode.value) {
+    return false;
+  }
+
+  const redirect =
+    typeof route.query.redirect === "string" ? route.query.redirect.trim() : "";
+
+  return redirect.startsWith("/athlete") || redirect.startsWith("/invitations");
+});
 const selectedUserRole = computed<"athlete" | "trainer">({
   get: () => (selectedRole.value === "trainer" ? "trainer" : "athlete"),
   set: (value) => {
