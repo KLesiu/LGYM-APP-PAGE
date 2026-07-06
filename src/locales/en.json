@@ -979,6 +979,13 @@
       "title": "Training history",
       "detailsEyebrow": "Training details",
       "selectDate": "Select a training from history",
+      "monthSelector": {
+        "label": "Month",
+        "previousMonth": "Previous month",
+        "nextMonth": "Next month",
+        "none": "No month",
+        "empty": "No trainings found in the selected month."
+      },
       "columns": {
         "gym": "Gym",
         "exercises": "Exercises"

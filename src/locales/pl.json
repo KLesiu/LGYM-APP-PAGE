@@ -979,6 +979,13 @@
       "title": "Historia treningów",
       "detailsEyebrow": "Szczegóły treningu",
       "selectDate": "Wybierz trening z historii",
+      "monthSelector": {
+        "label": "Miesiąc",
+        "previousMonth": "Poprzedni miesiąc",
+        "nextMonth": "Następny miesiąc",
+        "none": "Brak miesiąca",
+        "empty": "Brak treningów w wybranym miesiącu."
+      },
       "columns": {
         "gym": "Siłownia",
       "exercises": "Ćwiczenia"
