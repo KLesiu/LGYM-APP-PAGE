@@ -111,6 +111,11 @@
   --lgym-card-padding: clamp(16px, 1.8vw, 24px);
   --lgym-section-gap: clamp(24px, 2.2vw, 32px);
   --lgym-control-height: 52px;
+  --lgym-table-cell-padding-x: 1.25rem;
+  --lgym-table-cell-padding-y: 0.95rem;
+  --lgym-table-mobile-min-width: 720px;
+  --lgym-pagination-button-min-width: 148px;
+  --lgym-pagination-gap: 0.75rem;
 }
 
 /* ─────────────────────────────────────────────
@@ -253,4 +258,29 @@ html {
 .v-field.v-field--active .v-field-label {
   color: rgb(var(--v-theme-primary)) !important;
   opacity: 1 !important;
+}
+
+@media (max-width: 1279px) {
+  :root {
+    --lgym-table-mobile-min-width: 640px;
+  }
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --lgym-table-cell-padding-x: 1rem;
+    --lgym-table-cell-padding-y: 0.85rem;
+    --lgym-pagination-button-min-width: 132px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --lgym-card-padding: 1rem;
+    --lgym-table-cell-padding-x: 0.875rem;
+    --lgym-table-cell-padding-y: 0.8rem;
+    --lgym-table-mobile-min-width: 560px;
+    --lgym-pagination-button-min-width: 0px;
+    --lgym-pagination-gap: 0.625rem;
+  }
 }
