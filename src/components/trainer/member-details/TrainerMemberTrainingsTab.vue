@@ -24,9 +24,46 @@
           </v-btn>
         </div>
 
-        <div v-else-if="trainingDates.length > 0" class="overflow-hidden rounded-xl bg-[var(--lgym-note-bg)]">
+        <div v-else-if="trainingDates.length > 0" class="space-y-4">
+          <div
+            v-if="availableMonths.length > 0"
+            class="flex items-center justify-between gap-3 rounded-xl bg-[var(--lgym-note-bg)] px-4 py-3"
+          >
+            <v-btn
+              icon
+              variant="text"
+              color="default"
+              :disabled="!canGoToPreviousMonth"
+              :aria-label="t('trainerMemberDetails.trainings.monthSelector.previousMonth')"
+              @click="goToPreviousMonth"
+            >
+              <v-icon icon="mdi-chevron-left" />
+            </v-btn>
+
+            <div class="min-w-0 text-center">
+              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                {{ t("trainerMemberDetails.trainings.monthSelector.label") }}
+              </p>
+              <p class="mt-1 truncate text-sm font-semibold text-[var(--lgym-text)] sm:text-base">
+                {{ activeMonthLabel }}
+              </p>
+            </div>
+
+            <v-btn
+              icon
+              variant="text"
+              color="default"
+              :disabled="!canGoToNextMonth"
+              :aria-label="t('trainerMemberDetails.trainings.monthSelector.nextMonth')"
+              @click="goToNextMonth"
+            >
+              <v-icon icon="mdi-chevron-right" />
+            </v-btn>
+          </div>
+
+          <div class="overflow-hidden rounded-xl bg-[var(--lgym-note-bg)]">
           <button
-            v-for="dateValue in trainingDates"
+            v-for="dateValue in visibleTrainingDates"
             :key="dateValue"
             type="button"
           class="w-full border-l-2 border-transparent px-4 py-4 text-left transition-colors duration-150 not-last:border-b not-last:border-[var(--lgym-border)]"
@@ -51,6 +88,14 @@
               </div>
             </div>
           </button>
+
+            <div
+              v-if="visibleTrainingDates.length === 0"
+              class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]"
+            >
+              {{ t("trainerMemberDetails.trainings.monthSelector.empty") }}
+            </div>
+          </div>
         </div>
 
         <div v-else class="rounded-2xl border border-dashed border-[var(--lgym-border)] px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]">
@@ -200,7 +245,14 @@ const props = defineProps<{
 
 const { t, locale } = useI18n();
 
+type TrainingMonthGroup = {
+  key: string;
+  label: string;
+  dates: string[];
+};
+
 const trainingDates = ref<string[]>([]);
+const activeMonthKey = ref<string | null>(null);
 const selectedDate = ref<string | null>(null);
 const selectedTrainings = ref<TrainingByDateDetailsDto[]>([]);
 const isLoadingDates = ref(false);
@@ -296,6 +348,85 @@ const sortDatesDescending = (values: string[]) =>
     (left, right) => new Date(right).getTime() - new Date(left).getTime(),
   );
 
+const getMonthKey = (value: string | null | undefined) => {
+  if (!value) return null;
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return null;
+
+  const year = parsed.getFullYear();
+  const month = String(parsed.getMonth() + 1).padStart(2, "0");
+  return `${year}-${month}`;
+};
+
+const formatMonthLabel = (value: string | null | undefined) => {
+  if (!value) return "—";
+
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+
+  return new Intl.DateTimeFormat(getUserLocale(), {
+    month: "long",
+    year: "numeric",
+  }).format(parsed);
+};
+
+const availableMonths = computed<TrainingMonthGroup[]>(() => {
+  const groups = new Map<string, string[]>();
+
+  for (const dateValue of trainingDates.value) {
+    const monthKey = getMonthKey(dateValue);
+    if (!monthKey) continue;
+
+    const existingDates = groups.get(monthKey) ?? [];
+    existingDates.push(dateValue);
+    groups.set(monthKey, existingDates);
+  }
+
+  return Array.from(groups.entries()).map(([key, dates]) => ({
+    key,
+    label: formatMonthLabel(dates[0] ?? null),
+    dates,
+  }));
+});
+
+const activeMonthIndex = computed(() =>
+  availableMonths.value.findIndex((month) => month.key === activeMonthKey.value),
+);
+
+const activeMonth = computed(
+  () =>
+    availableMonths.value.find((month) => month.key === activeMonthKey.value) ??
+    availableMonths.value[0] ??
+    null,
+);
+
+const activeMonthLabel = computed(
+  () => activeMonth.value?.label ?? t("trainerMemberDetails.trainings.monthSelector.none"),
+);
+
+const visibleTrainingDates = computed(() => activeMonth.value?.dates ?? []);
+
+const canGoToPreviousMonth = computed(
+  () => activeMonthIndex.value >= 0 && activeMonthIndex.value < availableMonths.value.length - 1,
+);
+
+const canGoToNextMonth = computed(() => activeMonthIndex.value > 0);
+
+const goToPreviousMonth = () => {
+  if (!canGoToPreviousMonth.value) return;
+
+  const nextMonth = availableMonths.value[activeMonthIndex.value + 1] ?? null;
+  activeMonthKey.value = nextMonth?.key ?? activeMonthKey.value;
+};
+
+const goToNextMonth = () => {
+  if (!canGoToNextMonth.value) return;
+
+  const nextMonth = availableMonths.value[activeMonthIndex.value - 1] ?? null;
+  activeMonthKey.value = nextMonth?.key ?? activeMonthKey.value;
+};
+
 const getTrainingKey = (
   training: TrainingByDateDetailsDto,
   trainingIndex: number,
@@ -350,6 +481,7 @@ const loadTrainingDates = async () => {
     }
 
     trainingDates.value = sortDatesDescending(response.data ?? []);
+    activeMonthKey.value = getMonthKey(trainingDates.value[0] ?? null);
     selectedDate.value = trainingDates.value[0] ?? null;
   } catch (error) {
     if (currentToken !== datesToken) return;
@@ -410,9 +542,42 @@ watch(
   () => props.traineeId,
   () => {
     trainingDates.value = [];
+    activeMonthKey.value = null;
     selectedDate.value = null;
     selectedTrainings.value = [];
     void loadTrainingDates();
+  },
+  { immediate: true },
+);
+
+watch(
+  availableMonths,
+  (months) => {
+    if (months.length === 0) {
+      activeMonthKey.value = null;
+      return;
+    }
+
+    if (!months.some((month) => month.key === activeMonthKey.value)) {
+      activeMonthKey.value = months[0]?.key ?? null;
+    }
+  },
+  { immediate: true },
+);
+
+watch(
+  [activeMonthKey, visibleTrainingDates],
+  ([, dates]) => {
+    if (dates.length === 0) {
+      if (selectedDate.value !== null) {
+        selectedDate.value = null;
+      }
+      return;
+    }
+
+    if (!selectedDate.value || !dates.includes(selectedDate.value)) {
+      selectedDate.value = dates[0] ?? null;
+    }
   },
   { immediate: true },
 );
