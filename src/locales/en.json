@@ -1549,6 +1549,7 @@
       },
       "chart": {
         "subtitle": "Change over time for: {bodyPart}",
+        "allTypesSubtitle": "Each measurement type is displayed as a separate series with its own color.",
         "selectSpecificType": "Choose a specific measurement type to display the history chart.",
         "hoverHint": "Hover over a point to see measurement details."
       },

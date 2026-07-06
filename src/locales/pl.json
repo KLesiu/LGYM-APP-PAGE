@@ -1549,6 +1549,7 @@
       },
       "chart": {
         "subtitle": "Zmiany dla pomiaru: {bodyPart}",
+        "allTypesSubtitle": "Każdy typ pomiaru jest pokazany jako osobna seria z własnym kolorem.",
         "selectSpecificType": "Wybierz konkretny typ pomiaru, aby zobaczyć wykres historii.",
         "hoverHint": "Najedź na punkt, aby zobaczyć szczegóły pomiaru."
       },
