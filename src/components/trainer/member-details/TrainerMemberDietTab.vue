@@ -224,6 +224,8 @@
                 variant="outlined"
                 hide-details
                 :readonly="isMealBasedMode"
+                :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
+                :class="{ 'diet-readonly-field': isMealBasedMode }"
                 @update:model-value="form.estimatedCalories = toNullableNumber($event)"
               />
               <v-text-field
@@ -234,6 +236,8 @@
                 variant="outlined"
                 hide-details
                 :readonly="isMealBasedMode"
+                :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
+                :class="{ 'diet-readonly-field': isMealBasedMode }"
                 @update:model-value="form.proteinGrams = toNullableNumber($event)"
               />
               <v-text-field
@@ -244,6 +248,8 @@
                 variant="outlined"
                 hide-details
                 :readonly="isMealBasedMode"
+                :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
+                :class="{ 'diet-readonly-field': isMealBasedMode }"
                 @update:model-value="form.carbsGrams = toNullableNumber($event)"
               />
               <v-text-field
@@ -254,6 +260,8 @@
                 variant="outlined"
                 hide-details
                 :readonly="isMealBasedMode"
+                :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
+                :class="{ 'diet-readonly-field': isMealBasedMode }"
                 @update:model-value="form.fatGrams = toNullableNumber($event)"
               />
               </div>
@@ -329,6 +337,8 @@
                       variant="outlined"
                       hide-details
                       readonly
+                      prepend-inner-icon="mdi-calculator-variant-outline"
+                      class="diet-readonly-field"
                     />
                     <v-text-field v-model.number="meal.proteinGrams" type="number" :label="t('trainerMemberDetails.diet.macros.protein')" density="comfortable" variant="outlined" hide-details />
                     <v-text-field v-model.number="meal.fatGrams" type="number" :label="t('trainerMemberDetails.diet.macros.fat')" density="comfortable" variant="outlined" hide-details />
@@ -1034,3 +1044,25 @@ watch(isMealBasedMode, (enabled) => {
   }
 });
 </script>
+
+<style scoped>
+.diet-readonly-field :deep(.v-field) {
+  background: color-mix(in srgb, var(--lgym-note-bg) 88%, var(--lgym-surface-card));
+}
+
+.diet-readonly-field :deep(.v-field--variant-outlined .v-field__outline__start),
+.diet-readonly-field :deep(.v-field--variant-outlined .v-field__outline__notch),
+.diet-readonly-field :deep(.v-field--variant-outlined .v-field__outline__end) {
+  border-color: color-mix(in srgb, var(--lgym-primary) 42%, var(--lgym-border));
+}
+
+.diet-readonly-field :deep(.v-field__input),
+.diet-readonly-field :deep(.v-label),
+.diet-readonly-field :deep(.v-icon) {
+  color: color-mix(in srgb, var(--lgym-text-muted) 84%, var(--lgym-primary));
+}
+
+.diet-readonly-field :deep(input) {
+  cursor: not-allowed;
+}
+</style>
