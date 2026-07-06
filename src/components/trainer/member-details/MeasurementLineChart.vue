@@ -14,7 +14,24 @@
       </span>
     </div>
 
-    <div v-if="chartPoints.length > 1" class="mt-6">
+    <div v-if="hasChartData" class="mt-6">
+      <div
+        v-if="visibleSeries.length > 1"
+        class="mb-4 flex flex-wrap gap-2"
+      >
+        <div
+          v-for="series in visibleSeries"
+          :key="series.key"
+          class="inline-flex items-center gap-2 rounded-full bg-[var(--lgym-note-bg)] px-3 py-1 text-xs font-semibold text-[var(--lgym-text)]"
+        >
+          <span
+            class="h-2.5 w-2.5 rounded-full"
+            :style="{ backgroundColor: series.color }"
+          />
+          <span>{{ series.label }}</span>
+        </div>
+      </div>
+
       <div ref="chartContainerRef" class="relative overflow-visible">
         <div
           v-if="hoveredPoint"
@@ -24,37 +41,42 @@
           <p class="font-semibold text-[var(--lgym-text)]">
             {{ hoveredPoint.label }}
           </p>
+          <p class="mt-1 font-semibold" :style="{ color: hoveredPoint.series.color }">
+            {{ hoveredPoint.series.label }}
+          </p>
           <p class="mt-1 text-[var(--lgym-text-muted)]">
             {{ hoverValueLabel }}
           </p>
         </div>
 
         <svg viewBox="0 0 100 56" class="h-56 w-full overflow-visible">
-        <line
-          v-for="tick in gridTicks"
-          :key="tick"
-          x1="0"
-          :y1="tick"
-          x2="100"
-          :y2="tick"
-          stroke="rgba(148, 163, 184, 0.22)"
-          stroke-width="0.6"
-        />
-        <polyline
-          :points="polylinePoints"
-          fill="none"
-          stroke="var(--lgym-primary)"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
+          <line
+            v-for="tick in gridTicks"
+            :key="tick"
+            x1="0"
+            :y1="tick"
+            x2="100"
+            :y2="tick"
+            stroke="rgba(148, 163, 184, 0.22)"
+            stroke-width="0.6"
+          />
+          <polyline
+            v-for="series in renderedSeries"
+            :key="series.key"
+            :points="series.polylinePoints"
+            fill="none"
+            :stroke="series.color"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
           <circle
-            v-for="point in chartPoints"
+            v-for="point in allRenderedPoints"
             :key="point.key"
             :cx="point.x"
             :cy="point.y"
             r="2.1"
-            fill="var(--lgym-primary)"
+            :fill="point.series.color"
             class="cursor-pointer"
             @mouseenter="onPointHover(point, $event)"
             @mousemove="onPointHover(point, $event)"
@@ -130,11 +152,26 @@ type ChartPoint = {
   key: string;
   label: string;
   value: number;
+  timestamp: number;
+};
+
+type ChartSeries = {
+  key: string;
+  label: string;
+  color: string;
+  unitLabel?: string;
+  values: ChartPoint[];
 };
 
 type RenderedChartPoint = ChartPoint & {
   x: number;
   y: number;
+  series: ChartSeries;
+};
+
+type RenderedChartSeries = ChartSeries & {
+  points: RenderedChartPoint[];
+  polylinePoints: string;
 };
 
 type HoveredChartPoint = RenderedChartPoint & {
@@ -150,56 +187,96 @@ const props = defineProps<{
   latestLabel: string;
   emptyMessage: string;
   pointCountLabel: string;
-  values: ChartPoint[];
-  formatValue: (value: number) => string;
+  series: ChartSeries[];
+  formatValue: (value: number, series?: ChartSeries) => string;
 }>();
 
 const gridTicks = [6, 18, 30, 42];
 const chartContainerRef = ref<HTMLElement | null>(null);
 const hoveredPoint = ref<HoveredChartPoint | null>(null);
 
-const safeValues = computed(() => props.values.filter((item) => Number.isFinite(item.value)));
+const visibleSeries = computed(() =>
+  props.series
+    .map((series) => ({
+      ...series,
+      values: series.values.filter((item) => Number.isFinite(item.value)),
+    }))
+    .filter((series) => series.values.length > 0),
+);
+
+const allSafeValues = computed(() => visibleSeries.value.flatMap((series) => series.values));
 
 const minValue = computed(() =>
-  safeValues.value.length > 0
-    ? Math.min(...safeValues.value.map((item) => item.value))
+  allSafeValues.value.length > 0
+    ? Math.min(...allSafeValues.value.map((item) => item.value))
     : null,
 );
 
 const maxValue = computed(() =>
-  safeValues.value.length > 0
-    ? Math.max(...safeValues.value.map((item) => item.value))
+  allSafeValues.value.length > 0
+    ? Math.max(...allSafeValues.value.map((item) => item.value))
     : null,
 );
 
 const latestValue = computed(() => {
-  if (safeValues.value.length === 0) return null;
-  return safeValues.value[safeValues.value.length - 1]?.value ?? null;
+  if (allSafeValues.value.length === 0) return null;
+
+  const sortedPoints = [...allSafeValues.value].sort((left, right) => left.timestamp - right.timestamp);
+  const latestPoint = sortedPoints[sortedPoints.length - 1];
+  return latestPoint?.value ?? null;
 });
 
-const chartPoints = computed(() => {
-  if (safeValues.value.length === 0) return [] as RenderedChartPoint[];
+const timestampBounds = computed(() => {
+  if (allSafeValues.value.length === 0) {
+    return null;
+  }
+
+  const timestamps = allSafeValues.value.map((item) => item.timestamp);
+  return {
+    min: Math.min(...timestamps),
+    max: Math.max(...timestamps),
+  };
+});
+
+const renderedSeries = computed(() => {
+  if (visibleSeries.value.length === 0 || !timestampBounds.value) {
+    return [] as RenderedChartSeries[];
+  }
 
   const min = minValue.value ?? 0;
   const max = maxValue.value ?? 0;
   const range = max - min;
+  const timestampRange = timestampBounds.value.max - timestampBounds.value.min;
 
-  return safeValues.value.map((item, index) => {
-    const x = safeValues.value.length === 1 ? 50 : (index / (safeValues.value.length - 1)) * 100;
-    const normalized = range === 0 ? 0.5 : (item.value - min) / range;
-    const y = 42 - normalized * 30;
+  return visibleSeries.value.map((series) => {
+    const points = [...series.values]
+      .sort((left, right) => left.timestamp - right.timestamp)
+      .map((item) => {
+        const x = timestampRange === 0
+          ? 50
+          : ((item.timestamp - timestampBounds.value!.min) / timestampRange) * 100;
+        const normalized = range === 0 ? 0.5 : (item.value - min) / range;
+        const y = 42 - normalized * 30;
+
+        return {
+          ...item,
+          x,
+          y,
+          series,
+        };
+      });
 
     return {
-      ...item,
-      x,
-      y,
+      ...series,
+      points,
+      polylinePoints: points.map((point) => `${point.x},${point.y}`).join(" "),
     };
   });
 });
 
-const polylinePoints = computed(() =>
-  chartPoints.value.map((point) => `${point.x},${point.y}`).join(" "),
-);
+const allRenderedPoints = computed(() => renderedSeries.value.flatMap((series) => series.points));
+
+const hasChartData = computed(() => allRenderedPoints.value.length > 0);
 
 const tooltipStyle = computed(() => {
   if (!hoveredPoint.value) return {};
@@ -236,16 +313,24 @@ const onPointHover = (point: RenderedChartPoint, event: MouseEvent) => {
 };
 
 const hoverValueLabel = computed(() =>
-  hoveredPoint.value ? props.formatValue(hoveredPoint.value.value) : "",
+  hoveredPoint.value ? props.formatValue(hoveredPoint.value.value, hoveredPoint.value.series) : "",
 );
 
-const firstPointLabel = computed(() => chartPoints.value[0]?.label ?? "—");
-const middlePointLabel = computed(() => {
-  if (chartPoints.value.length === 0) return "—";
-  const index = Math.floor((chartPoints.value.length - 1) / 2);
-  return chartPoints.value[index]?.label ?? "—";
+const timelineLabels = computed(() => {
+  const labels = [...allRenderedPoints.value]
+    .sort((left, right) => left.timestamp - right.timestamp)
+    .map((point) => point.label);
+
+  return [...new Set(labels)];
 });
-const lastPointLabel = computed(() => chartPoints.value[chartPoints.value.length - 1]?.label ?? "—");
+
+const firstPointLabel = computed(() => timelineLabels.value[0] ?? "—");
+const middlePointLabel = computed(() => {
+  if (timelineLabels.value.length === 0) return "—";
+  const index = Math.floor((timelineLabels.value.length - 1) / 2);
+  return timelineLabels.value[index] ?? "—";
+});
+const lastPointLabel = computed(() => timelineLabels.value[timelineLabels.value.length - 1] ?? "—");
 
 const minValueLabel = computed(() =>
   minValue.value === null ? "—" : props.formatValue(minValue.value),
