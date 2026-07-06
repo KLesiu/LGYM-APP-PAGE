@@ -397,10 +397,10 @@
                        </div>
 
                        <div class="mt-4">
-                          <v-combobox
-                            v-if="field.type === ReportTemplateFieldRequestType.Photos"
-                            v-model="field.moduleConfig.requiredViews"
-                            :items="photoViewOptions"
+                          <v-select
+                             v-if="field.type === ReportTemplateFieldRequestType.Photos"
+                             v-model="field.moduleConfig.requiredViews"
+                             :items="photoViewOptions"
                             item-title="label"
                             item-value="value"
                             :label="t('trainerMemberDetails.trainerReportTemplates.form.photoViewsLabel')"
@@ -409,21 +409,13 @@
                             chips
                             closable-chips
                             density="comfortable"
-                            variant="outlined"
-                            hide-details
-                            class="template-field-control"
-                            :return-object="false"
-                          />
-                          <p
-                            v-if="field.type === ReportTemplateFieldRequestType.Photos"
-                            class="mt-2 text-xs leading-5 text-[var(--lgym-text-muted)]"
-                          >
-                            {{ t("trainerMemberDetails.trainerReportTemplates.form.photoViewsHint") }}
-                          </p>
-
-                         <v-select
-                           v-else-if="field.type === ReportTemplateFieldRequestType.Measurements"
-                           v-model="field.moduleConfig.measurementTypes"
+                             variant="outlined"
+                             hide-details
+                             class="template-field-control"
+                           />
+                          <v-select
+                            v-else-if="field.type === ReportTemplateFieldRequestType.Measurements"
+                            v-model="field.moduleConfig.measurementTypes"
                            :items="measurementModuleOptions"
                            item-title="label"
                            item-value="value"
@@ -528,6 +520,11 @@ type ReportMeasurementType =
 type EditableTemplateFieldModuleConfig = {
   requiredViews: ReportPhotoView[];
   measurementTypes: ReportMeasurementType[];
+};
+
+type NormalizedPhotoViewsResult = {
+  values: ReportPhotoView[];
+  hasInvalidValues: boolean;
 };
 
 type TemplateFormState = {
@@ -682,21 +679,53 @@ const getStringArray = (value: unknown) =>
     ? value.filter((item): item is string => typeof item === "string" && item.trim().length > 0)
     : [];
 
-const normalizePhotoViews = (values: string[]) => {
+const photoViewAliases: Record<string, ReportPhotoView> = {
+  front: "Front",
+  "przód": "Front",
+  przod: "Front",
+  side: "Side",
+  bok: "Side",
+  sideleft: "SideLeft",
+  "side left": "SideLeft",
+  "bok lewy": "SideLeft",
+  sideright: "SideRight",
+  "side right": "SideRight",
+  "bok prawy": "SideRight",
+  back: "Back",
+  tył: "Back",
+  tyl: "Back",
+};
+
+const normalizePhotoViewValue = (value: string): ReportPhotoView | null => {
+  const normalizedKey = value.trim().toLowerCase();
+  return photoViewAliases[normalizedKey] ?? null;
+};
+
+const normalizePhotoViews = (values: string[]): NormalizedPhotoViewsResult => {
   const seen = new Set<string>();
+  const normalizedValues: ReportPhotoView[] = [];
+  let hasInvalidValues = false;
 
-  return values
-    .map((value) => value.trim())
-    .filter((value) => value.length > 0)
-    .filter((value) => {
-      const normalizedKey = value.toLowerCase();
-      if (seen.has(normalizedKey)) {
-        return false;
-      }
+  values.forEach((value) => {
+    const normalizedValue = normalizePhotoViewValue(value);
 
-      seen.add(normalizedKey);
-      return true;
-    });
+    if (!normalizedValue) {
+      hasInvalidValues = true;
+      return;
+    }
+
+    if (seen.has(normalizedValue)) {
+      return;
+    }
+
+    seen.add(normalizedValue);
+    normalizedValues.push(normalizedValue);
+  });
+
+  return {
+    values: normalizedValues,
+    hasInvalidValues,
+  };
 };
 
 const measurementTypeAliases: Record<string, ReportMeasurementType> = {
@@ -756,7 +785,7 @@ const normalizeModuleConfig = (
   return {
     requiredViews:
       type === ReportTemplateFieldRequestType.Photos
-        ? normalizePhotoViews(getStringArray(moduleConfig.requiredViews))
+        ? normalizePhotoViews(getStringArray(moduleConfig.requiredViews)).values
         : fallback.requiredViews,
     measurementTypes:
       type === ReportTemplateFieldRequestType.Measurements
@@ -975,6 +1004,10 @@ const saveTemplate = async () => {
 
   const fields = templateForm.value.fields
     .map((field, index) => ({
+      normalizedPhotoViews:
+        field.type === ReportTemplateFieldRequestType.Photos
+          ? normalizePhotoViews(field.moduleConfig.requiredViews)
+          : null,
       key: field.key.trim(),
       label: field.label.trim(),
       type: field.type,
@@ -982,7 +1015,9 @@ const saveTemplate = async () => {
       order: index + 1,
       moduleConfig: (() => {
         if (field.type === ReportTemplateFieldRequestType.Photos) {
-          return { requiredViews: normalizePhotoViews(field.moduleConfig.requiredViews) };
+          return {
+            requiredViews: normalizePhotoViews(field.moduleConfig.requiredViews).values,
+          };
         }
 
         if (field.type === ReportTemplateFieldRequestType.Measurements) {
@@ -1001,7 +1036,11 @@ const saveTemplate = async () => {
 
   const hasInvalidModuleConfig = fields.some((field) => {
     if (field.type === ReportTemplateFieldRequestType.Photos) {
-      return !Array.isArray(field.moduleConfig?.requiredViews) || field.moduleConfig.requiredViews.length === 0;
+      return (
+        field.normalizedPhotoViews?.hasInvalidValues === true ||
+        !Array.isArray(field.moduleConfig?.requiredViews) ||
+        field.moduleConfig.requiredViews.length === 0
+      );
     }
 
     if (field.type === ReportTemplateFieldRequestType.Measurements) {
