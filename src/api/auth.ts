@@ -1,4 +1,13 @@
-import type { LoginResponseDto, ResponseMessageDto } from "./model";
+import {
+  postApiForgotPassword as postApiForgotPasswordGenerated,
+  postApiResetPassword as postApiResetPasswordGenerated,
+} from "./generated/demo";
+import type {
+  ForgotPasswordRequest,
+  LoginResponseDto,
+  ResetPasswordRequest,
+  ResponseMessageDto,
+} from "./model";
 
 type ApiEnvelope<TData> = {
   data: TData;
@@ -68,5 +77,11 @@ export const postApiAuthGoogle = (idToken: string, accessToken?: string) =>
     "/api/auth/google",
     { idToken, accessToken },
   );
+
+export const postApiForgotPassword = (payload: ForgotPasswordRequest) =>
+  postApiForgotPasswordGenerated(payload);
+
+export const postApiResetPassword = (payload: ResetPasswordRequest) =>
+  postApiResetPasswordGenerated(payload);
 
 export { getApiErrorMessage };
