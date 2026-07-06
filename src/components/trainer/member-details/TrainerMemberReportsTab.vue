@@ -1484,9 +1484,7 @@ const formatFieldAnswer = (field: OrderedFieldLike, value: unknown) => {
     const count = getPhotosForField(field).length;
     return count > 0
       ? t("trainerMemberDetails.reports.preview.photosCount", { count })
-      : isLoadingSubmissionPhotos.value
-        ? t("trainerMemberDetails.reports.preview.photosLoading")
-        : t("trainerMemberDetails.reports.preview.photosEmpty");
+      : "";
   }
 
   if (field.type === "Measurements") {
