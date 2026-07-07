@@ -237,7 +237,7 @@ const togglePassword = () => {
 const hasAdminPermissions = (response: LoginResponseDto) => {
   const roles = (response.req?.roles ?? []).map((role) => role.toLowerCase());
   const permissionClaims = (
-    response.permissionClaims ??
+    response.permissionClaims ?? 
     response.req?.permissionClaims ??
     []
   ).map((claim) => claim.toLowerCase());
@@ -245,8 +245,27 @@ const hasAdminPermissions = (response: LoginResponseDto) => {
   return (
     roles.includes("admin") ||
     permissionClaims.includes("admin.access") ||
-    permissionClaims.includes("users.roles.manage")
+    permissionClaims.includes("users.roles.manage") ||
+    permissionClaims.includes("appconfig.manage") ||
+    permissionClaims.includes("exercises.global.manage")
   );
+};
+
+const hasExerciseManagementOnlyAccess = (response: LoginResponseDto) => {
+  const roles = (response.req?.roles ?? []).map((role) => role.toLowerCase());
+  const permissionClaims = (
+    response.permissionClaims ??
+    response.req?.permissionClaims ??
+    []
+  ).map((claim) => claim.toLowerCase());
+
+  const hasAdminPanelAccess =
+    roles.includes("admin") ||
+    permissionClaims.includes("admin.access") ||
+    permissionClaims.includes("users.roles.manage") ||
+    permissionClaims.includes("appconfig.manage");
+
+  return !hasAdminPanelAccess && permissionClaims.includes("exercises.global.manage");
 };
 
 const loginByRole = async (payload: LoginRequest) => {
@@ -329,7 +348,13 @@ const submitForm = async () => {
     resetFormValidation();
 
     if (isAdminMode.value) {
-      await router.replace(resolvePostLoginRedirect("/admin/users"));
+      await router.replace(
+        resolvePostLoginRedirect(
+          hasExerciseManagementOnlyAccess(response.data)
+            ? "/admin/exercises"
+            : "/admin/users",
+        ),
+      );
       return;
     }
 

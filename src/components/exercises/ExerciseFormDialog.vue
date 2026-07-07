@@ -13,7 +13,7 @@
         </p>
       </div>
 
-  <v-card-text class="px-6 py-6">
+      <v-card-text class="px-6 py-6">
         <div class="grid gap-5">
           <v-select
             :model-value="draft.source"
@@ -49,6 +49,22 @@
             hide-details
             :loading="isLoadingBodyParts"
             @update:model-value="$emit('update:draft', { ...draft, bodyPart: String($event ?? '') })"
+          />
+
+          <v-select
+            v-if="showFormulaField"
+            :model-value="draft.eloFormula"
+            :label="t('exerciseLibrary.dialog.fields.eloFormula')"
+            :items="formulaOptions"
+            item-title="label"
+            item-value="value"
+            density="comfortable"
+            variant="outlined"
+            hide-details
+            :disabled="isEditing && !canEditFormula"
+            :hint="formulaHint"
+            persistent-hint
+            @update:model-value="updateFormula"
           />
 
           <v-textarea
@@ -93,16 +109,19 @@ import { useI18n } from "vue-i18n";
 
 import type { ExerciseDraft, SelectOption } from "./types";
 
-defineProps<{
+const props = defineProps<{
   modelValue: boolean;
   isEditing: boolean;
   draft: ExerciseDraft;
   bodyPartOptions: SelectOption[];
+  formulaOptions: SelectOption[];
   isLoadingBodyParts: boolean;
   isSubmitting: boolean;
+  showFormulaField: boolean;
+  canEditFormula: boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   "update:modelValue": [value: boolean];
   "update:draft": [value: ExerciseDraft];
   close: [];
@@ -115,4 +134,18 @@ const createTargetOptions = computed(() => [
   { value: "global", label: t("exerciseLibrary.dialog.visibilityOptions.global") },
   { value: "user", label: t("exerciseLibrary.dialog.visibilityOptions.user") },
 ]);
+
+const formulaHint = computed(() =>
+  t("exerciseLibrary.dialog.formulaHint"),
+);
+
+const updateFormula = (value: unknown) => {
+  const nextFormula = String(value ?? "") as ExerciseDraft["eloFormula"];
+  if (!nextFormula) return;
+
+  emit("update:draft", {
+    ...props.draft,
+    eloFormula: nextFormula,
+  });
+};
 </script>

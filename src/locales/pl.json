@@ -1952,18 +1952,20 @@
     "fallback": {
       "name": "Ćwiczenie bez nazwy",
       "description": "Brak opisu dla tego ćwiczenia.",
-      "bodyPart": "Nieznana partia"
+      "bodyPart": "Nieznana partia",
+      "formula": "Nieznana formuła"
     },
     "dialog": {
       "eyebrow": "Nowe ćwiczenie",
       "editEyebrow": "Edycja ćwiczenia",
       "title": "Dodaj ćwiczenie",
       "editTitle": "Edytuj ćwiczenie",
-      "subtitle": "Administrator może utworzyć ćwiczenie globalne albo prywatne, a właściciel prywatnego ćwiczenia może je później edytować lub usunąć.",
+      "subtitle": "Administrator i osoby z uprawnieniem do zarządzania ćwiczeniami mogą tworzyć ćwiczenia globalne albo prywatne, wybrać formułę ELO i później je edytować lub usuwać.",
       "fields": {
         "visibility": "Widoczność",
         "name": "Nazwa",
         "bodyPart": "Partia ciała",
+        "eloFormula": "Formuła ELO",
         "description": "Opis",
         "image": "Link do grafiki"
       },
@@ -1972,6 +1974,7 @@
         "description": "Dodaj wskazówki techniczne albo krótki opis ćwiczenia",
         "image": "https://..."
       },
+      "formulaHint": "Istniejące ćwiczenia są pobierane bez zapisanej formuły z API, więc przed zapisem sprawdź tę wartość.",
       "visibilityOptions": {
         "global": "Globalne",
         "user": "Prywatne"

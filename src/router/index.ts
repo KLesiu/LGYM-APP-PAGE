@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import {
   hasAdminAccess,
+  hasGlobalExerciseManagementAccess,
   hasTrainerAccess,
   hasUserAccess,
 } from "../composables/useAuthSession";
@@ -215,7 +216,19 @@ router.beforeEach((to) => {
   );
   const requiresUser = to.matched.some((record) => record.meta.requiresUser);
 
-  if (requiresAdmin && !hasAdminAccess()) {
+  if (
+    to.name === "admin-exercises" &&
+    !(hasAdminAccess() || hasGlobalExerciseManagementAccess())
+  ) {
+    return {
+      name: "login-admin",
+      query: {
+        redirect: to.fullPath,
+      },
+    };
+  }
+
+  if (requiresAdmin && to.name !== "admin-exercises" && !hasAdminAccess()) {
     return {
       name: "login-admin",
       query: {
@@ -245,6 +258,12 @@ router.beforeEach((to) => {
   if (to.name === "login-admin" && hasAdminAccess()) {
     return {
       name: "admin-users",
+    };
+  }
+
+  if (to.name === "login-admin" && hasGlobalExerciseManagementAccess()) {
+    return {
+      name: "admin-exercises",
     };
   }
 
