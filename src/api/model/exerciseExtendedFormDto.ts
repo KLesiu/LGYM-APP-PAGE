@@ -5,7 +5,6 @@
  * OpenAPI spec version: 1.0
  */
 
-import type { ExerciseEloFormula } from "./exerciseEloFormula";
 import type { ExerciseFormDtoBodyPart } from "./exerciseFormDtoBodyPart";
 
 export interface ExerciseExtendedFormDto {
@@ -17,7 +16,7 @@ export interface ExerciseExtendedFormDto {
   user?: string | null;
   bodyPart?: ExerciseFormDtoBodyPart;
   /** @nullable */
-  eloFormula?: ExerciseEloFormula | null;
+  eloFormula?: string | null;
   /** @nullable */
   description?: string | null;
   /** @nullable */
