@@ -157,6 +157,7 @@ import type {
   ExerciseFormDtoBodyPart,
   ExerciseResponseDto,
   ExerciseTranslationDto,
+  LookupItemVm,
 } from "../../api/model";
 import {
   ExerciseEloFormula,
@@ -470,6 +471,19 @@ const formulaOptions = computed<SelectOption[]>(() =>
     .filter((item) => item.value.length > 0),
 );
 
+const resolveFormulaLookupItem = (formulaId: string): LookupItemVm | null => {
+  const normalizedId = formulaId.trim();
+  if (!normalizedId) return null;
+
+  const lookupItem = formulaLookup.value.find((item) => item.id?.trim() === normalizedId);
+  if (!lookupItem) return null;
+
+  return {
+    id: lookupItem.id?.trim() ?? normalizedId,
+    displayName: lookupItem.displayName?.trim() ?? lookupItem.name?.trim() ?? normalizedId,
+  };
+};
+
 const canManageExercise = (exercise: ExerciseCard) =>
   canManageGlobalExercises.value ||
   (exercise.source === "user" &&
@@ -685,7 +699,7 @@ const submitExercise = async () => {
       _id: exerciseDraft.value.id,
       name: trimmedName,
       bodyPart: bodyPart as ExerciseFormDtoBodyPart,
-      eloFormula: exerciseDraft.value.eloFormula,
+      eloFormula: resolveFormulaLookupItem(exerciseDraft.value.eloFormula),
       description: exerciseDraft.value.description.trim() || null,
       image: exerciseDraft.value.image.trim() || null,
       user: exerciseDraft.value.source === "user" ? currentUserId.value : null,

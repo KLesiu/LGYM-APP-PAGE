@@ -79,6 +79,7 @@ export * from './initiatePhotoUploadRequest';
 export * from './initiatePhotoUploadResponse';
 export * from './lastExerciseScoresRequestDto';
 export * from './lastExerciseScoresResponseDto';
+export * from './lookupItemVm';
 export * from './lastTrainingGymInfoDto';
 export * from './lastTrainingGymPlanDayInfoDto';
 export * from './lastTrainingInfoDto';

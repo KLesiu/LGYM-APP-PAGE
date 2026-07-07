@@ -6,6 +6,7 @@
  */
 
 import type { ExerciseFormDtoBodyPart } from "./exerciseFormDtoBodyPart";
+import type { LookupItemVm } from "./lookupItemVm";
 
 export interface ExerciseExtendedFormDto {
   /** @nullable */
@@ -16,7 +17,7 @@ export interface ExerciseExtendedFormDto {
   user?: string | null;
   bodyPart?: ExerciseFormDtoBodyPart;
   /** @nullable */
-  eloFormula?: string | null;
+  eloFormula?: LookupItemVm | null;
   /** @nullable */
   description?: string | null;
   /** @nullable */
