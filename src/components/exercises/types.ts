@@ -1,3 +1,5 @@
+import type { ExerciseEloFormula } from "../../api/model";
+
 export type RoleMode = "admin" | "trainer" | "user";
 export type SourceFilter = "all" | "global" | "user";
 export type ExerciseSource = Exclude<SourceFilter, "all">;
@@ -18,6 +20,7 @@ export type ExerciseDraft = {
   source: ExerciseSource;
   name: string;
   bodyPart: string;
+  eloFormula: ExerciseEloFormula;
   description: string;
   image: string;
 };

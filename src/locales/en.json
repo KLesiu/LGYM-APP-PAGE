@@ -1952,18 +1952,20 @@
     "fallback": {
       "name": "Untitled exercise",
       "description": "No description provided for this exercise.",
-      "bodyPart": "Unknown body part"
+      "bodyPart": "Unknown body part",
+      "formula": "Unknown formula"
     },
     "dialog": {
       "eyebrow": "New exercise",
       "editEyebrow": "Edit exercise",
       "title": "Add exercise",
       "editTitle": "Edit exercise",
-      "subtitle": "Administrators can create exercises as global or private, and the owner of a private exercise can later edit or delete it.",
+      "subtitle": "Administrators and exercise managers can create exercises as global or private, choose the ELO formula, and later edit or delete them.",
       "fields": {
         "visibility": "Visibility",
         "name": "Name",
         "bodyPart": "Body part",
+        "eloFormula": "ELO formula",
         "description": "Description",
         "image": "Image URL"
       },
@@ -1972,6 +1974,7 @@
         "description": "Add coaching notes or a short description of the movement",
         "image": "https://..."
       },
+      "formulaHint": "Existing exercises are loaded without a saved formula from the API, so double-check this value before saving.",
       "visibilityOptions": {
         "global": "Global",
         "user": "Private"

@@ -32,6 +32,8 @@ export * from './enumLookupDto';
 export * from './enumLookupResponseDto';
 export * from './exerciseByBodyPartRequestDto';
 export * from './exerciseByBodyPartRequestDtoBodyPart';
+export * from './exerciseEloFormula';
+export * from './exerciseExtendedFormDto';
 export * from './exerciseFormDto';
 export * from './exerciseFormDtoBodyPart';
 export * from './exerciseResponseDto';
