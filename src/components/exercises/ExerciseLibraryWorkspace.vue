@@ -456,10 +456,7 @@ const createBodyPartOptions = computed<SelectOption[]>(() =>
   bodyPartLookup.value
     .map((item) => ({
       value: item.id?.trim() ?? item.name?.trim() ?? "",
-      label:
-        item.displayName?.trim() ||
-        item.name?.trim() ||
-        t("exerciseLibrary.fallback.bodyPart"),
+      label: item.displayName?.trim() || t("exerciseLibrary.fallback.bodyPart"),
     }))
     .filter((item) => item.value.length > 0),
 );
@@ -468,10 +465,7 @@ const formulaOptions = computed<SelectOption[]>(() =>
   formulaLookup.value
     .map((item) => ({
       value: item.id?.trim() ?? item.name?.trim() ?? "",
-      label:
-        item.displayName?.trim() ||
-        item.name?.trim() ||
-        t("exerciseLibrary.fallback.formula"),
+      label: item.displayName?.trim() || t("exerciseLibrary.fallback.formula"),
     }))
     .filter((item) => item.value.length > 0),
 );
