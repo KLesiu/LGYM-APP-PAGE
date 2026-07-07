@@ -455,7 +455,7 @@ watch([filteredExercises, exerciseTotalPages], () => {
 const createBodyPartOptions = computed<SelectOption[]>(() =>
   bodyPartLookup.value
     .map((item) => ({
-      value: item.name?.trim() ?? "",
+      value: item.id?.trim() ?? item.name?.trim() ?? "",
       label:
         item.displayName?.trim() ||
         item.name?.trim() ||
@@ -467,7 +467,7 @@ const createBodyPartOptions = computed<SelectOption[]>(() =>
 const formulaOptions = computed<SelectOption[]>(() =>
   formulaLookup.value
     .map((item) => ({
-      value: item.name?.trim() ?? "",
+      value: item.id?.trim() ?? item.name?.trim() ?? "",
       label:
         item.displayName?.trim() ||
         item.name?.trim() ||

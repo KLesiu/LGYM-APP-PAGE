@@ -7,6 +7,8 @@
 
 export interface EnumLookupDto {
   /** @nullable */
+  id?: string | null;
+  /** @nullable */
   name?: string | null;
   /** @nullable */
   displayName?: string | null;
