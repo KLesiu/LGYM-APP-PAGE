@@ -1001,6 +1001,24 @@ Or via Docker Compose:
 docker compose up --build
 ```
 
+### GitHub Actions publishing to Docker Hub
+
+The repository includes `.github/workflows/docker-image.yml` for building and publishing the production image to Docker Hub on every push to `main` and on manual dispatch.
+
+Configure these GitHub repository settings before the workflow runs:
+
+- **Secret**: `DOCKERHUB_TOKEN` — Docker Hub access token with push permissions,
+- **Variable**: `DOCKERHUB_NAMESPACE` — Docker Hub namespace / organization,
+- **Variable**: `DOCKERHUB_USERNAME` — Docker Hub login name (can match the namespace),
+- **Variable**: `DOCKERHUB_IMAGE_NAME` — optional image name override; defaults to `lgym-page`,
+- **Variable**: `VITE_API_BASE_URL` — production API base URL injected at image build time,
+- **Variable**: `VITE_GOOGLE_CLIENT_ID` — optional Google client ID injected at image build time.
+
+Published tags include:
+
+- `latest`
+- `sha-<short-commit>`
+
 ## 17. npm scripts
 
 Defined scripts:
