@@ -559,16 +559,16 @@
             </v-card-text>
 
             <v-card-actions class="justify-end gap-3 px-6 pb-6">
+              <v-btn variant="outlined" color="primary" @click="closeSubmissionPreview">
+                {{ t("trainerMemberDetails.actions.cancel") }}
+              </v-btn>
               <v-btn
-                color="primary"
+                color="success"
                 class="min-h-10 rounded-md px-4"
                 :loading="isSavingFeedback"
                 @click="saveTrainerFeedback"
               >
                 {{ t("trainerMemberDetails.reports.actions.saveFeedback") }}
-              </v-btn>
-              <v-btn variant="outlined" color="primary" @click="closeSubmissionPreview">
-                {{ t("trainerMemberDetails.actions.cancel") }}
               </v-btn>
             </v-card-actions>
           </template>
@@ -1432,6 +1432,7 @@ const saveTrainerFeedback = async () => {
       submissions.value.find((submission) => submission._id === updatedSubmission._id) ??
       updatedSubmission;
     toast.success("trainerMemberDetails.reports.feedback.saveSuccess");
+    await closeSubmissionPreview();
   } catch (error) {
     console.error(error);
     toast.error("trainerMemberDetails.reports.feedback.saveFailed");
