@@ -104,8 +104,11 @@
       :is-editing="isEditingExercise"
       :draft="exerciseDraft"
       :body-part-options="createBodyPartOptions"
+      :formula-options="formulaOptions"
       :is-loading-body-parts="isLoadingBodyParts"
       :is-submitting="isSubmittingExercise"
+      :show-formula-field="canManageGlobalExercises"
+      :can-edit-formula="canManageGlobalExercises"
       @update:draft="exerciseDraft = $event"
       @close="closeExerciseDialog"
       @save="submitExercise"
@@ -151,13 +154,25 @@ import {
 } from "../../api/generated/demo";
 import type {
   EnumLookupDto,
-  ExerciseFormDto,
   ExerciseFormDtoBodyPart,
   ExerciseResponseDto,
   ExerciseTranslationDto,
+  LookupItemVm,
 } from "../../api/model";
+import {
+  ExerciseEloFormula,
+  type ExerciseExtendedFormDto,
+} from "../../api/model";
+import {
+  postApiExerciseAddExerciseWithFormula,
+  postApiExerciseIdAddUserExerciseWithFormula,
+  postApiExerciseUpdateExerciseWithFormula,
+} from "../../api/exerciseManagement";
 import { getApiErrorMessage } from "../../api/trainerInvitations";
-import { clearAuthSession } from "../../composables/useAuthSession";
+import {
+  clearAuthSession,
+  hasGlobalExerciseManagementAccess,
+} from "../../composables/useAuthSession";
 import { appLocaleOptions } from "../../composables/useAppLocale";
 import { getCurrentUser } from "../../composables/useCurrentUser";
 import { useToast } from "../../composables/useToast";
@@ -177,6 +192,7 @@ import type {
 } from "./types";
 
 const BODY_PARTS_ENUM_TYPE = "BodyParts";
+const EXERCISE_ELO_FORMULA_ENUM_TYPE = "ExerciseEloFormula";
 
 const props = defineProps<{
   roleMode: RoleMode;
@@ -189,12 +205,17 @@ const toast = useToast();
 
 const currentUser = computed(() => getCurrentUser());
 const currentUserId = computed(() => currentUser.value?.id?.trim() ?? "");
-const canCreateExercises = computed(() => props.roleMode === "admin");
+const canManageGlobalExercises = computed(
+  () => props.roleMode === "admin" || hasGlobalExerciseManagementAccess(),
+);
+const canCreateExercises = computed(() => canManageGlobalExercises.value);
 
 const globalExercises = ref<ExerciseResponseDto[]>([]);
 const userExercises = ref<ExerciseResponseDto[]>([]);
 const bodyPartLookup = ref<EnumLookupDto[]>([]);
+const formulaLookup = ref<EnumLookupDto[]>([]);
 const isLoadingBodyParts = ref(false);
+const isLoadingFormulaLookup = ref(false);
 const isLoading = ref(false);
 const hasLoadError = ref(false);
 const exercisePage = ref(1);
@@ -212,6 +233,7 @@ const exerciseDraft = ref<ExerciseDraft>({
   source: "global",
   name: "",
   bodyPart: "",
+  eloFormula: ExerciseEloFormula.Standard,
   description: "",
   image: "",
 });
@@ -434,23 +456,42 @@ watch([filteredExercises, exerciseTotalPages], () => {
 const createBodyPartOptions = computed<SelectOption[]>(() =>
   bodyPartLookup.value
     .map((item) => ({
-      value: item.name?.trim() ?? "",
-      label:
-        item.displayName?.trim() ||
-        item.name?.trim() ||
-        t("exerciseLibrary.fallback.bodyPart"),
+      value: item.id?.trim() ?? "",
+      label: item.displayName?.trim() || t("exerciseLibrary.fallback.bodyPart"),
     }))
     .filter((item) => item.value.length > 0),
 );
 
+const formulaOptions = computed<SelectOption[]>(() =>
+  formulaLookup.value
+    .map((item) => ({
+      value: item.id?.trim() ?? "",
+      label: item.displayName?.trim() || t("exerciseLibrary.fallback.formula"),
+    }))
+    .filter((item) => item.value.length > 0),
+);
+
+const resolveFormulaLookupItem = (formulaId: string): LookupItemVm | null => {
+  const normalizedId = formulaId.trim();
+  if (!normalizedId) return null;
+
+  const lookupItem = formulaLookup.value.find((item) => item.id?.trim() === normalizedId);
+  if (!lookupItem) return null;
+
+  return {
+    id: lookupItem.id?.trim() ?? normalizedId,
+    displayName: lookupItem.displayName?.trim() ?? lookupItem.name?.trim() ?? normalizedId,
+  };
+};
+
 const canManageExercise = (exercise: ExerciseCard) =>
-  props.roleMode === "admin" ||
+  canManageGlobalExercises.value ||
   (exercise.source === "user" &&
     !!currentUserId.value &&
     exercise.ownerUserId === currentUserId.value);
 
 const canTranslateExercise = (exercise: ExerciseCard) =>
-  props.roleMode === "admin" && exercise.source === "global";
+  canManageGlobalExercises.value && exercise.source === "global";
 
 const resetExerciseDraft = () => {
   exerciseDraft.value = {
@@ -458,6 +499,7 @@ const resetExerciseDraft = () => {
     source: "global",
     name: "",
     bodyPart: "",
+    eloFormula: ExerciseEloFormula.Standard,
     description: "",
     image: "",
   };
@@ -513,9 +555,39 @@ const loadBodyParts = async () => {
   }
 };
 
+const loadFormulaLookup = async () => {
+  if (formulaLookup.value.length > 0) return true;
+
+  isLoadingFormulaLookup.value = true;
+  try {
+    const enumResponse = await getApiEnumsEnumType(EXERCISE_ELO_FORMULA_ENUM_TYPE);
+
+    if (await handleUnauthorized(enumResponse.status)) return false;
+
+    if (enumResponse.status !== 200) {
+      const message = getApiErrorMessage(enumResponse.data);
+      if (message) toast.errorMessage(message);
+      else toast.error("exerciseLibrary.feedback.loadFailed");
+      return false;
+    }
+
+    formulaLookup.value = extractEnumValues(enumResponse.data);
+    return true;
+  } catch (error: unknown) {
+    console.error(error);
+    toast.error("exerciseLibrary.feedback.loadFailed");
+    return false;
+  } finally {
+    isLoadingFormulaLookup.value = false;
+  }
+};
+
 const openCreateDialog = async () => {
-  const loaded = await loadBodyParts();
-  if (!loaded) return;
+  const [bodyPartsLoaded, formulasLoaded] = await Promise.all([
+    loadBodyParts(),
+    canManageGlobalExercises.value ? loadFormulaLookup() : Promise.resolve(true),
+  ]);
+  if (!bodyPartsLoaded || !formulasLoaded) return;
 
   exerciseDialogMode.value = "create";
   resetExerciseDraft();
@@ -523,8 +595,11 @@ const openCreateDialog = async () => {
 };
 
 const openEditDialog = async (exercise: ExerciseCard) => {
-  const loaded = await loadBodyParts();
-  if (!loaded) return;
+  const [bodyPartsLoaded, formulasLoaded] = await Promise.all([
+    loadBodyParts(),
+    canManageGlobalExercises.value ? loadFormulaLookup() : Promise.resolve(true),
+  ]);
+  if (!bodyPartsLoaded || !formulasLoaded) return;
 
   exerciseDialogMode.value = "edit";
   exerciseDraft.value = {
@@ -532,6 +607,7 @@ const openEditDialog = async (exercise: ExerciseCard) => {
     source: exercise.source,
     name: exercise.name,
     bodyPart: exercise.bodyPartValue === "unknown" ? "" : exercise.bodyPartValue,
+    eloFormula: ExerciseEloFormula.Standard,
     description:
       exercise.description === t("exerciseLibrary.fallback.description")
         ? ""
@@ -619,21 +695,38 @@ const submitExercise = async () => {
   isSubmittingExercise.value = true;
 
   try {
-    const payload: ExerciseFormDto = {
+    const payload: ExerciseExtendedFormDto = {
       _id: exerciseDraft.value.id,
       name: trimmedName,
       bodyPart: bodyPart as ExerciseFormDtoBodyPart,
+      eloFormula: resolveFormulaLookupItem(exerciseDraft.value.eloFormula),
       description: exerciseDraft.value.description.trim() || null,
       image: exerciseDraft.value.image.trim() || null,
       user: exerciseDraft.value.source === "user" ? currentUserId.value : null,
     };
 
+    const useFormulaEndpoints = canManageGlobalExercises.value;
+
     const response =
       exerciseDialogMode.value === "create"
         ? exerciseDraft.value.source === "global"
-          ? await postApiExerciseAddExercise(payload, jsonRequestOptions)
-          : await postApiExerciseIdAddUserExercise(currentUserId.value, payload, jsonRequestOptions)
-        : await postApiExerciseUpdateExercise(payload, jsonRequestOptions);
+          ? useFormulaEndpoints
+            ? await postApiExerciseAddExerciseWithFormula(payload, jsonRequestOptions)
+            : await postApiExerciseAddExercise(payload, jsonRequestOptions)
+          : useFormulaEndpoints
+            ? await postApiExerciseIdAddUserExerciseWithFormula(
+                currentUserId.value,
+                payload,
+                jsonRequestOptions,
+              )
+            : await postApiExerciseIdAddUserExercise(
+                currentUserId.value,
+                payload,
+                jsonRequestOptions,
+              )
+        : useFormulaEndpoints
+          ? await postApiExerciseUpdateExerciseWithFormula(payload, jsonRequestOptions)
+          : await postApiExerciseUpdateExercise(payload, jsonRequestOptions);
 
     if (await handleUnauthorized(response.status)) return;
 

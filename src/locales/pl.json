@@ -181,7 +181,7 @@
       },
       "placeholders": {
         "username": "twoja_nazwa",
-        "email": "ja@example.com",
+        "email": "twoj-email",
         "password": "Hasło",
         "confirmPassword": "Potwierdź hasło"
       },
@@ -196,6 +196,59 @@
         "failed": "Rejestracja nie powiodła się. Spróbuj ponownie.",
         "success": "Rejestracja zakończona sukcesem. Możesz się teraz zalogować.",
         "unexpectedError": "Wystąpił nieoczekiwany błąd rejestracji. Spróbuj ponownie."
+      }
+    },
+    "forgotPassword": {
+      "title": "Reset hasła",
+      "subtitle": "Podaj adres e-mail, a wyślemy Ci link do ustawienia nowego hasła",
+      "fields": {
+        "email": "Adres e-mail"
+      },
+      "placeholders": {
+        "email": "twoj-email{'@'}example.com"
+      },
+      "actions": {
+        "submit": "Wyślij link resetujący",
+        "backToLogin": "Wróć do logowania"
+      },
+      "states": {
+        "successDescription": "Jeśli konto z tym adresem istnieje, wysłaliśmy link do resetu hasła. Sprawdź skrzynkę mailową."
+      },
+      "footer": {
+        "rememberedPassword": "Pamiętasz już hasło?",
+        "login": "Zaloguj się"
+      },
+      "feedback": {
+        "success": "Jeśli konto z tym adresem istnieje, wysłaliśmy link do resetu hasła.",
+        "failed": "Nie udało się wysłać linku resetującego. Spróbuj ponownie.",
+        "unexpectedError": "Wystąpił nieoczekiwany błąd podczas wysyłania linku resetującego."
+      }
+    },
+    "resetPassword": {
+      "title": "Ustaw nowe hasło",
+      "subtitle": "Wpisz nowe hasło dla swojego konta",
+      "fields": {
+        "newPassword": "Nowe hasło",
+        "confirmPassword": "Potwierdź hasło"
+      },
+      "placeholders": {
+        "newPassword": "Nowe hasło",
+        "confirmPassword": "Powtórz nowe hasło"
+      },
+      "states": {
+        "missingTokenTitle": "Brak tokenu resetującego",
+        "missingTokenDescription": "Otwórz pełny link z maila lub poproś o nowy link resetujący.",
+        "successDescription": "Hasło zostało zmienione. Możesz teraz bezpiecznie wrócić do logowania."
+      },
+      "actions": {
+        "submit": "Zmień hasło",
+        "requestNewLink": "Poproś o nowy link",
+        "backToLogin": "Wróć do logowania"
+      },
+      "feedback": {
+        "success": "Hasło zostało zmienione. Możesz się teraz zalogować.",
+        "failed": "Nie udało się zmienić hasła. Sprawdź link i spróbuj ponownie.",
+        "unexpectedError": "Wystąpił nieoczekiwany błąd podczas zmiany hasła."
       }
     }
   },
@@ -926,6 +979,13 @@
       "title": "Historia treningów",
       "detailsEyebrow": "Szczegóły treningu",
       "selectDate": "Wybierz trening z historii",
+      "monthSelector": {
+        "label": "Miesiąc",
+        "previousMonth": "Poprzedni miesiąc",
+        "nextMonth": "Następny miesiąc",
+        "none": "Brak miesiąca",
+        "empty": "Brak treningów w wybranym miesiącu."
+      },
       "columns": {
         "gym": "Siłownia",
       "exercises": "Ćwiczenia"
@@ -1367,7 +1427,6 @@
         "moduleConfigTitle": "Konfiguracja modułu",
         "photoViewsLabel": "Wymagane ujęcia zdjęć",
         "photoViewsPlaceholder": "Wybierz gotowe pozycje albo wpisz własną nazwę",
-        "photoViewsHint": "Możesz dodać kilka własnych pozycji. Wpisz nazwę i zatwierdź Enterem.",
         "measurementTypesLabel": "Wymagane typy pomiarów"
       },
       "dialog": {
@@ -1490,6 +1549,7 @@
       },
       "chart": {
         "subtitle": "Zmiany dla pomiaru: {bodyPart}",
+        "allTypesSubtitle": "Każdy typ pomiaru jest pokazany jako osobna seria z własnym kolorem.",
         "selectSpecificType": "Wybierz konkretny typ pomiaru, aby zobaczyć wykres historii.",
         "hoverHint": "Najedź na punkt, aby zobaczyć szczegóły pomiaru."
       },
@@ -1556,6 +1616,42 @@
       "feedback": {
         "loadFailed": "Nie udało się pobrać pomiarów."
       }
+    }
+  },
+  "invitationAction": {
+    "eyebrow": "Zaproszenie trenerskie",
+    "accept": {
+      "title": "Akceptowanie zaproszenia do współpracy",
+      "description": "Sprawdzamy Twoją sesję i spróbujemy od razu zaakceptować zaproszenie przypisane do tego linku."
+    },
+    "reject": {
+      "title": "Odrzucanie zaproszenia do współpracy",
+      "description": "Sprawdzamy Twoją sesję i spróbujemy od razu odrzucić zaproszenie przypisane do tego linku."
+    },
+    "status": {
+      "processing": {
+        "title": "Przetwarzanie zaproszenia",
+        "message": "Jeszcze chwila — weryfikujemy konto i wykonujemy wybraną akcję."
+      },
+      "redirecting": {
+        "title": "Logowanie wymagane",
+        "message": "Aby wykonać tę akcję, zaloguj się na konto podopiecznego. Przekierowujemy Cię do formularza logowania."
+      },
+      "success": {
+        "acceptTitle": "Zaproszenie zostało zaakceptowane",
+        "acceptMessage": "Współpraca z trenerem została aktywowana. Możesz teraz przejść do widoku relacji i dalszych działań.",
+        "rejectTitle": "Zaproszenie zostało odrzucone",
+        "rejectMessage": "Zaproszenie nie będzie już oczekiwać na Twoją decyzję. W każdej chwili możesz wrócić do widoku relacji."
+      },
+      "error": {
+        "title": "Nie udało się obsłużyć zaproszenia",
+        "message": "Nie mogliśmy wykonać tej akcji dla zaproszenia. Spróbuj ponownie albo zaloguj się jeszcze raz.",
+        "invalidLink": "Ten link do zaproszenia jest nieprawidłowy albo niekompletny."
+      }
+    },
+    "actions": {
+      "openRelationship": "Otwórz widok relacji",
+      "retry": "Spróbuj ponownie"
     }
   },
   "trainerInvitations": {
@@ -1856,18 +1952,20 @@
     "fallback": {
       "name": "Ćwiczenie bez nazwy",
       "description": "Brak opisu dla tego ćwiczenia.",
-      "bodyPart": "Nieznana partia"
+      "bodyPart": "Nieznana partia",
+      "formula": "Nieznana formuła"
     },
     "dialog": {
       "eyebrow": "Nowe ćwiczenie",
       "editEyebrow": "Edycja ćwiczenia",
       "title": "Dodaj ćwiczenie",
       "editTitle": "Edytuj ćwiczenie",
-      "subtitle": "Administrator może utworzyć ćwiczenie globalne albo prywatne, a właściciel prywatnego ćwiczenia może je później edytować lub usunąć.",
+      "subtitle": "Administrator i osoby z uprawnieniem do zarządzania ćwiczeniami mogą tworzyć ćwiczenia globalne albo prywatne, wybrać formułę ELO i później je edytować lub usuwać.",
       "fields": {
         "visibility": "Widoczność",
         "name": "Nazwa",
         "bodyPart": "Partia ciała",
+        "eloFormula": "Formuła ELO",
         "description": "Opis",
         "image": "Link do grafiki"
       },
@@ -1876,6 +1974,7 @@
         "description": "Dodaj wskazówki techniczne albo krótki opis ćwiczenia",
         "image": "https://..."
       },
+      "formulaHint": "Istniejące ćwiczenia są pobierane bez zapisanej formuły z API, więc przed zapisem sprawdź tę wartość.",
       "visibilityOptions": {
         "global": "Globalne",
         "user": "Prywatne"

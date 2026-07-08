@@ -11,6 +11,7 @@ const ADMIN_ROLE = "Admin";
 const ADMIN_ACCESS_CLAIM = "admin.access";
 const MANAGE_USER_ROLES_CLAIM = "users.roles.manage";
 const MANAGE_APP_CONFIG_CLAIM = "appconfig.manage";
+const MANAGE_GLOBAL_EXERCISES_CLAIM = "exercises.global.manage";
 
 const safeWindow = () => (typeof window === "undefined" ? null : window);
 
@@ -163,6 +164,21 @@ export const hasAdminAccess = () => {
     permissionClaims.includes(ADMIN_ACCESS_CLAIM) ||
     permissionClaims.includes(MANAGE_USER_ROLES_CLAIM) ||
     permissionClaims.includes(MANAGE_APP_CONFIG_CLAIM)
+  );
+};
+
+export const hasGlobalExerciseManagementAccess = () => {
+  const token = getAuthToken();
+  if (!token) return false;
+
+  const roles = getStoredRoles().map((role) => role.toLowerCase());
+  const permissionClaims = getStoredPermissionClaims().map((claim) =>
+    claim.toLowerCase(),
+  );
+
+  return (
+    roles.includes(ADMIN_ROLE.toLowerCase()) ||
+    permissionClaims.includes(MANAGE_GLOBAL_EXERCISES_CLAIM)
   );
 };
 

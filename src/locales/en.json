@@ -181,7 +181,7 @@
       },
       "placeholders": {
         "username": "your_username",
-        "email": "me.example.com",
+        "email": "your-email",
         "password": "Password",
         "confirmPassword": "Confirm Password"
       },
@@ -196,6 +196,59 @@
         "failed": "Registration failed. Please try again.",
         "success": "Registration successful. You can log in now.",
         "unexpectedError": "Unexpected registration error. Please try again."
+      }
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email address and we'll send you a link to set a new password",
+      "fields": {
+        "email": "Email address"
+      },
+      "placeholders": {
+        "email": "your-email{'@'}example.com"
+      },
+      "actions": {
+        "submit": "Send reset link",
+        "backToLogin": "Back to sign in"
+      },
+      "states": {
+        "successDescription": "If an account with that email exists, we sent a password reset link. Check your inbox."
+      },
+      "footer": {
+        "rememberedPassword": "Remembered your password?",
+        "login": "Sign in"
+      },
+      "feedback": {
+        "success": "If an account with that email exists, we sent a password reset link.",
+        "failed": "Failed to send password reset link. Please try again.",
+        "unexpectedError": "Unexpected error while sending the password reset link."
+      }
+    },
+    "resetPassword": {
+      "title": "Set a new password",
+      "subtitle": "Enter a new password for your account",
+      "fields": {
+        "newPassword": "New password",
+        "confirmPassword": "Confirm password"
+      },
+      "placeholders": {
+        "newPassword": "New password",
+        "confirmPassword": "Repeat your new password"
+      },
+      "states": {
+        "missingTokenTitle": "Missing reset token",
+        "missingTokenDescription": "Open the full link from your email or request a new password reset link.",
+        "successDescription": "Your password has been changed. You can safely return to sign in now."
+      },
+      "actions": {
+        "submit": "Change password",
+        "requestNewLink": "Request a new link",
+        "backToLogin": "Back to sign in"
+      },
+      "feedback": {
+        "success": "Your password has been changed. You can sign in now.",
+        "failed": "Failed to change your password. Check the link and try again.",
+        "unexpectedError": "Unexpected error while changing your password."
       }
     }
   },
@@ -926,6 +979,13 @@
       "title": "Training history",
       "detailsEyebrow": "Training details",
       "selectDate": "Select a training from history",
+      "monthSelector": {
+        "label": "Month",
+        "previousMonth": "Previous month",
+        "nextMonth": "Next month",
+        "none": "No month",
+        "empty": "No trainings found in the selected month."
+      },
       "columns": {
         "gym": "Gym",
         "exercises": "Exercises"
@@ -1367,7 +1427,6 @@
         "moduleConfigTitle": "Module configuration",
         "photoViewsLabel": "Required photo views",
         "photoViewsPlaceholder": "Choose presets or type your own position name",
-        "photoViewsHint": "You can add multiple custom positions. Type a name and confirm with Enter.",
         "measurementTypesLabel": "Required measurement types"
       },
       "dialog": {
@@ -1490,6 +1549,7 @@
       },
       "chart": {
         "subtitle": "Change over time for: {bodyPart}",
+        "allTypesSubtitle": "Each measurement type is displayed as a separate series with its own color.",
         "selectSpecificType": "Choose a specific measurement type to display the history chart.",
         "hoverHint": "Hover over a point to see measurement details."
       },
@@ -1556,6 +1616,42 @@
       "feedback": {
         "loadFailed": "Failed to load measurements."
       }
+    }
+  },
+  "invitationAction": {
+    "eyebrow": "Trainer invitation",
+    "accept": {
+      "title": "Accepting the collaboration invitation",
+      "description": "We are checking your session and will try to accept the invitation from this link right away."
+    },
+    "reject": {
+      "title": "Rejecting the collaboration invitation",
+      "description": "We are checking your session and will try to reject the invitation from this link right away."
+    },
+    "status": {
+      "processing": {
+        "title": "Processing invitation",
+        "message": "One moment — we are verifying your account and performing the selected action."
+      },
+      "redirecting": {
+        "title": "Login required",
+        "message": "To complete this action, sign in with the athlete account. We are redirecting you to the login form."
+      },
+      "success": {
+        "acceptTitle": "Invitation accepted",
+        "acceptMessage": "Your collaboration with the trainer is now active. You can continue to the relationship view.",
+        "rejectTitle": "Invitation rejected",
+        "rejectMessage": "This invitation is no longer waiting for your decision. You can return to the relationship view at any time."
+      },
+      "error": {
+        "title": "Invitation action failed",
+        "message": "We could not complete this action for the invitation. Try again or sign in once more.",
+        "invalidLink": "This invitation link is invalid or incomplete."
+      }
+    },
+    "actions": {
+      "openRelationship": "Open relationship view",
+      "retry": "Try again"
     }
   },
   "trainerInvitations": {
@@ -1856,18 +1952,20 @@
     "fallback": {
       "name": "Untitled exercise",
       "description": "No description provided for this exercise.",
-      "bodyPart": "Unknown body part"
+      "bodyPart": "Unknown body part",
+      "formula": "Unknown formula"
     },
     "dialog": {
       "eyebrow": "New exercise",
       "editEyebrow": "Edit exercise",
       "title": "Add exercise",
       "editTitle": "Edit exercise",
-      "subtitle": "Administrators can create exercises as global or private, and the owner of a private exercise can later edit or delete it.",
+      "subtitle": "Administrators and exercise managers can create exercises as global or private, choose the ELO formula, and later edit or delete them.",
       "fields": {
         "visibility": "Visibility",
         "name": "Name",
         "bodyPart": "Body part",
+        "eloFormula": "ELO formula",
         "description": "Description",
         "image": "Image URL"
       },
@@ -1876,6 +1974,7 @@
         "description": "Add coaching notes or a short description of the movement",
         "image": "https://..."
       },
+      "formulaHint": "Existing exercises are loaded without a saved formula from the API, so double-check this value before saving.",
       "visibilityOptions": {
         "global": "Global",
         "user": "Private"

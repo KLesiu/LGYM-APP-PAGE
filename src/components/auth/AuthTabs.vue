@@ -30,6 +30,7 @@ const { t } = useI18n();
 
 const props = defineProps<{
   modelValue: AuthRole;
+  showAthleteTab?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -42,10 +43,14 @@ const selectedRole = computed({
 });
 
 const roleOptions = computed(() => [
-  {
-    value: "athlete" as const,
-    label: t("auth.tabs.athlete"),
-  },
+  ...(props.showAthleteTab === false
+    ? []
+    : [
+        {
+          value: "athlete" as const,
+          label: t("auth.tabs.athlete"),
+        },
+      ]),
   {
     value: "trainer" as const,
     label: t("auth.tabs.trainer"),

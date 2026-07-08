@@ -21,7 +21,11 @@
           class="flex flex-col gap-5 text-left"
           @submit.prevent="submitForm"
         >
-          <AuthTabs v-if="!isAdminMode" v-model="selectedUserRole" />
+          <AuthTabs
+            v-if="!isAdminMode"
+            v-model="selectedUserRole"
+            :show-athlete-tab="showAthleteTab"
+          />
 
           <div class="grid gap-4">
             <v-text-field
@@ -34,17 +38,8 @@
               autocomplete="username"
             />
 
-            <div class="flex flex-col gap-1.5">
-              <div class="flex items-center justify-end">
-                <router-link
-                  to="/forgot-password"
-                  class="text-xs text-[var(--lgym-text-muted)] underline underline-offset-2 hover:text-[var(--lgym-text)]"
-                >
-                  {{ t("auth.login.actions.forgotPassword") }}
-                </router-link>
-              </div>
-
-              <v-text-field
+              <div class="flex flex-col gap-1.5">
+                <v-text-field
                 id="password"
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
@@ -57,6 +52,15 @@
                 "
                 @click:append-inner="togglePassword"
               />
+
+              <div v-if="!isAdminMode" class="flex justify-end">
+                <router-link
+                  to="/forgot-password"
+                  class="text-sm text-[var(--lgym-primary)] underline underline-offset-2 hover:text-[var(--lgym-text)]"
+                >
+                  {{ t("auth.login.actions.forgotPassword") }}
+                </router-link>
+              </div>
             </div>
           </div>
 
@@ -82,15 +86,6 @@
               </div>
 
               <div class="flex flex-col gap-2.5">
-                <v-btn
-                  block
-                  variant="outlined"
-                  color="primary"
-                  prepend-icon="mdi-apple"
-                  size="large"
-                >
-                  {{ t("auth.login.actions.loginWithApple") }}
-                </v-btn>
                 <v-btn
                   block
                   variant="outlined"
@@ -181,9 +176,13 @@ const resolveInitialRole = (): AuthRole => {
   const redirect =
     typeof route.query.redirect === "string" ? route.query.redirect : "";
 
+  if (redirect.startsWith("/athlete") || redirect.startsWith("/invitations")) {
+    return "athlete";
+  }
+
   if (redirect.startsWith("/trainer")) return "trainer";
 
-  return "athlete";
+  return "trainer";
 };
 
 const username = ref("");
@@ -193,6 +192,16 @@ const showPassword = ref(false);
 const isSubmitting = ref(false);
 
 const isAdminMode = computed(() => props.mode === "admin");
+const showAthleteTab = computed(() => {
+  if (isAdminMode.value) {
+    return false;
+  }
+
+  const redirect =
+    typeof route.query.redirect === "string" ? route.query.redirect.trim() : "";
+
+  return redirect.startsWith("/athlete") || redirect.startsWith("/invitations");
+});
 const selectedUserRole = computed<"athlete" | "trainer">({
   get: () => (selectedRole.value === "trainer" ? "trainer" : "athlete"),
   set: (value) => {
@@ -228,7 +237,7 @@ const togglePassword = () => {
 const hasAdminPermissions = (response: LoginResponseDto) => {
   const roles = (response.req?.roles ?? []).map((role) => role.toLowerCase());
   const permissionClaims = (
-    response.permissionClaims ??
+    response.permissionClaims ?? 
     response.req?.permissionClaims ??
     []
   ).map((claim) => claim.toLowerCase());
@@ -236,8 +245,27 @@ const hasAdminPermissions = (response: LoginResponseDto) => {
   return (
     roles.includes("admin") ||
     permissionClaims.includes("admin.access") ||
-    permissionClaims.includes("users.roles.manage")
+    permissionClaims.includes("users.roles.manage") ||
+    permissionClaims.includes("appconfig.manage") ||
+    permissionClaims.includes("exercises.global.manage")
   );
+};
+
+const hasExerciseManagementOnlyAccess = (response: LoginResponseDto) => {
+  const roles = (response.req?.roles ?? []).map((role) => role.toLowerCase());
+  const permissionClaims = (
+    response.permissionClaims ??
+    response.req?.permissionClaims ??
+    []
+  ).map((claim) => claim.toLowerCase());
+
+  const hasAdminPanelAccess =
+    roles.includes("admin") ||
+    permissionClaims.includes("admin.access") ||
+    permissionClaims.includes("users.roles.manage") ||
+    permissionClaims.includes("appconfig.manage");
+
+  return !hasAdminPanelAccess && permissionClaims.includes("exercises.global.manage");
 };
 
 const loginByRole = async (payload: LoginRequest) => {
@@ -320,7 +348,13 @@ const submitForm = async () => {
     resetFormValidation();
 
     if (isAdminMode.value) {
-      await router.replace(resolvePostLoginRedirect("/admin/users"));
+      await router.replace(
+        resolvePostLoginRedirect(
+          hasExerciseManagementOnlyAccess(response.data)
+            ? "/admin/exercises"
+            : "/admin/users",
+        ),
+      );
       return;
     }
 

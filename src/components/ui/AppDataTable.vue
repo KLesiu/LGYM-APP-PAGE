@@ -181,15 +181,22 @@ defineExpose({
 <style scoped>
 .app-data-table {
   min-height: 0;
+  min-width: 0;
 }
 
 .app-data-table__table :deep(.v-table__wrapper) {
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   padding-right: 0.25rem;
+  scrollbar-gutter: stable both-edges;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .app-data-table__table :deep(table) {
+  width: max-content;
   min-width: 100%;
 }
 
@@ -202,7 +209,7 @@ defineExpose({
 }
 
 .app-data-table__table :deep(th) {
-  padding: 0.95rem 1.25rem;
+  padding: var(--lgym-table-cell-padding-y) var(--lgym-table-cell-padding-x);
   color: var(--lgym-text-muted);
   font-size: 0.75rem;
   font-weight: 700;
@@ -214,7 +221,7 @@ defineExpose({
 }
 
 .app-data-table__table :deep(th:last-child) {
-  padding-right: 1.25rem;
+  padding-right: var(--lgym-table-cell-padding-x);
 }
 
 .app-data-table__table :deep(td) {
@@ -239,5 +246,21 @@ defineExpose({
 
 .app-data-table__table :deep(.app-data-table__row--clickable) {
   cursor: pointer;
+}
+
+@media (max-width: 1279px) {
+  .app-data-table__table :deep(table) {
+    min-width: max(100%, var(--lgym-table-mobile-min-width));
+  }
+}
+
+@media (max-width: 767px) {
+  .app-data-table__table :deep(.v-table__wrapper) {
+    padding-right: 0;
+  }
+
+  .app-data-table__table :deep(th) {
+    letter-spacing: 0.14em;
+  }
 }
 </style>

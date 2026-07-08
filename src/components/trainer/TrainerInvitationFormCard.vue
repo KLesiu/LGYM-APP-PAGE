@@ -35,7 +35,7 @@
           
         />
 
-        <v-combobox
+        <v-select
           v-model="preferredLanguage"
           :label="t('trainerInvitations.form.fields.preferredLanguage')"
           :items="languageOptions"
@@ -48,6 +48,7 @@
           "
           :disabled="isSubmitting"
           :hide-details="true"
+          :return-object="false"
         />
 
         <v-combobox
@@ -87,6 +88,11 @@ import { useI18n } from "vue-i18n";
 
 import type { CreateTrainerInvitationByEmailRequest } from "../../api/model";
 
+type LanguageOption = {
+  value: string;
+  label: string;
+};
+
 const props = defineProps<{
   defaultLanguage: string;
   defaultTimeZone: string;
@@ -106,7 +112,7 @@ const formRef = ref<{
 const isFormValid = ref<boolean | null>(null);
 
 const email = ref("");
-const preferredLanguage = ref(props.defaultLanguage);
+const preferredLanguage = ref<string>(props.defaultLanguage);
 const preferredTimeZone = ref(props.defaultTimeZone);
 
 const safeSupportedTimeZones = () => {
@@ -147,6 +153,18 @@ const languageOptions = computed(() => [
   },
 ]);
 
+const getLanguageValue = (value: string | LanguageOption | null | undefined) => {
+  if (typeof value === "string") {
+    return value.trim();
+  }
+
+  if (value && typeof value === "object" && typeof value.value === "string") {
+    return value.value.trim();
+  }
+
+  return "";
+};
+
 const requiredRules = (message: string) => [
   (value: string | null | undefined) => !!value || message,
 ];
@@ -172,7 +190,7 @@ const submitForm = async () => {
 
   emit("submit", {
     email: email.value.trim(),
-    preferredLanguage: preferredLanguage.value,
+    preferredLanguage: getLanguageValue(preferredLanguage.value),
     preferredTimeZone: preferredTimeZone.value.trim(),
   });
 };

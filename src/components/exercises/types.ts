@@ -18,6 +18,7 @@ export type ExerciseDraft = {
   source: ExerciseSource;
   name: string;
   bodyPart: string;
+  eloFormula: string;
   description: string;
   image: string;
 };

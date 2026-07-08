@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import {
   hasAdminAccess,
+  hasGlobalExerciseManagementAccess,
   hasTrainerAccess,
   hasUserAccess,
 } from "../composables/useAuthSession";
@@ -24,7 +25,10 @@ import TrainerTrainingPlansPage from "../pages/trainer/TrainerTrainingPlansPage.
 import TrainerReportTemplatesPage from "../pages/trainer/TrainerReportTemplatesPage.vue";
 import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage.vue";
+import InvitationActionPage from "../pages/InvitationActionPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
+import ResetPasswordPage from "../pages/ResetPasswordPage.vue";
 import UserExercisesPage from "../pages/user/UserExercisesPage.vue";
 import UserRelationshipPage from "../pages/user/UserRelationshipPage.vue";
 
@@ -49,6 +53,21 @@ export const router = createRouter({
       path: "/register",
       name: "register",
       component: RegisterPage,
+    },
+    {
+      path: "/forgot-password",
+      name: "forgot-password",
+      component: ForgotPasswordPage,
+    },
+    {
+      path: "/reset-password",
+      name: "reset-password",
+      component: ResetPasswordPage,
+    },
+    {
+      path: "/invitations/:action/:invitationId",
+      name: "invitation-action",
+      component: InvitationActionPage,
     },
     {
       path: "/admin",
@@ -197,7 +216,19 @@ router.beforeEach((to) => {
   );
   const requiresUser = to.matched.some((record) => record.meta.requiresUser);
 
-  if (requiresAdmin && !hasAdminAccess()) {
+  if (
+    to.name === "admin-exercises" &&
+    !(hasAdminAccess() || hasGlobalExerciseManagementAccess())
+  ) {
+    return {
+      name: "login-admin",
+      query: {
+        redirect: to.fullPath,
+      },
+    };
+  }
+
+  if (requiresAdmin && to.name !== "admin-exercises" && !hasAdminAccess()) {
     return {
       name: "login-admin",
       query: {
@@ -227,6 +258,12 @@ router.beforeEach((to) => {
   if (to.name === "login-admin" && hasAdminAccess()) {
     return {
       name: "admin-users",
+    };
+  }
+
+  if (to.name === "login-admin" && hasGlobalExerciseManagementAccess()) {
+    return {
+      name: "admin-exercises",
     };
   }
 

@@ -146,7 +146,11 @@ export const useUserTrainerRelationship = () => {
       return "error" as const;
     }
 
-    pendingInvitations.value = Array.isArray(response.data) ? response.data : [];
+    pendingInvitations.value = Array.isArray(response.data)
+      ? response.data.filter(
+          (invitation) => normalizeInvitationStatus(invitation.status) === "pending",
+        )
+      : [];
     return "loaded" as const;
   };
 

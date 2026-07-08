@@ -106,8 +106,8 @@
               :max-label="t('trainerMemberDetails.measurements.summary.maximum')"
               :latest-label="t('trainerMemberDetails.measurements.summary.latest')"
               :empty-message="t('trainerMemberDetails.measurements.empty.chart')"
-              :point-count-label="t('trainerMemberDetails.measurements.summary.points', { count: chartSeries.length })"
-              :values="chartSeries"
+              :point-count-label="t('trainerMemberDetails.measurements.summary.points', { count: totalChartPointCount })"
+              :series="chartSeries"
               :format-value="formatChartValue"
             />
           </template>
@@ -323,6 +323,19 @@ const hasError = ref(false);
 const historySearch = ref("");
 const historySort = ref<"newest" | "oldest">("newest");
 
+const chartPalette = [
+  "#52b36b",
+  "#60a5fa",
+  "#f59e0b",
+  "#f472b6",
+  "#a78bfa",
+  "#2dd4bf",
+  "#f87171",
+  "#facc15",
+  "#fb7185",
+  "#34d399",
+];
+
 const bodyPartOptions = computed(() =>
   measurementTypeOptions.map((option) => ({
     label: t(option.labelKey),
@@ -446,23 +459,98 @@ const changePercentageLabel = computed(() =>
     : `${formatNumericValue(trend.value.changePercentage)}%`,
 );
 
-const chartSeries = computed(() =>
-  [...historyPoints.value]
-    .filter((item) => typeof item.value === "number")
-    .sort(
-      (left, right) =>
-        new Date(left.createdAt ?? 0).getTime() - new Date(right.createdAt ?? 0).getTime(),
-    )
-    .map((item, index) => ({
-      key: `${item.createdAt ?? "measurement"}-${index}`,
-      label: formatDate(item.createdAt),
-      value: item.value ?? 0,
-    })),
+const buildChartPoint = (item: MeasurementResponseDto, index: number) => ({
+  key: `${item.bodyPart?.name ?? item.bodyPart?.displayName ?? "measurement"}-${item.createdAt ?? "measurement"}-${index}`,
+  label: formatDate(item.createdAt),
+  value: item.value ?? 0,
+  timestamp: new Date(item.createdAt ?? 0).getTime(),
+});
+
+const chartSeries = computed(() => {
+  const points = [...historyPoints.value].filter(
+    (item) => typeof item.value === "number" && Number.isFinite(item.value),
+  );
+
+  if (selectedBodyPart.value !== "ALL") {
+    return [
+      {
+        key: selectedBodyPart.value,
+        label: selectedBodyPartLabel.value,
+        color: chartPalette[0],
+        unitLabel: trendUnitLabel.value,
+        values: points
+          .sort(
+            (left, right) =>
+              new Date(left.createdAt ?? 0).getTime() - new Date(right.createdAt ?? 0).getTime(),
+          )
+          .map(buildChartPoint),
+      },
+    ];
+  }
+
+  const groupedSeries = new Map<
+    string,
+    {
+      key: string;
+      label: string;
+      unitLabel: string;
+      values: MeasurementResponseDto[];
+    }
+  >();
+
+  points.forEach((item) => {
+    const bodyPartKey = item.bodyPart?.name || item.bodyPart?.displayName || "Unknown";
+    const existingSeries = groupedSeries.get(bodyPartKey);
+
+    if (existingSeries) {
+      existingSeries.values.push(item);
+      return;
+    }
+
+    groupedSeries.set(bodyPartKey, {
+      key: bodyPartKey,
+      label: item.bodyPart?.displayName || item.bodyPart?.name || t("trainerMemberDetails.measurements.bodyParts.Unknown"),
+      unitLabel: item.unit?.displayName || item.unit?.name || "",
+      values: [item],
+    });
+  });
+
+  const optionOrder = new Map(
+    measurementTypeOptions.map((option, index) => [option.value, index]),
+  );
+
+  return [...groupedSeries.values()]
+    .sort((left, right) => {
+      const leftOrder = optionOrder.get(left.key as TrainerMeasurementBodyPart) ?? Number.MAX_SAFE_INTEGER;
+      const rightOrder = optionOrder.get(right.key as TrainerMeasurementBodyPart) ?? Number.MAX_SAFE_INTEGER;
+
+      if (leftOrder !== rightOrder) {
+        return leftOrder - rightOrder;
+      }
+
+      return left.label.localeCompare(right.label);
+    })
+    .map((series, index) => ({
+      key: series.key,
+      label: series.label,
+      color: chartPalette[index % chartPalette.length],
+      unitLabel: series.unitLabel,
+      values: series.values
+        .sort(
+          (left, right) =>
+            new Date(left.createdAt ?? 0).getTime() - new Date(right.createdAt ?? 0).getTime(),
+        )
+        .map(buildChartPoint),
+    }));
+});
+
+const totalChartPointCount = computed(() =>
+  chartSeries.value.reduce((count, series) => count + series.values.length, 0),
 );
 
 const chartSubtitle = computed(() => {
   if (selectedBodyPart.value === "ALL") {
-    return t("trainerMemberDetails.measurements.chart.selectSpecificType");
+    return t("trainerMemberDetails.measurements.chart.allTypesSubtitle");
   }
 
   const bodyPartLabel = bodyPartOptions.value.find(
@@ -536,9 +624,12 @@ const toHistoryRow = (value: unknown) =>
     searchValue: string;
   };
 
-const formatChartValue = (value: number) => {
+const formatChartValue = (
+  value: number,
+  series?: { unitLabel?: string },
+) => {
   const formatted = formatNumericValue(value);
-  return trendUnitLabel.value ? `${formatted} ${trendUnitLabel.value}` : formatted;
+  return series?.unitLabel ? `${formatted} ${series.unitLabel}` : formatted;
 };
 
 const loadMeasurements = async () => {

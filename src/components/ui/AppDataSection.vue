@@ -1,6 +1,6 @@
 <template>
   <section class="flex min-h-0 min-w-0 w-full flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-  <div class="border-b border-[var(--lgym-border)] px-6 py-6 lg:px-8 lg:py-7">
+  <div data-app-data-section-header="true" class="border-b border-[var(--lgym-border)] px-4 py-5 sm:px-5 lg:px-8 lg:py-7">
       <div class="flex flex-col gap-6">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div class="max-w-3xl lgym-section-heading">
@@ -16,10 +16,10 @@
             </p>
           </div>
 
-          <div class="flex flex-wrap items-center gap-3 self-start lg:self-auto lg:justify-end">
+          <div class="flex max-w-full flex-wrap items-center gap-3 self-start lg:self-auto lg:justify-end">
             <div
               v-if="summaryText"
-              class="rounded-full border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-2 text-sm text-[var(--lgym-text-muted)]"
+              class="max-w-full rounded-full border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-2 text-sm text-[var(--lgym-text-muted)] break-words"
             >
               {{ summaryText }}
             </div>
@@ -42,17 +42,18 @@
       <slot />
     </div>
 
-    <div v-if="showPagination" class="border-t border-[var(--lgym-border)] px-4 pb-5 pt-7 sm:px-5 sm:pb-5 sm:pt-7">
-      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-sm text-[var(--lgym-text-muted)]">
+    <div v-if="showPagination" data-app-data-section-pagination="true" class="border-t border-[var(--lgym-border)] px-4 pb-4 pt-5 sm:px-5 sm:pb-5 sm:pt-6 lg:px-6">
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <p class="min-w-0 max-w-full text-sm text-[var(--lgym-text-muted)] break-words">
           {{ paginationSummary }}
         </p>
 
-        <div class="flex w-full flex-col gap-3 self-end sm:w-auto sm:flex-row">
+        <div class="flex w-full flex-col gap-[var(--lgym-pagination-gap)] self-stretch sm:flex-row sm:flex-wrap sm:justify-end lg:w-auto">
           <v-btn
             variant="outlined"
             color="primary"
-            class="min-h-10 rounded-md px-4"
+            class="min-h-10 w-full rounded-md px-4 sm:w-auto"
+            :style="{ minWidth: `var(--lgym-pagination-button-min-width)` }"
             :disabled="disablePrevious"
             @click="$emit('previous')"
           >
@@ -61,7 +62,8 @@
           <v-btn
             variant="outlined"
             color="primary"
-            class="min-h-10 rounded-md px-4"
+            class="min-h-10 w-full rounded-md px-4 sm:w-auto"
+            :style="{ minWidth: `var(--lgym-pagination-button-min-width)` }"
             :disabled="disableNext"
             @click="$emit('next')"
           >

@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import {
   HubConnectionBuilder,
   HubConnectionState,
@@ -79,9 +79,46 @@ export function useTrainerNotifications(userId: string) {
   const isMarkingAllRead = ref(false);
   const activeNotificationId = ref<string | null>(null);
   let hubConnection: HubConnection | null = null;
+  let startPollingPromise: Promise<void> | null = null;
+
+  const getCurrentUserId = () => userId.trim();
+
+  const mergeNotifications = (items: TrainerNotificationItem[]) => {
+    notifications.value = Array.from(
+      new Map(
+        items
+          .filter((notification) => !!notification._id)
+          .filter((notification) => isTrainerNotificationType(notification.type))
+          .map((notification) => [
+            getNotificationDeduplicationKey(notification),
+            notification,
+          ]),
+      ).values(),
+    ).sort(
+      (left, right) =>
+        new Date(right.createdAt ?? 0).getTime() - new Date(left.createdAt ?? 0).getTime(),
+    );
+  };
+
+  const handleIncomingNotification = (
+    incomingNotification: InAppNotificationResultDto | null | undefined,
+  ) => {
+    if (!incomingNotification) return;
+
+    const mappedNotification = mapNotification(incomingNotification);
+    if (!mappedNotification._id || !isTrainerNotificationType(mappedNotification.type)) {
+      return;
+    }
+
+    mergeNotifications([mappedNotification, ...notifications.value]);
+    isLoaded.value = true;
+    error.value = null;
+  };
 
   const fetchNotifications = async () => {
-    if (!userId) {
+    const currentUserId = getCurrentUserId();
+
+    if (!currentUserId) {
       notifications.value = [];
       error.value = null;
       isLoaded.value = true;
@@ -103,10 +140,10 @@ export function useTrainerNotifications(userId: string) {
         if (visitedCursors.has(cursorKey)) break;
         visitedCursors.add(cursorKey);
 
-        const response = await getApiIdNotifications(userId, {
-          Limit: 50,
-          CursorCreatedAt: cursorCreatedAt,
-          CursorId: cursorId,
+          const response = await getApiIdNotifications(currentUserId, {
+            Limit: 50,
+            CursorCreatedAt: cursorCreatedAt,
+            CursorId: cursorId,
         });
 
         if (response.status !== 200) {
@@ -122,17 +159,7 @@ export function useTrainerNotifications(userId: string) {
         cursorId = payload.nextCursorId ?? undefined;
       }
 
-      notifications.value = Array.from(
-        new Map(
-          allItems
-            .filter((notification) => !!notification._id)
-            .filter((notification) => isTrainerNotificationType(notification.type))
-            .map((notification) => [
-              getNotificationDeduplicationKey(notification),
-              notification,
-            ]),
-        ).values(),
-      );
+      mergeNotifications(allItems);
       isLoaded.value = true;
     } catch (fetchError) {
       error.value =
@@ -157,15 +184,16 @@ export function useTrainerNotifications(userId: string) {
   });
 
   const markAsRead = async (notificationId: string) => {
-    await postApiIdNotificationsNotificationIdMarkRead(userId, notificationId);
+    await postApiIdNotificationsNotificationIdMarkRead(getCurrentUserId(), notificationId);
   };
 
   const markAllAsRead = async () => {
-    if (!userId) return;
+    const currentUserId = getCurrentUserId();
+    if (!currentUserId) return;
 
     isMarkingAllRead.value = true;
     try {
-      const response = await postApiIdNotificationsMarkAllRead(userId);
+      const response = await postApiIdNotificationsMarkAllRead(currentUserId);
       if (response.status !== 200) {
         throw new Error("Failed to mark all notifications as read");
       }
@@ -204,6 +232,8 @@ export function useTrainerNotifications(userId: string) {
   };
 
   const stopPolling = () => {
+    startPollingPromise = null;
+
     if (hubConnection) {
       const currentConnection = hubConnection;
       hubConnection = null;
@@ -211,50 +241,71 @@ export function useTrainerNotifications(userId: string) {
     }
   };
 
-  const startPolling = () => {
-    stopPolling();
+  const startPolling = async () => {
+    if (startPollingPromise) {
+      return startPollingPromise;
+    }
 
-    if (typeof window === "undefined" || !userId) return;
+    const currentUserId = getCurrentUserId();
+
+    if (typeof window === "undefined" || !currentUserId) return;
+
+    if (
+      hubConnection &&
+      (hubConnection.state === HubConnectionState.Connected ||
+        hubConnection.state === HubConnectionState.Connecting ||
+        hubConnection.state === HubConnectionState.Reconnecting)
+    ) {
+      return;
+    }
+
+    stopPolling();
 
     const token = getAuthToken();
     if (!token) return;
 
     const connection = new HubConnectionBuilder()
       .withUrl(`${apiBaseUrl}/hubs/notifications`, {
-        accessTokenFactory: () => getAuthToken(),
+        accessTokenFactory: () => getAuthToken() || "",
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)
       .build();
 
-    connection.on("ReceiveNotification", () => {
+    connection.on("ReceiveNotification", (notification: InAppNotificationResultDto) => {
+      handleIncomingNotification(notification);
       void fetchNotifications();
     });
 
     connection.onreconnected(() => fetchNotifications());
 
-    void connection
+    hubConnection = connection;
+    startPollingPromise = connection
       .start()
       .then(() => fetchNotifications())
       .catch((error) => {
         console.warn("Failed to connect trainer notifications hub", error);
+        if (hubConnection === connection) {
+          hubConnection = null;
+        }
+      })
+      .finally(() => {
+        if (startPollingPromise) {
+          startPollingPromise = null;
+        }
       });
 
-    hubConnection = connection;
+    await startPollingPromise;
   };
 
   watch(
     () => userId,
     () => {
       void fetchNotifications();
-      startPolling();
+      void startPolling();
     },
     { immediate: true },
   );
-
-  onMounted(() => {
-    startPolling();
-  });
 
   onBeforeUnmount(() => {
     stopPolling();
@@ -273,7 +324,7 @@ export function useTrainerNotifications(userId: string) {
         return;
       }
 
-      startPolling();
+      void startPolling();
     },
   );
 

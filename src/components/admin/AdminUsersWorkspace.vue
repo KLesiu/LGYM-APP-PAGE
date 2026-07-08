@@ -4,6 +4,7 @@
     class="flex min-h-0 min-w-0 w-full flex-col"
   >
     <AppDataSection
+      class="flex-1 min-h-0"
       :eyebrow="t('admin.table.sectionEyebrow')"
       :title="`${t('admin.table.user')} & ${t('admin.table.roles')}`"
       :subtitle="t('admin.table.sectionSubtitle')"
@@ -16,7 +17,6 @@
       @previous="$emit('changePage', page - 1)"
       @next="$emit('changePage', page + 1)"
     >
-    <div ref="headerRef" class="contents" />
     <div class="min-h-0 flex-1">
       <AppDataTable
         ref="tableRef"
@@ -259,7 +259,6 @@
         </template>
       </AppDataTable>
     </div>
-    <div ref="paginationRef" class="contents" />
     </AppDataSection>
   </div>
 </template>
@@ -308,12 +307,10 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const cardRef = ref<HTMLElement | null>(null);
-const headerRef = ref<HTMLElement | null>(null);
 const tableRef = ref<{ getTableElement: () => HTMLElement | null } | null>(null);
 
 type RefTarget = Element | ComponentPublicInstance | null;
 
-const paginationRef = ref<RefTarget>(null);
 const firstRowRef = ref<RefTarget>(null);
 
 const headers = computed<TableHeader[]>(() => [
@@ -373,12 +370,16 @@ const setFirstRowRef = (value: RefTarget) => {
 };
 
 const getRecommendedPageSize = () => {
-  const cardHeight =
-    resolveElement(cardRef.value)?.getBoundingClientRect().height ?? 0;
+  const cardRect = resolveElement(cardRef.value)?.getBoundingClientRect() ?? null;
+  const rootElement = resolveElement(cardRef.value);
   const headerHeight =
-    resolveElement(headerRef.value)?.getBoundingClientRect().height ?? 0;
+    rootElement
+      ?.querySelector('[data-app-data-section-header="true"]')
+      ?.getBoundingClientRect().height ?? 0;
   const paginationHeight =
-    resolveElement(paginationRef.value)?.getBoundingClientRect().height ?? 0;
+    rootElement
+      ?.querySelector('[data-app-data-section-pagination="true"]')
+      ?.getBoundingClientRect().height ?? 0;
   const tableElement = tableRef.value?.getTableElement() ?? null;
   const tableHeadHeight =
     tableElement?.querySelector("thead")?.getBoundingClientRect().height ?? 0;
@@ -391,14 +392,24 @@ const getRecommendedPageSize = () => {
     return Math.max(maxHeight, rowHeight);
   }, firstRowHeight);
 
-  if (!cardHeight || !tallestVisibleRow) {
+  if (!cardRect || !tallestVisibleRow) {
     return Math.max(1, props.pageSize);
   }
 
+  const viewportHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+  const cardTop = Math.max(cardRect.top, 0);
+  const viewportBottomGap = 24;
   const availableRowsHeight =
-    cardHeight - headerHeight - paginationHeight - tableHeadHeight - 8;
+    viewportHeight - cardTop - headerHeight - paginationHeight - tableHeadHeight - viewportBottomGap;
 
-  return Math.max(1, Math.floor(availableRowsHeight / tallestVisibleRow));
+  if (availableRowsHeight <= tallestVisibleRow) {
+    return 1;
+  }
+
+  const recommendedRows = Math.floor(availableRowsHeight / tallestVisibleRow);
+  const maxRows = viewportHeight >= 1200 ? 6 : viewportHeight >= 960 ? 5 : 4;
+
+  return Math.max(1, Math.min(recommendedRows, maxRows));
 };
 
 const updateEditableRoles = (
