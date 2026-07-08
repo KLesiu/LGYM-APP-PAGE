@@ -682,7 +682,9 @@
     "actions": {
       "backToPlan": "Wróć do planu",
       "cancel": "Anuluj",
+      "previous": "Poprzednia",
       "save": "Zapisz dzień planu",
+      "next": "Następna",
       "retry": "Spróbuj ponownie"
     },
     "error": {

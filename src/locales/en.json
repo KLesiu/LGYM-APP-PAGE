@@ -682,7 +682,9 @@
     "actions": {
       "backToPlan": "Back to plan",
       "cancel": "Cancel",
+      "previous": "Previous",
       "save": "Save plan day",
+      "next": "Next",
       "retry": "Retry"
     },
     "error": {
