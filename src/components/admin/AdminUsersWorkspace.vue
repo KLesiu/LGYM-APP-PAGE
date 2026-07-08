@@ -41,9 +41,9 @@
                 class="overflow-hidden rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-4"
               >
                 <div class="flex flex-col gap-4">
-                  <div class="flex items-start gap-4">
+                  <div class="flex items-center gap-4">
                     <div
- class="inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[18px] bg-[var(--lgym-avatar-bg)] text-[var(--lgym-text)] text-base font-bold shadow-[inset_0_1px_0_rgba(232,230,230,0.12)]"
+ class="inline-flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-[18px] bg-[var(--lgym-primary)] text-base font-bold text-white"
                     >
                       {{ getUserInitial(item) }}
                     </div>
@@ -137,40 +137,20 @@
             data-admin-user-row="true"
  class="px-6 py-6"
           >
-            <div class="flex items-start gap-4">
+            <div class="flex items-center gap-4">
               <div
- class="inline-flex h-[52px] w-[52px] items-center justify-center rounded-[18px] bg-[var(--lgym-avatar-bg)] text-[var(--lgym-text)] text-base font-bold shadow-[inset_0_1px_0_rgba(232,230,230,0.12)]"
+ class="inline-flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-[18px] bg-[var(--lgym-primary)] text-base font-bold text-white"
                 >
                   {{ getUserInitial(toUser(item)) }}
                 </div>
 
-                <div class="min-w-0 space-y-2">
-                  <div>
-                    <p class="text-[var(--lgym-text)] truncate text-sm font-semibold">
-                      {{ toUser(item).name || t("admin.table.unknownName") }}
-                    </p>
-                    <p class="text-[var(--lgym-text-muted)] mt-1 text-xs">
-                      ID: {{ toUser(item).id || "—" }}
-                    </p>
-                  </div>
-
-                  <div
-                    v-if="(toUser(item).roles?.length ?? 0) > 0"
-                    class="flex flex-wrap gap-3"
-                  >
-                    <v-chip
-                      v-for="role in toUser(item).roles ?? []"
-                      :key="`${toUser(item).id}-${role}`"
-                      size="x-small"
-                      color="primary"
-                      class="role-badge font-semibold"
-                  >
-                    {{ role }}
-                  </v-chip>
+                <div class="flex min-w-0 items-center self-center">
+                  <p class="truncate text-sm font-semibold leading-none text-[var(--lgym-text)]">
+                    {{ toUser(item).name || t("admin.table.unknownName") }}
+                  </p>
                 </div>
               </div>
             </div>
-          </div>
         </template>
 
         <template #item.email="{ item }">

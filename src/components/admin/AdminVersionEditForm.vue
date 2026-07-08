@@ -1,9 +1,9 @@
 <template>
   <v-form
-    class="flex flex-col gap-6"
+    class="flex flex-col gap-7"
     @submit.prevent="$emit('submit')"
   >
-    <div class="grid gap-5 md:grid-cols-2">
+    <div class="grid gap-5 lg:gap-6 md:grid-cols-2">
       <v-text-field
         :model-value="latestVersion"
         :label="t('admin.versions.fields.latestVersion')"
@@ -56,7 +56,7 @@
     />
 
     <div
- class="rounded-3xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-6 py-6"
+      class="rounded-3xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5 lg:px-6 lg:py-6"
     >
       <div
         class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between"
@@ -81,11 +81,11 @@
       </div>
     </div>
 
-    <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
+    <div class="flex flex-col gap-3 border-t border-[var(--lgym-border)] pt-5 sm:flex-row sm:justify-end">
       <v-btn
         variant="outlined"
         color="primary"
-        class="min-h-[52px] px-6"
+        class="min-h-[52px] px-6 lg:px-7"
         @click="$emit('loadCurrent')"
       >
         {{ t("admin.versions.actions.loadCurrent") }}
@@ -94,7 +94,7 @@
       <v-btn
         type="submit"
         color="primary"
-        class="min-h-[52px] px-6"
+        class="min-h-[52px] px-6 lg:px-7"
         :loading="isSubmitting"
         :disabled="isSubmitting"
       >
