@@ -1,33 +1,37 @@
 <template>
   <div class="flex min-h-0 min-w-0 flex-col gap-4">
     <section class="flex flex-col gap-4">
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
-            {{ t("trainerMemberDetails.diet.eyebrow") }}
-          </p>
-          <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
-            {{ t("trainerMemberDetails.diet.title") }}
-          </h2>
-          <p class="mt-2 max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
-            {{ t("trainerMemberDetails.diet.subtitle") }}
-          </p>
+      <div class="flex flex-col gap-4 rounded-[28px] border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-5 py-6 sm:px-6">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
+              {{ t("trainerMemberDetails.diet.eyebrow") }}
+            </p>
+            <h2 class="mt-2 text-2xl font-semibold text-[var(--lgym-text)] sm:text-3xl">
+              {{ t("trainerMemberDetails.diet.title") }}
+            </h2>
+            <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)"]>{{ plansCountLabel }}</p>
+          </div>
+
+          <div class="flex flex-wrap gap-2">
+            <v-btn color="primary" class="min-h-10 rounded-md px-4" @click="openCreateDialog">
+              {{ t("trainerMemberDetails.diet.actions.create") }}
+            </v-btn>
+            <v-btn
+              v-if="activePlans.length === 1"
+              variant="outlined"
+              color="primary"
+              class="min-h-10 rounded-md px-4"
+              @click="openEditDialog(activePlans[0])"
+            >
+              {{ t("trainerMemberDetails.diet.actions.editActive") }}
+            </v-btn>
+          </div>
         </div>
 
-        <div class="flex flex-wrap gap-2">
-          <v-btn color="primary" class="min-h-10 rounded-md px-4" @click="openCreateDialog">
-            {{ t("trainerMemberDetails.diet.actions.create") }}
-          </v-btn>
-          <v-btn
-            v-if="activePlans.length === 1"
-            variant="outlined"
-            color="primary"
-            class="min-h-10 rounded-md px-4"
-            @click="openEditDialog(activePlans[0])"
-          >
-            {{ t("trainerMemberDetails.diet.actions.editActive") }}
-          </v-btn>
-        </div>
+        <p class="max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
+          {{ t("trainerMemberDetails.diet.subtitle") }}
+        </p>
       </div>
 
       <div v-if="activePlans.length > 1" class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-3 text-sm text-[var(--lgym-text-muted)]">
@@ -54,16 +58,17 @@
         </p>
       </div>
 
-      <div v-else class="grid gap-4">
+      <div v-else class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <article
-          v-for="plan in plans"
+          v-for="plan in sortedPlans"
           :key="plan._id || plan.name || 'diet'"
-          class="overflow-hidden rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+          class="group cursor-pointer overflow-hidden rounded-[28px] border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)] transition hover:-translate-y-0.5 hover:border-[var(--lgym-primary)]/50"
+          @click="openPlanPreview(plan)"
         >
-          <div class="flex flex-col gap-4 px-5 py-5 lg:flex-row lg:items-start lg:justify-between sm:px-6">
+          <div class="flex h-full flex-col gap-4 px-5 py-5 sm:px-6">
             <div class="min-w-0 flex-1">
-              <div class="flex flex-wrap items-center gap-3">
-                <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
+              <div class="flex flex-wrap items-start gap-3">
+                <h3 class="flex-1 text-lg font-semibold text-[var(--lgym-text)]">
                   {{ plan.name || t("trainerMemberDetails.diet.fallback.noName") }}
                 </h3>
                 <v-chip :color="plan.isActive ? 'success' : 'secondary'" size="small" variant="outlined">
@@ -76,94 +81,142 @@
               <p class="mt-1 text-xs text-[var(--lgym-text-soft)]">
                 {{ t("trainerMemberDetails.diet.meta.mealCount", { count: plan.meals?.length ?? 0 }) }}
               </p>
-              <p v-if="plan.notes" class="mt-3 whitespace-pre-line text-sm leading-6 text-[var(--lgym-text-muted)]">
-                {{ plan.notes }}
+              <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-3 text-sm">
+                  <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.calories") }}</span>
+                  <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(plan.estimatedCalories) }}</p>
+                </div>
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-3 text-sm">
+                  <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.meta.mealCount", { count: plan.meals?.length ?? 0 }) }}</span>
+                  <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ plan.meals?.length ?? 0 }}</p>
+                </div>
+              </div>
+              <p class="diet-card-preview mt-4 whitespace-pre-line text-sm leading-7 text-[var(--lgym-text-muted)]">
+                {{ getDietPreview(plan) }}
               </p>
             </div>
 
-            <div class="flex flex-wrap gap-2">
-              <v-btn
-                v-if="!plan.isActive && plan._id"
-                color="primary"
-                variant="tonal"
-                class="min-h-10 rounded-md px-4"
-                :loading="activatingPlanId === plan._id"
-                @click="activatePlan(plan)"
-              >
-                {{ t("trainerMemberDetails.diet.actions.activate") }}
-              </v-btn>
-              <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click="openEditDialog(plan)">
-                {{ t("trainerMemberDetails.diet.actions.edit") }}
-              </v-btn>
-              <v-btn variant="outlined" color="secondary" class="min-h-10 rounded-md px-4" @click="openHistoryDialog(plan)">
-                {{ t("trainerMemberDetails.diet.actions.history") }}
-              </v-btn>
-              <v-btn
-                variant="outlined"
-                color="error"
-                class="min-h-10 rounded-md px-4"
-                :loading="deletingPlanId === plan._id"
-                @click="deletePlan(plan)"
-              >
-                {{ t("trainerMemberDetails.diet.actions.delete") }}
-              </v-btn>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">Open diet</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <v-dialog v-model="isPreviewOpen" max-width="1080">
+      <v-card rounded="lg" class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
+        <template v-if="selectedPreviewPlan">
+          <div class="border-b border-[var(--lgym-border)] px-6 py-5">
+            <div class="flex items-start justify-between gap-4">
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
+                  {{ t("trainerMemberDetails.diet.eyebrow") }}
+                </p>
+                <h3 class="mt-2 text-2xl font-semibold text-[var(--lgym-text)]">
+                  {{ selectedPreviewPlan.name || t("trainerMemberDetails.diet.fallback.noName") }}
+                </h3>
+                <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+                  {{ t("trainerMemberDetails.diet.meta.dateRange", { start: selectedPreviewPlan.startDate || '—', end: selectedPreviewPlan.endDate || t('trainerMemberDetails.diet.meta.noEndDate') }) }}
+                </p>
+              </div>
+
+              <v-btn icon="mdi-close" variant="text" @click="closePlanPreview" />
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-2">
+              <v-chip :color="selectedPreviewPlan.isActive ? 'success' : 'secondary'" size="small" variant="outlined">
+                {{ selectedPreviewPlan.isActive ? t("trainerMemberDetails.diet.badges.active") : t("trainerMemberDetails.diet.badges.inactive") }}
+              </v-chip>
             </div>
           </div>
 
-          <div class="border-t border-[var(--lgym-border)] px-5 py-5 sm:px-6">
-            <div class="grid gap-3 md:grid-cols-4">
-            <div class="rounded-md bg-[var(--lgym-note-bg)] p-3 text-sm">
-              <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.calories") }}</span>
-              <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(plan.estimatedCalories) }}</p>
-            </div>
-            <div class="rounded-md bg-[var(--lgym-note-bg)] p-3 text-sm">
-              <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.protein") }}</span>
-              <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(plan.proteinGrams) }}</p>
-            </div>
-            <div class="rounded-md bg-[var(--lgym-note-bg)] p-3 text-sm">
-              <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.carbs") }}</span>
-              <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(plan.carbsGrams) }}</p>
-            </div>
-            <div class="rounded-md bg-[var(--lgym-note-bg)] p-3 text-sm">
-              <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.fat") }}</span>
-              <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(plan.fatGrams) }}</p>
-            </div>
-          </div>
+          <v-card-text class="px-6 py-6">
+            <div class="grid gap-5">
+              <div class="grid gap-3 md:grid-cols-4">
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-4 text-sm">
+                  <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.calories") }}</span>
+                  <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(selectedPreviewPlan.estimatedCalories) }}</p>
+                </div>
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-4 text-sm">
+                  <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.protein") }}</span>
+                  <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(selectedPreviewPlan.proteinGrams) }}</p>
+                </div>
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-4 text-sm">
+                  <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.carbs") }}</span>
+                  <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(selectedPreviewPlan.carbsGrams) }}</p>
+                </div>
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-4 text-sm">
+                  <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.fat") }}</span>
+                  <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(selectedPreviewPlan.fatGrams) }}</p>
+                </div>
+              </div>
 
-            <div class="mt-5 rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-4 sm:px-5">
-              <p class="text-sm font-semibold text-[var(--lgym-text)]">{{ t("trainerMemberDetails.diet.meals.title") }}</p>
-              <div class="mt-3 overflow-x-auto">
-                <div class="min-w-[760px]">
-                  <div class="grid grid-cols-[minmax(220px,2fr)_88px_88px_88px_88px_56px] gap-3 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--lgym-text-soft)]">
-                    <span>{{ t("trainerMemberDetails.diet.form.mealName") }}</span>
-                    <span class="text-right">{{ t("trainerMemberDetails.diet.macros.calories") }}</span>
-                    <span class="text-right">{{ t("trainerMemberDetails.diet.macros.protein") }}</span>
-                    <span class="text-right">{{ t("trainerMemberDetails.diet.macros.fat") }}</span>
-                    <span class="text-right">{{ t("trainerMemberDetails.diet.macros.carbs") }}</span>
-                    <span class="text-right">#</span>
-                  </div>
-                  <div class="grid gap-2">
-                    <div v-for="meal in sortMeals(plan.meals)" :key="meal._id || `${meal.name}-${meal.order}`" class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-4 py-3">
-                      <div class="grid grid-cols-[minmax(220px,2fr)_88px_88px_88px_88px_56px] items-start gap-3 text-sm">
-                        <div>
-                          <p class="font-semibold text-[var(--lgym-text)]">{{ meal.name || t("trainerMemberDetails.diet.meals.fallback") }}</p>
-                          <p v-if="meal.description" class="mt-1 text-xs leading-5 text-[var(--lgym-text-muted)]">{{ meal.description }}</p>
+              <div v-if="selectedPreviewPlan.notes" class="rounded-3xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5">
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                  {{ t("trainerMemberDetails.diet.form.notes") }}
+                </p>
+                <p class="mt-3 whitespace-pre-line text-sm leading-7 text-[var(--lgym-text-muted)]">
+                  {{ selectedPreviewPlan.notes }}
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-4 sm:px-5">
+                <p class="text-sm font-semibold text-[var(--lgym-text)]">{{ t("trainerMemberDetails.diet.meals.title") }}</p>
+                <div class="mt-3 overflow-x-auto">
+                  <div class="min-w-[760px]">
+                    <div class="grid grid-cols-[minmax(220px,2fr)_88px_88px_88px_88px_56px] gap-3 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--lgym-text-soft)]">
+                      <span>{{ t("trainerMemberDetails.diet.form.mealName") }}</span>
+                      <span class="text-right">{{ t("trainerMemberDetails.diet.macros.calories") }}</span>
+                      <span class="text-right">{{ t("trainerMemberDetails.diet.macros.protein") }}</span>
+                      <span class="text-right">{{ t("trainerMemberDetails.diet.macros.fat") }}</span>
+                      <span class="text-right">{{ t("trainerMemberDetails.diet.macros.carbs") }}</span>
+                      <span class="text-right">#</span>
+                    </div>
+                    <div class="grid gap-2">
+                      <div v-for="meal in sortMeals(selectedPreviewPlan.meals)" :key="meal._id || `${meal.name}-${meal.order}`" class="rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-4 py-3">
+                        <div class="grid grid-cols-[minmax(220px,2fr)_88px_88px_88px_88px_56px] items-start gap-3 text-sm">
+                          <div>
+                            <p class="font-semibold text-[var(--lgym-text)]">{{ meal.name || t("trainerMemberDetails.diet.meals.fallback") }}</p>
+                            <p v-if="meal.description" class="mt-1 text-xs leading-5 text-[var(--lgym-text-muted)]">{{ meal.description }}</p>
+                          </div>
+                          <p class="text-right font-semibold text-[var(--lgym-text)]">{{ formatOptional(meal.estimatedCalories) }}</p>
+                          <p class="text-right font-semibold text-[var(--lgym-text)]">{{ formatOptional(meal.proteinGrams) }}</p>
+                          <p class="text-right font-semibold text-[var(--lgym-text)]">{{ formatOptional(meal.fatGrams) }}</p>
+                          <p class="text-right font-semibold text-[var(--lgym-text)]">{{ formatOptional(meal.carbsGrams) }}</p>
+                          <p class="text-right text-xs text-[var(--lgym-text-muted)]">{{ meal.order ?? 0 }}</p>
                         </div>
-                        <p class="text-right font-semibold text-[var(--lgym-text)]">{{ formatOptional(meal.estimatedCalories) }}</p>
-                        <p class="text-right font-semibold text-[var(--lgym-text)]">{{ formatOptional(meal.proteinGrams) }}</p>
-                        <p class="text-right font-semibold text-[var(--lgym-text)]">{{ formatOptional(meal.fatGrams) }}</p>
-                        <p class="text-right font-semibold text-[var(--lgym-text)]">{{ formatOptional(meal.carbsGrams) }}</p>
-                        <p class="text-right text-xs text-[var(--lgym-text-muted)]">{{ meal.order ?? 0 }}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </article>
-      </div>
-    </section>
+          </v-card-text>
+
+          <v-card-actions class="flex-wrap justify-end gap-3 px-6 pb-6">
+            <v-btn variant="text" @click="closePlanPreview">{{ t("trainerMemberDetails.actions.close") }}</v-btn>
+            <v-btn
+              v-if="!selectedPreviewPlan.isActive && selectedPreviewPlan._id"
+              color="primary"
+              variant="tonal"
+              class="min-h-10 rounded-md px-4"
+              :loading="activatingPlanId === selectedPreviewPlan._id"
+              @click="activatePlan(selectedPreviewPlan)"
+            >
+              {{ t("trainerMemberDetails.diet.actions.activate") }}
+            </v-btn>
+            <v-btn variant="outlined" color="secondary" class="min-h-10 rounded-md px-4" @click="openHistoryDialog(selectedPreviewPlan)">
+              {{ t("trainerMemberDetails.diet.actions.history") }}
+            </v-btn>
+            <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click="openEditDialog(selectedPreviewPlan)">
+              {{ t("trainerMemberDetails.diet.actions.edit") }}
+            </v-btn>
+            <v-btn variant="outlined" color="error" class="min-h-10 rounded-md px-4" :loading="deletingPlanId === selectedPreviewPlan._id" @click="deletePlan(selectedPreviewPlan)">
+              {{ t("trainerMemberDetails.diet.actions.delete") }}
+            </v-btn>
+          </v-card-actions>
+        </template>
+      </v-card>
+    </v-dialog>
 
     <v-dialog v-model="isEditorOpen" max-width="900" scrollable>
       <v-card
@@ -489,12 +542,14 @@ const historyEntries = ref<DietPlanHistoryDto[]>([]);
 const isLoading = ref(false);
 const hasError = ref(false);
 const isSaving = ref(false);
+const isPreviewOpen = ref(false);
 const isEditorOpen = ref(false);
 const isHistoryOpen = ref(false);
 const isLoadingHistory = ref(false);
 const editingPlanId = ref<string | null>(null);
 const activatingPlanId = ref<string | null>(null);
 const deletingPlanId = ref<string | null>(null);
+const selectedPreviewPlanId = ref<string | null>(null);
 const isMealBasedMode = ref(true);
 const validationErrors = ref<ValidationErrors>({
   name: [],
@@ -516,7 +571,34 @@ const form = ref<DietPlanFormState>({
   meals: [],
 });
 
-const activePlans = computed(() => plans.value.filter((plan) => plan.isActive));
+const sortedPlans = computed(() =>
+  [...plans.value].sort((left, right) => {
+    if (Boolean(left.isActive) !== Boolean(right.isActive)) {
+      return left.isActive ? -1 : 1;
+    }
+
+    const leftTime = left.updatedAt ? new Date(left.updatedAt).getTime() : 0;
+    const rightTime = right.updatedAt ? new Date(right.updatedAt).getTime() : 0;
+    return rightTime - leftTime;
+  }),
+);
+
+const activePlans = computed(() => sortedPlans.value.filter((plan) => plan.isActive));
+
+const selectedPreviewPlan = computed(
+  () => sortedPlans.value.find((plan) => plan._id === selectedPreviewPlanId.value) ?? null,
+);
+
+const plansCountLabel = computed(() => {
+  const activeCount = activePlans.value.length;
+  const totalCount = sortedPlans.value.length;
+
+  if (activeCount === 0) {
+    return `${totalCount} plans`;
+  }
+
+  return `${totalCount} plans · ${activeCount} active`;
+});
 
 const createEditableMeal = (meal?: Partial<EditableMeal>): EditableMeal => ({
   clientKey: nextMealClientKey++,
@@ -624,6 +706,25 @@ const resetForm = () => {
   editingPlanId.value = null;
 };
 
+const getDietPreview = (plan: DietPlanDto) => {
+  const normalizedNotes = plan.notes?.trim();
+  if (normalizedNotes) {
+    return normalizedNotes;
+  }
+
+  return t("trainerMemberDetails.diet.meta.mealCount", { count: plan.meals?.length ?? 0 });
+};
+
+const openPlanPreview = (plan: DietPlanDto) => {
+  selectedPreviewPlanId.value = plan._id || null;
+  isPreviewOpen.value = true;
+};
+
+const closePlanPreview = () => {
+  isPreviewOpen.value = false;
+  selectedPreviewPlanId.value = null;
+};
+
 const loadPlans = async () => {
   if (!props.traineeId) return;
   isLoading.value = true;
@@ -645,11 +746,13 @@ const loadPlans = async () => {
 };
 
 const openCreateDialog = () => {
+  closePlanPreview();
   resetForm();
   isEditorOpen.value = true;
 };
 
 const openEditDialog = (plan: DietPlanDto) => {
+  closePlanPreview();
   validationErrors.value = {
     name: [],
     startDate: [],
@@ -810,6 +913,10 @@ const activatePlan = async (plan: DietPlanDto) => {
       throw new Error(getApiErrorMessage(response.data) || "Failed to activate diet plan");
     }
 
+    if (selectedPreviewPlanId.value === plan._id) {
+      closePlanPreview();
+    }
+
     await loadPlans();
     toast.successMessage(t("trainerMemberDetails.diet.feedback.activated"));
   } catch (error) {
@@ -847,6 +954,10 @@ const deletePlan = async (plan: DietPlanDto) => {
       throw new Error(getApiErrorMessage(response.data) || "Failed to delete diet plan");
     }
 
+    if (selectedPreviewPlanId.value === plan._id) {
+      closePlanPreview();
+    }
+
     await loadPlans();
     toast.successMessage(t("trainerMemberDetails.diet.feedback.deleted"));
   } catch (error) {
@@ -863,6 +974,7 @@ const deletePlan = async (plan: DietPlanDto) => {
 
 const openHistoryDialog = async (plan: DietPlanDto) => {
   if (!plan._id) return;
+  closePlanPreview();
   isHistoryOpen.value = true;
   isLoadingHistory.value = true;
 
@@ -1037,7 +1149,10 @@ const getHistorySummary = (entry: DietPlanHistoryDto, previousEntry?: DietPlanHi
 
 const formatDateTime = (value?: string | null) => props.formatDateTime(value);
 
-watch(() => props.traineeId, () => void loadPlans(), { immediate: true });
+watch(() => props.traineeId, () => {
+  closePlanPreview();
+  void loadPlans();
+}, { immediate: true });
 watch(isMealBasedMode, (enabled) => {
   if (enabled && form.value.meals.length === 0) {
     addMeal();
@@ -1046,6 +1161,13 @@ watch(isMealBasedMode, (enabled) => {
 </script>
 
 <style scoped>
+.diet-card-preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .diet-readonly-field :deep(.v-field) {
   background: color-mix(in srgb, var(--lgym-note-bg) 88%, var(--lgym-surface-card));
 }
