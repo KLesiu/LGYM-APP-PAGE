@@ -178,21 +178,21 @@
   </section>
 
   <v-dialog v-model="isTemplateDialogOpen" max-width="1120">
-    <v-card rounded="md" class="report-template-dialog overflow-hidden">
-      <div class="template-dialog-hero sticky top-0 z-10 px-4 py-4 sm:px-5 sm:py-4">
+    <v-card rounded="md" class="lgym-form-shell report-template-dialog overflow-hidden shadow-none">
+      <div class="lgym-form-header template-dialog-hero sticky top-0 z-10 px-4 py-4 sm:px-5 sm:py-4">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div class="max-w-3xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]">
+            <p class="lgym-form-eyebrow text-[rgb(var(--v-theme-primary))]">
               {{ t("trainerMemberDetails.trainerReportTemplates.page.eyebrow") }}
             </p>
-            <h3 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+            <h3 class="lgym-form-title text-xl sm:text-2xl">
               {{
                 editingTemplateId
                   ? t("trainerMemberDetails.trainerReportTemplates.dialog.editTemplateTitle")
                   : t("trainerMemberDetails.trainerReportTemplates.dialog.createTemplateTitle")
               }}
             </h3>
-            <p class="mt-2 max-w-2xl text-sm leading-6 text-[var(--lgym-text-muted)]">
+            <p class="lgym-form-subtitle max-w-2xl">
               {{ t("trainerMemberDetails.trainerReportTemplates.page.subtitle") }}
             </p>
           </div>
@@ -445,7 +445,7 @@
          </div>
       </v-card-text>
 
-      <v-card-actions class="sticky bottom-0 z-10 mt-1 justify-end gap-3 border-t border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
+      <v-card-actions class="lgym-form-actions sticky bottom-0 z-10 mt-1 bg-[var(--lgym-surface-card)] px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
         <div class="flex flex-wrap justify-end gap-2">
           <v-btn variant="text" class="rounded-md px-3.5" @click="isTemplateDialogOpen = false">
             {{ t("trainerMemberDetails.trainerReportTemplates.actions.cancel") }}
