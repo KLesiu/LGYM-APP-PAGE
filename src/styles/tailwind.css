@@ -220,6 +220,89 @@ body {
   overflow-x: hidden;
 }
 
+.lgym-form-shell {
+  overflow: hidden;
+  border: 1px solid var(--lgym-border);
+  background: var(--lgym-surface-card);
+  box-shadow: var(--lgym-shadow-surface);
+}
+
+.lgym-form-header {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--lgym-border);
+  background: linear-gradient(135deg, rgba(var(--lgym-primary-rgb), 0.12), transparent 70%);
+  padding: 1.25rem 1.5rem;
+}
+
+.lgym-form-header::after {
+  content: "";
+  position: absolute;
+  right: -3rem;
+  bottom: -4.5rem;
+  width: 11rem;
+  height: 11rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(var(--lgym-primary-rgb), 0.16), transparent 68%);
+  pointer-events: none;
+}
+
+.lgym-form-eyebrow {
+  color: var(--lgym-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.lgym-form-title {
+  margin-top: 0.5rem;
+  color: var(--lgym-text);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.lgym-form-subtitle {
+  margin-top: 0.5rem;
+  color: var(--lgym-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.lgym-form-body {
+  padding: 1.5rem;
+}
+
+.lgym-form-section {
+  border: 1px solid var(--lgym-border);
+  border-radius: 1rem;
+  background: var(--lgym-note-bg);
+  padding: 1rem;
+}
+
+.lgym-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  border-top: 1px solid var(--lgym-border);
+  padding: 1.25rem 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .lgym-form-header {
+    padding: 1.5rem;
+  }
+
+  .lgym-form-body {
+    padding: 1.5rem;
+  }
+
+  .lgym-form-actions {
+    padding: 1.25rem 1.5rem;
+  }
+}
+
 html,
 body,
 #app {
