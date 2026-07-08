@@ -1,19 +1,19 @@
 <template>
   <v-dialog :model-value="modelValue" max-width="560" @update:model-value="$emit('update:modelValue', $event)">
-    <v-card class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-6 py-5">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">
+    <v-card class="lgym-form-shell rounded-xl shadow-none">
+      <div class="lgym-form-header">
+        <p class="lgym-form-eyebrow">
           {{ t("exerciseLibrary.deleteDialog.eyebrow") }}
         </p>
-        <h3 class="mt-2 text-xl font-semibold text-[var(--lgym-text)]">
+        <h3 class="lgym-form-title text-xl">
           {{ t("exerciseLibrary.deleteDialog.title") }}
         </h3>
-        <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+        <p class="lgym-form-subtitle">
           {{ t("exerciseLibrary.deleteDialog.description", { name: exerciseName }) }}
         </p>
       </div>
 
-      <v-card-actions class="justify-end gap-3 px-6 py-5">
+      <v-card-actions class="lgym-form-actions">
         <v-btn variant="outlined" color="primary" @click="$emit('close')">
           {{ t("exerciseLibrary.actions.cancel") }}
         </v-btn>

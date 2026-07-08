@@ -8,10 +8,10 @@
       :pagination-summary="exercisePaginationSummary"
       :previous-label="commonPreviousLabel"
       :next-label="commonNextLabel"
-      :disable-previous="exercisePage <= 1 || isLoading"
-      :disable-next="exercisePage >= exerciseTotalPages || isLoading"
-      @previous="exercisePage = Math.max(1, exercisePage - 1)"
-      @next="exercisePage = Math.min(exerciseTotalPages, exercisePage + 1)"
+      :disable-previous="currentExercisePage <= 1 || isLoading"
+      :disable-next="currentExercisePage >= exerciseTotalPages || isLoading"
+      @previous="exercisePage = Math.max(1, currentExercisePage - 1)"
+      @next="exercisePage = Math.min(exerciseTotalPages, currentExercisePage + 1)"
       class="flex-1"
     >
       <template #header-actions>
@@ -89,8 +89,6 @@
       <ExerciseLibraryTable
         v-else
         :items="paginatedExercises"
-        :page="exercisePage"
-        :items-per-page="exercisePageSize"
         :can-manage-exercise="canManageExercise"
         :can-translate-exercise="canTranslateExercise"
         @edit="openEditDialog"
@@ -108,6 +106,7 @@
       :is-loading-body-parts="isLoadingBodyParts"
       :is-submitting="isSubmittingExercise"
       :show-formula-field="canManageGlobalExercises"
+      :show-visibility-field="canManageGlobalExercises"
       :can-edit-formula="canManageGlobalExercises"
       @update:draft="exerciseDraft = $event"
       @close="closeExerciseDialog"
@@ -145,6 +144,7 @@ import { useRoute, useRouter } from "vue-router";
 import {
   getApiEnumsEnumType,
   getApiExerciseGetAllGlobalExercises,
+  getApiExerciseIdGetExercise,
   getApiExerciseIdGetAllUserExercises,
   postApiExerciseAddExercise,
   postApiExerciseIdAddGlobalTranslation,
@@ -208,7 +208,9 @@ const currentUserId = computed(() => currentUser.value?.id?.trim() ?? "");
 const canManageGlobalExercises = computed(
   () => props.roleMode === "admin" || hasGlobalExerciseManagementAccess(),
 );
-const canCreateExercises = computed(() => canManageGlobalExercises.value);
+const canCreateExercises = computed(
+  () => canManageGlobalExercises.value || props.roleMode === "trainer",
+);
 
 const globalExercises = ref<ExerciseResponseDto[]>([]);
 const userExercises = ref<ExerciseResponseDto[]>([]);
@@ -320,6 +322,22 @@ const extractEnumValues = (value: unknown): EnumLookupDto[] => {
     : [];
 };
 
+const resolveEnumLookupValue = (item: EnumLookupDto) => {
+  const normalizedId = item.id?.trim();
+  if (normalizedId) return normalizedId;
+
+  return item.name?.trim() ?? "";
+};
+
+const resolveBodyPartDraftValue = (
+  bodyPart: ExerciseResponseDto["bodyPart"],
+) => {
+  const normalizedName = bodyPart?.name?.trim();
+  if (normalizedName) return normalizedName;
+
+  return bodyPart?.displayName?.trim() ?? "";
+};
+
 const toExerciseCard = (
   exercise: ExerciseResponseDto,
   source: ExerciseSource,
@@ -396,9 +414,12 @@ const exerciseTotalPages = computed(() =>
   Math.max(Math.ceil(filteredExercises.value.length / exercisePageSize.value) || 1, 1),
 );
 
+const currentExercisePage = computed(() =>
+  Math.min(exercisePage.value, exerciseTotalPages.value),
+);
+
 const paginatedExercises = computed(() => {
-  const currentPage = Math.min(exercisePage.value, exerciseTotalPages.value);
-  const startIndex = (currentPage - 1) * exercisePageSize.value;
+  const startIndex = (currentExercisePage.value - 1) * exercisePageSize.value;
 
   return filteredExercises.value.slice(startIndex, startIndex + exercisePageSize.value);
 });
@@ -425,7 +446,7 @@ const exercisePaginationSummary = computed(() => {
   const totalCount = filteredExercises.value.length;
 
   return t("exerciseLibrary.pagination.summary", {
-    page: exercisePage.value,
+    page: currentExercisePage.value,
     totalPages: exerciseTotalPages.value,
     totalCount,
   });
@@ -453,10 +474,14 @@ watch([filteredExercises, exerciseTotalPages], () => {
   normalizeExercisePage();
 });
 
+watch([searchQuery, bodyPartFilter, sourceFilter], () => {
+  exercisePage.value = 1;
+});
+
 const createBodyPartOptions = computed<SelectOption[]>(() =>
   bodyPartLookup.value
     .map((item) => ({
-      value: item.id?.trim() ?? "",
+      value: resolveEnumLookupValue(item),
       label: item.displayName?.trim() || t("exerciseLibrary.fallback.bodyPart"),
     }))
     .filter((item) => item.value.length > 0),
@@ -465,7 +490,7 @@ const createBodyPartOptions = computed<SelectOption[]>(() =>
 const formulaOptions = computed<SelectOption[]>(() =>
   formulaLookup.value
     .map((item) => ({
-      value: item.id?.trim() ?? "",
+      value: resolveEnumLookupValue(item),
       label: item.displayName?.trim() || t("exerciseLibrary.fallback.formula"),
     }))
     .filter((item) => item.value.length > 0),
@@ -475,11 +500,13 @@ const resolveFormulaLookupItem = (formulaId: string): LookupItemVm | null => {
   const normalizedId = formulaId.trim();
   if (!normalizedId) return null;
 
-  const lookupItem = formulaLookup.value.find((item) => item.id?.trim() === normalizedId);
+  const lookupItem = formulaLookup.value.find(
+    (item) => resolveEnumLookupValue(item) === normalizedId,
+  );
   if (!lookupItem) return null;
 
   return {
-    id: lookupItem.id?.trim() ?? normalizedId,
+    id: resolveEnumLookupValue(lookupItem) || normalizedId,
     displayName: lookupItem.displayName?.trim() ?? lookupItem.name?.trim() ?? normalizedId,
   };
 };
@@ -496,7 +523,7 @@ const canTranslateExercise = (exercise: ExerciseCard) =>
 const resetExerciseDraft = () => {
   exerciseDraft.value = {
     id: null,
-    source: "global",
+    source: canManageGlobalExercises.value ? "global" : "user",
     name: "",
     bodyPart: "",
     eloFormula: ExerciseEloFormula.Standard,
@@ -601,18 +628,36 @@ const openEditDialog = async (exercise: ExerciseCard) => {
   ]);
   if (!bodyPartsLoaded || !formulasLoaded) return;
 
+  let exerciseDetails: ExerciseResponseDto;
+
+  try {
+    const response = await getApiExerciseIdGetExercise(exercise.id);
+
+    if (await handleUnauthorized(response.status)) return;
+
+    if (response.status !== 200) {
+      const message = getApiErrorMessage(response.data);
+      if (message) toast.errorMessage(message);
+      else toast.error("exerciseLibrary.feedback.loadFailed");
+      return;
+    }
+
+    exerciseDetails = response.data;
+  } catch (error: unknown) {
+    console.error(error);
+    toast.error("exerciseLibrary.feedback.loadFailed");
+    return;
+  }
+
   exerciseDialogMode.value = "edit";
   exerciseDraft.value = {
     id: exercise.id,
     source: exercise.source,
-    name: exercise.name,
-    bodyPart: exercise.bodyPartValue === "unknown" ? "" : exercise.bodyPartValue,
+    name: exerciseDetails.name?.trim() ?? exercise.name,
+    bodyPart: resolveBodyPartDraftValue(exerciseDetails.bodyPart),
     eloFormula: ExerciseEloFormula.Standard,
-    description:
-      exercise.description === t("exerciseLibrary.fallback.description")
-        ? ""
-        : exercise.description,
-    image: exercise.imageUrl,
+    description: exerciseDetails.description?.trim() ?? "",
+    image: exerciseDetails.image?.trim() ?? "",
   };
   isExerciseDialogOpen.value = true;
 };

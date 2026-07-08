@@ -4,8 +4,6 @@
       :headers="headers"
       :items="items"
       item-value="id"
-      :items-per-page="itemsPerPage"
-      :page="page"
       hide-default-footer
       density="comfortable"
       hover
@@ -55,37 +53,57 @@
         </div>
       </template>
 
-        <template #item.actions="{ item }">
-          <div class="flex min-w-[170px] flex-wrap justify-end gap-2 py-2">
-            <v-btn
-              v-if="canManageExercise(toExercise(item))"
-              variant="outlined"
-              color="primary"
-              class="min-h-10 rounded-md px-4"
-              @click="$emit('edit', toExercise(item))"
-            >
-              {{ t("exerciseLibrary.actions.edit") }}
-            </v-btn>
-            <v-btn
-              v-if="canManageExercise(toExercise(item))"
-              variant="outlined"
-              color="error"
-              class="min-h-10 rounded-md px-4"
-              @click="$emit('delete', toExercise(item))"
-            >
-              {{ t("exerciseLibrary.actions.delete") }}
-            </v-btn>
-            <v-btn
-              v-if="canTranslateExercise(toExercise(item))"
-              variant="outlined"
-              color="secondary"
-              class="min-h-10 rounded-md px-4"
-              @click="$emit('translate', toExercise(item))"
-            >
-              {{ t("exerciseLibrary.actions.addTranslation") }}
-            </v-btn>
-          </div>
-        </template>
+      <template #item.actions="{ item }">
+        <div class="flex min-w-[132px] flex-wrap justify-end gap-1 py-2">
+          <v-tooltip location="top">
+            <template #activator="{ props }">
+              <v-btn
+                v-if="canManageExercise(toExercise(item))"
+                v-bind="props"
+                icon="mdi-pencil-outline"
+                variant="text"
+                color="primary"
+                size="small"
+                :aria-label="t('exerciseLibrary.actions.edit')"
+                @click="$emit('edit', toExercise(item))"
+              />
+            </template>
+            {{ t("exerciseLibrary.actions.edit") }}
+          </v-tooltip>
+
+          <v-tooltip location="top">
+            <template #activator="{ props }">
+              <v-btn
+                v-if="canManageExercise(toExercise(item))"
+                v-bind="props"
+                icon="mdi-delete-outline"
+                variant="text"
+                color="error"
+                size="small"
+                :aria-label="t('exerciseLibrary.actions.delete')"
+                @click="$emit('delete', toExercise(item))"
+              />
+            </template>
+            {{ t("exerciseLibrary.actions.delete") }}
+          </v-tooltip>
+
+          <v-tooltip location="top">
+            <template #activator="{ props }">
+              <v-btn
+                v-if="canTranslateExercise(toExercise(item))"
+                v-bind="props"
+                icon="mdi-translate"
+                variant="text"
+                color="secondary"
+                size="small"
+                :aria-label="t('exerciseLibrary.actions.addTranslation')"
+                @click="$emit('translate', toExercise(item))"
+              />
+            </template>
+            {{ t("exerciseLibrary.actions.addTranslation") }}
+          </v-tooltip>
+        </div>
+      </template>
 
       <template #no-data>
         <div class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
@@ -105,8 +123,6 @@ import type { ExerciseCard } from "./types";
 
 defineProps<{
   items: ExerciseCard[];
-  page: number;
-  itemsPerPage: number;
   canManageExercise: (exercise: ExerciseCard) => boolean;
   canTranslateExercise: (exercise: ExerciseCard) => boolean;
 }>();
