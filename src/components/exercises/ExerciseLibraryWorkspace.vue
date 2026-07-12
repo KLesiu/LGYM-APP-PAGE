@@ -154,11 +154,12 @@ import {
 } from "../../api/generated/demo";
 import type {
   EnumLookupDto,
-  ExerciseFormDtoBodyPart,
+  ExerciseExtendedFormDtoBodyPart as ExerciseExtendedFormDtoBodyPartValue,
   ExerciseResponseDto,
   ExerciseTranslationDto,
   LookupItemVm,
 } from "../../api/model";
+import { ExerciseExtendedFormDtoBodyPart } from "../../api/model";
 import type { ExerciseExtendedFormDto } from "../../api/model";
 import {
   postApiExerciseAddExerciseWithFormula,
@@ -191,6 +192,7 @@ import type {
 const BODY_PARTS_ENUM_TYPE = "BodyParts";
 const EXERCISE_ELO_FORMULA_ENUM_TYPE = "ExerciseEloFormula";
 const DEFAULT_EXERCISE_ELO_FORMULA = "Standard";
+const EXERCISE_BODY_PART_VALUES = Object.values(ExerciseExtendedFormDtoBodyPart);
 
 const props = defineProps<{
   roleMode: RoleMode;
@@ -327,13 +329,47 @@ const resolveEnumLookupValue = (item: EnumLookupDto) => {
   return item.name?.trim() ?? "";
 };
 
+const isExerciseBodyPart = (
+  value: string,
+): value is ExerciseExtendedFormDtoBodyPartValue =>
+  EXERCISE_BODY_PART_VALUES.some((bodyPartValue) => bodyPartValue === value);
+
+const resolveBodyPartEnumValue = (
+  value: string | null | undefined,
+): ExerciseExtendedFormDtoBodyPartValue | null => {
+  const normalizedValue = value?.trim();
+  if (!normalizedValue) return null;
+  if (isExerciseBodyPart(normalizedValue)) return normalizedValue;
+
+  const lookupItem = bodyPartLookup.value.find((item) => {
+    const candidates = [item.name, item.id, item.displayName]
+      .map((candidate) => candidate?.trim())
+      .filter((candidate): candidate is string => Boolean(candidate));
+
+    return candidates.includes(normalizedValue);
+  });
+
+  const lookupName = lookupItem?.name?.trim();
+  if (lookupName && isExerciseBodyPart(lookupName)) return lookupName;
+
+  const lookupId = lookupItem?.id?.trim();
+  if (lookupId && isExerciseBodyPart(lookupId)) return lookupId;
+
+  return null;
+};
+
+const resolveBodyPartLookupValue = (item: EnumLookupDto) =>
+  resolveBodyPartEnumValue(item.name) ?? resolveBodyPartEnumValue(item.id) ?? "";
+
 const resolveBodyPartDraftValue = (
   bodyPart: ExerciseResponseDto["bodyPart"],
 ) => {
-  const normalizedName = bodyPart?.name?.trim();
-  if (normalizedName) return normalizedName;
-
-  return bodyPart?.displayName?.trim() ?? "";
+  return (
+    resolveBodyPartEnumValue(bodyPart?.name) ??
+    resolveBodyPartEnumValue(bodyPart?.id) ??
+    resolveBodyPartEnumValue(bodyPart?.displayName) ??
+    ""
+  );
 };
 
 const toExerciseCard = (
@@ -479,7 +515,7 @@ watch([searchQuery, bodyPartFilter, sourceFilter], () => {
 const createBodyPartOptions = computed<SelectOption[]>(() =>
   bodyPartLookup.value
     .map((item) => ({
-      value: resolveEnumLookupValue(item),
+      value: resolveBodyPartLookupValue(item),
       label: item.displayName?.trim() || t("exerciseLibrary.fallback.bodyPart"),
     }))
     .filter((item) => item.value.length > 0),
@@ -507,6 +543,13 @@ const resolveFormulaLookupItem = (formulaId: string): LookupItemVm | undefined =
     id: resolveEnumLookupValue(lookupItem) || normalizedId,
     displayName: lookupItem.displayName?.trim() ?? lookupItem.name?.trim() ?? normalizedId,
   };
+};
+
+const resolveFormulaDraftValue = (formula: LookupItemVm | null | undefined) => {
+  const formulaId = formula?.id?.trim();
+  if (formulaId) return formulaId;
+
+  return DEFAULT_EXERCISE_ELO_FORMULA;
 };
 
 const canManageExercise = (exercise: ExerciseCard) =>
@@ -653,7 +696,7 @@ const openEditDialog = async (exercise: ExerciseCard) => {
     source: exercise.source,
     name: exerciseDetails.name?.trim() ?? exercise.name,
     bodyPart: resolveBodyPartDraftValue(exerciseDetails.bodyPart),
-    eloFormula: DEFAULT_EXERCISE_ELO_FORMULA,
+    eloFormula: resolveFormulaDraftValue(exerciseDetails.eloFormula),
     description: exerciseDetails.description?.trim() ?? "",
     image: exerciseDetails.image?.trim() ?? "",
   };
@@ -724,7 +767,7 @@ const submitExercise = async () => {
     return;
   }
 
-  const bodyPart = exerciseDraft.value.bodyPart.trim();
+  const bodyPart = resolveBodyPartEnumValue(exerciseDraft.value.bodyPart);
   if (!bodyPart) {
     toast.error("exerciseLibrary.feedback.bodyPartRequired");
     return;
@@ -741,7 +784,7 @@ const submitExercise = async () => {
     const payload: ExerciseExtendedFormDto = {
       _id: exerciseDraft.value.id,
       name: trimmedName,
-      bodyPart: bodyPart as ExerciseFormDtoBodyPart,
+      bodyPart,
       eloFormula: resolveFormulaLookupItem(exerciseDraft.value.eloFormula),
       description: exerciseDraft.value.description.trim() || null,
       image: exerciseDraft.value.image.trim() || null,
