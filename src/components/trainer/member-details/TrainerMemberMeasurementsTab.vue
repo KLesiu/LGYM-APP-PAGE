@@ -41,7 +41,8 @@
 
 
 
-      <div class="mt-4 flex flex-wrap gap-2">
+      <div class="pt-4">
+      <div class="flex flex-wrap gap-2">
         <button
           v-for="tab in tabs"
           :key="tab.value"
@@ -58,7 +59,7 @@
         </button>
       </div>
 
-      <v-progress-linear v-if="isLoading" indeterminate color="primary" />
+      <v-progress-linear v-if="isLoading" class="mt-4" indeterminate color="primary" />
 
       <div class="flex flex-col gap-4 pt-4">
         <div v-if="hasError && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-3 py-10 text-center">
@@ -263,6 +264,7 @@
             </div>
           </div>
         </template>
+      </div>
       </div>
     </section>
   </div>
