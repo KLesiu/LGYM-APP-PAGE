@@ -213,7 +213,7 @@
                 </p>
               </div>
 
-              <div class="mt-5 grid gap-4 lg:grid-cols-[minmax(240px,0.95fr)_minmax(0,1.25fr)]">
+              <div class="mt-5 grid gap-4">
                 <v-text-field
                   v-model="templateForm.name"
                   :label="t('trainerMemberDetails.trainerReportTemplates.form.templateName')"
@@ -257,14 +257,13 @@
                 </div>
               </div>
 
-               <div class="template-fields-head mt-4 hidden xl:grid">
-                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldLabel') }}</span>
-                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldKey') }}</span>
-                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldType') }}</span>
-                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldOrder') }}</span>
-                 <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldRequired') }}</span>
-                 <span class="text-right">#</span>
-               </div>
+                <div class="template-fields-head mt-4 hidden xl:grid">
+                  <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldLabel') }}</span>
+                  <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldType') }}</span>
+                  <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldOrder') }}</span>
+                  <span>{{ t('trainerMemberDetails.trainerReportTemplates.form.fieldRequired') }}</span>
+                  <span class="text-right">#</span>
+                </div>
 
                <VueDraggable
                  v-model="templateForm.fields"
@@ -329,15 +328,7 @@
                         hide-details
                         class="template-field-control template-field-row"
                       />
-                       <v-text-field
-                         v-model="field.key"
-                         :label="t('trainerMemberDetails.trainerReportTemplates.form.fieldKey')"
-                        density="comfortable"
-                        variant="outlined"
-                        hide-details
-                        class="template-field-control template-field-row"
-                      />
-                       <v-select
+                        <v-select
                           v-model="field.type"
                          :items="fieldTypeOptions"
                          item-title="label"
@@ -809,11 +800,32 @@ const getPhotoViewLabel = (value: string) => {
 const getMeasurementTypeLabel = (value: string) =>
   t(`trainerMemberDetails.measurements.bodyParts.${value}`);
 
+const generateTemplateFieldKey = () => {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  const bytes = new Uint8Array(16);
+  if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+    crypto.getRandomValues(bytes);
+  } else {
+    for (let index = 0; index < bytes.length; index += 1) {
+      bytes[index] = Math.floor(Math.random() * 256);
+    }
+  }
+
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+  const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0"));
+  return `${hex.slice(0, 4).join("")}-${hex.slice(4, 6).join("")}-${hex.slice(6, 8).join("")}-${hex.slice(8, 10).join("")}-${hex.slice(10, 16).join("")}`;
+};
+
 const createEditableField = (
   field?: Partial<Omit<EditableTemplateField, "localId">>,
 ): EditableTemplateField => ({
   localId: `template-field-${++nextTemplateFieldLocalId}`,
-  key: field?.key ?? "",
+  key: field?.key?.trim() || generateTemplateFieldKey(),
   label: field?.label ?? "",
   type: field?.type ?? ReportTemplateFieldRequestType.Text,
   isRequired: field?.isRequired ?? false,
@@ -1027,7 +1039,7 @@ const saveTemplate = async () => {
         return null;
       })(),
     }))
-    .filter((field) => field.key && field.label && field.type);
+    .filter((field) => field.label && field.type);
 
   if (fields.length === 0) {
     toast.error("trainerMemberDetails.trainerReportTemplates.feedback.templateFieldRequired");
@@ -1197,7 +1209,7 @@ watch(
 }
 
 .template-fields-head {
-  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.15fr) 140px 96px 132px 44px;
+  grid-template-columns: minmax(0, 1fr) 140px 96px 132px 44px;
   gap: 0.75rem;
   align-items: center;
   color: var(--lgym-text-muted);
@@ -1234,7 +1246,7 @@ watch(
 
 @media (min-width: 1280px) {
   .template-field-grid {
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1.15fr) 140px 96px 132px 44px;
+    grid-template-columns: minmax(0, 1fr) 140px 96px 132px 44px;
     align-items: center;
   }
 }
