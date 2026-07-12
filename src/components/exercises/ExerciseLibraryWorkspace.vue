@@ -159,10 +159,7 @@ import type {
   ExerciseTranslationDto,
   LookupItemVm,
 } from "../../api/model";
-import {
-  ExerciseEloFormula,
-  type ExerciseExtendedFormDto,
-} from "../../api/model";
+import type { ExerciseExtendedFormDto } from "../../api/model";
 import {
   postApiExerciseAddExerciseWithFormula,
   postApiExerciseIdAddUserExerciseWithFormula,
@@ -193,6 +190,7 @@ import type {
 
 const BODY_PARTS_ENUM_TYPE = "BodyParts";
 const EXERCISE_ELO_FORMULA_ENUM_TYPE = "ExerciseEloFormula";
+const DEFAULT_EXERCISE_ELO_FORMULA = "Standard";
 
 const props = defineProps<{
   roleMode: RoleMode;
@@ -235,7 +233,7 @@ const exerciseDraft = ref<ExerciseDraft>({
   source: "global",
   name: "",
   bodyPart: "",
-  eloFormula: ExerciseEloFormula.Standard,
+  eloFormula: DEFAULT_EXERCISE_ELO_FORMULA,
   description: "",
   image: "",
 });
@@ -496,14 +494,14 @@ const formulaOptions = computed<SelectOption[]>(() =>
     .filter((item) => item.value.length > 0),
 );
 
-const resolveFormulaLookupItem = (formulaId: string): LookupItemVm | null => {
+const resolveFormulaLookupItem = (formulaId: string): LookupItemVm | undefined => {
   const normalizedId = formulaId.trim();
-  if (!normalizedId) return null;
+  if (!normalizedId) return undefined;
 
   const lookupItem = formulaLookup.value.find(
     (item) => resolveEnumLookupValue(item) === normalizedId,
   );
-  if (!lookupItem) return null;
+  if (!lookupItem) return undefined;
 
   return {
     id: resolveEnumLookupValue(lookupItem) || normalizedId,
@@ -526,7 +524,7 @@ const resetExerciseDraft = () => {
     source: canManageGlobalExercises.value ? "global" : "user",
     name: "",
     bodyPart: "",
-    eloFormula: ExerciseEloFormula.Standard,
+    eloFormula: DEFAULT_EXERCISE_ELO_FORMULA,
     description: "",
     image: "",
   };
@@ -655,7 +653,7 @@ const openEditDialog = async (exercise: ExerciseCard) => {
     source: exercise.source,
     name: exerciseDetails.name?.trim() ?? exercise.name,
     bodyPart: resolveBodyPartDraftValue(exerciseDetails.bodyPart),
-    eloFormula: ExerciseEloFormula.Standard,
+    eloFormula: DEFAULT_EXERCISE_ELO_FORMULA,
     description: exerciseDetails.description?.trim() ?? "",
     image: exerciseDetails.image?.trim() ?? "",
   };

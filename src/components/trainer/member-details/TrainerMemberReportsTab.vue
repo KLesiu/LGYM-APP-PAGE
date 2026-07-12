@@ -467,7 +467,7 @@
                           <div v-if="entry.photos.length > 0" class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                             <article
                               v-for="photo in entry.photos"
-                              :key="photo._id || photo.storageKey || photo.viewType || entry.key"
+                              :key="photo._id || photo.readUrl || photo.thumbnailUrl || photo.viewType || entry.key"
                               class="overflow-hidden rounded-xl bg-[var(--lgym-note-bg)]"
                             >
                               <a

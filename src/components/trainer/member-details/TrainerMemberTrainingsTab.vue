@@ -103,7 +103,7 @@
               :key="getTrainingKey(selectedTraining, 0)"
               class="overflow-hidden rounded-2xl bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
             >
-              <div class="space-y-6 px-5 py-5 sm:px-6 sm:py-6">
+              <div class="space-y-6 flex flex-col gap-2 px-5 py-5 sm:px-6 sm:py-6">
                 <div v-if="selectedTraining.planDay?.name" class="flex flex-wrap items-start justify-between gap-3">
                   <div
                     class="inline-flex items-center rounded-full bg-[var(--lgym-note-bg)] px-3 py-1 text-xs font-medium text-[var(--lgym-text-muted)]"
