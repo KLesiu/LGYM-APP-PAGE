@@ -1,19 +1,6 @@
 <template>
   <section class="grid gap-4">
-    <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-      <div class="min-w-0">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">
-          {{ t("trainerMemberDetails.reports.recurring.eyebrow") }}
-        </p>
-        <h3 class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">
-          {{ t("trainerMemberDetails.reports.recurring.title") }}
-        </h3>
-        <p class="mt-2 max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
-          {{ t("trainerMemberDetails.reports.recurring.subtitle") }}
-        </p>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-2">
+    <div class="flex flex-wrap items-center justify-end gap-2">
         <v-chip size="small" color="success" variant="outlined" class="font-semibold">
           {{ t("trainerMemberDetails.reports.recurring.status.active") }} · {{ activeAssignmentsCount }}
         </v-chip>
@@ -23,7 +10,6 @@
         <v-btn color="primary" class="min-h-10 rounded-md px-4" @click="openCreateDialog">
           {{ t("trainerMemberDetails.reports.recurring.actions.create") }}
         </v-btn>
-      </div>
     </div>
 
     <v-progress-linear v-if="isLoading" indeterminate color="primary" />

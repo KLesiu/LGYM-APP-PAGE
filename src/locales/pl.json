@@ -361,6 +361,7 @@
       "statusLinked": "Podłączone",
       "statusNotLinked": "Niepodłączone",
       "linkAction": "Połącz Google",
+      "unlinkAction": "Odłącz Google",
       "alreadyLinked": "Google połączone",
       "unknownProvider": "Zewnętrzny dostawca",
       "noProviderEmail": "Brak adresu e-mail od dostawcy"
@@ -369,6 +370,8 @@
       "loadFailed": "Nie udało się pobrać podłączonych metod logowania.",
       "linkFailed": "Nie udało się połączyć konta Google.",
       "linkSuccess": "Konto Google zostało połączone.",
+      "unlinkFailed": "Nie udało się odłączyć konta Google.",
+      "unlinkSuccess": "Konto Google zostało odłączone.",
       "unauthorized": "Sesja wygasła. Zaloguj się ponownie."
     }
   },
@@ -682,7 +685,9 @@
     "actions": {
       "backToPlan": "Wróć do planu",
       "cancel": "Anuluj",
+      "previous": "Poprzednia",
       "save": "Zapisz dzień planu",
+      "next": "Następna",
       "retry": "Spróbuj ponownie"
     },
     "error": {
@@ -1120,7 +1125,7 @@
         "endDate": "Data końca",
         "modeTitle": "Sposób rozpisania diety",
         "modeMeals": "Rozpisuję dietę na posiłki",
-        "modeGlobal": "Ustawiam tylko globalną pulę kalorii i makr",
+          "modeGlobal": "Ustawiam tylko globalną pulę kalorii i makroskładników",
         "modeMealsHint": "Makra i kalorie całego planu wyliczą się automatycznie na podstawie posiłków.",
         "modeGlobalHint": "Ustaw docelowe wartości dla całego planu bez rozpisywania poszczególnych posiłków.",
         "autoCalculatedHint": "W trybie posiłków kalorie są liczone automatycznie: 1 g białka = 4 kcal, 1 g węglowodanów = 4 kcal, 1 g tłuszczu = 9 kcal.",
@@ -1167,6 +1172,18 @@
         "fieldNotes": "Notatki trenera",
         "fieldIsActive": "Status aktywności",
         "fieldMealCount": "Liczba posiłków",
+        "category": "Sekcja",
+        "field": "Pole",
+        "value": "Wartość / zmiana",
+        "previous": "Przed zmianą",
+        "current": "Po zmianie",
+        "categories": {
+          "plan": "Plan",
+          "macros": "Makra",
+          "meals": "Posiłki",
+          "notes": "Notatki",
+          "status": "Status"
+        },
         "mealAdded": "Dodano {meal}",
         "mealRemoved": "Usunięto {meal}",
         "mealFieldPrefix": "{meal} / {field}",
@@ -1234,6 +1251,9 @@
       "history": {
         "empty": "Brak zapisanych zmian dla tej notatki.",
         "unknown": "Zmiana",
+        "field": "Pole",
+        "value": "Wartość / zmiana",
+        "fieldContent": "Treść notatki",
         "previous": "Poprzednia treść",
         "current": "Nowa treść",
         "emptyValue": "—"

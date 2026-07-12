@@ -76,16 +76,39 @@
                 prepend-inner-icon="mdi-magnify"
                 class="min-w-0 w-full flex-1 sm:min-w-[220px]"
               />
-              <v-select
-                v-model="selectedBodyPart"
-                :items="bodyPartOptions"
-                item-title="label"
-                item-value="value"
-                density="compact"
-                variant="outlined"
-                hide-details
-                class="w-full shrink-0 sm:w-[170px]"
-              />
+              <div class="relative z-20 w-full shrink-0 sm:w-[240px]">
+                <v-menu
+                  v-model="isBodyPartMenuOpen"
+                  :close-on-content-click="true"
+                  location="bottom start"
+                  offset="6"
+                  contained
+                  scroll-strategy="reposition"
+                  content-class="trainer-plan-day-body-part-menu"
+                >
+                  <template #activator="{ props: menuProps }">
+                    <v-btn
+                      v-bind="menuProps"
+                      variant="outlined"
+                      color="primary"
+                      class="w-full justify-between rounded-xl px-4 normal-case tracking-normal"
+                    >
+                      <span class="truncate">{{ selectedBodyPartLabel }}</span>
+                      <v-icon icon="mdi-chevron-down" size="18" />
+                    </v-btn>
+                  </template>
+
+                  <v-list class="min-w-[240px]">
+                    <v-list-item
+                      v-for="option in bodyPartOptions"
+                      :key="option.value"
+                      :active="selectedBodyPart === option.value"
+                      :title="option.label"
+                      @click.stop="selectBodyPart(option.value)"
+                    />
+                  </v-list>
+                </v-menu>
+              </div>
             </div>
 
             <div class="mt-3 flex flex-wrap gap-2">
@@ -115,16 +138,16 @@
               </v-btn>
             </div>
 
-            <div
-              v-else-if="filteredExercises.length === 0"
-              class="px-4 py-6 text-center text-sm text-[var(--lgym-text-muted)] sm:px-6"
-            >
-              {{ t("trainerTrainingPlanDayEditor.library.empty") }}
-            </div>
+              <div
+                v-else-if="filteredExercises.length === 0"
+                class="px-4 py-6 text-center text-sm text-[var(--lgym-text-muted)] sm:px-6"
+              >
+                {{ t("trainerTrainingPlanDayEditor.library.empty") }}
+              </div>
 
             <VueDraggable
               v-else
-              v-model="filteredExerciseItems"
+                v-model="filteredExerciseItems"
               :animation="180"
               :sort="false"
               :group="libraryDragGroup"
@@ -136,11 +159,11 @@
               :clone="cloneLibraryExercise"
               @add="handleLibraryAdd"
             >
-              <div
-                v-for="exercise in filteredExerciseItems"
-                :key="exercise._id || exercise.name || 'exercise'"
-                class="grid w-full grid-cols-1 gap-3 border-b border-[var(--lgym-border)] px-4 py-3 text-left transition-colors hover:bg-[var(--lgym-note-bg)]/22 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-2 sm:px-6"
-              >
+                <div
+                  v-for="exercise in filteredExerciseItems"
+                  :key="exercise._id || exercise.name || 'exercise'"
+                  class="grid w-full grid-cols-1 gap-3 border-b border-[var(--lgym-border)] px-4 py-3 text-left transition-colors hover:bg-[var(--lgym-note-bg)]/22 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-2 sm:px-6"
+                >
                 <div class="min-w-0">
                   <p class="truncate text-sm font-medium text-[var(--lgym-text)]">
                     {{ exercise.name || t("trainerTrainingPlanDetails.exercises.fallback.noName") }}
@@ -187,6 +210,35 @@
                 </div>
               </div>
             </VueDraggable>
+          </div>
+
+          <div class="flex items-center justify-between gap-3 border-t border-[var(--lgym-border)] px-4 py-3 text-xs text-[var(--lgym-text-muted)] sm:px-6">
+            <span>
+              {{ leftLibraryPaginationSummary }}
+            </span>
+
+            <div class="flex items-center gap-2">
+              <v-btn
+                variant="outlined"
+                color="primary"
+                size="small"
+                class="rounded-md px-3"
+                :disabled="libraryPage <= 1"
+                @click="libraryPage = Math.max(1, libraryPage - 1)"
+              >
+                {{ t("trainerTrainingPlanDayEditor.actions.previous") }}
+              </v-btn>
+              <v-btn
+                variant="outlined"
+                color="primary"
+                size="small"
+                class="rounded-md px-3"
+                :disabled="libraryPage >= libraryTotalPages"
+                @click="libraryPage = Math.min(libraryTotalPages, libraryPage + 1)"
+              >
+                {{ t("trainerTrainingPlanDayEditor.actions.next") }}
+              </v-btn>
+            </div>
           </div>
         </section>
 
@@ -345,6 +397,9 @@ const {
 const searchQuery = ref("");
 const selectedBodyPart = ref("all");
 const exerciseSource = ref<"all" | "user" | "global">("all");
+const isBodyPartMenuOpen = ref(false);
+const libraryPage = ref(1);
+const libraryPageSize = 10;
 
 const draftName = computed({
   get: () => draft.value.name ?? "",
@@ -389,7 +444,7 @@ const draftExercisesModel = computed<DraftExerciseRow[]>({
   },
 });
 const filteredExerciseItems = computed<ExerciseResponseDto[]>({
-  get: () => filteredExercises.value,
+  get: () => paginatedFilteredExercises.value,
   set: () => {
     return;
   },
@@ -411,6 +466,12 @@ const sourceOptions = [
   { value: "global", labelKey: "trainerTrainingPlanDayEditor.library.filters.global" },
 ] as const;
 
+const getExerciseBodyPartValue = (exercise: ExerciseResponseDto) =>
+  exercise.bodyPart?.name?.trim() || exercise.bodyPart?.displayName?.trim() || "";
+
+const getExerciseBodyPartLabel = (exercise: ExerciseResponseDto) =>
+  exercise.bodyPart?.displayName?.trim() || exercise.bodyPart?.name?.trim() || "";
+
 const exerciseLibrary = computed(() => {
   const combined = new Map<string, ExerciseResponseDto>();
 
@@ -427,19 +488,24 @@ const bodyPartOptions = computed(() => {
   const options = new Map<string, string>();
 
   for (const exercise of exerciseLibrary.value) {
-    const value = exercise.bodyPart?.displayName || exercise.bodyPart?.name;
-    if (!value) continue;
-    options.set(value, value);
+    const value = getExerciseBodyPartValue(exercise);
+    const label = getExerciseBodyPartLabel(exercise);
+    if (!value || !label) continue;
+    options.set(value, label);
   }
 
   return [
     { value: "all", label: t("trainerTrainingPlanDayEditor.library.filters.allBodyParts") },
-    ...[...options.values()].sort((left, right) => left.localeCompare(right)).map((value) => ({
-      value,
-      label: value,
-    })),
+    ...[...options.entries()]
+      .sort(([, left], [, right]) => left.localeCompare(right))
+      .map(([value, label]) => ({ value, label })),
   ];
 });
+
+const selectedBodyPartLabel = computed(
+  () => bodyPartOptions.value.find((option) => option.value === selectedBodyPart.value)?.label
+    ?? t("trainerTrainingPlanDayEditor.library.filters.allBodyParts"),
+);
 
 const filteredExercises = computed(() => {
   const sourceList =
@@ -450,11 +516,36 @@ const filteredExercises = computed(() => {
         : exerciseLibrary.value;
 
   return sourceList.filter((exercise) => {
-    const bodyPart = exercise.bodyPart?.displayName || exercise.bodyPart?.name || "";
-    const matchesBodyPart = selectedBodyPart.value === "all" || bodyPart === selectedBodyPart.value;
-    const haystack = [exercise.name, bodyPart].filter(Boolean).join(" ").toLowerCase();
+    const bodyPartValue = getExerciseBodyPartValue(exercise);
+    const bodyPartLabel = getExerciseBodyPartLabel(exercise);
+    const matchesBodyPart = selectedBodyPart.value === "all" || bodyPartValue === selectedBodyPart.value;
+    const haystack = [exercise.name, bodyPartLabel].filter(Boolean).join(" ").toLowerCase();
     return matchesBodyPart && haystack.includes(searchQuery.value.trim().toLowerCase());
   });
+});
+
+const libraryTotalPages = computed(() =>
+  Math.max(Math.ceil(filteredExercises.value.length / libraryPageSize) || 1, 1),
+);
+
+const currentLibraryPage = computed(() =>
+  Math.min(libraryPage.value, libraryTotalPages.value),
+);
+
+const paginatedFilteredExercises = computed(() => {
+  const startIndex = (currentLibraryPage.value - 1) * libraryPageSize;
+  return filteredExercises.value.slice(startIndex, startIndex + libraryPageSize);
+});
+
+const leftLibraryPaginationSummary = computed(() => {
+  if (filteredExercises.value.length === 0) {
+    return t("trainerTrainingPlanDayEditor.library.empty");
+  }
+
+  const startIndex = (currentLibraryPage.value - 1) * libraryPageSize + 1;
+  const endIndex = Math.min(startIndex + paginatedFilteredExercises.value.length - 1, filteredExercises.value.length);
+
+  return `${startIndex}-${endIndex} / ${filteredExercises.value.length}`;
 });
 
 const hasExerciseInDraft = (exerciseId: string | null | undefined) =>
@@ -553,6 +644,19 @@ const reloadExercises = async () => {
   await loadExercises();
 };
 
+const selectBodyPart = (value: string) => {
+  selectedBodyPart.value = value;
+  isBodyPartMenuOpen.value = false;
+};
+
+watch([searchQuery, selectedBodyPart, exerciseSource], () => {
+  libraryPage.value = 1;
+});
+
+watch([filteredExercises, libraryTotalPages], () => {
+  libraryPage.value = Math.min(libraryPage.value, libraryTotalPages.value);
+});
+
 const handleSave = async () => {
   draft.value = {
     ...draft.value,
@@ -582,3 +686,13 @@ watch(
   { immediate: true },
 );
 </script>
+
+<style scoped>
+.trainer-plan-day-body-part-menu :deep(.v-overlay__content) {
+  min-width: 15rem;
+}
+
+.trainer-plan-day-body-part-menu :deep(.v-list-item-title) {
+  white-space: nowrap;
+}
+</style>

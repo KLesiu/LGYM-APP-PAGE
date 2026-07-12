@@ -361,6 +361,7 @@
       "statusLinked": "Linked",
       "statusNotLinked": "Not linked",
       "linkAction": "Link Google",
+      "unlinkAction": "Unlink Google",
       "alreadyLinked": "Google linked",
       "unknownProvider": "External provider",
       "noProviderEmail": "No provider email returned"
@@ -369,6 +370,8 @@
       "loadFailed": "Failed to load connected sign-in providers.",
       "linkFailed": "Failed to link the Google account.",
       "linkSuccess": "Google account linked successfully.",
+      "unlinkFailed": "Failed to unlink the Google account.",
+      "unlinkSuccess": "Google account unlinked successfully.",
       "unauthorized": "Your session expired. Please sign in again."
     }
   },
@@ -682,7 +685,9 @@
     "actions": {
       "backToPlan": "Back to plan",
       "cancel": "Cancel",
+      "previous": "Previous",
       "save": "Save plan day",
+      "next": "Next",
       "retry": "Retry"
     },
     "error": {
@@ -1167,6 +1172,18 @@
         "fieldNotes": "Trainer notes",
         "fieldIsActive": "Active status",
         "fieldMealCount": "Meal count",
+        "category": "Section",
+        "field": "Field",
+        "value": "Value / change",
+        "previous": "Before",
+        "current": "After",
+        "categories": {
+          "plan": "Plan",
+          "macros": "Macros",
+          "meals": "Meals",
+          "notes": "Notes",
+          "status": "Status"
+        },
         "mealAdded": "Added {meal}",
         "mealRemoved": "Removed {meal}",
         "mealFieldPrefix": "{meal} / {field}",
@@ -1234,6 +1251,9 @@
       "history": {
         "empty": "No changes recorded for this note yet.",
         "unknown": "Change",
+        "field": "Field",
+        "value": "Value / change",
+        "fieldContent": "Note content",
         "previous": "Previous content",
         "current": "New content",
         "emptyValue": "—"

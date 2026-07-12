@@ -1,26 +1,30 @@
 <template>
   <div class="flex min-h-0 min-w-0 flex-col gap-4">
-    <section class="flex flex-col gap-4">
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
-            {{ t("trainerMemberDetails.notes.eyebrow") }}
-          </p>
-          <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
-            {{ t("trainerMemberDetails.notes.title") }}
-          </h2>
-          <p class="mt-2 max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
-            {{ t("trainerMemberDetails.notes.subtitle") }}
-          </p>
-        </div>
+    <section>
+      <div>
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
+              {{ t("trainerMemberDetails.notes.eyebrow") }}
+            </p>
+            <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+              {{ t("trainerMemberDetails.notes.title") }}
+            </h2>
+            <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">{{ notesCountLabel }}</p>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
+              {{ t("trainerMemberDetails.notes.subtitle") }}
+            </p>
+          </div>
 
-        <v-btn color="primary" class="min-h-10 rounded-md px-4" @click="openCreateDialog">
-          {{ t("trainerMemberDetails.notes.actions.create") }}
-        </v-btn>
+          <v-btn color="primary" class="min-h-10 rounded-md px-4" @click="openCreateDialog">
+            {{ t("trainerMemberDetails.notes.actions.create") }}
+          </v-btn>
+        </div>
       </div>
 
       <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
+      <div class="pt-4">
       <div v-if="hasError && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
         <p class="text-sm text-[var(--lgym-text-muted)]">
           {{ t("trainerMemberDetails.notes.error.load") }}
@@ -39,16 +43,17 @@
         </p>
       </div>
 
-      <div v-else class="grid gap-4">
+      <div v-else class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <article
-          v-for="note in notes"
+          v-for="note in sortedNotes"
           :key="note._id || note.title || 'note'"
-          class="overflow-hidden rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+          class="group cursor-pointer overflow-hidden rounded-[28px] border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)] transition hover:-translate-y-0.5 hover:border-[var(--lgym-primary)]/50"
+          @click="openNotePreview(note)"
         >
-          <div class="flex flex-col gap-4 px-5 py-5 lg:flex-row lg:items-start lg:justify-between sm:px-6">
-            <div class="min-w-0 flex-1">
-              <div class="flex flex-wrap items-center gap-3">
-                <h3 class="text-lg font-semibold text-[var(--lgym-text)]">
+          <div class="flex h-full flex-col gap-4 px-5 py-5 sm:px-6">
+            <div class="flex min-w-0 flex-1 flex-col">
+              <div class="flex flex-wrap items-start gap-3">
+                <h3 class="flex-1 text-lg font-semibold text-[var(--lgym-text)]">
                   {{ note.title || t("trainerMemberDetails.notes.fallback.noTitle") }}
                 </h3>
                 <v-chip v-if="note.visibleToTrainee" color="primary" size="small" variant="outlined">
@@ -61,26 +66,97 @@
               <p class="mt-2 text-xs text-[var(--lgym-text-soft)]">
                 {{ t("trainerMemberDetails.notes.meta.updatedAt") }}: {{ formatDateTime(note.lastUpdatedAt) }}
               </p>
-              <p class="mt-4 whitespace-pre-line text-sm leading-6 text-[var(--lgym-text-muted)]">
-                {{ note.content || t("trainerMemberDetails.notes.fallback.noContent") }}
+              <p class="note-card-preview mt-4 whitespace-pre-line text-sm leading-7 text-[var(--lgym-text-muted)]">
+                {{ getNotePreview(note.content) }}
               </p>
             </div>
 
-            <div class="flex flex-wrap gap-2">
-              <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click="openEditDialog(note)">
-                {{ t("trainerMemberDetails.notes.actions.edit") }}
-              </v-btn>
-              <v-btn variant="outlined" color="secondary" class="min-h-10 rounded-md px-4" @click="openHistoryDialog(note)">
-                {{ t("trainerMemberDetails.notes.actions.history") }}
-              </v-btn>
-              <v-btn variant="outlined" color="error" class="min-h-10 rounded-md px-4" :loading="deletingNoteId === note._id" @click="deleteNote(note)">
-                {{ t("trainerMemberDetails.notes.actions.delete") }}
-              </v-btn>
-            </div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">Open note</p>
           </div>
         </article>
       </div>
+      </div>
     </section>
+
+    <v-dialog v-model="isPreviewOpen" max-width="920">
+      <v-card
+        rounded="lg"
+        class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]"
+      >
+        <template v-if="selectedPreviewNote">
+          <div class="border-b border-[var(--lgym-border)] px-6 py-5">
+            <div class="flex items-start justify-between gap-4">
+              <div class="min-w-0 flex-1">
+                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
+                  {{ t("trainerMemberDetails.notes.eyebrow") }}
+                </p>
+                <h3 class="mt-2 text-2xl font-semibold text-[var(--lgym-text)]">
+                  {{ selectedPreviewNote.title || t("trainerMemberDetails.notes.fallback.noTitle") }}
+                </h3>
+                <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+                  {{ t("trainerMemberDetails.notes.meta.updatedAt") }}: {{ formatDateTime(selectedPreviewNote.lastUpdatedAt) }}
+                </p>
+              </div>
+
+              <v-btn icon="mdi-close" variant="text" @click="closeNotePreview" />
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-2">
+              <v-chip v-if="selectedPreviewNote.visibleToTrainee" color="primary" size="small" variant="outlined">
+                {{ t("trainerMemberDetails.notes.badges.visible") }}
+              </v-chip>
+              <v-chip v-if="selectedPreviewNote.isPinned" color="secondary" size="small" variant="outlined">
+                {{ t("trainerMemberDetails.notes.badges.pinned") }}
+              </v-chip>
+            </div>
+          </div>
+
+          <v-card-text class="px-6 py-6">
+            <div class="grid gap-5">
+              <div class="rounded-3xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-5 py-5">
+                <p class="whitespace-pre-line text-sm leading-7 text-[var(--lgym-text-muted)]">
+                  {{ selectedPreviewNote.content || t("trainerMemberDetails.notes.fallback.noContent") }}
+                </p>
+              </div>
+
+              <div class="grid gap-3 sm:grid-cols-2">
+                <div class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-3">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                    {{ t("trainerMemberDetails.notes.meta.updatedAt") }}
+                  </p>
+                  <p class="mt-2 text-sm text-[var(--lgym-text)]">
+                    {{ formatDateTime(selectedPreviewNote.lastUpdatedAt) }}
+                  </p>
+                </div>
+                <div class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-3">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                    Created at
+                  </p>
+                  <p class="mt-2 text-sm text-[var(--lgym-text)]">
+                    {{ formatDateTime(selectedPreviewNote.createdAt) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </v-card-text>
+
+          <v-card-actions class="flex-wrap justify-end gap-3 px-6 pb-6">
+            <v-btn variant="text" @click="closeNotePreview">
+              {{ t("trainerMemberDetails.actions.close") }}
+            </v-btn>
+            <v-btn variant="outlined" color="secondary" class="min-h-10 rounded-md px-4" @click="openHistoryDialog(selectedPreviewNote)">
+              {{ t("trainerMemberDetails.notes.actions.history") }}
+            </v-btn>
+            <v-btn variant="outlined" color="primary" class="min-h-10 rounded-md px-4" @click="openEditDialog(selectedPreviewNote)">
+              {{ t("trainerMemberDetails.notes.actions.edit") }}
+            </v-btn>
+            <v-btn variant="outlined" color="error" class="min-h-10 rounded-md px-4" :loading="deletingNoteId === selectedPreviewNote._id" @click="deleteNote(selectedPreviewNote)">
+              {{ t("trainerMemberDetails.notes.actions.delete") }}
+            </v-btn>
+          </v-card-actions>
+        </template>
+      </v-card>
+    </v-dialog>
 
     <v-dialog v-model="isEditorOpen" max-width="760">
       <v-card rounded="lg" class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
@@ -116,32 +192,49 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="isHistoryOpen" max-width="760">
-      <v-card rounded="lg">
-        <v-card-title class="text-lg font-semibold">{{ t("trainerMemberDetails.notes.dialog.historyTitle") }}</v-card-title>
+    <v-dialog v-model="isHistoryOpen" max-width="920">
+      <v-card rounded="lg" class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
+        <v-card-title class="px-6 pt-6 text-xl font-semibold text-[var(--lgym-text)]">
+          {{ t("trainerMemberDetails.notes.dialog.historyTitle") }}
+        </v-card-title>
         <v-card-text class="px-6 py-5">
           <v-progress-linear v-if="isLoadingHistory" indeterminate color="primary" />
           <div v-else-if="historyEntries.length === 0" class="py-8 text-center text-sm text-[var(--lgym-text-muted)]">
             {{ t("trainerMemberDetails.notes.history.empty") }}
           </div>
           <div v-else class="grid gap-3">
-            <article v-for="entry in historyEntries" :key="entry._id ?? entry.changedAt ?? entry.changeType ?? 'note-history'" class="rounded-md border border-[var(--lgym-border)] p-4">
+            <article v-for="entry in historyEntries" :key="getNoteHistoryKey(entry)" class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-4 sm:px-5 sm:py-5">
               <div class="flex items-center justify-between gap-3">
-                <p class="font-semibold text-[var(--lgym-text)]">{{ entry.changeType || t("trainerMemberDetails.notes.history.unknown") }}</p>
-                <span class="text-xs text-[var(--lgym-text-muted)]">{{ formatDateTime(entry.changedAt) }}</span>
+                <p class="font-semibold text-[var(--lgym-text)]">{{ getNoteHistoryChangeType(entry) }}</p>
+                <span class="text-xs text-[var(--lgym-text-muted)]">{{ formatDateTime(getNoteHistoryChangedAt(entry)) }}</span>
               </div>
-              <div class="mt-3 grid gap-3 text-sm">
-                <div>
-                  <p class="text-[var(--lgym-text-soft)]">{{ t("trainerMemberDetails.notes.history.previous") }}</p>
-                  <p class="mt-1 whitespace-pre-line rounded-md bg-[var(--lgym-note-bg)] p-3 text-[var(--lgym-text-muted)]">
-                    {{ entry.previousContent || t("trainerMemberDetails.notes.history.emptyValue") }}
-                  </p>
+
+              <div class="mt-4 overflow-hidden rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
+                <div class="hidden grid-cols-[minmax(180px,1fr)_minmax(260px,2fr)] gap-4 border-b border-[var(--lgym-border)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)] md:grid">
+                  <span>{{ t("trainerMemberDetails.notes.history.field") }}</span>
+                  <span>{{ t("trainerMemberDetails.notes.history.value") }}</span>
                 </div>
-                <div>
-                  <p class="text-[var(--lgym-text-soft)]">{{ t("trainerMemberDetails.notes.history.current") }}</p>
-                  <p class="mt-1 whitespace-pre-line rounded-md bg-[var(--lgym-note-bg)] p-3 text-[var(--lgym-text)]">
-                    {{ entry.newContent || t("trainerMemberDetails.notes.history.emptyValue") }}
-                  </p>
+                <div class="grid gap-2 px-4 py-3 text-sm md:grid-cols-[minmax(180px,1fr)_minmax(260px,2fr)] md:items-start md:gap-4">
+                  <div>
+                    <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--lgym-text-soft)] md:hidden">
+                      {{ t("trainerMemberDetails.notes.history.field") }}
+                    </p>
+                    <p class="font-semibold text-[var(--lgym-text)]">{{ t("trainerMemberDetails.notes.history.fieldContent") }}</p>
+                  </div>
+
+                  <div>
+                    <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--lgym-text-soft)] md:hidden">
+                      {{ t("trainerMemberDetails.notes.history.value") }}
+                    </p>
+                    <p v-if="isCreatedNoteHistory(entry)" class="whitespace-pre-line break-words font-semibold text-[var(--lgym-text)]">
+                      {{ formatNoteHistoryValue(getNoteHistoryNewContent(entry)) }}
+                    </p>
+                    <p v-else class="whitespace-pre-line break-words text-[var(--lgym-text-muted)]">
+                      <span>{{ formatNoteHistoryValue(getNoteHistoryPreviousContent(entry)) }}</span>
+                      <span class="mx-2 text-[var(--lgym-text-soft)]">=&gt;</span>
+                      <span class="font-semibold text-[var(--lgym-text)]">{{ formatNoteHistoryValue(getNoteHistoryNewContent(entry)) }}</span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </article>
@@ -156,7 +249,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import {
@@ -187,11 +280,13 @@ const historyEntries = ref<TraineeNoteHistoryDto[]>([]);
 const isLoading = ref(false);
 const hasError = ref(false);
 const isSaving = ref(false);
+const isPreviewOpen = ref(false);
 const isEditorOpen = ref(false);
 const isHistoryOpen = ref(false);
 const isLoadingHistory = ref(false);
 const editingNoteId = ref<string | null>(null);
 const deletingNoteId = ref<string | null>(null);
+const selectedPreviewNoteId = ref<string | null>(null);
 const validationErrors = ref<{ content: string[] }>({ content: [] });
 
 const form = ref<UpsertTraineeNoteRequest>({
@@ -199,6 +294,33 @@ const form = ref<UpsertTraineeNoteRequest>({
   content: "",
   visibleToTrainee: false,
   isPinned: false,
+});
+
+const sortedNotes = computed(() =>
+  [...notes.value].sort((left, right) => {
+    if (Boolean(left.isPinned) !== Boolean(right.isPinned)) {
+      return left.isPinned ? -1 : 1;
+    }
+
+    const leftTime = left.lastUpdatedAt ? new Date(left.lastUpdatedAt).getTime() : 0;
+    const rightTime = right.lastUpdatedAt ? new Date(right.lastUpdatedAt).getTime() : 0;
+    return rightTime - leftTime;
+  }),
+);
+
+const selectedPreviewNote = computed(
+  () => sortedNotes.value.find((note) => note._id === selectedPreviewNoteId.value) ?? null,
+);
+
+const notesCountLabel = computed(() => {
+  const pinnedCount = sortedNotes.value.filter((note) => note.isPinned).length;
+  const totalCount = sortedNotes.value.length;
+
+  if (pinnedCount === 0) {
+    return `${totalCount} notes`;
+  }
+
+  return `${totalCount} notes · ${pinnedCount} pinned`;
 });
 
 const resetForm = () => {
@@ -210,6 +332,25 @@ const resetForm = () => {
     visibleToTrainee: false,
     isPinned: false,
   };
+};
+
+const getNotePreview = (content: string | null | undefined) => {
+  const normalized = content?.trim();
+  if (!normalized) {
+    return t("trainerMemberDetails.notes.fallback.noContent");
+  }
+
+  return normalized;
+};
+
+const openNotePreview = (note: TraineeNoteDto) => {
+  selectedPreviewNoteId.value = note._id || null;
+  isPreviewOpen.value = true;
+};
+
+const closeNotePreview = () => {
+  isPreviewOpen.value = false;
+  selectedPreviewNoteId.value = null;
 };
 
 const loadNotes = async () => {
@@ -238,6 +379,7 @@ const openCreateDialog = () => {
 };
 
 const openEditDialog = (note: TraineeNoteDto) => {
+  closeNotePreview();
   editingNoteId.value = note._id || null;
   validationErrors.value = { content: [] };
   form.value = {
@@ -314,6 +456,10 @@ const deleteNote = async (note: TraineeNoteDto) => {
       throw new Error(getApiErrorMessage(response.data) || "Failed to delete note");
     }
 
+    if (selectedPreviewNoteId.value === note._id) {
+      closeNotePreview();
+    }
+
     await loadNotes();
     toast.successMessage(t("trainerMemberDetails.notes.feedback.deleted"));
   } catch (error) {
@@ -326,6 +472,7 @@ const deleteNote = async (note: TraineeNoteDto) => {
 
 const openHistoryDialog = async (note: TraineeNoteDto) => {
   if (!note._id) return;
+  closeNotePreview();
   isHistoryOpen.value = true;
   isLoadingHistory.value = true;
 
@@ -344,5 +491,46 @@ const openHistoryDialog = async (note: TraineeNoteDto) => {
   }
 };
 
+const toNoteHistoryRecord = (entry: TraineeNoteHistoryDto): Record<string, unknown> =>
+  entry as Record<string, unknown>;
+
+const getNoteHistoryString = (entry: TraineeNoteHistoryDto, camelKey: keyof TraineeNoteHistoryDto, pascalKey: string) => {
+  const record = toNoteHistoryRecord(entry);
+  const value = record[camelKey] ?? record[pascalKey];
+  return typeof value === "string" ? value : null;
+};
+
+const getNoteHistoryKey = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "_id", "Id")
+  ?? getNoteHistoryChangedAt(entry)
+  ?? getNoteHistoryChangeType(entry);
+
+const getNoteHistoryChangeType = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "changeType", "ChangeType") || t("trainerMemberDetails.notes.history.unknown");
+
+const getNoteHistoryChangedAt = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "changedAt", "ChangedAt");
+
+const getNoteHistoryPreviousContent = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "previousContent", "PreviousContent");
+
+const getNoteHistoryNewContent = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "newContent", "NewContent");
+
+const formatNoteHistoryValue = (value: string | null) =>
+  value?.trim() || t("trainerMemberDetails.notes.history.emptyValue");
+
+const isCreatedNoteHistory = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryChangeType(entry).toLowerCase() === "created" || !getNoteHistoryPreviousContent(entry)?.trim();
+
 watch(() => props.traineeId, () => void loadNotes(), { immediate: true });
 </script>
+
+<style scoped>
+.note-card-preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>

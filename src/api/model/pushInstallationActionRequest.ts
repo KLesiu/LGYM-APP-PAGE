@@ -5,9 +5,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface LookupItemVm {
+export interface PushInstallationActionRequest {
   /** @nullable */
-  id?: string | null;
-  /** @nullable */
-  displayName?: string | null;
+  installationId?: string | null;
 }

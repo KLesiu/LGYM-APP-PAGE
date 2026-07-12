@@ -25,76 +25,55 @@
         </div>
       </div>
 
-      <div
-        class="mt-7 rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-2 sm:p-3"
-      >
-        <v-tabs
-          v-model="activePlatform"
-          color="primary"
-          grow
-          align-tabs="center"
-        >
-          <v-tab
-            v-for="platform in platformOptions"
-            :key="platform.value"
-            :value="platform.value"
-            rounded="xl"
-            class="min-h-[50px] px-4 normal-case font-semibold tracking-normal"
-          >
-            <div class="flex items-center gap-2">
-              <v-icon :icon="platform.icon" size="18" />
-              <span>{{ platform.label }}</span>
-            </div>
-          </v-tab>
-        </v-tabs>
-      </div>
     </div>
 
     <v-card-text
       class="min-h-0 flex-1 px-6 py-6 lg:px-8 lg:py-8"
     >
-      <v-window v-model="activePlatform" class="min-h-0">
-        <v-window-item
+      <div class="grid min-h-0 gap-6 xl:gap-7 2xl:gap-8 xl:grid-cols-2">
+        <section
           v-for="platform in platformOptions"
           :key="platform.value"
-          :value="platform.value"
-          class="min-h-0"
+          class="rounded-[30px] border border-[var(--lgym-border)] bg-[var(--lgym-surface-muted)] px-5 py-5 lg:px-7 lg:py-6"
         >
-          <div
-            class="grid min-h-0 gap-6 2xl:gap-8 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]"
-          >
-            <section class="space-y-5">
-              <AdminVersionCurrentSummary
-                :platform-label="platform.label"
-                :current-config="states[platform.value].currentConfig"
-                :is-loading="states[platform.value].isLoading"
-              />
-            </section>
+          <div class="mb-6 flex items-center gap-3 border-b border-[var(--lgym-border)] pb-5">
+            <div
+              class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--lgym-primary)] text-white"
+            >
+              <v-icon :icon="platform.icon" size="22" />
+            </div>
 
-            <section class="pt-1">
-              <AdminVersionEditForm
-                :platform="platform.value"
-                v-model:latest-version="states[platform.value].latestVersion"
-                v-model:min-required-version="
-                  states[platform.value].minRequiredVersion
-                "
-                v-model:update-url="states[platform.value].updateUrl"
-                v-model:release-notes="states[platform.value].releaseNotes"
-                v-model:force-update="states[platform.value].forceUpdate"
-                :is-submitting="states[platform.value].isSubmitting"
-                @submit="submitPlatform(platform.value)"
-                @load-current="loadPlatform(platform.value)"
-              />
-            </section>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
+                {{ t("admin.versions.eyebrow") }}
+              </p>
+              <h3 class="text-2xl font-semibold text-[var(--lgym-text)]">
+                {{ platform.label }}
+              </h3>
+            </div>
           </div>
-        </v-window-item>
-      </v-window>
+
+          <div class="pt-1">
+            <AdminVersionEditForm
+              :platform="platform.value"
+              v-model:latest-version="states[platform.value].latestVersion"
+              v-model:min-required-version="states[platform.value].minRequiredVersion"
+              v-model:update-url="states[platform.value].updateUrl"
+              v-model:release-notes="states[platform.value].releaseNotes"
+              v-model:force-update="states[platform.value].forceUpdate"
+              :is-submitting="states[platform.value].isSubmitting"
+              @submit="submitPlatform(platform.value)"
+              @load-current="loadPlatform(platform.value)"
+            />
+          </div>
+        </section>
+      </div>
     </v-card-text>
   </v-card>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 
 import {
@@ -110,7 +89,6 @@ import {
 import { getAuthUserId } from "../../composables/useAuthSession";
 import { useToast } from "../../composables/useToast";
 
-import AdminVersionCurrentSummary from "./AdminVersionCurrentSummary.vue";
 import AdminVersionEditForm from "./AdminVersionEditForm.vue";
 
 type VersionPlatform = "Android" | "Ios";
@@ -132,8 +110,6 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const toast = useToast();
-
-const activePlatform = ref<VersionPlatform>("Android");
 
 const createEmptyState = (): VersionState => ({
   latestVersion: "",

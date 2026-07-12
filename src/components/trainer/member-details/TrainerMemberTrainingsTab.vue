@@ -1,226 +1,196 @@
 <template>
-  <div class="grid gap-5 xl:grid-cols-[minmax(260px,320px)_minmax(0,1fr)]">
-    <section
-      class="min-h-0 rounded-2xl border-r border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] p-5  sm:p-6"
-    >
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
-          {{ t("trainerMemberDetails.trainings.eyebrow") }}
-        </p>
-        <h2 class="mt-3 text-xl font-semibold text-[var(--lgym-text)]">
-          {{ t("trainerMemberDetails.trainings.title") }}
-        </h2>
+  <div class="flex min-h-0 min-w-0 flex-col gap-4">
+    <section>
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
+            {{ t("trainerMemberDetails.trainings.eyebrow") }}
+          </p>
+          <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+            {{ t("trainerMemberDetails.trainings.title") }}
+          </h2>
+          <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+            {{ selectedDate ? formatTrainingTitle(selectedDate) : t("trainerMemberDetails.trainings.selectDate") }}
+          </p>
+        </div>
       </div>
 
-      <v-progress-linear v-if="isLoadingDates" indeterminate color="primary" class="mt-4" />
-
-      <div class="min-h-0 pt-4">
-        <div v-if="hasDatesError && !isLoadingDates" class="rounded-2xl border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
-          <p class="text-sm text-[var(--lgym-text-muted)]">
-            {{ t("trainerMemberDetails.trainings.error.subtitle") }}
-          </p>
-          <v-btn class="mt-4 rounded-md px-4" color="primary" variant="outlined" @click="loadTrainingDates">
-            {{ t("trainerMemberDetails.actions.retry") }}
-          </v-btn>
-        </div>
-
-        <div v-else-if="trainingDates.length > 0" class="space-y-4">
-          <div
-            v-if="availableMonths.length > 0"
-            class="flex items-center justify-between gap-3 rounded-xl bg-[var(--lgym-note-bg)] px-4 py-3"
-          >
-            <v-btn
-              icon
-              variant="text"
-              color="default"
-              :disabled="!canGoToPreviousMonth"
-              :aria-label="t('trainerMemberDetails.trainings.monthSelector.previousMonth')"
-              @click="goToPreviousMonth"
-            >
-              <v-icon icon="mdi-chevron-left" />
-            </v-btn>
-
-            <div class="min-w-0 text-center">
-              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                {{ t("trainerMemberDetails.trainings.monthSelector.label") }}
-              </p>
-              <p class="mt-1 truncate text-sm font-semibold text-[var(--lgym-text)] sm:text-base">
-                {{ activeMonthLabel }}
-              </p>
-            </div>
-
-            <v-btn
-              icon
-              variant="text"
-              color="default"
-              :disabled="!canGoToNextMonth"
-              :aria-label="t('trainerMemberDetails.trainings.monthSelector.nextMonth')"
-              @click="goToNextMonth"
-            >
-              <v-icon icon="mdi-chevron-right" />
-            </v-btn>
+      <div class="grid gap-5 pt-4 xl:grid-cols-[minmax(260px,320px)_minmax(0,1fr)]">
+        <section class="min-h-0 rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-4 sm:px-5 sm:py-5">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
+              {{ t("trainerMemberDetails.trainings.eyebrow") }}
+            </p>
+            <h3 class="mt-2 text-lg font-semibold text-[var(--lgym-text)]">
+              {{ t("trainerMemberDetails.trainings.title") }}
+            </h3>
           </div>
 
-          <div class="overflow-hidden rounded-xl bg-[var(--lgym-note-bg)]">
-          <button
-            v-for="dateValue in visibleTrainingDates"
-            :key="dateValue"
-            type="button"
-          class="w-full border-l-2 border-transparent px-4 py-4 text-left transition-colors duration-150 not-last:border-b not-last:border-[var(--lgym-border)]"
-            :class="
-              selectedDate === dateValue
-                ? 'border-l-[var(--lgym-primary)] bg-[var(--lgym-surface)]'
-                : 'hover:bg-[var(--lgym-surface)]'
-            "
-            @click="selectedDate = dateValue"
-          >
-            <div class="flex items-start gap-3">
-          <div class="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--lgym-note-icon-bg)] text-[var(--lgym-note-icon-text)]">
-                <v-icon icon="mdi-calendar-month-outline" />
-              </div>
-              <div class="min-w-0">
-                <p class="text-sm font-semibold sm:text-base" :class="selectedDate === dateValue ? 'text-[var(--lgym-primary)]' : 'text-[var(--lgym-text)]'">
-                  {{ formatLongDate(dateValue) }}
-                </p>
-                <p class="mt-1 text-xs text-[var(--lgym-text-muted)] sm:text-sm">
-                  {{ formatTime(dateValue) }}
-                </p>
-              </div>
-            </div>
-          </button>
+          <v-progress-linear v-if="isLoadingDates" indeterminate color="primary" class="mt-4" />
 
-            <div
-              v-if="visibleTrainingDates.length === 0"
-              class="px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]"
-            >
-              {{ t("trainerMemberDetails.trainings.monthSelector.empty") }}
-            </div>
-          </div>
-        </div>
-
-        <div v-else class="rounded-2xl border border-dashed border-[var(--lgym-border)] px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]">
-          {{ t("trainerMemberDetails.trainings.empty.title") }}
-        </div>
-      </div>
-    </section>
-
-    <section class="min-h-0">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
-          {{ t("trainerMemberDetails.trainings.detailsEyebrow") }}
-        </p>
-        <h2 class="mt-3 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
-          {{ selectedDate ? formatTrainingTitle(selectedDate) : t("trainerMemberDetails.trainings.selectDate") }}
-        </h2>
-      </div>
-
-      <v-progress-linear v-if="isLoadingDetails" indeterminate color="primary" class="mt-4" />
-
-      <div class="mt-6 flex flex-col gap-6">
-        <div v-if="hasDetailsError && !isLoadingDetails" class="rounded-2xl border border-dashed border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-6 py-10 text-center">
-          <p class="text-sm text-[var(--lgym-text-muted)]">
-            {{ t("trainerMemberDetails.trainings.error.details") }}
-          </p>
-          <v-btn class="mt-4" color="primary" variant="outlined" @click="loadTrainingDetails">
-            {{ t("trainerMemberDetails.actions.retry") }}
-          </v-btn>
-        </div>
-
-        <div v-else-if="!selectedTraining && !isLoadingDetails" class="rounded-2xl border border-dashed border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
-          {{ t("trainerMemberDetails.trainings.empty.details") }}
-        </div>
-
-        <article
-          v-else-if="selectedTraining"
-          :key="getTrainingKey(selectedTraining, 0)"
-          class="overflow-hidden rounded-2xl bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
-        >
-      <div class="space-y-6 px-5 py-5 sm:px-6 sm:py-6">
-            <div v-if="selectedTraining.planDay?.name" class="flex flex-wrap items-start justify-between gap-3">
-              <div
-                class="inline-flex items-center rounded-full bg-[var(--lgym-note-bg)] px-3 py-1 text-xs font-medium text-[var(--lgym-text-muted)]"
-              >
-                {{ selectedTraining.planDay.name }}
-              </div>
+          <div class="min-h-0 pt-4">
+            <div v-if="hasDatesError && !isLoadingDates" class="rounded-2xl border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
+              <p class="text-sm text-[var(--lgym-text-muted)]">
+                {{ t("trainerMemberDetails.trainings.error.subtitle") }}
+              </p>
+              <v-btn class="mt-4 rounded-md px-4" color="primary" variant="outlined" @click="loadTrainingDates">
+                {{ t("trainerMemberDetails.actions.retry") }}
+              </v-btn>
             </div>
 
-            <dl class="mt-5 grid gap-3 md:grid-cols-3">
-            <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
-                <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                  {{ t("trainerMemberDetails.trainings.summary.startTime") }}
-                </dt>
-                <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
-                  {{ formatTime(selectedTraining.createdAt) }}
-                </dd>
-              </div>
+            <div v-else-if="trainingDates.length > 0" class="space-y-4">
+              <div class="overflow-hidden rounded-2xl bg-[var(--lgym-surface-card)] p-2">
+                <v-date-picker
+                  :model-value="selectedDayKey"
+                  :month="activeDatePickerMonth"
+                  :year="activeDatePickerYear"
+                  :events="trainingEventDates"
+                  color="primary"
+                  event-color="primary"
+                  first-day-of-week="0"
+                  hide-header
+                  show-adjacent-months
+                  width="100%"
+                  class="lgym-training-calendar"
+                  @update:model-value="selectDatePickerValue"
+                  @update:month="setActiveDatePickerMonth"
+                  @update:year="setActiveDatePickerYear"
+                />
 
-            <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
-              <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                  {{ t("trainerMemberDetails.trainings.summary.gym") }}
-                </dt>
-                <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
-                  {{ selectedTraining.gym || t("trainerMemberDetails.trainings.fallback.noGym") }}
-                </dd>
-              </div>
-
-            <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
-              <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
-                  {{ t("trainerMemberDetails.trainings.summary.exercisesCount") }}
-                </dt>
-                <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
-                  {{ selectedTraining.exercises?.length ?? 0 }}
-                </dd>
-              </div>
-            </dl>
-
-            <section class="mt-8">
-              <h3 class="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--lgym-text-soft)]">
-                {{ t("trainerMemberDetails.trainings.exerciseList") }}
-              </h3>
-
-              <div v-if="selectedTraining.exercises?.length" class="mt-5 grid gap-6">
-                <article
-                  v-for="(exercise, exerciseIndex) in selectedTraining.exercises"
-                  :key="getExerciseKey(exercise, exerciseIndex, selectedTraining, 0)"
-          class="rounded-xl bg-[var(--lgym-note-bg)] px-5 py-5"
+                <div
+                  v-if="activeMonthTrainingCount === 0"
+                  class="px-3 py-5 text-center text-sm text-[var(--lgym-text-muted)]"
                 >
-                  <p class="text-lg font-semibold text-[var(--lgym-text)]">
-                    {{ exercise.exerciseDetails?.name || t("trainerMemberDetails.trainings.fallback.noExercise") }}
-                  </p>
-                  <p class="mt-1 text-sm text-[var(--lgym-text-muted)]">
-                    {{ exercise.exerciseDetails?.bodyPart?.displayName || exercise.exerciseDetails?.bodyPart?.name || t("trainerMemberDetails.trainings.fallback.noBodyPart") }}
-                  </p>
+                  {{ t("trainerMemberDetails.trainings.monthSelector.empty") }}
+                </div>
+              </div>
+            </div>
 
+            <div v-else class="rounded-2xl border border-dashed border-[var(--lgym-border)] px-6 py-12 text-center text-sm text-[var(--lgym-text-muted)]">
+              {{ t("trainerMemberDetails.trainings.empty.title") }}
+            </div>
+          </div>
+        </section>
+
+        <section class="min-h-0">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
+              {{ t("trainerMemberDetails.trainings.detailsEyebrow") }}
+            </p>
+            <h3 class="mt-2 text-lg font-semibold text-[var(--lgym-text)] sm:text-xl">
+              {{ selectedDate ? formatTrainingTitle(selectedDate) : t("trainerMemberDetails.trainings.selectDate") }}
+            </h3>
+          </div>
+
+          <v-progress-linear v-if="isLoadingDetails" indeterminate color="primary" class="mt-4" />
+
+          <div class="mt-4 flex flex-col gap-4">
+            <div v-if="hasDetailsError && !isLoadingDetails" class="rounded-2xl border border-dashed border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-6 py-10 text-center">
+              <p class="text-sm text-[var(--lgym-text-muted)]">
+                {{ t("trainerMemberDetails.trainings.error.details") }}
+              </p>
+              <v-btn class="mt-4" color="primary" variant="outlined" @click="loadTrainingDetails">
+                {{ t("trainerMemberDetails.actions.retry") }}
+              </v-btn>
+            </div>
+
+            <div v-else-if="!selectedTraining && !isLoadingDetails" class="rounded-2xl border border-dashed border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-6 py-10 text-center text-sm text-[var(--lgym-text-muted)]">
+              {{ t("trainerMemberDetails.trainings.empty.details") }}
+            </div>
+
+            <article
+              v-else-if="selectedTraining"
+              :key="getTrainingKey(selectedTraining, 0)"
+              class="overflow-hidden rounded-2xl bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+            >
+              <div class="space-y-6 flex flex-col gap-2 px-5 py-5 sm:px-6 sm:py-6">
+                <div v-if="selectedTraining.planDay?.name" class="flex flex-wrap items-start justify-between gap-3">
                   <div
-                    v-if="exercise.scoresDetails?.length"
-                    class="mt-4 overflow-hidden rounded-lg bg-transparent"
+                    class="inline-flex items-center rounded-full bg-[var(--lgym-note-bg)] px-3 py-1 text-xs font-medium text-[var(--lgym-text-muted)]"
                   >
-                    <div
-                      v-for="(score, scoreIndex) in exercise.scoresDetails"
-                      :key="getScoreKey(score, scoreIndex)"
-                      class="flex flex-col gap-1 px-4 py-3 not-last:border-b not-last:border-[var(--lgym-border)] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
-                    >
-                      <span class="text-sm font-medium text-[var(--lgym-text)]">
-                        {{ t("trainerMemberDetails.trainings.seriesLabel", { series: score.series ?? scoreIndex + 1 }) }}
-                      </span>
-                      <span class="text-sm text-[var(--lgym-text-muted)] sm:text-right">
-                        {{ formatScoreSummary(score, scoreIndex) }}
-                      </span>
-                    </div>
+                    {{ selectedTraining.planDay.name }}
+                  </div>
+                </div>
+
+                <dl class="grid gap-3 md:grid-cols-3">
+                  <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
+                    <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.trainings.summary.startTime") }}
+                    </dt>
+                    <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
+                      {{ formatTime(selectedTraining.createdAt) }}
+                    </dd>
                   </div>
 
-                  <p v-else class="mt-4 text-sm text-[var(--lgym-text-muted)]">
-                    {{ t("trainerMemberDetails.trainings.empty.series") }}
-                  </p>
-                </article>
-              </div>
+                  <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
+                    <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.trainings.summary.gym") }}
+                    </dt>
+                    <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
+                      {{ selectedTraining.gym || t("trainerMemberDetails.trainings.fallback.noGym") }}
+                    </dd>
+                  </div>
 
-              <p v-else class="mt-5 text-sm text-[var(--lgym-text-muted)]">
-                {{ t("trainerMemberDetails.trainings.empty.exercises") }}
-              </p>
-            </section>
+                  <div class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-4">
+                    <dt class="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--lgym-text-soft)]">
+                      {{ t("trainerMemberDetails.trainings.summary.exercisesCount") }}
+                    </dt>
+                    <dd class="mt-3 text-base font-semibold text-[var(--lgym-text)]">
+                      {{ selectedTraining.exercises?.length ?? 0 }}
+                    </dd>
+                  </div>
+                </dl>
+
+                <section>
+                  <h3 class="text-sm font-semibold uppercase tracking-[0.2em] text-[var(--lgym-text-soft)]">
+                    {{ t("trainerMemberDetails.trainings.exerciseList") }}
+                  </h3>
+
+                  <div v-if="selectedTraining.exercises?.length" class="mt-5 grid gap-6">
+                    <article
+                      v-for="(exercise, exerciseIndex) in selectedTraining.exercises"
+                      :key="getExerciseKey(exercise, exerciseIndex, selectedTraining, 0)"
+                      class="rounded-xl bg-[var(--lgym-note-bg)] px-5 py-5"
+                    >
+                      <p class="text-lg font-semibold text-[var(--lgym-text)]">
+                        {{ exercise.exerciseDetails?.name || t("trainerMemberDetails.trainings.fallback.noExercise") }}
+                      </p>
+                      <p class="mt-1 text-sm text-[var(--lgym-text-muted)]">
+                        {{ exercise.exerciseDetails?.bodyPart?.displayName || exercise.exerciseDetails?.bodyPart?.name || t("trainerMemberDetails.trainings.fallback.noBodyPart") }}
+                      </p>
+
+                      <div
+                        v-if="exercise.scoresDetails?.length"
+                        class="mt-4 overflow-hidden rounded-lg bg-transparent"
+                      >
+                        <div
+                          v-for="(score, scoreIndex) in exercise.scoresDetails"
+                          :key="getScoreKey(score, scoreIndex)"
+                          class="flex flex-col gap-1 px-4 py-3 not-last:border-b not-last:border-[var(--lgym-border)] sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+                        >
+                          <span class="text-sm font-medium text-[var(--lgym-text)]">
+                            {{ t("trainerMemberDetails.trainings.seriesLabel", { series: score.series ?? scoreIndex + 1 }) }}
+                          </span>
+                          <span class="text-sm text-[var(--lgym-text-muted)] sm:text-right">
+                            {{ formatScoreSummary(score, scoreIndex) }}
+                          </span>
+                        </div>
+                      </div>
+
+                      <p v-else class="mt-4 text-sm text-[var(--lgym-text-muted)]">
+                        {{ t("trainerMemberDetails.trainings.empty.series") }}
+                      </p>
+                    </article>
+                  </div>
+
+                  <p v-else class="mt-5 text-sm text-[var(--lgym-text-muted)]">
+                    {{ t("trainerMemberDetails.trainings.empty.exercises") }}
+                  </p>
+                </section>
+              </div>
+            </article>
           </div>
-        </article>
+        </section>
       </div>
     </section>
   </div>
@@ -254,6 +224,7 @@ type TrainingMonthGroup = {
 const trainingDates = ref<string[]>([]);
 const activeMonthKey = ref<string | null>(null);
 const selectedDate = ref<string | null>(null);
+const selectedPickerDateKey = ref<string | null>(null);
 const selectedTrainings = ref<TrainingByDateDetailsDto[]>([]);
 const isLoadingDates = ref(false);
 const isLoadingDetails = ref(false);
@@ -359,6 +330,18 @@ const getMonthKey = (value: string | null | undefined) => {
   return `${year}-${month}`;
 };
 
+const getDateKey = (value: string | Date | null | undefined) => {
+  if (!value) return null;
+
+  const parsed = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(parsed.getTime())) return null;
+
+  const year = parsed.getFullYear();
+  const month = String(parsed.getMonth() + 1).padStart(2, "0");
+  const day = String(parsed.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 const formatMonthLabel = (value: string | null | undefined) => {
   if (!value) return "—";
 
@@ -390,41 +373,92 @@ const availableMonths = computed<TrainingMonthGroup[]>(() => {
   }));
 });
 
-const activeMonthIndex = computed(() =>
-  availableMonths.value.findIndex((month) => month.key === activeMonthKey.value),
+const visibleTrainingDates = computed(() =>
+  trainingDates.value.filter((dateValue) => getMonthKey(dateValue) === activeMonthKey.value),
 );
 
-const activeMonth = computed(
-  () =>
-    availableMonths.value.find((month) => month.key === activeMonthKey.value) ??
-    availableMonths.value[0] ??
-    null,
+const selectedDayKey = computed(
+  () => selectedPickerDateKey.value ?? getDateKey(selectedDate.value),
 );
 
-const activeMonthLabel = computed(
-  () => activeMonth.value?.label ?? t("trainerMemberDetails.trainings.monthSelector.none"),
-);
+const trainingDatesByDay = computed(() => {
+  const datesByDay = new Map<string, string[]>();
 
-const visibleTrainingDates = computed(() => activeMonth.value?.dates ?? []);
+  for (const dateValue of trainingDates.value) {
+    const dateKey = getDateKey(dateValue);
+    if (!dateKey) continue;
 
-const canGoToPreviousMonth = computed(
-  () => activeMonthIndex.value >= 0 && activeMonthIndex.value < availableMonths.value.length - 1,
-);
+    const datesForDay = datesByDay.get(dateKey) ?? [];
+    datesForDay.push(dateValue);
+    datesByDay.set(dateKey, sortDatesDescending(datesForDay));
+  }
 
-const canGoToNextMonth = computed(() => activeMonthIndex.value > 0);
+  return datesByDay;
+});
 
-const goToPreviousMonth = () => {
-  if (!canGoToPreviousMonth.value) return;
+const activeMonthTrainingCount = computed(() => visibleTrainingDates.value.length);
 
-  const nextMonth = availableMonths.value[activeMonthIndex.value + 1] ?? null;
-  activeMonthKey.value = nextMonth?.key ?? activeMonthKey.value;
+const trainingEventDates = computed(() => Array.from(trainingDatesByDay.value.keys()));
+
+const getActiveMonthParts = () => {
+  if (!activeMonthKey.value) {
+    const today = new Date();
+    return { year: today.getFullYear(), month: today.getMonth() };
+  }
+
+  const [yearValue, monthValue] = activeMonthKey.value.split("-");
+  const year = Number(yearValue);
+  const monthIndex = Number(monthValue) - 1;
+
+  if (!Number.isInteger(year) || !Number.isInteger(monthIndex)) {
+    const today = new Date();
+    return { year: today.getFullYear(), month: today.getMonth() };
+  }
+
+  return { year, month: monthIndex };
 };
 
-const goToNextMonth = () => {
-  if (!canGoToNextMonth.value) return;
+const activeDatePickerMonth = computed(() => getActiveMonthParts().month);
+const activeDatePickerYear = computed(() => getActiveMonthParts().year);
 
-  const nextMonth = availableMonths.value[activeMonthIndex.value - 1] ?? null;
-  activeMonthKey.value = nextMonth?.key ?? activeMonthKey.value;
+const setActiveDatePickerMonth = (month: unknown) => {
+  const parsedMonth = Number(month);
+  if (!Number.isInteger(parsedMonth)) return;
+
+  const { year } = getActiveMonthParts();
+  activeMonthKey.value = `${year}-${String(parsedMonth + 1).padStart(2, "0")}`;
+};
+
+const setActiveDatePickerYear = (year: unknown) => {
+  const parsedYear = Number(year);
+  if (!Number.isInteger(parsedYear)) return;
+
+  const { month } = getActiveMonthParts();
+  activeMonthKey.value = `${parsedYear}-${String(month + 1).padStart(2, "0")}`;
+};
+
+const selectDatePickerValue = (value: unknown) => {
+  const dateValue = Array.isArray(value) ? value[0] : value;
+  const dateKey = getDateKey(dateValue as string | Date | null | undefined);
+
+  selectedPickerDateKey.value = dateKey;
+
+  if (!dateKey) {
+    selectedDate.value = null;
+    selectedTrainings.value = [];
+    hasDetailsError.value = false;
+    isLoadingDetails.value = false;
+    return;
+  }
+
+  activeMonthKey.value = getMonthKey(dateKey) ?? activeMonthKey.value;
+  selectedDate.value = trainingDatesByDay.value.get(dateKey)?.[0] ?? null;
+
+  if (!selectedDate.value) {
+    selectedTrainings.value = [];
+    hasDetailsError.value = false;
+    isLoadingDetails.value = false;
+  }
 };
 
 const getTrainingKey = (
@@ -544,6 +578,7 @@ watch(
     trainingDates.value = [];
     activeMonthKey.value = null;
     selectedDate.value = null;
+    selectedPickerDateKey.value = null;
     selectedTrainings.value = [];
     void loadTrainingDates();
   },
@@ -555,10 +590,11 @@ watch(
   (months) => {
     if (months.length === 0) {
       activeMonthKey.value = null;
+      selectedPickerDateKey.value = null;
       return;
     }
 
-    if (!months.some((month) => month.key === activeMonthKey.value)) {
+    if (!activeMonthKey.value) {
       activeMonthKey.value = months[0]?.key ?? null;
     }
   },
@@ -572,12 +608,18 @@ watch(
       if (selectedDate.value !== null) {
         selectedDate.value = null;
       }
+
+      if (getMonthKey(selectedPickerDateKey.value) !== activeMonthKey.value) {
+        selectedPickerDateKey.value = null;
+      }
       return;
     }
 
     if (!selectedDate.value || !dates.includes(selectedDate.value)) {
       selectedDate.value = dates[0] ?? null;
     }
+
+    selectedPickerDateKey.value = getDateKey(selectedDate.value);
   },
   { immediate: true },
 );

@@ -145,25 +145,40 @@
     </div>
 
     <v-dialog v-model="isPlanDialogOpen" max-width="520">
-      <v-card rounded="lg">
-        <v-card-title class="text-lg font-semibold">
-          {{
-            editingPlanId
-              ? t("trainerTrainingPlans.dialog.renameTitle")
-              : t("trainerTrainingPlans.dialog.createTitle")
-          }}
-        </v-card-title>
-        <v-card-text>
-          <v-text-field
-            v-model="planName"
-            :label="t('trainerTrainingPlans.form.name')"
-            :placeholder="t('trainerTrainingPlans.form.namePlaceholder')"
-            density="compact"
-            variant="outlined"
-            hide-details
-          />
+      <v-card
+        rounded="xl"
+        class="lgym-form-shell overflow-hidden shadow-none"
+      >
+        <div class="lgym-form-header">
+          <p class="lgym-form-eyebrow">
+            {{ t("trainerTrainingPlans.list.eyebrow") }}
+          </p>
+          <v-card-title class="lgym-form-title px-0">
+            {{
+              editingPlanId
+                ? t("trainerTrainingPlans.dialog.renameTitle")
+                : t("trainerTrainingPlans.dialog.createTitle")
+            }}
+          </v-card-title>
+          <p class="lgym-form-subtitle">
+            {{ t("trainerTrainingPlans.form.namePlaceholder") }}
+          </p>
+        </div>
+
+        <v-card-text class="lgym-form-body">
+          <div class="lgym-form-section">
+            <v-text-field
+              v-model="planName"
+              :label="t('trainerTrainingPlans.form.name')"
+              :placeholder="t('trainerTrainingPlans.form.namePlaceholder')"
+              density="comfortable"
+              variant="outlined"
+              prepend-inner-icon="mdi-pencil-outline"
+              hide-details
+            />
+          </div>
         </v-card-text>
-        <v-card-actions class="justify-end px-6 pb-6">
+        <v-card-actions class="lgym-form-actions">
           <v-btn variant="text" @click="isPlanDialogOpen = false">
             {{ t("trainerTrainingPlans.actions.cancel") }}
           </v-btn>

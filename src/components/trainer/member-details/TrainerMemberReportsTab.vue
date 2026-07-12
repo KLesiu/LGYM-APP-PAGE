@@ -1,8 +1,24 @@
 <template>
   <div class="flex min-h-0 min-w-0 flex-col gap-4">
-     <div class="bg-[var(--lgym-note-bg)]/55 px-2 py-2 sm:px-3">
-        <v-tabs v-model="activeReportView" color="primary" grow align-tabs="start" class="min-h-[60px]">
-          <v-tab
+    <section>
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
+            {{ activeReportHeader.eyebrow }}
+          </p>
+          <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
+            {{ activeReportHeader.title }}
+          </h2>
+          <p v-if="activeReportHeader.subtitle" class="mt-2 max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
+            {{ activeReportHeader.subtitle }}
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-4">
+        <div class="bg-[var(--lgym-note-bg)]/55 px-2 py-2 sm:px-3">
+         <v-tabs v-model="activeReportView" color="primary" grow align-tabs="start" class="min-h-[60px]">
+           <v-tab
             v-for="tab in reportViewTabs"
             :key="tab.value"
             :value="tab.value"
@@ -12,9 +28,11 @@
               <v-icon :icon="tab.icon" size="18" />
               <span>{{ tab.label }}</span>
             </div>
-          </v-tab>
-        </v-tabs>
+           </v-tab>
+         </v-tabs>
+        </div>
       </div>
+    </section>
 
     <section v-if="activeReportView === 'recurring'" class="min-h-0 min-w-0">
       <TrainerMemberRecurringReportsSection
@@ -24,16 +42,7 @@
     </section>
 
     <section v-else class="min-h-0 min-w-0 border-t border-[var(--lgym-border)] pt-4">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
-          {{ t("trainerMemberDetails.reports.submissionsEyebrow") }}
-        </p>
-        <h2 class="mt-1 text-lg font-semibold text-[var(--lgym-text)] sm:text-xl">
-          {{ t("trainerMemberDetails.reports.submissionsTitle") }}
-        </h2>
-      </div>
-
-      <div class="grid gap-4 pt-3">
+      <div class="grid gap-4">
         <section>
           <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
             <div class="flex flex-wrap gap-2">
@@ -458,7 +467,7 @@
                           <div v-if="entry.photos.length > 0" class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                             <article
                               v-for="photo in entry.photos"
-                              :key="photo._id || photo.storageKey || photo.viewType || entry.key"
+                              :key="photo._id || photo.readUrl || photo.thumbnailUrl || photo.viewType || entry.key"
                               class="overflow-hidden rounded-xl bg-[var(--lgym-note-bg)]"
                             >
                               <a
@@ -559,16 +568,16 @@
             </v-card-text>
 
             <v-card-actions class="justify-end gap-3 px-6 pb-6">
+              <v-btn variant="outlined" color="primary" @click="closeSubmissionPreview">
+                {{ t("trainerMemberDetails.actions.cancel") }}
+              </v-btn>
               <v-btn
-                color="primary"
+                color="success"
                 class="min-h-10 rounded-md px-4"
                 :loading="isSavingFeedback"
                 @click="saveTrainerFeedback"
               >
                 {{ t("trainerMemberDetails.reports.actions.saveFeedback") }}
-              </v-btn>
-              <v-btn variant="outlined" color="primary" @click="closeSubmissionPreview">
-                {{ t("trainerMemberDetails.actions.cancel") }}
               </v-btn>
             </v-card-actions>
           </template>
@@ -712,6 +721,20 @@ const reportViewTabs = computed(() => [
     icon: "mdi-history",
   },
 ]);
+
+const activeReportHeader = computed(() =>
+  activeReportView.value === "recurring"
+    ? {
+        eyebrow: t("trainerMemberDetails.reports.recurring.eyebrow"),
+        title: t("trainerMemberDetails.reports.recurring.title"),
+        subtitle: t("trainerMemberDetails.reports.recurring.subtitle"),
+      }
+    : {
+        eyebrow: t("trainerMemberDetails.reports.submissionsEyebrow"),
+        title: t("trainerMemberDetails.reports.submissionsTitle"),
+        subtitle: t("trainerMemberDetails.reports.submissionsSubtitle"),
+      },
+);
 
 const hasNonEmptyComment = (value: unknown) =>
   typeof value === "string" && value.trim().length > 0;
@@ -1432,6 +1455,7 @@ const saveTrainerFeedback = async () => {
       submissions.value.find((submission) => submission._id === updatedSubmission._id) ??
       updatedSubmission;
     toast.success("trainerMemberDetails.reports.feedback.saveSuccess");
+    await closeSubmissionPreview();
   } catch (error) {
     console.error(error);
     toast.error("trainerMemberDetails.reports.feedback.saveFailed");

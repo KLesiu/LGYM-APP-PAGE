@@ -1,20 +1,16 @@
 <template>
   <v-card
     rounded="[32px]"
-    class="admin-register-card flex h-full min-h-0 flex-col overflow-hidden border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
+    class="admin-register-card lgym-form-shell flex h-full min-h-0 flex-col rounded-[32px]"
   >
-    <div
-      class="relative overflow-hidden bg-[var(--lgym-register-top-bg)] px-6 py-6"
-    >
-      <p
-        class="text-xs font-semibold uppercase tracking-[0.24em] text-[rgb(var(--v-theme-primary))]"
-      >
+    <div class="lgym-form-header bg-[var(--lgym-register-top-bg)]">
+      <p class="lgym-form-eyebrow text-[rgb(var(--v-theme-primary))]">
         {{ t("admin.register.eyebrow") }}
       </p>
-      <h2 class="mt-3 text-2xl font-semibold text-[var(--lgym-text)]">
+      <h2 class="lgym-form-title">
         {{ t("admin.register.title") }}
       </h2>
-      <p class="mt-3 max-w-md text-sm leading-6 text-[var(--lgym-text-muted)]">
+      <p class="lgym-form-subtitle max-w-md">
         {{ t("admin.register.subtitle") }}
       </p>
       <p
@@ -22,13 +18,10 @@
       >
         {{ t("admin.register.scope") }}
       </p>
-      <div
-      class="absolute -right-10 -bottom-20 h-[180px] w-[180px] rounded-full bg-[var(--lgym-register-glow)] pointer-events-none"
-      ></div>
     </div>
 
     <v-card-text
-      class="admin-register-form flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-6 py-6"
+      class="admin-register-form lgym-form-body flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto"
     >
       <v-form
         ref="formRef"
@@ -37,9 +30,7 @@
         class="flex flex-1 flex-col gap-6"
         @submit.prevent="submitForm"
       >
-        <div
-          class="rounded-[22px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-3"
-        >
+        <div class="lgym-form-section rounded-[22px] p-3">
           <AuthTabs v-model="selectedRole" />
         </div>
 
@@ -88,9 +79,7 @@
           />
         </div>
 
-        <div
-          class="rounded-[24px] border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-5"
-        >
+        <div class="lgym-form-section rounded-[24px] p-5">
           <div class="flex items-start gap-3">
             <div
               class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--lgym-note-icon-bg)] text-[var(--lgym-note-icon-text)]"

@@ -5,17 +5,16 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface PhotoHistoryItemResponse {
+export interface DietPlanHistoryDto {
   /** @nullable */
   _id?: string | null;
   /** @nullable */
-  viewType?: string | null;
-  sizeBytes?: number;
+  dietPlanId?: string | null;
   /** @nullable */
-  thumbnailUrl?: string | null;
+  changedByUserId?: string | null;
+  changeDate?: string;
   /** @nullable */
-  readUrl?: string | null;
+  changeType?: string | null;
   /** @nullable */
-  reportRequestId?: string | null;
-  uploadedAt?: string;
+  snapshotJson?: string | null;
 }

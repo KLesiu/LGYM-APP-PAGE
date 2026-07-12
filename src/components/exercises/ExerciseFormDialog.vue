@@ -1,21 +1,22 @@
 <template>
   <v-dialog :model-value="modelValue" max-width="720" @update:model-value="$emit('update:modelValue', $event)">
-    <v-card class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-6 py-5">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">
+    <v-card class="lgym-form-shell rounded-xl shadow-none">
+      <div class="lgym-form-header">
+        <p class="lgym-form-eyebrow">
           {{ isEditing ? t("exerciseLibrary.dialog.editEyebrow") : t("exerciseLibrary.dialog.eyebrow") }}
         </p>
-        <h3 class="mt-2 text-xl font-semibold text-[var(--lgym-text)]">
+        <h3 class="lgym-form-title text-xl">
           {{ isEditing ? t("exerciseLibrary.dialog.editTitle") : t("exerciseLibrary.dialog.title") }}
         </h3>
-        <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+        <p class="lgym-form-subtitle">
           {{ t("exerciseLibrary.dialog.subtitle") }}
         </p>
       </div>
 
-      <v-card-text class="px-6 py-6">
-        <div class="grid gap-5">
+      <v-card-text class="lgym-form-body">
+        <div class="lgym-form-section grid gap-5">
           <v-select
+            v-if="showVisibilityField"
             :model-value="draft.source"
             :label="t('exerciseLibrary.dialog.fields.visibility')"
             :items="createTargetOptions"
@@ -80,6 +81,7 @@
           />
 
           <v-text-field
+            v-if="draft.source === 'global'"
             :model-value="draft.image"
             :label="t('exerciseLibrary.dialog.fields.image')"
             :placeholder="t('exerciseLibrary.dialog.placeholders.image')"
@@ -91,7 +93,7 @@
         </div>
       </v-card-text>
 
-      <v-card-actions class="justify-end gap-3 px-6 pb-6">
+      <v-card-actions class="lgym-form-actions border-t-0 pt-0">
         <v-btn variant="outlined" color="primary" @click="$emit('close')">
           {{ t("exerciseLibrary.actions.cancel") }}
         </v-btn>
@@ -118,6 +120,7 @@ const props = defineProps<{
   isLoadingBodyParts: boolean;
   isSubmitting: boolean;
   showFormulaField: boolean;
+  showVisibilityField: boolean;
   canEditFormula: boolean;
 }>();
 

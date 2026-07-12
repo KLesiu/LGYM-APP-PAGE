@@ -1,20 +1,20 @@
 <template>
   <v-dialog :model-value="modelValue" max-width="640" @update:model-value="$emit('update:modelValue', $event)">
-    <v-card class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
-      <div class="border-b border-[var(--lgym-border)] px-6 py-5">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">
+    <v-card class="lgym-form-shell rounded-xl shadow-none">
+      <div class="lgym-form-header">
+        <p class="lgym-form-eyebrow">
           {{ t("exerciseLibrary.translationDialog.eyebrow") }}
         </p>
-        <h3 class="mt-2 text-xl font-semibold text-[var(--lgym-text)]">
+        <h3 class="lgym-form-title text-xl">
           {{ t("exerciseLibrary.translationDialog.title") }}
         </h3>
-        <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">
+        <p class="lgym-form-subtitle">
           {{ t("exerciseLibrary.translationDialog.subtitle", { name: exerciseName }) }}
         </p>
       </div>
 
-  <v-card-text class="px-6 py-6">
-        <div class="grid gap-5">
+  <v-card-text class="lgym-form-body">
+        <div class="lgym-form-section grid gap-5">
           <v-select
             :model-value="culture"
             :label="t('exerciseLibrary.translationDialog.fields.culture')"
@@ -56,7 +56,7 @@
         </div>
       </v-card-text>
 
-      <v-card-actions class="justify-end gap-3 px-6 pb-6">
+      <v-card-actions class="lgym-form-actions border-t-0 pt-0">
         <v-btn variant="outlined" color="primary" @click="$emit('close')">
           {{ t("exerciseLibrary.actions.cancel") }}
         </v-btn>
