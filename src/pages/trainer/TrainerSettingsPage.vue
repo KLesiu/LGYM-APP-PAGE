@@ -49,19 +49,29 @@
                 </v-chip>
 
                 <v-btn
+                  v-if="!isGoogleLinked"
                   color="primary"
                   variant="outlined"
                   prepend-icon="mdi-google"
                   class="min-h-10 rounded-md px-4"
                   :loading="isLinkingGoogle"
-                  :disabled="isLinkingGoogle || isLoadingExternalLogins || isGoogleLinked"
+                  :disabled="isLinkingGoogle || isLoadingExternalLogins || isUnlinkingGoogle"
                   @click="linkGoogleAccount"
                 >
-                  {{
-                    isGoogleLinked
-                      ? t("trainerSettings.google.alreadyLinked")
-                      : t("trainerSettings.google.linkAction")
-                  }}
+                  {{ t("trainerSettings.google.linkAction") }}
+                </v-btn>
+
+                <v-btn
+                  v-else
+                  color="error"
+                  variant="outlined"
+                  prepend-icon="mdi-link-variant-off"
+                  class="min-h-10 rounded-md px-4"
+                  :loading="isUnlinkingGoogle"
+                  :disabled="isUnlinkingGoogle || isLoadingExternalLogins || isLinkingGoogle"
+                  @click="unlinkGoogleAccount"
+                >
+                  {{ t("trainerSettings.google.unlinkAction") }}
                 </v-btn>
               </div>
             </div>
@@ -96,6 +106,7 @@ import {
   getApiAccountExternalLogins,
   getApiErrorMessage,
   postApiAccountLinkGoogle,
+  postApiAccountUnlinkGoogle,
   type ExternalLoginDto,
 } from "../../api/account";
 import AppDataSection from "../../components/ui/AppDataSection.vue";
@@ -111,6 +122,7 @@ const { signInWithGoogle, handleGoogleAuthFailure } = useGoogleAuth();
 const externalLogins = ref<ExternalLoginDto[]>([]);
 const isLoadingExternalLogins = ref(false);
 const isLinkingGoogle = ref(false);
+const isUnlinkingGoogle = ref(false);
 const hasLoadError = ref(false);
 
 const linkedGoogleLogin = computed(
@@ -204,6 +216,35 @@ const linkGoogleAccount = async () => {
     toast.error("trainerSettings.feedback.linkFailed");
   } finally {
     isLinkingGoogle.value = false;
+  }
+};
+
+const unlinkGoogleAccount = async () => {
+  if (!isGoogleLinked.value) return;
+
+  isUnlinkingGoogle.value = true;
+
+  try {
+    const response = await postApiAccountUnlinkGoogle();
+
+    if (await handleUnauthorizedResponse(response.status)) return;
+
+    if (response.status < 200 || response.status >= 300) {
+      const message = getApiErrorMessage(response.data);
+      if (message) {
+        toast.errorMessage(message);
+      } else {
+        toast.error("trainerSettings.feedback.unlinkFailed");
+      }
+      return;
+    }
+
+    toast.success("trainerSettings.feedback.unlinkSuccess");
+    await loadExternalLogins();
+  } catch (error) {
+    toast.error("trainerSettings.feedback.unlinkFailed");
+  } finally {
+    isUnlinkingGoogle.value = false;
   }
 };
 

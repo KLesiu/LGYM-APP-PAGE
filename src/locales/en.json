@@ -361,6 +361,7 @@
       "statusLinked": "Linked",
       "statusNotLinked": "Not linked",
       "linkAction": "Link Google",
+      "unlinkAction": "Unlink Google",
       "alreadyLinked": "Google linked",
       "unknownProvider": "External provider",
       "noProviderEmail": "No provider email returned"
@@ -369,6 +370,8 @@
       "loadFailed": "Failed to load connected sign-in providers.",
       "linkFailed": "Failed to link the Google account.",
       "linkSuccess": "Google account linked successfully.",
+      "unlinkFailed": "Failed to unlink the Google account.",
+      "unlinkSuccess": "Google account unlinked successfully.",
       "unauthorized": "Your session expired. Please sign in again."
     }
   },

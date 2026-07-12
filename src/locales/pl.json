@@ -361,6 +361,7 @@
       "statusLinked": "Podłączone",
       "statusNotLinked": "Niepodłączone",
       "linkAction": "Połącz Google",
+      "unlinkAction": "Odłącz Google",
       "alreadyLinked": "Google połączone",
       "unknownProvider": "Zewnętrzny dostawca",
       "noProviderEmail": "Brak adresu e-mail od dostawcy"
@@ -369,6 +370,8 @@
       "loadFailed": "Nie udało się pobrać podłączonych metod logowania.",
       "linkFailed": "Nie udało się połączyć konta Google.",
       "linkSuccess": "Konto Google zostało połączone.",
+      "unlinkFailed": "Nie udało się odłączyć konta Google.",
+      "unlinkSuccess": "Konto Google zostało odłączone.",
       "unauthorized": "Sesja wygasła. Zaloguj się ponownie."
     }
   },
