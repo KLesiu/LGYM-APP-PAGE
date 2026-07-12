@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0
  */
 import type { EnumLookupDto } from './enumLookupDto';
+import type { LookupItemVm } from './lookupItemVm';
 
 export interface ExerciseResponseDto {
   /** @nullable */
@@ -14,6 +15,7 @@ export interface ExerciseResponseDto {
   /** @nullable */
   user?: string | null;
   bodyPart?: EnumLookupDto;
+  eloFormula?: LookupItemVm;
   /** @nullable */
   description?: string | null;
   /** @nullable */
