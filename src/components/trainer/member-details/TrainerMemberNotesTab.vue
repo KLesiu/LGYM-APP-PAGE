@@ -1,30 +1,30 @@
 <template>
   <div class="flex min-h-0 min-w-0 flex-col gap-4">
-    <section class="flex flex-col gap-4">
-      <div class="flex flex-col gap-4 rounded-[28px] border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-5 py-6 sm:px-6">
+    <section>
+      <div>
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
               {{ t("trainerMemberDetails.notes.eyebrow") }}
             </p>
-            <h2 class="mt-2 text-2xl font-semibold text-[var(--lgym-text)] sm:text-3xl">
+            <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
               {{ t("trainerMemberDetails.notes.title") }}
             </h2>
             <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">{{ notesCountLabel }}</p>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
+              {{ t("trainerMemberDetails.notes.subtitle") }}
+            </p>
           </div>
 
           <v-btn color="primary" class="min-h-10 rounded-md px-4" @click="openCreateDialog">
             {{ t("trainerMemberDetails.notes.actions.create") }}
           </v-btn>
         </div>
-
-        <p class="max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
-          {{ t("trainerMemberDetails.notes.subtitle") }}
-        </p>
       </div>
 
       <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
+      <div class="pt-4">
       <div v-if="hasError && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
         <p class="text-sm text-[var(--lgym-text-muted)]">
           {{ t("trainerMemberDetails.notes.error.load") }}
@@ -74,6 +74,7 @@
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">Open note</p>
           </div>
         </article>
+      </div>
       </div>
     </section>
 
@@ -191,32 +192,49 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="isHistoryOpen" max-width="760">
-      <v-card rounded="lg">
-        <v-card-title class="text-lg font-semibold">{{ t("trainerMemberDetails.notes.dialog.historyTitle") }}</v-card-title>
+    <v-dialog v-model="isHistoryOpen" max-width="920">
+      <v-card rounded="lg" class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
+        <v-card-title class="px-6 pt-6 text-xl font-semibold text-[var(--lgym-text)]">
+          {{ t("trainerMemberDetails.notes.dialog.historyTitle") }}
+        </v-card-title>
         <v-card-text class="px-6 py-5">
           <v-progress-linear v-if="isLoadingHistory" indeterminate color="primary" />
           <div v-else-if="historyEntries.length === 0" class="py-8 text-center text-sm text-[var(--lgym-text-muted)]">
             {{ t("trainerMemberDetails.notes.history.empty") }}
           </div>
           <div v-else class="grid gap-3">
-            <article v-for="entry in historyEntries" :key="entry._id ?? entry.changedAt ?? entry.changeType ?? 'note-history'" class="rounded-md border border-[var(--lgym-border)] p-4">
+            <article v-for="entry in historyEntries" :key="getNoteHistoryKey(entry)" class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-4 sm:px-5 sm:py-5">
               <div class="flex items-center justify-between gap-3">
-                <p class="font-semibold text-[var(--lgym-text)]">{{ entry.changeType || t("trainerMemberDetails.notes.history.unknown") }}</p>
-                <span class="text-xs text-[var(--lgym-text-muted)]">{{ formatDateTime(entry.changedAt) }}</span>
+                <p class="font-semibold text-[var(--lgym-text)]">{{ getNoteHistoryChangeType(entry) }}</p>
+                <span class="text-xs text-[var(--lgym-text-muted)]">{{ formatDateTime(getNoteHistoryChangedAt(entry)) }}</span>
               </div>
-              <div class="mt-3 grid gap-3 text-sm">
-                <div>
-                  <p class="text-[var(--lgym-text-soft)]">{{ t("trainerMemberDetails.notes.history.previous") }}</p>
-                  <p class="mt-1 whitespace-pre-line rounded-md bg-[var(--lgym-note-bg)] p-3 text-[var(--lgym-text-muted)]">
-                    {{ entry.previousContent || t("trainerMemberDetails.notes.history.emptyValue") }}
-                  </p>
+
+              <div class="mt-4 overflow-hidden rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
+                <div class="hidden grid-cols-[minmax(180px,1fr)_minmax(260px,2fr)] gap-4 border-b border-[var(--lgym-border)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)] md:grid">
+                  <span>{{ t("trainerMemberDetails.notes.history.field") }}</span>
+                  <span>{{ t("trainerMemberDetails.notes.history.value") }}</span>
                 </div>
-                <div>
-                  <p class="text-[var(--lgym-text-soft)]">{{ t("trainerMemberDetails.notes.history.current") }}</p>
-                  <p class="mt-1 whitespace-pre-line rounded-md bg-[var(--lgym-note-bg)] p-3 text-[var(--lgym-text)]">
-                    {{ entry.newContent || t("trainerMemberDetails.notes.history.emptyValue") }}
-                  </p>
+                <div class="grid gap-2 px-4 py-3 text-sm md:grid-cols-[minmax(180px,1fr)_minmax(260px,2fr)] md:items-start md:gap-4">
+                  <div>
+                    <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--lgym-text-soft)] md:hidden">
+                      {{ t("trainerMemberDetails.notes.history.field") }}
+                    </p>
+                    <p class="font-semibold text-[var(--lgym-text)]">{{ t("trainerMemberDetails.notes.history.fieldContent") }}</p>
+                  </div>
+
+                  <div>
+                    <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--lgym-text-soft)] md:hidden">
+                      {{ t("trainerMemberDetails.notes.history.value") }}
+                    </p>
+                    <p v-if="isCreatedNoteHistory(entry)" class="whitespace-pre-line break-words font-semibold text-[var(--lgym-text)]">
+                      {{ formatNoteHistoryValue(getNoteHistoryNewContent(entry)) }}
+                    </p>
+                    <p v-else class="whitespace-pre-line break-words text-[var(--lgym-text-muted)]">
+                      <span>{{ formatNoteHistoryValue(getNoteHistoryPreviousContent(entry)) }}</span>
+                      <span class="mx-2 text-[var(--lgym-text-soft)]">=&gt;</span>
+                      <span class="font-semibold text-[var(--lgym-text)]">{{ formatNoteHistoryValue(getNoteHistoryNewContent(entry)) }}</span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </article>
@@ -472,6 +490,38 @@ const openHistoryDialog = async (note: TraineeNoteDto) => {
     isLoadingHistory.value = false;
   }
 };
+
+const toNoteHistoryRecord = (entry: TraineeNoteHistoryDto): Record<string, unknown> =>
+  entry as Record<string, unknown>;
+
+const getNoteHistoryString = (entry: TraineeNoteHistoryDto, camelKey: keyof TraineeNoteHistoryDto, pascalKey: string) => {
+  const record = toNoteHistoryRecord(entry);
+  const value = record[camelKey] ?? record[pascalKey];
+  return typeof value === "string" ? value : null;
+};
+
+const getNoteHistoryKey = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "_id", "Id")
+  ?? getNoteHistoryChangedAt(entry)
+  ?? getNoteHistoryChangeType(entry);
+
+const getNoteHistoryChangeType = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "changeType", "ChangeType") || t("trainerMemberDetails.notes.history.unknown");
+
+const getNoteHistoryChangedAt = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "changedAt", "ChangedAt");
+
+const getNoteHistoryPreviousContent = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "previousContent", "PreviousContent");
+
+const getNoteHistoryNewContent = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryString(entry, "newContent", "NewContent");
+
+const formatNoteHistoryValue = (value: string | null) =>
+  value?.trim() || t("trainerMemberDetails.notes.history.emptyValue");
+
+const isCreatedNoteHistory = (entry: TraineeNoteHistoryDto) =>
+  getNoteHistoryChangeType(entry).toLowerCase() === "created" || !getNoteHistoryPreviousContent(entry)?.trim();
 
 watch(() => props.traineeId, () => void loadNotes(), { immediate: true });
 </script>

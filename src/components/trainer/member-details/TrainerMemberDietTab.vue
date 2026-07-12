@@ -1,16 +1,19 @@
 <template>
   <div class="flex min-h-0 min-w-0 flex-col gap-4">
-    <section class="flex flex-col gap-4">
-      <div class="flex flex-col gap-4 rounded-[28px] border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-5 py-6 sm:px-6">
+    <section>
+      <div>
         <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
               {{ t("trainerMemberDetails.diet.eyebrow") }}
             </p>
-            <h2 class="mt-2 text-2xl font-semibold text-[var(--lgym-text)] sm:text-3xl">
+            <h2 class="mt-2 text-xl font-semibold text-[var(--lgym-text)] sm:text-2xl">
               {{ t("trainerMemberDetails.diet.title") }}
             </h2>
-            <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)"]>{{ plansCountLabel }}</p>
+            <p class="mt-2 text-sm leading-6 text-[var(--lgym-text-muted)]">{{ plansCountLabel }}</p>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
+              {{ t("trainerMemberDetails.diet.subtitle") }}
+            </p>
           </div>
 
           <div class="flex flex-wrap gap-2">
@@ -28,37 +31,34 @@
             </v-btn>
           </div>
         </div>
-
-        <p class="max-w-3xl text-sm leading-6 text-[var(--lgym-text-muted)]">
-          {{ t("trainerMemberDetails.diet.subtitle") }}
-        </p>
-      </div>
-
-      <div v-if="activePlans.length > 1" class="rounded-xl bg-[var(--lgym-note-bg)] px-4 py-3 text-sm text-[var(--lgym-text-muted)]">
-        {{ t("trainerMemberDetails.diet.summary.activeCount", { count: activePlans.length }) }}
       </div>
 
       <v-progress-linear v-if="isLoading" indeterminate color="primary" />
 
-      <div v-if="hasError && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
-        <p class="text-sm text-[var(--lgym-text-muted)]">
-          {{ t("trainerMemberDetails.diet.error") }}
-        </p>
-        <v-btn class="mt-4" color="primary" variant="outlined" @click="loadPlans">
-          {{ t("trainerMemberDetails.actions.retry") }}
-        </v-btn>
-      </div>
+      <div class="pt-4">
+        <div v-if="activePlans.length > 1" class="mb-4 rounded-xl bg-[var(--lgym-note-bg)] px-4 py-3 text-sm text-[var(--lgym-text-muted)]">
+          {{ t("trainerMemberDetails.diet.summary.activeCount", { count: activePlans.length }) }}
+        </div>
 
-      <div v-else-if="plans.length === 0 && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
-        <p class="text-base font-semibold text-[var(--lgym-text)]">
-          {{ t("trainerMemberDetails.diet.empty.title") }}
-        </p>
-        <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
-          {{ t("trainerMemberDetails.diet.empty.subtitle") }}
-        </p>
-      </div>
+        <div v-if="hasError && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
+          <p class="text-sm text-[var(--lgym-text-muted)]">
+            {{ t("trainerMemberDetails.diet.error") }}
+          </p>
+          <v-btn class="mt-4" color="primary" variant="outlined" @click="loadPlans">
+            {{ t("trainerMemberDetails.actions.retry") }}
+          </v-btn>
+        </div>
 
-      <div v-else class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div v-else-if="plans.length === 0 && !isLoading" class="rounded-md border border-dashed border-[var(--lgym-border)] px-6 py-10 text-center">
+          <p class="text-base font-semibold text-[var(--lgym-text)]">
+            {{ t("trainerMemberDetails.diet.empty.title") }}
+          </p>
+          <p class="mt-2 text-sm text-[var(--lgym-text-muted)]">
+            {{ t("trainerMemberDetails.diet.empty.subtitle") }}
+          </p>
+        </div>
+
+        <div v-else class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <article
           v-for="plan in sortedPlans"
           :key="plan._id || plan.name || 'diet'"
@@ -99,6 +99,7 @@
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--lgym-primary)]">Open diet</p>
           </div>
         </article>
+        </div>
       </div>
     </section>
 
@@ -132,19 +133,19 @@
           <v-card-text class="px-6 py-6">
             <div class="grid gap-5">
               <div class="grid gap-3 md:grid-cols-4">
-                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-4 text-sm">
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-4 text-sm">
                   <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.calories") }}</span>
                   <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(selectedPreviewPlan.estimatedCalories) }}</p>
                 </div>
-                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-4 text-sm">
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-4 text-sm">
                   <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.protein") }}</span>
                   <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(selectedPreviewPlan.proteinGrams) }}</p>
                 </div>
-                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-4 text-sm">
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-4 text-sm">
                   <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.carbs") }}</span>
                   <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(selectedPreviewPlan.carbsGrams) }}</p>
                 </div>
-                <div class="rounded-2xl bg-[var(--lgym-note-bg)] p-4 text-sm">
+                <div class="rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-4 text-sm">
                   <span class="text-[var(--lgym-text-muted)]">{{ t("trainerMemberDetails.diet.macros.fat") }}</span>
                   <p class="mt-1 font-semibold text-[var(--lgym-text)]">{{ formatOptional(selectedPreviewPlan.fatGrams) }}</p>
                 </div>
@@ -253,70 +254,77 @@
               </div>
             </section>
 
-            <div class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] p-4 sm:p-5">
-              <div class="grid gap-4 md:grid-cols-2">
-              <v-text-field v-model="form.name" density="comfortable" variant="outlined" hide-details="auto" :error-messages="validationErrors.name">
-                <template #label>
-                  {{ t('trainerMemberDetails.diet.form.name') }} <span class="text-red-400">*</span>
-                </template>
-              </v-text-field>
-              <v-text-field v-model="form.startDate" type="date" density="comfortable" variant="outlined" hide-details="auto" :error-messages="validationErrors.startDate">
-                <template #label>
-                  {{ t('trainerMemberDetails.diet.form.startDate') }} <span class="text-red-400">*</span>
-                </template>
-              </v-text-field>
-              <v-text-field v-model="form.endDate" :label="t('trainerMemberDetails.diet.form.endDate')" type="date" density="comfortable" variant="outlined" hide-details />
-              <div class="flex min-h-[56px] items-center rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-3">
-                <v-switch v-model="form.isActive" :label="t('trainerMemberDetails.diet.form.isActive')" color="primary" inset hide-details class="w-full" />
-              </div>
-              <v-text-field
-                :model-value="isMealBasedMode ? aggregatedMealMacros.estimatedCalories ?? '' : form.estimatedCalories"
-                type="number"
-                :label="t('trainerMemberDetails.diet.macros.calories')"
-                density="comfortable"
-                variant="outlined"
-                hide-details
-                :readonly="isMealBasedMode"
-                :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
-                :class="{ 'diet-readonly-field': isMealBasedMode }"
-                @update:model-value="form.estimatedCalories = toNullableNumber($event)"
-              />
-              <v-text-field
-                :model-value="isMealBasedMode ? aggregatedMealMacros.proteinGrams ?? '' : form.proteinGrams"
-                type="number"
-                :label="t('trainerMemberDetails.diet.macros.protein')"
-                density="comfortable"
-                variant="outlined"
-                hide-details
-                :readonly="isMealBasedMode"
-                :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
-                :class="{ 'diet-readonly-field': isMealBasedMode }"
-                @update:model-value="form.proteinGrams = toNullableNumber($event)"
-              />
-              <v-text-field
-                :model-value="isMealBasedMode ? aggregatedMealMacros.carbsGrams ?? '' : form.carbsGrams"
-                type="number"
-                :label="t('trainerMemberDetails.diet.macros.carbs')"
-                density="comfortable"
-                variant="outlined"
-                hide-details
-                :readonly="isMealBasedMode"
-                :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
-                :class="{ 'diet-readonly-field': isMealBasedMode }"
-                @update:model-value="form.carbsGrams = toNullableNumber($event)"
-              />
-              <v-text-field
-                :model-value="isMealBasedMode ? aggregatedMealMacros.fatGrams ?? '' : form.fatGrams"
-                type="number"
-                :label="t('trainerMemberDetails.diet.macros.fat')"
-                density="comfortable"
-                variant="outlined"
-                hide-details
-                :readonly="isMealBasedMode"
-                :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
-                :class="{ 'diet-readonly-field': isMealBasedMode }"
-                @update:model-value="form.fatGrams = toNullableNumber($event)"
-              />
+            <div class="diet-plan-fields-card rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)]">
+              <div class="grid gap-6">
+                <v-text-field v-model="form.name" density="comfortable" variant="outlined" hide-details="auto" :error-messages="validationErrors.name">
+                  <template #label>
+                    {{ t('trainerMemberDetails.diet.form.name') }} <span class="text-red-400">*</span>
+                  </template>
+                </v-text-field>
+
+                <div class="grid gap-4 md:grid-cols-2">
+                  <v-text-field v-model="form.startDate" type="date" density="comfortable" variant="outlined" hide-details="auto" :error-messages="validationErrors.startDate">
+                    <template #label>
+                      {{ t('trainerMemberDetails.diet.form.startDate') }} <span class="text-red-400">*</span>
+                    </template>
+                  </v-text-field>
+                  <v-text-field v-model="form.endDate" :label="t('trainerMemberDetails.diet.form.endDate')" type="date" density="comfortable" variant="outlined" hide-details />
+                </div>
+
+                <div class="flex min-h-[56px] items-center rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] px-4 py-3 sm:px-5">
+                  <v-switch v-model="form.isActive" :label="t('trainerMemberDetails.diet.form.isActive')" color="primary" inset hide-details class="w-full" />
+                </div>
+
+                <div class="grid gap-4 md:grid-cols-2">
+                  <v-text-field
+                    :model-value="caloriesFieldValue"
+                    type="number"
+                    :label="t('trainerMemberDetails.diet.macros.calories')"
+                    density="comfortable"
+                    variant="outlined"
+                    hide-details
+                    :readonly="isCaloriesAutoCalculated"
+                    :prepend-inner-icon="isCaloriesAutoCalculated ? 'mdi-calculator-variant-outline' : undefined"
+                    :class="{ 'diet-readonly-field': isCaloriesAutoCalculated }"
+                    @update:model-value="form.estimatedCalories = toNullableNumber($event)"
+                  />
+                  <v-text-field
+                    :model-value="isMealBasedMode ? aggregatedMealMacros.proteinGrams ?? '' : form.proteinGrams"
+                    type="number"
+                    :label="t('trainerMemberDetails.diet.macros.protein')"
+                    density="comfortable"
+                    variant="outlined"
+                    hide-details
+                    :readonly="isMealBasedMode"
+                    :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
+                    :class="{ 'diet-readonly-field': isMealBasedMode }"
+                    @update:model-value="form.proteinGrams = toNullableNumber($event)"
+                  />
+                  <v-text-field
+                    :model-value="isMealBasedMode ? aggregatedMealMacros.carbsGrams ?? '' : form.carbsGrams"
+                    type="number"
+                    :label="t('trainerMemberDetails.diet.macros.carbs')"
+                    density="comfortable"
+                    variant="outlined"
+                    hide-details
+                    :readonly="isMealBasedMode"
+                    :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
+                    :class="{ 'diet-readonly-field': isMealBasedMode }"
+                    @update:model-value="form.carbsGrams = toNullableNumber($event)"
+                  />
+                  <v-text-field
+                    :model-value="isMealBasedMode ? aggregatedMealMacros.fatGrams ?? '' : form.fatGrams"
+                    type="number"
+                    :label="t('trainerMemberDetails.diet.macros.fat')"
+                    density="comfortable"
+                    variant="outlined"
+                    hide-details
+                    :readonly="isMealBasedMode"
+                    :prepend-inner-icon="isMealBasedMode ? 'mdi-lock-outline' : undefined"
+                    :class="{ 'diet-readonly-field': isMealBasedMode }"
+                    @update:model-value="form.fatGrams = toNullableNumber($event)"
+                  />
+                </div>
               </div>
             </div>
 
@@ -426,26 +434,66 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="isHistoryOpen" max-width="760">
-      <v-card rounded="lg">
-        <v-card-title class="text-lg font-semibold">{{ t("trainerMemberDetails.diet.dialog.historyTitle") }}</v-card-title>
+    <v-dialog v-model="isHistoryOpen" max-width="1080">
+      <v-card rounded="lg" class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
+        <v-card-title class="px-6 pt-6 text-xl font-semibold text-[var(--lgym-text)]">
+          {{ t("trainerMemberDetails.diet.dialog.historyTitle") }}
+        </v-card-title>
         <v-card-text class="px-6 py-5">
           <v-progress-linear v-if="isLoadingHistory" indeterminate color="primary" />
           <div v-else-if="historyEntries.length === 0" class="py-8 text-center text-sm text-[var(--lgym-text-muted)]">
             {{ t("trainerMemberDetails.diet.history.empty") }}
           </div>
           <div v-else class="grid gap-3">
-            <article v-for="(entry, index) in historyEntries" :key="entry._id ?? entry.changeDate ?? entry.changeType ?? 'history-entry'" class="rounded-md border border-[var(--lgym-border)] p-4">
+            <article v-for="(entry, index) in historyEntries" :key="entry._id ?? entry.changeDate ?? entry.changeType ?? 'history-entry'" class="rounded-2xl border border-[var(--lgym-border)] bg-[var(--lgym-note-bg)] px-4 py-4">
               <div class="flex items-center justify-between gap-3">
                 <p class="font-semibold text-[var(--lgym-text)]">{{ entry.changeType || t("trainerMemberDetails.diet.history.unknown") }}</p>
                 <span class="text-xs text-[var(--lgym-text-muted)]">{{ formatDateTime(entry.changeDate) }}</span>
               </div>
-              <div class="mt-3 rounded-md bg-[var(--lgym-note-bg)] p-3">
+
+              <div class="mt-4 overflow-hidden rounded-xl border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)]">
                 <template v-if="getHistorySummary(entry, historyEntries[index + 1]).length > 0">
-                  <div v-for="change in getHistorySummary(entry, historyEntries[index + 1])" :key="change.key" class="grid gap-1 py-2 text-sm text-[var(--lgym-text-muted)] sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:gap-3">
-                    <span class="text-[var(--lgym-text)]">{{ change.label }}</span>
-                    <span>{{ change.from }}</span>
-                    <span class="font-medium text-[var(--lgym-text)]">{{ change.to }}</span>
+                  <div class="hidden grid-cols-[150px_minmax(180px,1fr)_minmax(220px,2fr)] gap-4 border-b border-[var(--lgym-border)] px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--lgym-text-soft)] md:grid">
+                    <span>{{ t("trainerMemberDetails.diet.history.category") }}</span>
+                    <span>{{ t("trainerMemberDetails.diet.history.field") }}</span>
+                    <span>{{ t("trainerMemberDetails.diet.history.value") }}</span>
+                  </div>
+                  <div class="divide-y divide-[var(--lgym-border)]">
+                    <div
+                      v-for="change in getHistorySummary(entry, historyEntries[index + 1])"
+                      :key="change.key"
+                      class="grid gap-2 px-4 py-3 text-sm md:grid-cols-[150px_minmax(180px,1fr)_minmax(220px,2fr)] md:items-center md:gap-4"
+                    >
+                      <div>
+                        <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--lgym-text-soft)] md:hidden">
+                          {{ t("trainerMemberDetails.diet.history.category") }}
+                        </p>
+                        <span class="inline-flex rounded-full bg-[var(--lgym-note-bg)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--lgym-primary)]">
+                          {{ getHistoryCategoryLabel(change.category) }}
+                        </span>
+                      </div>
+
+                      <div>
+                        <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--lgym-text-soft)] md:hidden">
+                          {{ t("trainerMemberDetails.diet.history.field") }}
+                        </p>
+                        <p class="font-semibold text-[var(--lgym-text)]">{{ change.label }}</p>
+                      </div>
+
+                      <div>
+                        <p class="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--lgym-text-soft)] md:hidden">
+                          {{ t("trainerMemberDetails.diet.history.value") }}
+                        </p>
+                        <p v-if="change.isCreated" class="break-words font-semibold text-[var(--lgym-text)]">
+                          {{ change.to }}
+                        </p>
+                        <p v-else class="break-words text-[var(--lgym-text-muted)]">
+                          <span>{{ change.from }}</span>
+                          <span class="mx-2 text-[var(--lgym-text-soft)]">=&gt;</span>
+                          <span class="font-semibold text-[var(--lgym-text)]">{{ change.to }}</span>
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </template>
                 <p v-else class="text-sm text-[var(--lgym-text-muted)]">
@@ -522,7 +570,11 @@ type HistorySummaryRow = {
   label: string;
   from: string;
   to: string;
+  category: "plan" | "macros" | "meals" | "notes" | "status";
+  isCreated?: boolean;
 };
+
+type HistorySummaryCategory = HistorySummaryRow["category"];
 
 type ValidationErrors = {
   name: string[];
@@ -683,6 +735,28 @@ const aggregatedMealMacros = computed(() => {
   };
 });
 
+const globalMacroCalories = computed(() => {
+  const proteinGrams = toNullableNumber(form.value.proteinGrams);
+  const carbsGrams = toNullableNumber(form.value.carbsGrams);
+  const fatGrams = toNullableNumber(form.value.fatGrams);
+
+  if (proteinGrams == null && carbsGrams == null && fatGrams == null) {
+    return null;
+  }
+
+  return calculateCaloriesFromMacros(proteinGrams, carbsGrams, fatGrams);
+});
+
+const isCaloriesAutoCalculated = computed(() => isMealBasedMode.value || globalMacroCalories.value != null);
+
+const caloriesFieldValue = computed(() => {
+  if (isMealBasedMode.value) {
+    return aggregatedMealMacros.value.estimatedCalories ?? "";
+  }
+
+  return globalMacroCalories.value ?? form.value.estimatedCalories;
+});
+
 const resetForm = () => {
   isMealBasedMode.value = true;
   validationErrors.value = {
@@ -812,7 +886,7 @@ const syncMealOrders = () => {
 };
 
 const hasAtLeastOneGlobalTarget = () =>
-  [form.value.estimatedCalories, form.value.proteinGrams, form.value.carbsGrams, form.value.fatGrams].some(
+  [caloriesFieldValue.value, form.value.proteinGrams, form.value.carbsGrams, form.value.fatGrams].some(
     (value) => toNullableNumber(value) != null,
   );
 
@@ -853,7 +927,9 @@ const validateForm = () => {
 
 const toPayload = (): UpsertDietPlanRequest => ({
   ...form.value,
-  estimatedCalories: isMealBasedMode.value ? aggregatedMealMacros.value.estimatedCalories : toNullableNumber(form.value.estimatedCalories),
+  estimatedCalories: isMealBasedMode.value
+    ? aggregatedMealMacros.value.estimatedCalories
+    : globalMacroCalories.value ?? toNullableNumber(form.value.estimatedCalories),
   proteinGrams: isMealBasedMode.value ? aggregatedMealMacros.value.proteinGrams : toNullableNumber(form.value.proteinGrams),
   carbsGrams: isMealBasedMode.value ? aggregatedMealMacros.value.carbsGrams : toNullableNumber(form.value.carbsGrams),
   fatGrams: isMealBasedMode.value ? aggregatedMealMacros.value.fatGrams : toNullableNumber(form.value.fatGrams),
@@ -1021,13 +1097,103 @@ const formatHistoryValue = (value: string | number | boolean | null | undefined,
   return String(value);
 };
 
+const getHistoryFieldCategory = (key: keyof DietHistorySnapshot): HistorySummaryCategory => {
+  if (["estimatedCalories", "proteinGrams", "carbsGrams", "fatGrams"].includes(String(key))) {
+    return "macros";
+  }
+
+  if (key === "notes") {
+    return "notes";
+  }
+
+  if (key === "isActive") {
+    return "status";
+  }
+
+  return "plan";
+};
+
+const getHistoryMealFieldCategory = (key: keyof DietMealDto): HistorySummaryCategory =>
+  ["estimatedCalories", "proteinGrams", "carbsGrams", "fatGrams"].includes(String(key)) ? "macros" : "meals";
+
+const getHistoryCategoryLabel = (category: HistorySummaryCategory) =>
+  t(`trainerMemberDetails.diet.history.categories.${category}`);
+
+const toHistoryRecord = (value: unknown): Record<string, unknown> | null => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+
+  return value as Record<string, unknown>;
+};
+
+const getHistoryProperty = (source: Record<string, unknown>, camelKey: string, pascalKey: string) =>
+  source[camelKey] ?? source[pascalKey];
+
+const getHistoryString = (source: Record<string, unknown>, camelKey: string, pascalKey: string) => {
+  const value = getHistoryProperty(source, camelKey, pascalKey);
+  return typeof value === "string" ? value : null;
+};
+
+const getHistoryNumber = (source: Record<string, unknown>, camelKey: string, pascalKey: string) => {
+  const value = getHistoryProperty(source, camelKey, pascalKey);
+  return typeof value === "number" ? value : null;
+};
+
+const getHistoryBoolean = (source: Record<string, unknown>, camelKey: string, pascalKey: string) => {
+  const value = getHistoryProperty(source, camelKey, pascalKey);
+  return typeof value === "boolean" ? value : undefined;
+};
+
+const normalizeHistoryMeal = (rawMeal: unknown): DietMealDto | null => {
+  const meal = toHistoryRecord(rawMeal);
+  if (!meal) {
+    return null;
+  }
+
+  return {
+    name: getHistoryString(meal, "name", "Name"),
+    order: getHistoryNumber(meal, "order", "Order") ?? undefined,
+    description: getHistoryString(meal, "description", "Description"),
+    estimatedCalories: getHistoryNumber(meal, "estimatedCalories", "EstimatedCalories"),
+    proteinGrams: getHistoryNumber(meal, "proteinGrams", "ProteinGrams"),
+    carbsGrams: getHistoryNumber(meal, "carbsGrams", "CarbsGrams"),
+    fatGrams: getHistoryNumber(meal, "fatGrams", "FatGrams"),
+  };
+};
+
+const normalizeHistorySnapshot = (rawSnapshot: unknown): DietHistorySnapshot | null => {
+  const snapshot = toHistoryRecord(rawSnapshot);
+  if (!snapshot) {
+    return null;
+  }
+
+  const rawMeals = getHistoryProperty(snapshot, "meals", "Meals");
+  const meals = Array.isArray(rawMeals)
+    ? rawMeals.map(normalizeHistoryMeal).filter((meal): meal is DietMealDto => meal != null)
+    : [];
+
+  return {
+    name: getHistoryString(snapshot, "name", "Name"),
+    startDate: getHistoryString(snapshot, "startDate", "StartDate"),
+    endDate: getHistoryString(snapshot, "endDate", "EndDate"),
+    estimatedCalories: getHistoryNumber(snapshot, "estimatedCalories", "EstimatedCalories"),
+    proteinGrams: getHistoryNumber(snapshot, "proteinGrams", "ProteinGrams"),
+    carbsGrams: getHistoryNumber(snapshot, "carbsGrams", "CarbsGrams"),
+    fatGrams: getHistoryNumber(snapshot, "fatGrams", "FatGrams"),
+    notes: getHistoryString(snapshot, "notes", "Notes"),
+    isActive: getHistoryBoolean(snapshot, "isActive", "IsActive"),
+    meals,
+  };
+};
+
 const parseHistorySnapshot = (snapshotJson?: string | null): DietHistorySnapshot | null => {
   if (!snapshotJson) {
     return null;
   }
 
   try {
-    return JSON.parse(snapshotJson) as DietHistorySnapshot;
+    return normalizeHistorySnapshot(JSON.parse(snapshotJson));
   } catch {
     return null;
   }
@@ -1067,6 +1233,8 @@ const getHistorySummary = (entry: DietPlanHistoryDto, previousEntry?: DietPlanHi
         label: field.label,
         from: t("trainerMemberDetails.diet.history.createdSummary"),
         to: formatHistoryValue(currentValue as string | number | boolean | null | undefined, field.kind),
+        category: getHistoryFieldCategory(field.key),
+        isCreated: true,
       });
       return;
     }
@@ -1076,6 +1244,7 @@ const getHistorySummary = (entry: DietPlanHistoryDto, previousEntry?: DietPlanHi
       label: field.label,
       from: formatHistoryValue(previousValue as string | number | boolean | null | undefined, field.kind),
       to: formatHistoryValue(currentValue as string | number | boolean | null | undefined, field.kind),
+      category: getHistoryFieldCategory(field.key),
     });
   });
 
@@ -1086,8 +1255,12 @@ const getHistorySummary = (entry: DietPlanHistoryDto, previousEntry?: DietPlanHi
     changes.push({
       key: "meal-count",
       label: t("trainerMemberDetails.diet.history.fieldMealCount"),
-      from: formatHistoryValue(previousMeals.length),
+      from: !previous && entry.changeType === "Created"
+        ? t("trainerMemberDetails.diet.history.createdSummary")
+        : formatHistoryValue(previousMeals.length),
       to: formatHistoryValue(currentMeals.length),
+      category: "meals",
+      isCreated: !previous && entry.changeType === "Created",
     });
   }
 
@@ -1112,6 +1285,7 @@ const getHistorySummary = (entry: DietPlanHistoryDto, previousEntry?: DietPlanHi
         label: t("trainerMemberDetails.diet.history.mealAdded", { meal: mealLabel }),
         from: t("trainerMemberDetails.diet.history.emptyValue"),
         to: t("trainerMemberDetails.diet.history.boolTrue"),
+        category: "meals",
       });
       continue;
     }
@@ -1122,6 +1296,7 @@ const getHistorySummary = (entry: DietPlanHistoryDto, previousEntry?: DietPlanHi
         label: t("trainerMemberDetails.diet.history.mealRemoved", { meal: mealLabel }),
         from: t("trainerMemberDetails.diet.history.boolTrue"),
         to: t("trainerMemberDetails.diet.history.emptyValue"),
+        category: "meals",
       });
       continue;
     }
@@ -1140,6 +1315,7 @@ const getHistorySummary = (entry: DietPlanHistoryDto, previousEntry?: DietPlanHi
         label: t("trainerMemberDetails.diet.history.mealFieldPrefix", { meal: mealLabel, field: field.label }),
         from: formatHistoryValue(previousMeal[field.key] as string | number | boolean | null | undefined),
         to: formatHistoryValue(currentMeal[field.key] as string | number | boolean | null | undefined),
+        category: getHistoryMealFieldCategory(field.key),
       });
     });
   }
@@ -1187,4 +1363,10 @@ watch(isMealBasedMode, (enabled) => {
 .diet-readonly-field :deep(input) {
   cursor: not-allowed;
 }
+
+.diet-plan-fields-card {
+  padding: 1rem !important;
+}
+
+
 </style>

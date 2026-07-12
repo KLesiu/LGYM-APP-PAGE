@@ -1169,6 +1169,18 @@
         "fieldNotes": "Trainer notes",
         "fieldIsActive": "Active status",
         "fieldMealCount": "Meal count",
+        "category": "Section",
+        "field": "Field",
+        "value": "Value / change",
+        "previous": "Before",
+        "current": "After",
+        "categories": {
+          "plan": "Plan",
+          "macros": "Macros",
+          "meals": "Meals",
+          "notes": "Notes",
+          "status": "Status"
+        },
         "mealAdded": "Added {meal}",
         "mealRemoved": "Removed {meal}",
         "mealFieldPrefix": "{meal} / {field}",
@@ -1236,6 +1248,9 @@
       "history": {
         "empty": "No changes recorded for this note yet.",
         "unknown": "Change",
+        "field": "Field",
+        "value": "Value / change",
+        "fieldContent": "Note content",
         "previous": "Previous content",
         "current": "New content",
         "emptyValue": "—"
