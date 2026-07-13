@@ -344,7 +344,7 @@ const headers = computed(() => [
   { title: t("trainerMemberDetails.plans.form.name"), key: "name", sortable: false },
   { title: t("trainerMemberDetails.plans.meta.createdAt"), key: "createdAt", sortable: false },
   { title: t("trainerMemberDetails.plans.badges.active"), key: "status", sortable: false },
-  { title: t("common.actions"), key: "actions", sortable: false, align: "end" as const },
+  { title: t("trainerMemberDetails.plans.columns.actions"), key: "actions", sortable: false, align: "end" as const },
 ]);
 
 let requestToken = 0;

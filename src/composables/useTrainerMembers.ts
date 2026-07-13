@@ -85,6 +85,11 @@ export const canUnlinkMember = (member: TrainerDashboardTraineeDto) => {
   return Boolean(traineeId && member.isLinked);
 };
 
+export const canOpenMemberDetails = (member: TrainerDashboardTraineeDto) => {
+  const traineeId = member._id?.trim();
+  return Boolean(traineeId && member.isLinked);
+};
+
 export const getMemberStatusTranslationKey = (
   status: TrainerDashboardTraineeDtoStatus | null | undefined,
 ) => {

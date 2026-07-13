@@ -1,5 +1,9 @@
 <template>
-  <div class="flex min-h-full min-w-0 flex-1 flex-col gap-2">
+  <div v-if="isCheckingAccess" class="flex min-h-full min-w-0 flex-1 items-center justify-center">
+    <v-progress-circular indeterminate color="primary" />
+  </div>
+
+  <div v-else-if="canViewDetails" class="flex min-h-full min-w-0 flex-1 flex-col gap-2">
     <section
       class="border border-[var(--lgym-border)] bg-[var(--lgym-surface-card)] shadow-[var(--lgym-shadow-surface)]"
     >
@@ -78,6 +82,7 @@ import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter, type LocationQueryRaw } from "vue-router";
 
+import { getApiTrainerTraineesTraineeIdPlans } from "../../api/generated/demo";
 import TrainerMemberDietTab from "../../components/trainer/member-details/TrainerMemberDietTab.vue";
 import TrainerMemberMeasurementsTab from "../../components/trainer/member-details/TrainerMemberMeasurementsTab.vue";
 import TrainerMemberNotesTab from "../../components/trainer/member-details/TrainerMemberNotesTab.vue";
@@ -88,13 +93,18 @@ import {
   useTrainerMemberDetails,
   type MemberDetailsTab,
 } from "../../composables/useTrainerMemberDetails";
+import { getRememberedMemberSnapshot } from "../../composables/useTrainerMembers";
+import { useToast } from "../../composables/useToast";
 
 const { locale, t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const toast = useToast();
 
 const traineeId = computed(() => String(route.params.traineeId ?? ""));
 const activeTab = ref<MemberDetailsTab>("trainings");
+const isCheckingAccess = ref(true);
+const canViewDetails = ref(false);
 const requestedTab = computed<MemberDetailsTab | null>(() => {
   const tab = String(route.query.tab ?? "").trim();
   return ["trainings", "plans", "diet", "notes", "reports", "measurements"].includes(tab)
@@ -141,6 +151,60 @@ const {
   formatDate,
   formatDateTime,
 } = useTrainerMemberDetails(traineeId, locale);
+
+let accessCheckToken = 0;
+
+const redirectToMembers = async () => {
+  await router.replace({ name: "trainer-members" });
+};
+
+const verifyAccess = async () => {
+  const currentToken = ++accessCheckToken;
+  const currentTraineeId = traineeId.value.trim();
+
+  canViewDetails.value = false;
+  isCheckingAccess.value = true;
+
+  if (!currentTraineeId) {
+    toast.warning("trainerMembers.feedback.detailsRequiresActiveRelationship");
+    await redirectToMembers();
+    return;
+  }
+
+  const snapshot = getRememberedMemberSnapshot(currentTraineeId);
+  if (snapshot && !snapshot.isLinked) {
+    toast.warning("trainerMembers.feedback.detailsRequiresActiveRelationship");
+    await redirectToMembers();
+    return;
+  }
+
+  try {
+    const response = await getApiTrainerTraineesTraineeIdPlans(currentTraineeId);
+    if (currentToken !== accessCheckToken) return;
+
+    if (response.status >= 200 && response.status < 300) {
+      canViewDetails.value = true;
+      return;
+    }
+
+    toast.warning("trainerMembers.feedback.detailsRequiresActiveRelationship");
+    await redirectToMembers();
+  } catch (error) {
+    if (currentToken !== accessCheckToken) return;
+
+    console.error(error);
+    toast.warning("trainerMembers.feedback.detailsRequiresActiveRelationship");
+    await redirectToMembers();
+  } finally {
+    if (currentToken === accessCheckToken) {
+      isCheckingAccess.value = false;
+    }
+  }
+};
+
+watch(traineeId, () => {
+  void verifyAccess();
+}, { immediate: true });
 
 watch(
   requestedTab,

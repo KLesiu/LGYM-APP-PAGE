@@ -388,7 +388,8 @@
       "subtitle": "Zarządzaj biblioteką szablonów treningowych, które trener może później kopiować i przypisywać podopiecznym."
     },
     "columns": {
-      "status": "Gotowość"
+      "status": "Gotowość",
+      "actions": "Akcje"
     },
     "status": {
       "assignable": "Gotowy do przypisania"
@@ -790,7 +791,8 @@
       "loadFailed": "Nie udało się pobrać listy podopiecznych.",
       "unlinkSuccess": "Podopieczny został odpięty poprawnie.",
       "unlinkFailed": "Nie udało się odpiąć podopiecznego.",
-      "unauthorized": "Sesja trenera wygasła albo nie masz dostępu do tego widoku."
+      "unauthorized": "Sesja trenera wygasła albo nie masz dostępu do tego widoku.",
+      "detailsRequiresActiveRelationship": "Nie możesz wejść w szczegóły podopiecznego bez aktywnej relacji."
     }
   },
   "userRelationship": {
@@ -1032,6 +1034,9 @@
       },
       "meta": {
         "createdAt": "Utworzono"
+      },
+      "columns": {
+        "actions": "Akcje"
       },
       "fallback": {
         "noName": "Plan bez nazwy"

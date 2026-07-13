@@ -388,7 +388,8 @@
       "subtitle": "Manage the trainer template library that can later be copied and assigned to trainees."
     },
     "columns": {
-      "status": "Readiness"
+      "status": "Readiness",
+      "actions": "Actions"
     },
     "status": {
       "assignable": "Ready to assign"
@@ -790,7 +791,8 @@
       "loadFailed": "Failed to load the members list.",
       "unlinkSuccess": "Member unlinked successfully.",
       "unlinkFailed": "Failed to unlink the member.",
-      "unauthorized": "Your trainer session expired or you no longer have access to this view."
+      "unauthorized": "Your trainer session expired or you no longer have access to this view.",
+      "detailsRequiresActiveRelationship": "You cannot open member details without an active relationship."
     }
   },
   "userRelationship": {
@@ -1032,6 +1034,9 @@
       },
       "meta": {
         "createdAt": "Created"
+      },
+      "columns": {
+        "actions": "Actions"
       },
       "fallback": {
         "noName": "Untitled plan"

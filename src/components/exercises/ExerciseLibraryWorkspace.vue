@@ -471,9 +471,7 @@ const commonNextLabel = computed(() =>
 );
 
 const exercisePageSizeLabel = computed(() =>
-  props.roleMode === "admin"
-    ? t("admin.filters.pageSize")
-    : t("trainerMembers.list.filters.pageSize"),
+  t("trainerMembers.list.filters.pageSize")
 );
 
 const exercisePaginationSummary = computed(() => {

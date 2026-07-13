@@ -225,7 +225,7 @@ const headers = computed(() => [
   { title: t("trainerTrainingPlans.form.name"), key: "name", sortable: false },
   { title: t("trainerTrainingPlans.columns.status"), key: "status", sortable: false },
   {
-    title: t("common.actions"),
+    title: t("trainerTrainingPlans.columns.actions"),
     key: "actions",
     sortable: false,
     align: "end" as const,
