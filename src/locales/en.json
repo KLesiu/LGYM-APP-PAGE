@@ -790,7 +790,8 @@
       "loadFailed": "Failed to load the members list.",
       "unlinkSuccess": "Member unlinked successfully.",
       "unlinkFailed": "Failed to unlink the member.",
-      "unauthorized": "Your trainer session expired or you no longer have access to this view."
+      "unauthorized": "Your trainer session expired or you no longer have access to this view.",
+      "detailsRequiresActiveRelationship": "You cannot open member details without an active relationship."
     }
   },
   "userRelationship": {

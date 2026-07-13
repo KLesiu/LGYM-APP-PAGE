@@ -37,13 +37,16 @@ import type { TrainerDashboardTraineeDto } from "../../api/model";
 import TrainerMembersTable from "../../components/trainer/members/TrainerMembersTable.vue";
 import { useConfirmDialog } from "../../composables/useConfirmDialog";
 import {
+  canOpenMemberDetails,
   rememberMemberSnapshot,
   useTrainerMembers,
 } from "../../composables/useTrainerMembers";
+import { useToast } from "../../composables/useToast";
 
 const { t } = useI18n();
 const router = useRouter();
 const { confirm } = useConfirmDialog();
+const toast = useToast();
 
 const {
   members,
@@ -67,7 +70,10 @@ const {
 
 const openDetails = async (member: TrainerDashboardTraineeDto) => {
   const traineeId = member._id?.trim();
-  if (!traineeId) return;
+  if (!traineeId || !canOpenMemberDetails(member)) {
+    toast.warning("trainerMembers.feedback.detailsRequiresActiveRelationship");
+    return;
+  }
 
   rememberMemberSnapshot(member);
   await router.push(`/trainer/members/${traineeId}`);

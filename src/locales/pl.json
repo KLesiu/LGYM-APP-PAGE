@@ -790,7 +790,8 @@
       "loadFailed": "Nie udało się pobrać listy podopiecznych.",
       "unlinkSuccess": "Podopieczny został odpięty poprawnie.",
       "unlinkFailed": "Nie udało się odpiąć podopiecznego.",
-      "unauthorized": "Sesja trenera wygasła albo nie masz dostępu do tego widoku."
+      "unauthorized": "Sesja trenera wygasła albo nie masz dostępu do tego widoku.",
+      "detailsRequiresActiveRelationship": "Nie możesz wejść w szczegóły podopiecznego bez aktywnej relacji."
     }
   },
   "userRelationship": {
