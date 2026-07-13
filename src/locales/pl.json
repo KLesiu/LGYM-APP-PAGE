@@ -1034,6 +1034,9 @@
       "meta": {
         "createdAt": "Utworzono"
       },
+      "columns": {
+        "actions": "Akcje"
+      },
       "fallback": {
         "noName": "Plan bez nazwy"
       },
