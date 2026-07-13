@@ -388,7 +388,8 @@
       "subtitle": "Zarządzaj biblioteką szablonów treningowych, które trener może później kopiować i przypisywać podopiecznym."
     },
     "columns": {
-      "status": "Gotowość"
+      "status": "Gotowość",
+      "actions": "Akcje"
     },
     "status": {
       "assignable": "Gotowy do przypisania"

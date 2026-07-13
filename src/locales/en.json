@@ -388,7 +388,8 @@
       "subtitle": "Manage the trainer template library that can later be copied and assigned to trainees."
     },
     "columns": {
-      "status": "Readiness"
+      "status": "Readiness",
+      "actions": "Actions"
     },
     "status": {
       "assignable": "Ready to assign"
