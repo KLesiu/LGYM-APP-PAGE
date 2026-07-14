@@ -1921,6 +1921,254 @@
       "summary": "Strona {page} z {totalPages} • łącznie {totalCount} użytkowników"
     }
   },
+  "landing": {
+    "nav": {
+      "ariaLabel": "Nawigacja strony głównej",
+      "athletes": "Dla trenujących",
+      "trainers": "Dla trenerów",
+      "socials": "Sociale"
+    },
+    "hero": {
+      "badge": "Aplikacja treningowa + panel dla trenerów",
+      "title": "Trenuj konkretnie. Mierz progres. Prowadź podopiecznych bez chaosu.",
+      "subtitle": "LGYM łączy aplikację mobilną dla osób ćwiczących z webowym panelem dla trenerów. Plany, treningi, historia, ćwiczenia i współpraca z podopiecznymi trafiają w jedno uporządkowane miejsce.",
+      "primaryCta": "Pobierz aplikację",
+      "secondaryCta": "Zaloguj się do panelu",
+      "screens": {
+        "primary": {
+          "badge": "Slot na screen",
+          "title": "Dashboard / Start",
+          "description": "Wstaw obraz aplikacji mobilnej"
+        },
+        "secondary": {
+          "badge": "Slot na screen",
+          "title": "Aktywny trening",
+          "description": "Serie, ciężar, przerwy, progres"
+        }
+      },
+      "panel": {
+        "eyebrow": "Panel trenera",
+        "title": "Podopieczni, plany i raporty w jednym widoku.",
+        "rows": {
+          "members": "Lista podopiecznych",
+          "plans": "Plany treningowe",
+          "reports": "Raporty i feedback"
+        }
+      }
+    },
+    "metrics": {
+      "roles": {
+        "value": "3",
+        "label": "role produktu"
+      },
+      "system": {
+        "value": "1",
+        "label": "spójny system"
+      },
+      "access": {
+        "value": "24/7",
+        "label": "dostęp do planu"
+      }
+    },
+    "features": {
+      "eyebrow": "Dlaczego LGYM",
+      "title": "Zamiast kolejnej notatki w telefonie — system do realnego prowadzenia treningu.",
+      "items": {
+        "plan": {
+          "title": "Plan zamiast improwizacji",
+          "description": "Buduj dni treningowe, zapisuj ćwiczenia i prowadź progres bez rozproszonych notatek."
+        },
+        "history": {
+          "title": "Historia, która coś mówi",
+          "description": "Treningi, wyniki i rekordy tworzą kontekst do kolejnych decyzji — dla użytkownika i trenera."
+        },
+        "collaboration": {
+          "title": "Współpraca trener–podopieczny",
+          "description": "Zaproszenia, plany, raporty i feedback zamieniają aplikację w centrum pracy trenerskiej."
+        }
+      }
+    },
+    "context": {
+      "eyebrow": "Dla ćwiczących",
+      "title": "Trening z rankingiem ELO i realną rywalizacją.",
+      "description": "LGYM zamienia zwykły zapis treningu w system progresu: wyniki budują ranking ELO, rekordy mają znaczenie, a ćwiczący może porównywać się z innymi i rywalizować o lepszą pozycję podczas kolejnych treningów.",
+      "screenBadge": "Screen",
+      "screens": {
+        "plan": "Plan dnia",
+        "library": "Biblioteka ćwiczeń",
+        "history": "Historia treningów"
+      }
+    },
+    "showcase": {
+      "ariaLabel": "Prezentacja produktu LGYM",
+      "controlsAriaLabel": "Sterowanie sliderem",
+      "previousSlide": "Poprzedni slajd",
+      "nextSlide": "Następny slajd",
+      "elo": {
+        "kicker": "Rywalizacja",
+        "title": "Trenuj solo, ale widzisz jak wypadasz na tle innych",
+        "description": "Historia treningów, rekordy i ranking ELO tworzą motywację do kolejnej serii — nie tylko zapisują, co już zostało zrobione."
+      },
+      "slides": {
+        "mobilePlan": {
+          "kicker": "Ranking ELO",
+          "title": "Każdy trening może przesunąć Cię w rankingu",
+          "description": "Serie, ciężar i rekordy nie są tylko historią — pracują na wynik ELO, który pokazuje progres i pozwala rywalizować z innymi ćwiczącymi."
+        },
+        "trainerPlatform": {
+          "kicker": "Platforma trenera",
+          "title": "Panel trenera jako centrum operacyjne",
+          "description": "Landing musi sprzedawać też web: podopieczni, plany, raporty i feedback są pokazane jako realna wartość dla trenerów.",
+          "metrics": {
+            "members": {
+              "value": "24",
+              "label": "aktywnych podopiecznych"
+            },
+            "plans": {
+              "value": "12",
+              "label": "planów do obsługi"
+            },
+            "reports": {
+              "value": "8",
+              "label": "raportów do feedbacku"
+            }
+          },
+          "rows": {
+            "relationships": "Szybki przegląd relacji trener–podopieczny",
+            "plans": "Tworzenie i udostępnianie planów",
+            "feedback": "Raporty, notatki i feedback w jednym miejscu"
+          }
+        },
+        "exerciseLibrary": {
+          "kicker": "Biblioteka ćwiczeń",
+          "title": "Rywalizacja oparta o konkretne ćwiczenia",
+          "description": "Biblioteka ćwiczeń porządkuje ruchy, dzięki czemu wyniki, rekordy i porównania między użytkownikami mają wspólny kontekst."
+        },
+        "coachingWorkflow": {
+          "kicker": "Workflow trenerski",
+          "title": "Mniej wiadomości, więcej uporządkowanej pracy",
+          "description": "Platforma trenera pokazuje produkt biznesowo: pomaga zarządzać ludźmi, decyzjami treningowymi i komunikacją.",
+          "metrics": {
+            "roles": {
+              "value": "3",
+              "label": "role produktu"
+            },
+            "system": {
+              "value": "1",
+              "label": "spójny ekosystem"
+            },
+            "growth": {
+              "value": "∞",
+              "label": "miejsce na rozwój"
+            }
+          },
+          "rows": {
+            "roles": "Panel dla trenerów i administratorów",
+            "web": "Web wygodniejszy do pracy operacyjnej",
+            "mobile": "Mobile jako codzienny interfejs zawodnika"
+          }
+        },
+        "progressTracking": {
+          "kicker": "Rywalizacja",
+          "title": "Trenuj solo, ale widzisz jak wypadasz na tle innych",
+          "description": "Historia treningów, rekordy i ranking ELO tworzą motywację do kolejnej serii — nie tylko zapisują, co już zostało zrobione."
+        }
+      }
+    },
+    "productSections": {
+      "athletes": {
+        "eyebrow": "Dla trenujących",
+        "title": "Aplikacja, która prowadzi przez trening zamiast tylko go zapisywać.",
+        "description": "To miejsce na najważniejsze screeny z mobile: start, plan dnia, aktywny trening, ćwiczenia i historia. Sekcja ma pokazać osobie ćwiczącej, że LGYM jest codziennym narzędziem do progresu.",
+        "screens": {
+          "start": {
+            "kicker": "Start",
+            "title": "Dashboard użytkownika"
+          },
+          "plan": {
+            "kicker": "Plan",
+            "title": "Plan dnia treningowego"
+          },
+          "training": {
+            "kicker": "Trening",
+            "title": "Aktywna sesja"
+          },
+          "history": {
+            "kicker": "Historia",
+            "title": "Progres i wykonane treningi"
+          }
+        }
+      },
+      "trainers": {
+        "eyebrow": "Dla trenerów",
+        "title": "Platforma webowa do pracy z podopiecznymi, planami i feedbackiem.",
+        "description": "Tu możesz wkleić docelowe screeny z panelu trenera. Na razie zostawiłem eleganckie sloty produktowe, które komunikują, jakie widoki powinny się tu znaleźć.",
+        "screens": {
+          "members": {
+            "kicker": "Podopieczni",
+            "title": "Lista i szczegóły klientów",
+            "placeholder": "Poziomy screen: lista podopiecznych / szczegóły klienta",
+            "description": "Slot na screen z listą podopiecznych, statusem relacji i szybkim wejściem w szczegóły."
+          },
+          "plans": {
+            "kicker": "Plany",
+            "title": "Budowanie planów treningowych",
+            "placeholder": "Poziomy screen: kreator planu / dni treningowe",
+            "description": "Miejsce na screen kreatora planu, dni treningowych albo udostępniania planu kodem."
+          },
+          "reports": {
+            "kicker": "Raporty",
+            "title": "Feedback i kontrola pracy",
+            "placeholder": "Poziomy screen: raporty / pomiary / feedback",
+            "description": "Slot pod widok raportów, notatek, pomiarów lub historii pracy z podopiecznym."
+          }
+        }
+      }
+    },
+    "audiences": {
+      "items": {
+        "mobile": {
+          "kicker": "Mobile",
+          "title": "Dla osób ćwiczących",
+          "copy": "Plan treningu, ćwiczenia, historia i progres zawsze pod ręką."
+        },
+        "web": {
+          "kicker": "Web",
+          "title": "Dla trenerów",
+          "copy": "Wygodniejsze zarządzanie podopiecznymi, planami i raportami z poziomu przeglądarki."
+        },
+        "platform": {
+          "kicker": "Platforma",
+          "title": "Dla rozwoju produktu",
+          "copy": "Jeden ekosystem dla aplikacji mobilnej, panelu webowego i przyszłych kampanii."
+        }
+      }
+    },
+    "socials": {
+      "eyebrow": "Sociale",
+      "title": "Obserwuj rozwój LGYM poza aplikacją.",
+      "description": "Instagram i TikTok to miejsce na szybkie materiały: progres użytkowników, zapowiedzi funkcji, screeny panelu trenera i krótkie treningowe formaty.",
+      "links": {
+        "instagram": {
+          "label": "Instagram",
+          "description": "Screeny, progres i zapowiedzi"
+        },
+        "tiktok": {
+          "label": "TikTok",
+          "description": "Krótkie formaty treningowe"
+        }
+      }
+    },
+    "download": {
+      "eyebrow": "Start promocji",
+      "title": "Gotowy landing — teraz podmień sloty na screeny i podepnij linki do sklepów.",
+      "description": "Przyciski poniżej są przygotowane jako miejsca na docelowe linki App Store i Google Play.",
+      "appStorePrefix": "Download on the",
+      "googlePlayPrefix": "Get it on",
+      "appStoreAria": "Miejsce na link do App Store",
+      "googlePlayAria": "Miejsce na link do Google Play"
+    }
+  },
   "exerciseLibrary": {
     "page": {
       "title": "Biblioteka ćwiczeń",
@@ -2027,6 +2275,7 @@
       "name": "Nazwa",
       "bodyPart": "Partia ciała",
       "source": "Źródło",
+      "eloFormula": "Formuła ELO",
       "description": "Opis",
       "image": "Grafika",
       "actions": "Akcje"
@@ -2049,6 +2298,7 @@
       "saveSuccess": "Ćwiczenie zostało zapisane poprawnie.",
       "updateFailed": "Nie udało się zaktualizować ćwiczenia.",
       "updateSuccess": "Ćwiczenie zostało zaktualizowane poprawnie.",
+      "editForbidden": "Nie masz uprawnień do edycji tego ćwiczenia lub jego formuły ELO.",
       "deleteFailed": "Nie udało się usunąć ćwiczenia.",
       "deleteSuccess": "Ćwiczenie zostało usunięte poprawnie.",
       "translationFailed": "Nie udało się zapisać tłumaczenia.",

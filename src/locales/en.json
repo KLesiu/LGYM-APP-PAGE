@@ -1921,6 +1921,254 @@
       "summary": "Page {page} of {totalPages} • {totalCount} users total"
     }
   },
+  "landing": {
+    "nav": {
+      "ariaLabel": "Landing page navigation",
+      "athletes": "For athletes",
+      "trainers": "For coaches",
+      "socials": "Socials"
+    },
+    "hero": {
+      "badge": "Training app + coach dashboard",
+      "title": "Train with purpose. Track progress. Coach without chaos.",
+      "subtitle": "LGYM connects a mobile app for athletes with a web dashboard for coaches. Plans, workouts, history, exercises, and athlete collaboration all live in one organized place.",
+      "primaryCta": "Download the app",
+      "secondaryCta": "Sign in to dashboard",
+      "screens": {
+        "primary": {
+          "badge": "Screenshot slot",
+          "title": "Dashboard / Home",
+          "description": "Place a mobile app screenshot here"
+        },
+        "secondary": {
+          "badge": "Screenshot slot",
+          "title": "Active workout",
+          "description": "Sets, load, rest, and progress"
+        }
+      },
+      "panel": {
+        "eyebrow": "Coach dashboard",
+        "title": "Athletes, plans, and reports in one view.",
+        "rows": {
+          "members": "Athlete list",
+          "plans": "Training plans",
+          "reports": "Reports and feedback"
+        }
+      }
+    },
+    "metrics": {
+      "roles": {
+        "value": "3",
+        "label": "product roles"
+      },
+      "system": {
+        "value": "1",
+        "label": "unified system"
+      },
+      "access": {
+        "value": "24/7",
+        "label": "plan access"
+      }
+    },
+    "features": {
+      "eyebrow": "Why LGYM",
+      "title": "Not another phone note — a real system for training execution.",
+      "items": {
+        "plan": {
+          "title": "A plan instead of improvising",
+          "description": "Build training days, save exercises, and track progress without scattered notes."
+        },
+        "history": {
+          "title": "History that explains progress",
+          "description": "Workouts, results, and records create context for the next decision — for athletes and coaches."
+        },
+        "collaboration": {
+          "title": "Coach–athlete collaboration",
+          "description": "Invitations, plans, reports, and feedback turn the app into a coaching workspace."
+        }
+      }
+    },
+    "context": {
+      "eyebrow": "For athletes",
+      "title": "Training with an ELO ranking and real competition.",
+      "description": "LGYM turns workout logging into a progress system: results build an ELO ranking, records matter, and athletes can compare themselves with others while competing for a better position in future workouts.",
+      "screenBadge": "Screen",
+      "screens": {
+        "plan": "Daily plan",
+        "library": "Exercise library",
+        "history": "Workout history"
+      }
+    },
+    "showcase": {
+      "ariaLabel": "LGYM product showcase",
+      "controlsAriaLabel": "Slider controls",
+      "previousSlide": "Previous slide",
+      "nextSlide": "Next slide",
+      "elo": {
+        "kicker": "Competition",
+        "title": "Train solo, but see how you compare with others",
+        "description": "Workout history, records, and the ELO ranking create motivation for the next set — they do more than store what already happened."
+      },
+      "slides": {
+        "mobilePlan": {
+          "kicker": "ELO ranking",
+          "title": "Every workout can move you up the ranking",
+          "description": "Sets, load, and records are not just history — they feed an ELO score that shows progress and lets athletes compete with others."
+        },
+        "trainerPlatform": {
+          "kicker": "Coach platform",
+          "title": "The coach dashboard as an operating center",
+          "description": "The landing page must sell the web platform too: athletes, plans, reports, and feedback are real value for coaches.",
+          "metrics": {
+            "members": {
+              "value": "24",
+              "label": "active athletes"
+            },
+            "plans": {
+              "value": "12",
+              "label": "plans to manage"
+            },
+            "reports": {
+              "value": "8",
+              "label": "reports needing feedback"
+            }
+          },
+          "rows": {
+            "relationships": "Fast coach–athlete relationship overview",
+            "plans": "Create and share training plans",
+            "feedback": "Reports, notes, and feedback in one place"
+          }
+        },
+        "exerciseLibrary": {
+          "kicker": "Exercise library",
+          "title": "Competition built around specific exercises",
+          "description": "The exercise library keeps movements structured, so results, records, and user comparisons share the same context."
+        },
+        "coachingWorkflow": {
+          "kicker": "Coaching workflow",
+          "title": "Fewer messages, more structured work",
+          "description": "The coach platform presents the business value clearly: managing people, training decisions, and communication.",
+          "metrics": {
+            "roles": {
+              "value": "3",
+              "label": "product roles"
+            },
+            "system": {
+              "value": "1",
+              "label": "unified ecosystem"
+            },
+            "growth": {
+              "value": "∞",
+              "label": "room to grow"
+            }
+          },
+          "rows": {
+            "roles": "Dashboard for coaches and admins",
+            "web": "Web is better for operational work",
+            "mobile": "Mobile remains the athlete’s daily interface"
+          }
+        },
+        "progressTracking": {
+          "kicker": "Competition",
+          "title": "Train solo, but see how you compare with others",
+          "description": "Workout history, records, and the ELO ranking create motivation for the next set — they do more than store what already happened."
+        }
+      }
+    },
+    "productSections": {
+      "athletes": {
+        "eyebrow": "For athletes",
+        "title": "An app that guides the workout instead of only recording it.",
+        "description": "This is the place for the most important mobile screenshots: home, daily plan, active workout, exercises, and history. The section should show athletes that LGYM is a daily progress tool.",
+        "screens": {
+          "start": {
+            "kicker": "Home",
+            "title": "User dashboard"
+          },
+          "plan": {
+            "kicker": "Plan",
+            "title": "Daily training plan"
+          },
+          "training": {
+            "kicker": "Workout",
+            "title": "Active session"
+          },
+          "history": {
+            "kicker": "History",
+            "title": "Progress and completed workouts"
+          }
+        }
+      },
+      "trainers": {
+        "eyebrow": "For coaches",
+        "title": "A web platform for working with athletes, plans, and feedback.",
+        "description": "This is where you can paste final coach dashboard screenshots. For now, the polished product slots communicate which views should go here.",
+        "screens": {
+          "members": {
+            "kicker": "Athletes",
+            "title": "Client list and details",
+            "placeholder": "Landscape screenshot: athlete list / client details",
+            "description": "Slot for a screenshot with athlete list, relationship status, and quick access to details."
+          },
+          "plans": {
+            "kicker": "Plans",
+            "title": "Building training plans",
+            "placeholder": "Landscape screenshot: plan builder / training days",
+            "description": "Place for a screenshot of the plan builder, training days, or share-code flow."
+          },
+          "reports": {
+            "kicker": "Reports",
+            "title": "Feedback and work control",
+            "placeholder": "Landscape screenshot: reports / measurements / feedback",
+            "description": "Slot for reports, notes, measurements, or athlete work history."
+          }
+        }
+      }
+    },
+    "audiences": {
+      "items": {
+        "mobile": {
+          "kicker": "Mobile",
+          "title": "For athletes",
+          "copy": "Training plan, exercises, history, and progress always within reach."
+        },
+        "web": {
+          "kicker": "Web",
+          "title": "For coaches",
+          "copy": "A more convenient way to manage athletes, plans, and reports from the browser."
+        },
+        "platform": {
+          "kicker": "Platform",
+          "title": "For product growth",
+          "copy": "One ecosystem for the mobile app, web dashboard, and future campaigns."
+        }
+      }
+    },
+    "socials": {
+      "eyebrow": "Socials",
+      "title": "Follow LGYM’s growth beyond the app.",
+      "description": "Instagram and TikTok are the place for quick material: user progress, feature previews, coach dashboard screenshots, and short training formats.",
+      "links": {
+        "instagram": {
+          "label": "Instagram",
+          "description": "Screenshots, progress, and previews"
+        },
+        "tiktok": {
+          "label": "TikTok",
+          "description": "Short training formats"
+        }
+      }
+    },
+    "download": {
+      "eyebrow": "Promotion start",
+      "title": "The landing page is ready — replace slots with screenshots and connect store links.",
+      "description": "The buttons below are prepared as placeholders for the final App Store and Google Play links.",
+      "appStorePrefix": "Download on the",
+      "googlePlayPrefix": "Get it on",
+      "appStoreAria": "Placeholder link for App Store",
+      "googlePlayAria": "Placeholder link for Google Play"
+    }
+  },
   "exerciseLibrary": {
     "page": {
       "title": "Exercise library",
@@ -2027,6 +2275,7 @@
       "name": "Name",
       "bodyPart": "Body part",
       "source": "Source",
+      "eloFormula": "ELO formula",
       "description": "Description",
       "image": "Image",
       "actions": "Actions"
@@ -2049,6 +2298,7 @@
       "saveSuccess": "Exercise saved successfully.",
       "updateFailed": "Failed to update the exercise.",
       "updateSuccess": "Exercise updated successfully.",
+      "editForbidden": "You do not have permission to edit this exercise or its ELO formula.",
       "deleteFailed": "Failed to delete the exercise.",
       "deleteSuccess": "Exercise deleted successfully.",
       "translationFailed": "Failed to save the translation.",

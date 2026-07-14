@@ -27,6 +27,7 @@ import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage.vue";
 import InvitationActionPage from "../pages/InvitationActionPage.vue";
+import LandingPage from "../pages/LandingPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
 import ResetPasswordPage from "../pages/ResetPasswordPage.vue";
 import UserExercisesPage from "../pages/user/UserExercisesPage.vue";
@@ -37,7 +38,8 @@ export const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/login",
+      name: "landing",
+      component: LandingPage,
     },
     {
       path: "/login",
