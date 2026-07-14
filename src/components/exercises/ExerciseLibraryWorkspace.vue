@@ -91,6 +91,7 @@
         :items="paginatedExercises"
         :can-manage-exercise="canManageExercise"
         :can-translate-exercise="canTranslateExercise"
+        :show-formula-column="roleMode === 'admin'"
         @edit="openEditDialog"
         @delete="handleDeleteExercise"
         @translate="openTranslationDialog"
@@ -105,9 +106,9 @@
       :formula-options="formulaOptions"
       :is-loading-body-parts="isLoadingBodyParts"
       :is-submitting="isSubmittingExercise"
-      :show-formula-field="canManageGlobalExercises"
+      :show-formula-field="showFormulaControls"
       :show-visibility-field="canManageGlobalExercises"
-      :can-edit-formula="canManageGlobalExercises"
+      :can-edit-formula="showFormulaControls"
       @update:draft="exerciseDraft = $event"
       @close="closeExerciseDialog"
       @save="submitExercise"
@@ -211,6 +212,7 @@ const canManageGlobalExercises = computed(
 const canCreateExercises = computed(
   () => canManageGlobalExercises.value || props.roleMode === "trainer",
 );
+const showFormulaControls = computed(() => props.roleMode === "admin");
 
 const globalExercises = ref<ExerciseResponseDto[]>([]);
 const userExercises = ref<ExerciseResponseDto[]>([]);
@@ -273,6 +275,20 @@ const formatBodyPart = (exercise: ExerciseResponseDto) =>
     "exerciseLibrary.fallback.bodyPart",
   );
 
+const formatFormula = (exercise: ExerciseResponseDto) =>
+  formatText(
+    exercise.eloFormula?.displayName || exercise.eloFormula?.id,
+    "exerciseLibrary.fallback.formula",
+  );
+
+const hideFormulaOutsideAdmin = (exercise: ExerciseResponseDto): ExerciseResponseDto =>
+  showFormulaControls.value
+    ? exercise
+    : {
+        ...exercise,
+        eloFormula: undefined,
+      };
+
 const redirectToLogin = async () => {
   clearAuthSession();
   toast.error(
@@ -291,6 +307,26 @@ const handleUnauthorized = async (status: number) => {
   if (status !== 401) return false;
   await redirectToLogin();
   return true;
+};
+
+const showExerciseSaveError = (status: number, fallbackKey: string, data: unknown) => {
+  const message = getApiErrorMessage(data);
+  if (message) {
+    toast.errorMessage(message);
+    return;
+  }
+
+  toast.error(status === 403 ? "exerciseLibrary.feedback.editForbidden" : fallbackKey);
+};
+
+const canSubmitExerciseDraft = () => {
+  if (exerciseDialogMode.value !== "edit") return true;
+
+  const draftId = exerciseDraft.value.id?.trim();
+  if (!draftId) return false;
+
+  const currentExercise = allExercises.value.find((exercise) => exercise.id === draftId);
+  return currentExercise ? canManageExercise(currentExercise) : false;
 };
 
 const isOptionalEmptyResponse = (status: number) => status === 204 || status === 404;
@@ -387,6 +423,7 @@ const toExerciseCard = (
     bodyPart: formatBodyPart(exercise),
     bodyPartValue:
       (exercise.bodyPart?.name || exercise.bodyPart?.displayName || "unknown").trim(),
+    eloFormula: formatFormula(exercise),
     description: formatText(
       exercise.description,
       "exerciseLibrary.fallback.description",
@@ -651,7 +688,7 @@ const loadFormulaLookup = async () => {
 const openCreateDialog = async () => {
   const [bodyPartsLoaded, formulasLoaded] = await Promise.all([
     loadBodyParts(),
-    canManageGlobalExercises.value ? loadFormulaLookup() : Promise.resolve(true),
+    showFormulaControls.value ? loadFormulaLookup() : Promise.resolve(true),
   ]);
   if (!bodyPartsLoaded || !formulasLoaded) return;
 
@@ -661,9 +698,14 @@ const openCreateDialog = async () => {
 };
 
 const openEditDialog = async (exercise: ExerciseCard) => {
+  if (!canManageExercise(exercise)) {
+    toast.error("exerciseLibrary.feedback.editForbidden");
+    return;
+  }
+
   const [bodyPartsLoaded, formulasLoaded] = await Promise.all([
     loadBodyParts(),
-    canManageGlobalExercises.value ? loadFormulaLookup() : Promise.resolve(true),
+    showFormulaControls.value ? loadFormulaLookup() : Promise.resolve(true),
   ]);
   if (!bodyPartsLoaded || !formulasLoaded) return;
 
@@ -675,13 +717,11 @@ const openEditDialog = async (exercise: ExerciseCard) => {
     if (await handleUnauthorized(response.status)) return;
 
     if (response.status !== 200) {
-      const message = getApiErrorMessage(response.data);
-      if (message) toast.errorMessage(message);
-      else toast.error("exerciseLibrary.feedback.loadFailed");
+      showExerciseSaveError(response.status, "exerciseLibrary.feedback.loadFailed", response.data);
       return;
     }
 
-    exerciseDetails = response.data;
+    exerciseDetails = hideFormulaOutsideAdmin(response.data);
   } catch (error: unknown) {
     console.error(error);
     toast.error("exerciseLibrary.feedback.loadFailed");
@@ -729,7 +769,7 @@ const loadExercises = async () => {
       return;
     }
 
-    globalExercises.value = [...(globalResponse.data ?? [])];
+    globalExercises.value = (globalResponse.data ?? []).map(hideFormulaOutsideAdmin);
 
     if (!currentUserId.value) {
       userExercises.value = [];
@@ -748,7 +788,10 @@ const loadExercises = async () => {
       return;
     }
 
-    userExercises.value = userResponse.status === 200 ? [...(userResponse.data ?? [])] : [];
+    userExercises.value =
+      userResponse.status === 200
+        ? (userResponse.data ?? []).map(hideFormulaOutsideAdmin)
+        : [];
   } catch (error: unknown) {
     console.error(error);
     hasLoadError.value = true;
@@ -776,6 +819,11 @@ const submitExercise = async () => {
     return;
   }
 
+  if (!canSubmitExerciseDraft()) {
+    toast.error("exerciseLibrary.feedback.editForbidden");
+    return;
+  }
+
   isSubmittingExercise.value = true;
 
   try {
@@ -789,7 +837,7 @@ const submitExercise = async () => {
       user: exerciseDraft.value.source === "user" ? currentUserId.value : null,
     };
 
-    const useFormulaEndpoints = canManageGlobalExercises.value;
+    const useFormulaEndpoints = showFormulaControls.value;
 
     const response =
       exerciseDialogMode.value === "create"
@@ -815,15 +863,13 @@ const submitExercise = async () => {
     if (await handleUnauthorized(response.status)) return;
 
     if (response.status < 200 || response.status >= 300) {
-      const message = getApiErrorMessage(response.data);
-      if (message) toast.errorMessage(message);
-      else {
-        toast.error(
-          exerciseDialogMode.value === "create"
-            ? "exerciseLibrary.feedback.saveFailed"
-            : "exerciseLibrary.feedback.updateFailed",
-        );
-      }
+      showExerciseSaveError(
+        response.status,
+        exerciseDialogMode.value === "create"
+          ? "exerciseLibrary.feedback.saveFailed"
+          : "exerciseLibrary.feedback.updateFailed",
+        response.data,
+      );
       return;
     }
 

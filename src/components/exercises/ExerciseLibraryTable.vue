@@ -30,6 +30,14 @@
         </div>
       </template>
 
+      <template v-if="showFormulaColumn" #item.eloFormula="{ item }">
+        <div class="min-w-[140px] py-3">
+          <v-chip size="small" color="secondary" variant="outlined">
+            {{ toExercise(item).eloFormula }}
+          </v-chip>
+        </div>
+      </template>
+
       <template #item.description="{ item }">
         <div class="min-w-[260px] max-w-[420px] py-3 text-sm text-[var(--lgym-text-muted)]">
           {{ toExercise(item).description }}
@@ -121,10 +129,11 @@ import { useI18n } from "vue-i18n";
 import AppDataTable from "../ui/AppDataTable.vue";
 import type { ExerciseCard } from "./types";
 
-defineProps<{
+const props = defineProps<{
   items: ExerciseCard[];
   canManageExercise: (exercise: ExerciseCard) => boolean;
   canTranslateExercise: (exercise: ExerciseCard) => boolean;
+  showFormulaColumn: boolean;
 }>();
 
 defineEmits<{
@@ -141,6 +150,9 @@ const headers = computed(() => [
   { title: t("exerciseLibrary.columns.name"), key: "name", sortable: true },
   { title: t("exerciseLibrary.columns.bodyPart"), key: "bodyPart", sortable: true },
   { title: t("exerciseLibrary.columns.source"), key: "source", sortable: true },
+  ...(props.showFormulaColumn
+    ? [{ title: t("exerciseLibrary.columns.eloFormula"), key: "eloFormula", sortable: true }]
+    : []),
   { title: t("exerciseLibrary.columns.description"), key: "description", sortable: false },
   { title: t("exerciseLibrary.columns.image"), key: "image", sortable: false },
   { title: t("exerciseLibrary.columns.actions"), key: "actions", sortable: false, align: "end" as const },
