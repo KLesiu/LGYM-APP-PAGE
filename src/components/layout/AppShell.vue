@@ -42,7 +42,11 @@
   <!-- Mobile Sidebar Overlay -->
   <Teleport to="body">
     <Transition name="sidebar-overlay">
-      <div v-if="sidebarOpen" class="fixed inset-0 z-40 lg:hidden">
+      <div
+        v-if="sidebarOpen"
+        :class="mobileOverlayThemeClass"
+        class="fixed inset-0 z-40 lg:hidden"
+      >
         <!-- Scrim/backdrop -->
         <div
           class="absolute inset-0 bg-black/30"
@@ -75,13 +79,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 import type { AppBreadcrumbItem } from "./appBreadcrumbs";
 import AppSidebar from "./AppSidebar.vue";
 import AppHeader from "./AppHeader.vue";
 import type { SidebarItem } from "./AppSidebar.vue";
+import { useAppTheme } from "../../composables/useAppTheme";
 import type { CurrentUser } from "../../composables/useCurrentUser";
 
 defineProps<{
@@ -100,6 +105,9 @@ defineEmits<{
 
 const sidebarOpen = ref(false);
 const route = useRoute();
+const { currentTheme } = useAppTheme();
+
+const mobileOverlayThemeClass = computed(() => `v-theme--${currentTheme.value}`);
 
 // Close sidebar on navigation change
 watch(
