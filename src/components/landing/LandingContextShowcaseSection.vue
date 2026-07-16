@@ -9,6 +9,7 @@
 
       <div class="landing-showcase" :aria-label="t('landing.showcase.ariaLabel')">
         <div class="landing-showcase__stage">
+          <div class="landing-showcase__pulse" aria-hidden="true" />
           <article class="landing-showcase-phone">
             <img :src="eloShowcase.image" :alt="t(eloShowcase.titleKey)" />
           </article>

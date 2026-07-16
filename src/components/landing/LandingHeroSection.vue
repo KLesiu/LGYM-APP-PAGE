@@ -37,6 +37,12 @@
       <div class="relative z-10 min-h-[560px] lg:min-h-[650px]">
         <div class="landing-orbit landing-orbit--one" />
         <div class="landing-orbit landing-orbit--two" />
+        <div class="landing-gym-plate landing-gym-plate--top" aria-hidden="true">
+          <span />
+        </div>
+        <div class="landing-gym-plate landing-gym-plate--bottom" aria-hidden="true">
+          <span />
+        </div>
 
         <article class="landing-phone landing-phone--primary">
           <div class="landing-phone__slot">
@@ -59,6 +65,12 @@
         <article class="landing-panel-card">
           <p class="text-xs font-bold uppercase tracking-[0.28em] text-[var(--lgym-primary)]">{{ t("landing.hero.panel.eyebrow") }}</p>
           <h2 class="mt-3 text-2xl font-black tracking-tight">{{ t("landing.hero.panel.title") }}</h2>
+          <div class="landing-rep-counter" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
           <div class="mt-5 space-y-3">
             <div v-for="row in panelRows" :key="row" class="landing-panel-row">
               <span />

@@ -2161,12 +2161,14 @@
     },
     "download": {
       "eyebrow": "Start promocji",
-      "title": "Gotowy landing — teraz podmień sloty na screeny i podepnij linki do sklepów.",
-      "description": "Przyciski poniżej są przygotowane jako miejsca na docelowe linki App Store i Google Play.",
-      "appStorePrefix": "Download on the",
-      "googlePlayPrefix": "Get it on",
-      "appStoreAria": "Miejsce na link do App Store",
-      "googlePlayAria": "Miejsce na link do Google Play"
+      "title": "Pobierz LGYM i zacznij trenować z planem, który naprawdę działa.",
+      "loading": "Sprawdzamy aktualne linki do sklepów...",
+      "unavailable": "Linki do sklepów będą dostępne po opublikowaniu aktualnej wersji aplikacji.",
+      "version": "Wersja {version}",
+      "appStorePrefix": "Pobierz z",
+      "googlePlayPrefix": "Pobierz z",
+      "appStoreAria": "Pobierz LGYM z App Store",
+      "googlePlayAria": "Pobierz LGYM z Google Play"
     }
   },
   "exerciseLibrary": {

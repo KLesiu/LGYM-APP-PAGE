@@ -2161,12 +2161,14 @@
     },
     "download": {
       "eyebrow": "Promotion start",
-      "title": "The landing page is ready — replace slots with screenshots and connect store links.",
-      "description": "The buttons below are prepared as placeholders for the final App Store and Google Play links.",
+      "title": "Download LGYM and start training with a plan that actually works.",
+      "loading": "Checking current store links...",
+      "unavailable": "Store links will be available after the current app version is published.",
+      "version": "Version {version}",
       "appStorePrefix": "Download on the",
       "googlePlayPrefix": "Get it on",
-      "appStoreAria": "Placeholder link for App Store",
-      "googlePlayAria": "Placeholder link for Google Play"
+      "appStoreAria": "Download LGYM from the App Store",
+      "googlePlayAria": "Download LGYM from Google Play"
     }
   },
   "exerciseLibrary": {

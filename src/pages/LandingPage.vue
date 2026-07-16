@@ -1,5 +1,5 @@
 <template>
-  <main class="landing-page min-h-screen overflow-hidden bg-[var(--lgym-bg)] text-[var(--lgym-text)]">
+  <main class="landing-page min-h-screen bg-[var(--lgym-bg)] text-[var(--lgym-text)]">
     <LandingHeader />
     <LandingHeroSection />
     <LandingFeaturesSection />
@@ -56,10 +56,59 @@ onBeforeUnmount(() => {
 
 <style>
 .landing-page {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
   background:
-    radial-gradient(circle at 12% 12%, rgba(var(--lgym-primary-rgb), 0.22), transparent 26rem),
-    radial-gradient(circle at 86% 4%, rgba(18, 18, 18, 0.12), transparent 20rem),
+    radial-gradient(circle at 12% 12%, rgba(var(--lgym-primary-rgb), 0.28), transparent 28rem),
+    radial-gradient(circle at 86% 4%, rgba(var(--lgym-primary-rgb), 0.14), transparent 22rem),
     var(--lgym-bg);
+}
+
+html:has(.landing-page),
+body:has(.landing-page),
+#app:has(.landing-page) {
+  height: auto;
+  min-height: 100%;
+}
+
+html:has(.landing-page) {
+  overflow-y: auto;
+}
+
+body:has(.landing-page) {
+  overflow-y: visible;
+}
+
+.landing-page::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(var(--lgym-primary-rgb), 0.28), transparent 20rem),
+    radial-gradient(circle at 78% 18%, rgba(var(--lgym-primary-rgb), 0.16), transparent 18rem),
+    radial-gradient(circle at 18% 72%, rgba(var(--lgym-primary-rgb), 0.18), transparent 24rem),
+    radial-gradient(circle at 84% 76%, rgba(var(--lgym-primary-rgb), 0.2), transparent 26rem),
+    linear-gradient(118deg, transparent 0 18%, rgba(var(--lgym-primary-rgb), 0.08) 18.2% 18.8%, transparent 19% 48%, rgba(var(--lgym-primary-rgb), 0.08) 48.2% 48.8%, transparent 49%),
+    repeating-radial-gradient(circle at 12% 28%, rgba(var(--lgym-primary-rgb), 0.16) 0 0.12rem, transparent 0.16rem 4.8rem),
+    repeating-linear-gradient(90deg, transparent 0 5.5rem, rgba(var(--lgym-primary-rgb), 0.075) 5.55rem 5.65rem, transparent 5.7rem 11rem);
+  opacity: 0.96;
+}
+
+.landing-page::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 9% 34%, transparent 0 2.1rem, rgba(var(--lgym-primary-rgb), 0.18) 2.18rem 2.28rem, transparent 2.36rem 5.4rem, rgba(var(--lgym-primary-rgb), 0.12) 5.48rem 5.58rem, transparent 5.66rem),
+    radial-gradient(circle at 93% 44%, transparent 0 1.8rem, rgba(var(--lgym-primary-rgb), 0.18) 1.88rem 2rem, transparent 2.08rem 4.8rem, rgba(var(--lgym-primary-rgb), 0.11) 4.9rem 5rem, transparent 5.08rem),
+    linear-gradient(90deg, transparent 0 7%, rgba(var(--lgym-primary-rgb), 0.16) 7.1% 7.45%, transparent 7.55% 92.5%, rgba(var(--lgym-primary-rgb), 0.16) 92.6% 92.95%, transparent 93.05% 100%);
+  opacity: 0.72;
+  mask-image: linear-gradient(to bottom, transparent, black 8%, black 92%, transparent);
 }
 
 .landing-page *,
@@ -77,6 +126,16 @@ onBeforeUnmount(() => {
     linear-gradient(90deg, rgba(var(--lgym-primary-rgb), 0.08) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: linear-gradient(to bottom, black, transparent 78%);
+}
+
+.landing-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 0 42%, rgba(255, 255, 255, 0.22) 48%, transparent 56% 100%);
+  opacity: 0.22;
+  transform: translateX(-120%);
+  animation: landing-sweep 8s ease-in-out infinite;
 }
 
 .landing-header {
@@ -149,10 +208,33 @@ onBeforeUnmount(() => {
   transform: translateY(-3px);
 }
 
+.landing-cta:active,
+.landing-store-button:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
 .landing-cta--primary {
+  position: relative;
+  overflow: hidden;
   background: var(--lgym-primary);
   color: white;
   box-shadow: 0 24px 70px rgba(var(--lgym-primary-rgb), 0.34);
+}
+
+.landing-cta--primary::after,
+.landing-store-button::after {
+  content: "";
+  position: absolute;
+  inset: -45% auto -45% -35%;
+  width: 32%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+  transform: rotate(14deg) translateX(-160%);
+  transition: transform 560ms ease;
+}
+
+.landing-cta--primary:hover::after,
+.landing-store-button:hover::after {
+  transform: rotate(14deg) translateX(520%);
 }
 
 .landing-cta--secondary {
@@ -172,8 +254,30 @@ onBeforeUnmount(() => {
 }
 
 .landing-metric {
+  position: relative;
+  overflow: hidden;
   border-radius: 1.25rem;
   padding: 1rem;
+}
+
+.landing-metric::after {
+  content: "";
+  position: absolute;
+  inset: auto 1rem 0.75rem;
+  height: 0.18rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--lgym-primary), transparent);
+  opacity: 0.42;
+  transform-origin: left;
+  animation: landing-rep-line 2.8s ease-in-out infinite;
+}
+
+.landing-metric:nth-child(2)::after {
+  animation-delay: 420ms;
+}
+
+.landing-metric:nth-child(3)::after {
+  animation-delay: 840ms;
 }
 
 .landing-metric dt {
@@ -201,6 +305,7 @@ onBeforeUnmount(() => {
   width: 19rem;
   height: 19rem;
   border: 1px solid rgba(var(--lgym-primary-rgb), 0.35);
+  animation: landing-orbit-drift 11s ease-in-out infinite alternate;
 }
 
 .landing-orbit--two {
@@ -209,6 +314,44 @@ onBeforeUnmount(() => {
   width: 26rem;
   height: 26rem;
   border: 1px dashed rgba(var(--lgym-primary-rgb), 0.3);
+  animation: landing-orbit-drift 14s ease-in-out infinite alternate-reverse;
+}
+
+.landing-gym-plate {
+  position: absolute;
+  z-index: 0;
+  display: grid;
+  width: clamp(4.5rem, 10vw, 7.25rem);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(var(--lgym-primary-rgb), 0.28);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle, transparent 0 22%, rgba(var(--lgym-primary-rgb), 0.18) 23% 32%, transparent 33%),
+    repeating-conic-gradient(from 18deg, rgba(var(--lgym-primary-rgb), 0.22) 0 10deg, transparent 10deg 24deg);
+  opacity: 0.72;
+  filter: blur(0.1px);
+  animation: landing-plate-spin 20s linear infinite;
+}
+
+.landing-gym-plate span {
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--lgym-primary-rgb), 0.36);
+  background: color-mix(in srgb, var(--lgym-surface-card) 72%, transparent);
+}
+
+.landing-gym-plate--top {
+  top: 4rem;
+  right: 0.5rem;
+}
+
+.landing-gym-plate--bottom {
+  bottom: 6.5rem;
+  left: 2.25rem;
+  animation-direction: reverse;
+  animation-duration: 24s;
 }
 
 .landing-phone {
@@ -219,6 +362,7 @@ onBeforeUnmount(() => {
   border-radius: 2.5rem;
   background: linear-gradient(155deg, #171717, #050505);
   box-shadow: 0 34px 100px rgba(0, 0, 0, 0.32);
+  animation: landing-phone-float 7s ease-in-out infinite;
 }
 
 .landing-phone--primary {
@@ -231,6 +375,7 @@ onBeforeUnmount(() => {
   left: 4%;
   top: 9rem;
   transform: rotate(-8deg) scale(0.9);
+  animation-delay: -2.4s;
 }
 
 .landing-phone__slot {
@@ -255,6 +400,25 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: 42% 0 0;
   background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.86));
+}
+
+.landing-phone__slot::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 0 34%, rgba(255, 255, 255, 0.22) 46%, transparent 58% 100%);
+  opacity: 0;
+  transform: translateX(-120%);
+  transition:
+    opacity 220ms ease,
+    transform 720ms ease;
+}
+
+.landing-phone:hover .landing-phone__slot::before {
+  opacity: 1;
+  transform: translateX(120%);
 }
 
 .landing-phone__slot img {
@@ -302,6 +466,33 @@ onBeforeUnmount(() => {
   padding: 1.25rem;
   backdrop-filter: blur(20px);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.18);
+  animation: landing-panel-pop 720ms ease both;
+}
+
+.landing-rep-counter {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 1rem;
+}
+
+.landing-rep-counter span {
+  width: 1.65rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: rgba(var(--lgym-primary-rgb), 0.24);
+  animation: landing-rep-pulse 1.6s ease-in-out infinite;
+}
+
+.landing-rep-counter span:nth-child(2) {
+  animation-delay: 160ms;
+}
+
+.landing-rep-counter span:nth-child(3) {
+  animation-delay: 320ms;
+}
+
+.landing-rep-counter span:nth-child(4) {
+  animation-delay: 480ms;
 }
 
 .landing-panel-row {
@@ -320,6 +511,8 @@ onBeforeUnmount(() => {
   height: 0.7rem;
   border-radius: 999px;
   background: var(--lgym-primary);
+  box-shadow: 0 0 0 0 rgba(var(--lgym-primary-rgb), 0.48);
+  animation: landing-dot-pulse 2.4s ease-in-out infinite;
 }
 
 .landing-eyebrow {
@@ -338,6 +531,17 @@ onBeforeUnmount(() => {
   transition: transform 180ms ease;
 }
 
+.landing-feature-card,
+.landing-audience-card,
+.landing-section-card,
+.landing-showcase,
+.landing-product-section,
+.landing-social-card {
+  animation: landing-section-rise 720ms ease both;
+  animation-timeline: view();
+  animation-range: entry 8% cover 28%;
+}
+
 .landing-feature-card__icon {
   display: inline-flex;
   margin-bottom: 3rem;
@@ -346,6 +550,14 @@ onBeforeUnmount(() => {
   padding: 0.65rem 0.9rem;
   color: var(--lgym-primary);
   font-weight: 950;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.landing-feature-card:hover .landing-feature-card__icon {
+  transform: rotate(-4deg) scale(1.06);
+  box-shadow: 0 12px 34px rgba(var(--lgym-primary-rgb), 0.2);
 }
 
 .landing-feature-card h3,
@@ -392,6 +604,7 @@ onBeforeUnmount(() => {
 }
 
 .landing-showcase__stage {
+  position: relative;
   display: grid;
   min-height: 32rem;
   place-items: center;
@@ -402,13 +615,26 @@ onBeforeUnmount(() => {
     #0a0d0a;
 }
 
+.landing-showcase__pulse {
+  position: absolute;
+  width: min(60vw, 24rem);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--lgym-primary-rgb), 0.3);
+  background: radial-gradient(circle, rgba(var(--lgym-primary-rgb), 0.16), transparent 62%);
+  animation: landing-showcase-pulse 3.8s ease-in-out infinite;
+}
+
 .landing-showcase-phone {
+  position: relative;
+  z-index: 1;
   width: min(74vw, 18rem);
   overflow: hidden;
   border: 0.8rem solid #101010;
   border-radius: 2.4rem;
   background: #101010;
   box-shadow: 0 26px 80px rgba(0, 0, 0, 0.34);
+  animation: landing-phone-float 8s ease-in-out infinite reverse;
 }
 
 .landing-showcase-phone img {
@@ -543,6 +769,48 @@ onBeforeUnmount(() => {
     box-shadow 180ms ease;
 }
 
+.landing-screen-card--mobile::before,
+.landing-screen-card--trainer::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 0 34%, rgba(255, 255, 255, 0.22) 46%, transparent 58% 100%);
+  opacity: 0;
+  transform: translateX(-120%);
+  transition:
+    opacity 220ms ease,
+    transform 720ms ease;
+}
+
+.landing-screen-card--mobile::after,
+.landing-screen-card--trainer::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 18% 18%, rgba(var(--lgym-primary-rgb), 0.18), transparent 34%);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.landing-screen-card--mobile:hover::before,
+.landing-screen-card--trainer:hover::before,
+.landing-screen-card--mobile:focus-visible::before,
+.landing-screen-card--trainer:focus-visible::before {
+  opacity: 1;
+  transform: translateX(120%);
+}
+
+.landing-screen-card--mobile:hover::after,
+.landing-screen-card--trainer:hover::after,
+.landing-screen-card--mobile:focus-visible::after,
+.landing-screen-card--trainer:focus-visible::after {
+  opacity: 1;
+}
+
 .landing-screen-card--mobile:nth-child(even) {
   transform: translateY(2rem);
 }
@@ -552,6 +820,7 @@ onBeforeUnmount(() => {
   border-color: rgba(var(--lgym-primary-rgb), 0.7);
   box-shadow: 0 28px 90px rgba(var(--lgym-primary-rgb), 0.18);
   outline: none;
+  transform: translateY(-0.5rem) rotate(-0.8deg);
 }
 
 .landing-screen-card--mobile img {
@@ -676,6 +945,8 @@ onBeforeUnmount(() => {
 }
 
 .landing-screen-card--trainer {
+  position: relative;
+  overflow: hidden;
   display: grid;
   width: 100%;
   gap: 1rem;
@@ -722,6 +993,10 @@ onBeforeUnmount(() => {
   height: 0.55rem;
   border-radius: 999px;
   background: rgba(26, 26, 26, 0.28);
+}
+
+.landing-trainer-screen-slot__bar span:nth-child(2) {
+  animation: landing-dot-pulse 2.6s ease-in-out infinite 220ms;
 }
 
 .landing-trainer-screen-slot__body {
@@ -973,16 +1248,42 @@ onBeforeUnmount(() => {
 
 .landing-final-cta {
   display: grid;
+  position: relative;
+  overflow: hidden;
   gap: 2rem;
   align-items: center;
   border-radius: 2.5rem;
+  border-color: rgba(var(--lgym-primary-rgb), 0.28);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(var(--lgym-primary-rgb), 0.16), transparent 18rem),
+    color-mix(in srgb, var(--lgym-surface-card) 96%, transparent);
   padding: clamp(1.5rem, 5vw, 4rem);
+  opacity: 1;
+  box-shadow: 0 30px 100px rgba(var(--lgym-primary-rgb), 0.12);
+}
+
+.landing-final-cta::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: auto -8% -42% auto;
+  width: min(42vw, 20rem);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--lgym-primary-rgb), 0.2);
+  background: repeating-conic-gradient(from 12deg, rgba(var(--lgym-primary-rgb), 0.12) 0 9deg, transparent 9deg 22deg);
+  opacity: 0.62;
 }
 
 .landing-store-button {
+  position: relative;
+  overflow: hidden;
   min-width: 13.5rem;
-  flex-direction: column;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.85rem;
+  row-gap: 0.12rem;
+  align-items: center;
   border: 1px solid var(--lgym-border-strong);
   background: #111;
   padding: 0.9rem 1.25rem;
@@ -990,10 +1291,33 @@ onBeforeUnmount(() => {
   line-height: 1.05;
 }
 
+.landing-store-button .v-icon {
+  grid-row: 1 / 4;
+  transition: transform 220ms ease;
+}
+
+.landing-store-button:hover .v-icon {
+  transform: translateY(-1px) scale(1.08);
+}
+
 .landing-store-button span {
-  margin-bottom: 0.2rem;
   color: rgba(255, 255, 255, 0.62);
   font-size: 0.72rem;
+}
+
+.landing-store-button strong {
+  font-size: 1.15rem;
+}
+
+.landing-store-button small,
+.landing-download-status {
+  color: var(--lgym-text-soft);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.landing-store-button small {
+  color: rgba(255, 255, 255, 0.62);
 }
 
 @media (min-width: 1024px) {
@@ -1140,6 +1464,10 @@ onBeforeUnmount(() => {
     display: none;
   }
 
+  .landing-gym-plate {
+    display: none;
+  }
+
   .landing-panel-card {
     bottom: -1rem;
     left: 0;
@@ -1175,6 +1503,179 @@ onBeforeUnmount(() => {
   .landing-social-links a {
     align-items: flex-start;
     border-radius: 1.15rem;
+  }
+}
+
+@keyframes landing-ambient-breathe {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+    opacity: 0.58;
+  }
+  to {
+    transform: scale(1.08) translate3d(1rem, -0.8rem, 0);
+    opacity: 0.86;
+  }
+}
+
+@keyframes landing-sweep {
+  0%,
+  54% {
+    transform: translateX(-120%);
+  }
+  78%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes landing-orbit-drift {
+  from {
+    transform: rotate(0deg) scale(1);
+  }
+  to {
+    transform: rotate(8deg) scale(1.04);
+  }
+}
+
+@keyframes landing-plate-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes landing-phone-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -0.85rem;
+  }
+}
+
+@keyframes landing-panel-pop {
+  from {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes landing-rep-line {
+  0%,
+  100% {
+    transform: scaleX(0.28);
+  }
+  50% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes landing-rep-pulse {
+  0%,
+  100% {
+    background: rgba(var(--lgym-primary-rgb), 0.22);
+    transform: scaleX(0.72);
+  }
+  45% {
+    background: var(--lgym-primary);
+    transform: scaleX(1);
+  }
+}
+
+@keyframes landing-dot-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--lgym-primary-rgb), 0.44);
+  }
+  50% {
+    box-shadow: 0 0 0 0.4rem rgba(var(--lgym-primary-rgb), 0);
+  }
+}
+
+@keyframes landing-section-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes landing-showcase-pulse {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.38;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 0.72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page::before,
+  .landing-noise::after,
+  .landing-orbit,
+  .landing-gym-plate,
+  .landing-phone,
+  .landing-panel-card,
+  .landing-rep-counter span,
+  .landing-panel-row span,
+  .landing-metric::after,
+  .landing-showcase-phone,
+  .landing-showcase__pulse,
+  .landing-feature-card,
+  .landing-audience-card,
+  .landing-section-card,
+  .landing-showcase,
+  .landing-product-section,
+  .landing-social-card,
+  .landing-final-cta {
+    animation: none;
+  }
+
+  .landing-cta,
+  .landing-store-button,
+  .landing-feature-card,
+  .landing-screen-card--mobile,
+  .landing-screen-card--trainer,
+  .landing-audience-card,
+  .landing-social-links a {
+    transition: none;
+  }
+
+  .landing-cta--primary::after,
+  .landing-store-button::after,
+  .landing-phone__slot::before,
+  .landing-screen-card--mobile::before,
+  .landing-screen-card--mobile::after,
+  .landing-screen-card--trainer::before,
+  .landing-screen-card--trainer::after {
+    opacity: 0;
+    transform: none;
+    transition: none;
+  }
+
+  .landing-cta--primary:hover::after,
+  .landing-store-button:hover::after,
+  .landing-phone:hover .landing-phone__slot::before,
+  .landing-screen-card--mobile:hover::before,
+  .landing-screen-card--mobile:hover::after,
+  .landing-screen-card--trainer:hover::before,
+  .landing-screen-card--trainer:hover::after,
+  .landing-screen-card--mobile:focus-visible::before,
+  .landing-screen-card--mobile:focus-visible::after,
+  .landing-screen-card--trainer:focus-visible::before,
+  .landing-screen-card--trainer:focus-visible::after {
+    opacity: 0;
+    transform: none;
   }
 }
 </style>
