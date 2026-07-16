@@ -415,10 +415,11 @@ Projekt jest przygotowany do działania jako statyczne SPA serwowane przez Nginx
 Najważniejsze cechy modelu wdrożenia:
 
 - build frontendowy powstaje w Dockerze,
-- runtime jest oparty o obraz `cgr.dev/chainguard/nginx`,
-- build-time przyjmuje m.in. `VITE_API_BASE_URL` oraz `VITE_GOOGLE_CLIENT_ID`,
+- runtime jest oparty o obraz `nginx:1.27-alpine`,
+- konfiguracja `VITE_API_BASE_URL` oraz `VITE_GOOGLE_CLIENT_ID` jest generowana przy starcie kontenera z runtime environment,
 - aplikacja jest serwowana na porcie `8080`,
 - routing SPA wymaga fallbacku do `index.html`,
+- `env-config.js` jest generowany przy starcie kontenera i nie powinien być cache'owany,
 - `public/google-callback.html` musi pozostać dostępny jako fizyczny plik.
 
 To oznacza, że `page` można łatwo osadzić w standardowym pipeline deploymentowym bez dodatkowego serwera Node po stronie runtime.
@@ -469,19 +470,19 @@ npm run orval
 
 ### Uruchomienie frontendu w Dockerze
 
-Build obrazu z ustawieniem docelowego API i Google Client ID:
+Build obrazu:
 
 ```bash
-docker build \
-  --build-arg VITE_API_BASE_URL=https://api.example.com \
-  --build-arg VITE_GOOGLE_CLIENT_ID=your-google-client-id \
-  -t lgym-page .
+docker build -t lgym-page .
 ```
 
-Start kontenera:
+Start kontenera z konfiguracją runtime:
 
 ```bash
-docker run -p 8080:8080 lgym-page
+docker run -p 8080:8080 \
+  -e VITE_API_BASE_URL=https://api.example.com \
+  -e VITE_GOOGLE_CLIENT_ID=your-google-client-id \
+  lgym-page
 ```
 
 Alternatywnie przez Docker Compose:
@@ -489,6 +490,23 @@ Alternatywnie przez Docker Compose:
 ```bash
 docker compose up --build
 ```
+
+### Publikacja produkcyjna i zasada `main`
+
+Publikacja produkcyjna odbywa się wyłącznie po scaleniu Pull Requesta do `main`. Jeden scalony PR oznacza jedną wersję produkcyjną i jeden tag Git w formacie `vX.Y.Z`.
+
+Zasady wersjonowania:
+
+- jeżeli PR ręcznie zmienia `package.json` `version`, workflow używa tej wersji,
+- jeżeli PR nie zmienia wersji, workflow automatycznie wykonuje patch bump przez `npm version patch --no-git-tag-version`, aktualizuje `package.json` i `package-lock.json`, tworzy commit release oraz tag,
+- release commit ma `[skip ci]`, aby nie uruchamiać kolejnego release z własnego commita,
+- tag produkcyjny wskazuje commit zawierający finalną wersję `package.json`.
+
+Zasada pracy na `main`:
+
+- lokalnie nie commitujemy i nie pushujemy bezpośrednio na `main`; każda zmiana ma przejść przez branch roboczy i Pull Request,
+- na GitHubie branch `main` powinien mieć branch protection: wymuszony Pull Request przed merge, zablokowany direct push oraz squash merge jako jedyny sposób scalania,
+- jedyny dopuszczalny wyjątek to `github-actions[bot]`, który po merge PR może dopisać automatyczny release commit z podbitą wersją.
 
 ## 17. Skrypty npm
 
@@ -510,19 +528,19 @@ Najważniejsze zmienne wynikające z kodu:
 
 ### Frontend
 
-- `VITE_API_BASE_URL` — bazowy adres backend API, domyślnie: `https://localhost:7025`
-- `VITE_GOOGLE_CLIENT_ID` — client ID dla logowania Google
+- `VITE_API_BASE_URL` — runtime bazowy adres backend API, domyślnie: `https://localhost:7025`
+- `VITE_GOOGLE_CLIENT_ID` — runtime client ID dla logowania Google
 
 ### Generowanie klienta API
 
 - `ORVAL_SWAGGER_URL` — adres Swagger / OpenAPI używany przez Orval
 
-Przykładowy plik `.env.local`:
+Przykładowy plik `.env.production` dla Docker Compose:
 
 ```env
-VITE_API_BASE_URL=https://localhost:7025
+PAGE_PORT=8080
+VITE_API_BASE_URL=https://api.example.com
 VITE_GOOGLE_CLIENT_ID=your-google-client-id
-ORVAL_SWAGGER_URL=https://localhost:7025/swagger/v1/swagger.json
 ```
 
 ## 19. Struktura projektu
@@ -926,10 +944,11 @@ The project is prepared to run as a static SPA served by Nginx.
 Important characteristics:
 
 - frontend build is produced in Docker,
-- runtime is based on `cgr.dev/chainguard/nginx`,
-- build-time configuration includes `VITE_API_BASE_URL` and `VITE_GOOGLE_CLIENT_ID`,
+- runtime is based on `nginx:1.27-alpine`,
+- `VITE_API_BASE_URL` and `VITE_GOOGLE_CLIENT_ID` are generated from the container runtime environment on startup,
 - the app listens on port `8080`,
 - SPA routing requires an `index.html` fallback,
+- `env-config.js` is generated on container startup and must not be cached,
 - `public/google-callback.html` must remain reachable as a physical file.
 
 This makes the deployment model simple and infrastructure-friendly: no Node server is required for runtime delivery.
@@ -980,19 +999,19 @@ npm run orval
 
 ### Run the frontend in Docker
 
-Build image with target API and Google Client ID:
+Build image:
 
 ```bash
-docker build \
-  --build-arg VITE_API_BASE_URL=https://api.example.com \
-  --build-arg VITE_GOOGLE_CLIENT_ID=your-google-client-id \
-  -t lgym-page .
+docker build -t lgym-page .
 ```
 
-Run container:
+Run container with runtime configuration:
 
 ```bash
-docker run -p 8080:8080 lgym-page
+docker run -p 8080:8080 \
+  -e VITE_API_BASE_URL=https://api.example.com \
+  -e VITE_GOOGLE_CLIENT_ID=your-google-client-id \
+  lgym-page
 ```
 
 Or via Docker Compose:
@@ -1003,21 +1022,37 @@ docker compose up --build
 
 ### GitHub Actions publishing to Docker Hub
 
-The repository includes `.github/workflows/docker-image.yml` for building and publishing the production image to Docker Hub on every push to `main` and on manual dispatch.
+The repository includes `.github/workflows/docker-image.yml` for creating one production version per merged Pull Request to `main`, tagging it as `vX.Y.Z`, and publishing the matching Docker Hub image. Manual dispatch is also available for an explicit release rerun.
 
 Configure these GitHub repository settings before the workflow runs:
 
 - **Secret**: `DOCKERHUB_TOKEN` — Docker Hub access token with push permissions,
 - **Variable**: `DOCKERHUB_NAMESPACE` — Docker Hub namespace / organization,
 - **Variable**: `DOCKERHUB_USERNAME` — Docker Hub login name (can match the namespace),
-- **Variable**: `DOCKERHUB_IMAGE_NAME` — optional image name override; defaults to `lgym-page`,
-- **Variable**: `VITE_API_BASE_URL` — production API base URL injected at image build time,
-- **Variable**: `VITE_GOOGLE_CLIENT_ID` — optional Google client ID injected at image build time.
+- **Variable**: `DOCKERHUB_IMAGE_NAME` — optional image name override; defaults to `lgym-page`.
 
 Published tags include:
 
 - `latest`
+- `vX.Y.Z`
 - `sha-<short-commit>`
+
+### Production release and `main` branch rule
+
+Production publishing happens only after a Pull Request is merged into `main`. One merged PR equals one production version and one Git tag in the `vX.Y.Z` format.
+
+Versioning rules:
+
+- if the PR manually changes `package.json` `version`, the workflow uses that version,
+- if the PR does not change the version, the workflow runs `npm version patch --no-git-tag-version`, updates `package.json` and `package-lock.json`, creates a release commit, and tags it,
+- the release commit includes `[skip ci]` so it does not trigger another release from its own commit,
+- the production tag points to the commit that contains the final `package.json` version.
+
+`main` branch rule:
+
+- locally, do not commit or push directly to `main`; every change must go through a working branch and Pull Request,
+- on GitHub, protect `main` by requiring Pull Requests before merge, blocking direct pushes, and using squash merge as the merge strategy,
+- the only allowed exception is `github-actions[bot]`, which may append the automatic release commit with the bumped version after a PR merge.
 
 ## 17. npm scripts
 
@@ -1039,19 +1074,19 @@ Key environment variables visible in the repository:
 
 ### Frontend
 
-- `VITE_API_BASE_URL` — backend API base URL, default: `https://localhost:7025`
-- `VITE_GOOGLE_CLIENT_ID` — Google sign-in client ID
+- `VITE_API_BASE_URL` — runtime backend API base URL, default: `https://localhost:7025`
+- `VITE_GOOGLE_CLIENT_ID` — runtime Google sign-in client ID
 
 ### API generation
 
 - `ORVAL_SWAGGER_URL` — Swagger / OpenAPI endpoint used by Orval
 
-Example `.env.local`:
+Example `.env.production` for Docker Compose:
 
 ```env
-VITE_API_BASE_URL=https://localhost:7025
+PAGE_PORT=8080
+VITE_API_BASE_URL=https://api.example.com
 VITE_GOOGLE_CLIENT_ID=your-google-client-id
-ORVAL_SWAGGER_URL=https://localhost:7025/swagger/v1/swagger.json
 ```
 
 ## 19. Project structure

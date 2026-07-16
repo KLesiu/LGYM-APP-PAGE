@@ -2,13 +2,12 @@ import { createApp } from "vue";
 import "./styles/tailwind.css";
 import App from "./App.vue";
 import { getAuthToken } from "./composables/useAuthSession";
+import { getApiBaseUrl } from "./config/runtimeConfig";
 import { i18n } from "./plugins/i18n";
 import { router } from "./router";
 import { vuetify } from "./plugins/vuetify";
 
-const apiBaseUrl = (
-  import.meta.env.VITE_API_BASE_URL ?? "https://localhost:7025"
-).replace(/\/$/, "");
+const apiBaseUrl = getApiBaseUrl();
 
 const createIdempotencyKey = () => {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function")

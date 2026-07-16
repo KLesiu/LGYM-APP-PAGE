@@ -14,6 +14,7 @@ import type {
   InAppNotificationResultDto,
   PagedNotificationsResultDto,
 } from "../api/model";
+import { getApiBaseUrl } from "../config/runtimeConfig";
 import { getAuthToken } from "./useAuthSession";
 import { useToast } from "./useToast";
 
@@ -30,9 +31,7 @@ const TRAINER_NOTIFICATION_TYPES = new Set([
   "TrainerRelationshipEnded",
 ]);
 
-const apiBaseUrl = (
-  import.meta.env.VITE_API_BASE_URL ?? "https://localhost:7025"
-).replace(/\/$/, "");
+const apiBaseUrl = getApiBaseUrl();
 
 const isTrainerNotificationType = (type?: string | null) =>
   !!type && TRAINER_NOTIFICATION_TYPES.has(type);
