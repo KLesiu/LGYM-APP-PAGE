@@ -34,41 +34,32 @@ const route = useRoute();
 const router = useRouter();
 
 const sectionByRouteName: Record<string, string> = {
-  "user-relationship-status": "relationship",
-  "user-relationship-invitation": "relationship",
-  "user-exercises": "exercises",
+  "user-account": "account",
 };
 
 const activeSection = computed(() => {
   const routeName = String(route.name ?? "");
-  return sectionByRouteName[routeName] ?? "relationship";
+  return sectionByRouteName[routeName] ?? "account";
 });
 
 const sidebarItems = computed<SidebarItem[]>(() => [
   {
-    key: "relationship",
-    label: t("userArea.navigation.relationship"),
-    icon: "mdi-account-heart-outline",
-    to: "/athlete/relationship",
-  },
-  {
-    key: "exercises",
-    label: t("userArea.navigation.exercises"),
-    icon: "mdi-dumbbell",
-    to: "/athlete/exercises",
+    key: "account",
+    label: t("userArea.navigation.account"),
+    icon: "mdi-account-circle-outline",
+    to: "/athlete/account",
   },
 ]);
 
 const sectionRouteByKey = {
-  relationship: { name: "user-relationship-status" as const },
-  exercises: { name: "user-exercises" as const },
+  account: { name: "user-account" as const },
 };
 
 const headerBreadcrumbs = computed<AppBreadcrumbItem[]>(() => {
   const items: AppBreadcrumbItem[] = [
     {
       title: t("userArea.appName"),
-      to: { name: "user-relationship-status" },
+      to: { name: "user-account" },
       exact: true,
     },
     {
@@ -78,11 +69,7 @@ const headerBreadcrumbs = computed<AppBreadcrumbItem[]>(() => {
     },
   ];
 
-  if (route.name === "user-relationship-invitation") {
-    items.push({ title: t("ui.breadcrumbs.invitationDetails") });
-  } else {
-    items[items.length - 1] = { title: items[items.length - 1].title };
-  }
+  items[items.length - 1] = { title: items[items.length - 1].title };
 
   return items;
 });

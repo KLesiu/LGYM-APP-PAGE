@@ -81,10 +81,15 @@
     "appName": "LGYM",
     "appSubtitle": "Athlete workspace",
     "navigation": {
+      "account": "Account",
       "relationship": "Trainer Relationship",
       "exercises": "Exercises"
     },
     "layout": {
+      "account": {
+        "title": "Account",
+        "subtitle": "Basic account information and account deletion access."
+      },
       "exercises": {
         "title": "Exercises",
         "subtitle": "Browse the global and personal exercise library, filter by source, and quickly search by name or body part."
@@ -98,7 +103,8 @@
   "auth": {
     "tabs": {
       "athlete": "Athlete Panel",
-      "trainer": "Trainer Zone"
+      "trainer": "Trainer Zone",
+      "userAccount": "User account"
     },
     "roles": {
       "admin": "Administrator",
@@ -154,6 +160,28 @@
         "timeout": "Google sign-in timed out. Please try again.",
         "accessDenied": "Google sign-in was cancelled before completion.",
         "invalidResponse": "Google sign-in returned an invalid response."
+      }
+    },
+    "account": {
+      "title": "Basic account information",
+      "subtitle": "Google-required view for user account management.",
+      "fallback": "No data",
+      "noSession": "Sign in as a user to see account data and delete the account.",
+      "fields": {
+        "name": "Username",
+        "email": "Email address",
+        "role": "Role"
+      },
+      "actions": {
+        "delete": "Delete account"
+      },
+      "confirm": {
+        "title": "Delete account?",
+        "message": "This action will delete your account and sign you out of the app. Do you want to continue?"
+      },
+      "feedback": {
+        "deleteSuccess": "Account deleted successfully.",
+        "deleteFailed": "Failed to delete the account. Please try again."
       }
     },
     "loginAdmin": {
@@ -308,7 +336,8 @@
   },
   "common": {
     "actions": {
-      "dismiss": "Dismiss notification"
+      "dismiss": "Dismiss notification",
+      "cancel": "Cancel"
     },
     "toastTitles": {
       "success": "Success",
@@ -373,6 +402,40 @@
       "unlinkFailed": "Failed to unlink the Google account.",
       "unlinkSuccess": "Google account unlinked successfully.",
       "unauthorized": "Your session expired. Please sign in again."
+    }
+  },
+  "userAccount": {
+    "page": {
+      "eyebrow": "User account",
+      "title": "Basic account information",
+      "subtitle": "This view meets Google requirements: users can see account data and delete the account."
+    },
+    "fallback": "No data",
+    "identity": {
+      "title": "Account details",
+      "subtitle": "Basic information comes from the active user session."
+    },
+    "fields": {
+      "name": "Username",
+      "email": "Email address",
+      "role": "Role"
+    },
+    "delete": {
+      "title": "Delete account",
+      "description": "Deleting the account is permanent and will sign you out of the app. Use this action only when you want to stop using LGYM.",
+      "cardTitle": "Permanent account deletion",
+      "cardDescription": "After confirmation, we send the delete-account request to the API, clear the local session, and return you to sign in."
+    },
+    "actions": {
+      "delete": "Delete account"
+    },
+    "confirm": {
+      "title": "Delete account?",
+      "message": "This action will delete your account and sign you out of the app. Do you want to continue?"
+    },
+    "feedback": {
+      "deleteSuccess": "Account deleted successfully.",
+      "deleteFailed": "Failed to delete the account. Please try again."
     }
   },
   "trainerTrainingPlans": {

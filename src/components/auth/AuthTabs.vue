@@ -24,13 +24,13 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-type AuthRole = "athlete" | "trainer";
+type AuthRole = "athlete" | "trainer" | "user";
 
 const { t } = useI18n();
 
 const props = defineProps<{
   modelValue: AuthRole;
-  showAthleteTab?: boolean;
+  showAccountTab?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -43,8 +43,13 @@ const selectedRole = computed({
 });
 
 const roleOptions = computed(() => [
-  ...(props.showAthleteTab === false
-    ? []
+  ...(props.showAccountTab
+    ? [
+        {
+          value: "user" as const,
+          label: t("auth.tabs.userAccount"),
+        },
+      ]
     : [
         {
           value: "athlete" as const,

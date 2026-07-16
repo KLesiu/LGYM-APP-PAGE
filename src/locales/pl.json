@@ -81,10 +81,15 @@
     "appName": "LGYM",
     "appSubtitle": "Strefa zawodnika",
     "navigation": {
+      "account": "Konto",
       "relationship": "Relacja z trenerem",
         "exercises": "Ćwiczenia"
     },
     "layout": {
+      "account": {
+        "title": "Konto",
+        "subtitle": "Podstawowe informacje o koncie i możliwość usunięcia konta."
+      },
       "exercises": {
         "title": "Ćwiczenia",
         "subtitle": "Przeglądaj bibliotekę globalnych i własnych ćwiczeń, filtruj po źródle i szybko wyszukuj po nazwie albo partii ciała."
@@ -98,7 +103,8 @@
   "auth": {
     "tabs": {
       "athlete": "Panel zawodnika",
-      "trainer": "Strefa trenera"
+      "trainer": "Strefa trenera",
+      "userAccount": "Konto użytkownika"
     },
     "roles": {
       "admin": "Administrator",
@@ -154,6 +160,28 @@
         "timeout": "Przekroczono czas logowania przez Google. Spróbuj ponownie.",
         "accessDenied": "Logowanie przez Google zostało anulowane przed zakończeniem.",
         "invalidResponse": "Logowanie przez Google zwróciło nieprawidłową odpowiedź."
+      }
+    },
+    "account": {
+      "title": "Podstawowe informacje o koncie",
+      "subtitle": "Widok wymagany przez Google do zarządzania kontem użytkownika.",
+      "fallback": "Brak danych",
+      "noSession": "Zaloguj się jako użytkownik, aby zobaczyć dane konta i usunąć konto.",
+      "fields": {
+        "name": "Nazwa użytkownika",
+        "email": "Adres e-mail",
+        "role": "Rola"
+      },
+      "actions": {
+        "delete": "Usuń konto"
+      },
+      "confirm": {
+        "title": "Usunąć konto?",
+        "message": "Ta operacja usunie Twoje konto i wyloguje Cię z aplikacji. Czy chcesz kontynuować?"
+      },
+      "feedback": {
+        "deleteSuccess": "Konto zostało usunięte.",
+        "deleteFailed": "Nie udało się usunąć konta. Spróbuj ponownie."
       }
     },
     "loginAdmin": {
@@ -308,7 +336,8 @@
   },
   "common": {
     "actions": {
-      "dismiss": "Zamknij komunikat"
+      "dismiss": "Zamknij komunikat",
+      "cancel": "Anuluj"
     },
     "toastTitles": {
       "success": "Sukces",
@@ -373,6 +402,40 @@
       "unlinkFailed": "Nie udało się odłączyć konta Google.",
       "unlinkSuccess": "Konto Google zostało odłączone.",
       "unauthorized": "Sesja wygasła. Zaloguj się ponownie."
+    }
+  },
+  "userAccount": {
+    "page": {
+      "eyebrow": "Konto użytkownika",
+      "title": "Podstawowe informacje o koncie",
+      "subtitle": "Widok spełnia wymagania Google: użytkownik widzi dane konta i może usunąć konto."
+    },
+    "fallback": "Brak danych",
+    "identity": {
+      "title": "Dane konta",
+      "subtitle": "Podstawowe informacje pochodzą z aktywnej sesji użytkownika."
+    },
+    "fields": {
+      "name": "Nazwa użytkownika",
+      "email": "Adres e-mail",
+      "role": "Rola"
+    },
+    "delete": {
+      "title": "Usunięcie konta",
+      "description": "Usunięcie konta jest trwałe i wyloguje Cię z aplikacji. Użyj tej akcji tylko wtedy, gdy chcesz zakończyć korzystanie z LGYM.",
+      "cardTitle": "Stałe usunięcie konta",
+      "cardDescription": "Po potwierdzeniu wyślemy żądanie usunięcia konta do API, wyczyścimy lokalną sesję i przeniesiemy Cię do logowania."
+    },
+    "actions": {
+      "delete": "Usuń konto"
+    },
+    "confirm": {
+      "title": "Usunąć konto?",
+      "message": "Ta operacja usunie Twoje konto i wyloguje Cię z aplikacji. Czy chcesz kontynuować?"
+    },
+    "feedback": {
+      "deleteSuccess": "Konto zostało usunięte.",
+      "deleteFailed": "Nie udało się usunąć konta. Spróbuj ponownie."
     }
   },
   "trainerTrainingPlans": {
