@@ -23,8 +23,8 @@
         >
           <AuthTabs
             v-if="!isAdminMode"
-            v-model="selectedUserRole"
-            :show-athlete-tab="showAthleteTab"
+            v-model="selectedAuthTab"
+            show-account-tab
           />
 
           <div class="grid gap-4">
@@ -128,6 +128,7 @@
         </p>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -147,6 +148,7 @@ import { useToast } from "../../composables/useToast";
 import AuthTabs from "./AuthTabs.vue";
 
 type AuthRole = "athlete" | "trainer" | "admin";
+type AuthTab = "user" | "trainer";
 
 const props = withDefaults(
   defineProps<{
@@ -170,44 +172,13 @@ const formRef = ref<{
 } | null>(null);
 const isFormValid = ref<boolean | null>(null);
 
-const resolveInitialRole = (): AuthRole => {
-  if (props.mode === "admin") return "admin";
-
-  const redirect =
-    typeof route.query.redirect === "string" ? route.query.redirect : "";
-
-  if (redirect.startsWith("/athlete") || redirect.startsWith("/invitations")) {
-    return "athlete";
-  }
-
-  if (redirect.startsWith("/trainer")) return "trainer";
-
-  return "trainer";
-};
-
 const username = ref("");
 const password = ref("");
-const selectedRole = ref<AuthRole>(resolveInitialRole());
+const selectedAuthTab = ref<AuthTab>("trainer");
 const showPassword = ref(false);
 const isSubmitting = ref(false);
 
 const isAdminMode = computed(() => props.mode === "admin");
-const showAthleteTab = computed(() => {
-  if (isAdminMode.value) {
-    return false;
-  }
-
-  const redirect =
-    typeof route.query.redirect === "string" ? route.query.redirect.trim() : "";
-
-  return redirect.startsWith("/athlete") || redirect.startsWith("/invitations");
-});
-const selectedUserRole = computed<"athlete" | "trainer">({
-  get: () => (selectedRole.value === "trainer" ? "trainer" : "athlete"),
-  set: (value) => {
-    selectedRole.value = value;
-  },
-});
 const loginTitle = computed(() =>
   isAdminMode.value ? t("auth.loginAdmin.title") : t("auth.login.title"),
 );
@@ -229,6 +200,11 @@ const passwordRules = [
   (value: string) => !!value || t("auth.validation.passwordRequired"),
   (value: string) => value.length >= 6 || t("auth.validation.passwordMin"),
 ];
+
+const activeLoginRole = computed<AuthRole>(() => {
+  if (isAdminMode.value) return "admin";
+  return selectedAuthTab.value === "trainer" ? "trainer" : "athlete";
+});
 
 const togglePassword = () => {
   showPassword.value = !showPassword.value;
@@ -269,7 +245,7 @@ const hasExerciseManagementOnlyAccess = (response: LoginResponseDto) => {
 };
 
 const loginByRole = async (payload: LoginRequest) => {
-  if (selectedRole.value === "trainer") return postApiTrainerLogin(payload);
+  if (activeLoginRole.value === "trainer") return postApiTrainerLogin(payload);
 
   return postApiLogin(payload);
 };
@@ -280,7 +256,7 @@ const performLogin = (response: LoginResponseDto) => {
 
   saveAuthSession({
     token,
-    role: selectedRole.value,
+    role: activeLoginRole.value,
     roles: response.req?.roles,
     permissionClaims:
       response.permissionClaims ?? response.req?.permissionClaims,
@@ -358,12 +334,12 @@ const submitForm = async () => {
       return;
     }
 
-    if (selectedRole.value === "trainer") {
+    if (selectedAuthTab.value === "trainer") {
       await router.replace(resolvePostLoginRedirect("/trainer/invitations"));
       return;
     }
 
-    await router.replace(resolvePostLoginRedirect("/athlete/relationship"));
+    await router.replace(resolvePostLoginRedirect("/athlete/account"));
   } catch (error: unknown) {
     toast.error("auth.login.feedback.unexpectedError");
   } finally {
@@ -394,12 +370,12 @@ const submitGoogleLogin = async () => {
     toast.success("auth.google.feedback.success");
     resetFormValidation();
 
-    if (selectedRole.value === "trainer") {
+    if (selectedAuthTab.value === "trainer") {
       await router.replace(resolvePostLoginRedirect("/trainer/invitations"));
       return;
     }
 
-    await router.replace(resolvePostLoginRedirect("/athlete/relationship"));
+    await router.replace(resolvePostLoginRedirect("/athlete/account"));
   } catch (error) {
     if (error && typeof error === "object" && "reason" in error) {
       handleGoogleAuthFailure(error as GoogleAuthFailure);

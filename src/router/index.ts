@@ -27,8 +27,10 @@ import LoginAdminPage from "../pages/LoginAdminPage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage.vue";
 import InvitationActionPage from "../pages/InvitationActionPage.vue";
+import LandingPage from "../pages/LandingPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
 import ResetPasswordPage from "../pages/ResetPasswordPage.vue";
+import UserAccountPage from "../pages/user/UserAccountPage.vue";
 import UserExercisesPage from "../pages/user/UserExercisesPage.vue";
 import UserRelationshipPage from "../pages/user/UserRelationshipPage.vue";
 
@@ -37,7 +39,8 @@ export const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/login",
+      name: "landing",
+      component: LandingPage,
     },
     {
       path: "/login",
@@ -108,7 +111,12 @@ export const router = createRouter({
       children: [
         {
           path: "",
-          redirect: "/athlete/relationship",
+          redirect: "/athlete/account",
+        },
+        {
+          path: "account",
+          name: "user-account",
+          component: UserAccountPage,
         },
         {
           path: "relationship",
@@ -275,7 +283,7 @@ router.beforeEach((to) => {
 
   if (to.name === "login" && hasUserAccess()) {
     return {
-      path: "/athlete/relationship",
+      path: "/athlete/account",
     };
   }
 

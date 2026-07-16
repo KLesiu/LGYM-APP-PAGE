@@ -1,4 +1,5 @@
 import { computed, ref } from "vue";
+import { getGoogleClientId } from "../config/runtimeConfig";
 import { useToast } from "./useToast";
 
 const GOOGLE_OAUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -44,11 +45,6 @@ const randomString = () => {
   }
 
   return `${Date.now()}-${Math.random().toString(36).slice(2, 12)}`;
-};
-
-const getGoogleClientId = () => {
-  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-  return typeof clientId === "string" ? clientId.trim() : "";
 };
 
 const buildPopupFeatures = () => {

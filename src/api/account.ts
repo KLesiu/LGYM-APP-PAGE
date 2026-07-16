@@ -1,5 +1,6 @@
 import {
   getApiAccountExternalLogins as generatedGetApiAccountExternalLogins,
+  getApiDeleteAccount as generatedGetApiDeleteAccount,
   postApiAccountLinkGoogle as generatedPostApiAccountLinkGoogle,
   postApiAccountUnlinkGoogle as generatedPostApiAccountUnlinkGoogle,
 } from "./generated/demo";
@@ -35,6 +36,11 @@ export const postApiAccountUnlinkGoogle = () =>
 export const getApiAccountExternalLogins = () =>
   generatedGetApiAccountExternalLogins().then(
     toApiEnvelope<ExternalLoginDto[] | ErrorMessagePayload>,
+  );
+
+export const getApiDeleteAccount = () =>
+  generatedGetApiDeleteAccount().then(
+    toApiEnvelope<ResponseMessageDto | ErrorMessagePayload>,
   );
 
 export { getApiErrorMessage, type ExternalLoginDto };

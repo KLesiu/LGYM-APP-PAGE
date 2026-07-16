@@ -9,6 +9,7 @@ export type ExerciseCard = {
   source: ExerciseSource;
   bodyPart: string;
   bodyPartValue: string;
+  eloFormula: string;
   description: string;
   imageUrl: string;
 };

@@ -15,7 +15,7 @@
         </div>
       </div>
 
-      <div class="grid gap-5 pt-4 xl:grid-cols-[minmax(260px,320px)_minmax(0,1fr)]">
+      <div class="grid gap-5 pt-4 xl:grid-cols-[minmax(340px,380px)_minmax(0,1fr)]">
         <section class="min-h-0 rounded-2xl bg-[var(--lgym-note-bg)] px-4 py-4 sm:px-5 sm:py-5">
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--lgym-primary)]">
@@ -39,23 +39,27 @@
             </div>
 
             <div v-else-if="trainingDates.length > 0" class="space-y-4">
-              <div class="overflow-hidden rounded-2xl bg-[var(--lgym-surface-card)] p-2">
-                <v-date-picker
-                  :model-value="selectedDayKey"
-                  :month="activeDatePickerMonth"
-                  :year="activeDatePickerYear"
-                  :events="trainingEventDates"
-                  color="primary"
-                  event-color="primary"
-                  first-day-of-week="0"
-                  hide-header
-                  show-adjacent-months
-                  width="100%"
-                  class="lgym-training-calendar"
-                  @update:model-value="selectDatePickerValue"
-                  @update:month="setActiveDatePickerMonth"
-                  @update:year="setActiveDatePickerYear"
-                />
+              <div class="rounded-2xl bg-[var(--lgym-surface-card)] p-2">
+                <div class="max-w-full overflow-x-auto pb-1 lgym-training-calendar-scroll">
+                  <div class="min-w-[320px]">
+                    <v-date-picker
+                      :model-value="selectedDayKey"
+                      :month="activeDatePickerMonth"
+                      :year="activeDatePickerYear"
+                      :events="trainingEventDates"
+                      color="primary"
+                      event-color="primary"
+                      first-day-of-week="0"
+                      hide-header
+                      show-adjacent-months
+                      width="100%"
+                      class="lgym-training-calendar"
+                      @update:model-value="selectDatePickerValue"
+                      @update:month="setActiveDatePickerMonth"
+                      @update:year="setActiveDatePickerYear"
+                    />
+                  </div>
+                </div>
 
                 <div
                   v-if="activeMonthTrainingCount === 0"
