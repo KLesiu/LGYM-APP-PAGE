@@ -1,53 +1,52 @@
-import { computed } from 'vue'
-import { useTheme } from 'vuetify'
+import { computed } from "vue";
+import { useTheme } from "vuetify";
 
-type AppThemeName = 'light' | 'dark'
+type AppThemeName = "light" | "dark";
 
-const THEME_STORAGE_KEY = 'lgym-theme'
+const THEME_STORAGE_KEY = "training-hub-theme";
 
 const isThemeName = (value: string | null): value is AppThemeName => {
-  return value === 'light' || value === 'dark'
-}
+  return value === "light" || value === "dark";
+};
 
 export const useAppTheme = () => {
-  const theme = useTheme()
+  const theme = useTheme();
 
   const currentTheme = computed<AppThemeName>(() => {
-    return theme.global.name.value === 'dark' ? 'dark' : 'light'
-  })
+    return theme.global.name.value === "dark" ? "dark" : "light";
+  });
 
-  const isDark = computed(() => currentTheme.value === 'dark')
+  const isDark = computed(() => currentTheme.value === "dark");
 
   const setTheme = (name: AppThemeName, persist = true) => {
-    theme.global.name.value = name
+    theme.global.name.value = name;
 
-    if (typeof window === 'undefined')
-      return
+    if (typeof window === "undefined") return;
 
-    document.documentElement.style.colorScheme = name
+    document.documentElement.style.colorScheme = name;
 
-    if (persist)
-      window.localStorage.setItem(THEME_STORAGE_KEY, name)
-  }
+    if (persist) window.localStorage.setItem(THEME_STORAGE_KEY, name);
+  };
 
   const toggleTheme = () => {
-    setTheme(isDark.value ? 'light' : 'dark')
-  }
+    setTheme(isDark.value ? "light" : "dark");
+  };
 
   const initializeTheme = () => {
-    if (typeof window === 'undefined')
-      return
+    if (typeof window === "undefined") return;
 
-    const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
+    const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
 
     if (isThemeName(savedTheme)) {
-      setTheme(savedTheme, false)
-      return
+      setTheme(savedTheme, false);
+      return;
     }
 
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    setTheme(systemPrefersDark ? 'dark' : 'light', false)
-  }
+    const systemPrefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    setTheme(systemPrefersDark ? "dark" : "light", false);
+  };
 
   return {
     currentTheme,
@@ -55,7 +54,7 @@ export const useAppTheme = () => {
     setTheme,
     toggleTheme,
     initializeTheme,
-  }
-}
+  };
+};
 
-export type { AppThemeName }
+export type { AppThemeName };
