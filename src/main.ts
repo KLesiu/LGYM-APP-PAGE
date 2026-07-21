@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import "./styles/tailwind.css";
+import "./styles/thesis-theme.css";
 import App from "./App.vue";
 import { getAuthToken } from "./composables/useAuthSession";
 import { getApiBaseUrl } from "./config/runtimeConfig";
